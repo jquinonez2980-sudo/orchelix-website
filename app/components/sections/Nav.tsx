@@ -5,7 +5,7 @@ import { useState } from "react";
 
 const NAV_LINKS = [
   { label: "Agents",     href: "/solutions" },
-  { label: "Platform",   href: "#how" },
+  { label: "Platform",   href: "/how-it-works" },
   { label: "Industries", href: "#why" },
   { label: "Pricing",    href: "/pricing" },
   { label: "About",      href: "#about" },
@@ -105,7 +105,7 @@ export default function Nav() {
             Sign in
           </a>
           <a
-            href="#book"
+            href="/book"
             style={{
               fontFamily: "var(--font-display)",
               fontWeight: 500,
@@ -214,7 +214,7 @@ export default function Nav() {
               Sign in
             </a>
             <a
-              href="#book"
+              href="/book"
               onClick={close}
               style={{
                 fontFamily: "var(--font-display)",
