@@ -6,7 +6,7 @@ import { useState } from "react";
 const NAV_LINKS = [
   { label: "Agents",     href: "/solutions" },
   { label: "Platform",   href: "/how-it-works" },
-  { label: "Industries", href: "#why" },
+  { label: "Industries", href: "/industries" },
   { label: "Pricing",    href: "/pricing" },
   { label: "Try Esmi",   href: "/try-esmi" },
   { label: "About",      href: "#about" },
