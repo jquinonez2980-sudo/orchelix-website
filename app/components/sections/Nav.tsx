@@ -8,6 +8,7 @@ const NAV_LINKS = [
   { label: "Platform",   href: "/how-it-works" },
   { label: "Industries", href: "#why" },
   { label: "Pricing",    href: "/pricing" },
+  { label: "Try Esmi",   href: "/try-esmi" },
   { label: "About",      href: "#about" },
 ];
 

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Nav from "../components/sections/Nav";
 import Footer from "../components/sections/Footer";
 
@@ -1033,33 +1034,15 @@ function EsmiCTA() {
 /* ─────────────────────────────────────────────── SHARED HELPERS */
 
 function EsmiMark({ small }: { small?: boolean }) {
-  const size = small ? 60 : 100;
   return (
-    <svg
-      width={size}
-      height={small ? 22 : 36}
-      viewBox="0 0 100 36"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-label="Esmi"
-    >
-      <defs>
-        <linearGradient id="esmi-g" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#5EEAD4" />
-          <stop offset="100%" stopColor="#5BB6FF" />
-        </linearGradient>
-      </defs>
-      <text
-        x="0"
-        y="30"
-        fontFamily="Georgia, 'Times New Roman', serif"
-        fontSize="36"
-        fontWeight="600"
-        fill="url(#esmi-g)"
-        letterSpacing="3"
-      >
-        esmi
-      </text>
-    </svg>
+    <Image
+      src="/esmi-logo.png"
+      alt="Esmi"
+      width={small ? 72 : 120}
+      height={small ? 28 : 46}
+      style={{ height: small ? 28 : 46, width: "auto", objectFit: "contain" }}
+      priority
+    />
   );
 }
 
