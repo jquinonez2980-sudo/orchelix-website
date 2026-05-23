@@ -413,14 +413,64 @@ function DemoStage() {
           </div>
 
           {/* Iframe */}
-          <div style={{ height: "min(680px, 75vh)", background: "#06122A" }}>
+          <div style={{ height: "min(680px, 75vh)", background: "#06122A", position: "relative" }}>
+            {/* Fallback shown behind iframe — visible if src fails to load */}
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 16,
+                padding: 32,
+                textAlign: "center",
+              }}
+            >
+              <div
+                style={{
+                  width: 56,
+                  height: 56,
+                  borderRadius: "50%",
+                  background: "rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(255,255,255,0.10)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.40)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21.5 16.5v2.6a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 1.62 3.4 2 2 0 0 1 3.6 1.22h2.6a2 2 0 0 1 2 1.72c.13.96.36 1.9.69 2.8a2 2 0 0 1-.45 2.11L7.3 9a16 16 0 0 0 6 6l1.13-1.14a2 2 0 0 1 2.11-.45c.9.33 1.84.56 2.8.7a2 2 0 0 1 1.72 2.03Z"/>
+                </svg>
+              </div>
+              <p style={{ fontFamily: "var(--font-display)", fontSize: 15, color: "rgba(255,255,255,0.50)", margin: 0, maxWidth: 320, lineHeight: 1.6 }}>
+                The live demo is warming up. Book a personalized walkthrough and we&apos;ll show you Esmi live on your line.
+              </p>
+              <a
+                href="/book"
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontWeight: 600,
+                  fontSize: 14,
+                  padding: "12px 22px",
+                  borderRadius: 10,
+                  background: "rgba(255,255,255,0.10)",
+                  border: "1px solid rgba(255,255,255,0.16)",
+                  color: "#fff",
+                  textDecoration: "none",
+                }}
+              >
+                Book a personalized demo →
+              </a>
+            </div>
             <iframe
               id="esmi-iframe"
               src={LIVE_URL}
               title="Esmi — Live receptionist demo"
               allow="microphone; autoplay"
               loading="lazy"
-              style={{ width: "100%", height: "100%", border: "none", display: "block" }}
+              style={{ position: "relative", zIndex: 1, width: "100%", height: "100%", border: "none", display: "block" }}
             />
           </div>
 
