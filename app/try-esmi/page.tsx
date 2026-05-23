@@ -4,7 +4,7 @@ import Image from "next/image";
 import Nav from "../components/sections/Nav";
 import Footer from "../components/sections/Footer";
 
-const LIVE_URL = "https://ai-receptionist-production-3446.up.railway.app";
+const LIVE_URL = "https://ai-receptionist-production-5375.up.railway.app";
 
 const SUGGESTIONS = [
   { key: "book",     label: "Book an appointment",  lang: "EN" },
