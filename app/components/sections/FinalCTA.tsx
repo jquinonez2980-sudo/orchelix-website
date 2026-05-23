@@ -95,7 +95,7 @@ export default function FinalCTA() {
             style={{ position: "relative", zIndex: 1 }}
           >
             <a
-              href="#contact"
+              href="/book"
               style={{
                 fontFamily: "var(--font-display)",
                 fontWeight: 500,
@@ -116,7 +116,7 @@ export default function FinalCTA() {
               Talk to a consultant
             </a>
             <a
-              href="#book"
+              href="/book"
               style={{
                 fontFamily: "var(--font-display)",
                 fontWeight: 500,

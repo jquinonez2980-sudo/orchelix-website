@@ -171,7 +171,7 @@ const TIERS: TierDef[] = [
     noteAnnual: "Billed annually · 14-day deployment included.",
     featured: false,
     ctaLabel: "Start a pilot",
-    ctaHref: "#book-pilot",
+    ctaHref: "/book",
     ctaPrimary: false,
     features: [
       { text: "**One Orchelix agent** of your choice — Receptionist, Revenue-Ops, or Finance" },
@@ -196,7 +196,7 @@ const TIERS: TierDef[] = [
     featured: true,
     badge: "Most popular",
     ctaLabel: "Book a demo",
-    ctaHref: "#book-operate",
+    ctaHref: "/book",
     ctaPrimary: true,
     features: [
       { text: "**All three agents** — Receptionist, Revenue-Ops, and Finance OS" },
@@ -221,7 +221,7 @@ const TIERS: TierDef[] = [
     noteAnnual: "From $14k/mo · scoped per engagement.",
     featured: false,
     ctaLabel: "Talk to sales",
-    ctaHref: "#contact-sales",
+    ctaHref: "/book",
     ctaPrimary: false,
     features: [
       { text: "**Unlimited agents** across multiple locations or business units" },
@@ -820,7 +820,7 @@ function FAQ() {
                 deck, no slides — just your workflow.
               </p>
               <a
-                href="#book"
+                href="/book"
                 className="inline-flex h-9 items-center rounded-[10px] px-4 text-[13px] font-medium text-white transition-opacity hover:opacity-90"
                 style={{ fontFamily: "var(--font-display)", background: "var(--navy-600)" }}
               >
@@ -911,14 +911,14 @@ function PricingFinalCTA() {
             </div>
             <div className="flex flex-wrap gap-3 lg:shrink-0">
               <a
-                href="#contact"
+                href="/book"
                 className="inline-flex h-12 items-center rounded-xl border border-white/20 px-6 text-[15px] font-medium text-white/90 transition-colors hover:bg-white/10"
                 style={{ fontFamily: "var(--font-display)" }}
               >
                 Talk to a consultant
               </a>
               <a
-                href="#book"
+                href="/book"
                 className="inline-flex h-12 items-center rounded-xl bg-white px-6 text-[15px] font-medium transition-opacity hover:opacity-90"
                 style={{ fontFamily: "var(--font-display)", color: "var(--navy-600)" }}
               >

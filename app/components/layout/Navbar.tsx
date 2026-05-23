@@ -77,7 +77,7 @@ export default function Navbar() {
             className="h-[42px] rounded-[10px] bg-navy-600 px-5 text-[14px] font-medium text-white shadow-[0_1px_0_rgba(255,255,255,0.08)_inset,0_1px_2px_rgba(10,37,64,0.10)] transition-colors hover:bg-navy-700"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            <a href="#book">Book a demo</a>
+            <a href="/book">Book a demo</a>
           </Button>
         </div>
 
@@ -125,7 +125,7 @@ export default function Navbar() {
               className="h-11 w-full rounded-[10px] bg-navy-600 text-[15px] font-medium text-white hover:bg-navy-700"
               style={{ fontFamily: "var(--font-display)" }}
             >
-              <a href="#book">Book a demo</a>
+              <a href="/book">Book a demo</a>
             </Button>
           </div>
         </div>

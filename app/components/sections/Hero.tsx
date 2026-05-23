@@ -101,7 +101,7 @@ export default function Hero() {
                 className="h-12 rounded-xl bg-navy-600 px-6 text-[15px] font-medium text-white shadow-[0_1px_0_rgba(255,255,255,0.08)_inset,0_1px_2px_rgba(10,37,64,0.10)] transition-colors hover:bg-navy-700"
                 style={{ fontFamily: "var(--font-display)" }}
               >
-                <a href="#book">
+                <a href="/book">
                   Book a demo
                   <span className="ml-1.5 opacity-85">→</span>
                 </a>
@@ -112,7 +112,7 @@ export default function Hero() {
                 className="h-12 rounded-xl border-line-strong bg-white px-6 text-[15px] font-medium text-navy-600 hover:bg-surface-2 hover:text-navy-600"
                 style={{ fontFamily: "var(--font-display)" }}
               >
-                <a href="#how">See how it works</a>
+                <a href="/how-it-works">See how it works</a>
               </Button>
             </div>
 
