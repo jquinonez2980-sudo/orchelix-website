@@ -1,3 +1,5 @@
+import React from "react";
+
 const items = [
   {
     title: "Senior consultants, not a help desk.",
