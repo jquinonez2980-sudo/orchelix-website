@@ -25,19 +25,51 @@ type ChatEvent =
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 const WELCOME_TEXT =
-  "Hi there! I'm Esmi, your AI receptionist at Orchelix. I can book appointments, check availability, and answer any questions about our services. How can I help you today?";
+  "Hi there! I'm Esmi, your AI receptionist at Orchelix. I can book appointments, check availability, and answer any questions about our services or pricing. How can I help you today?";
 
 const QUICK_REPLIES = [
-  { label: "📅 Book an appointment", value: "Book an appointment" },
-  { label: "🕐 Check availability",  value: "What's available this week?" },
-  { label: "💰 Pricing",             value: "What are your pricing packages?" },
-  { label: "📋 Services",            value: "What services do you offer?" },
+  {
+    label: "Book an appointment",
+    value: "Book an appointment",
+    icon: (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/>
+      </svg>
+    ),
+  },
+  {
+    label: "Check availability",
+    value: "What's available this week?",
+    icon: (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+      </svg>
+    ),
+  },
+  {
+    label: "Pricing",
+    value: "What are your pricing packages?",
+    icon: (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+      </svg>
+    ),
+  },
+  {
+    label: "Services",
+    value: "What services do you offer?",
+    icon: (
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+      </svg>
+    ),
+  },
 ];
 
 const TOOL_LABELS: Record<string, string> = {
-  list_available_slots:  "Checking calendar…",
-  book_appointment:      "Booking appointment…",
-  search_knowledge_base: "Looking it up…",
+  list_available_slots:  "Checking your calendar…",
+  book_appointment:      "Booking your appointment…",
+  search_knowledge_base: "Looking that up…",
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -106,6 +138,11 @@ export default function EsmiChat() {
       setMessages((prev) => [...prev, userMsg, assistantMsg]);
       setInput("");
       setLoading(true);
+
+      // Reset textarea height
+      if (inputRef.current) {
+        inputRef.current.style.height = "auto";
+      }
 
       try {
         const res = await fetch("/api/chat", {
@@ -232,14 +269,54 @@ export default function EsmiChat() {
     lastMsg.role === "assistant";
 
   return (
-    <div className="flex flex-col h-full bg-surface-2" style={{ fontFamily: "var(--font-display), ui-sans-serif, system-ui, sans-serif" }}>
+    <div
+      className="flex flex-col h-full"
+      style={{ fontFamily: "var(--font-display), ui-sans-serif, system-ui, sans-serif", background: "#F7F8FA" }}
+    >
+      <style>{`
+        @keyframes esmi-msg-in {
+          from { opacity: 0; transform: translateY(6px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes esmi-bounce {
+          0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+          30%           { transform: translateY(-5px); opacity: 1; }
+        }
+        @keyframes esmi-spin {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
+        }
+        @keyframes esmi-pulse-ring {
+          0%   { box-shadow: 0 0 0 0 rgba(34,197,94,0.40); }
+          70%  { box-shadow: 0 0 0 5px rgba(34,197,94,0); }
+          100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+        }
+      `}</style>
 
-      {/* ── Header ──────────────────────────────────────────────────── */}
-      <div className="flex items-center gap-3 px-4 py-3 bg-surface border-b border-line flex-shrink-0">
+      {/* ── Header ──────────────────────────────────────────────────────── */}
+      <div
+        className="flex items-center gap-3 flex-shrink-0"
+        style={{
+          padding: "13px 18px",
+          background: "#fff",
+          borderBottom: "1px solid rgba(10,37,64,0.08)",
+          boxShadow: "0 1px 0 rgba(255,255,255,0.8)",
+        }}
+      >
+        {/* Avatar with online dot */}
         <div className="relative flex-shrink-0">
           <div
-            className="rounded-[10px] flex items-center justify-center overflow-hidden"
-            style={{ width: 38, height: 38, background: "#0A2540", padding: 5 }}
+            style={{
+              width: 36,
+              height: 36,
+              background: "#06122A",
+              borderRadius: 10,
+              padding: 6,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 1px 3px rgba(6,18,42,0.25)",
+            }}
           >
             <Image
               src="/esmi-logo.png"
@@ -250,25 +327,76 @@ export default function EsmiChat() {
             />
           </div>
           <span
-            className="absolute bottom-[-1px] right-[-1px] w-[10px] h-[10px] rounded-full border-2 border-white bg-[#22C55E] block"
-            style={{ animation: "pulse 2.2s ease infinite" }}
+            style={{
+              position: "absolute",
+              bottom: -1,
+              right: -1,
+              width: 10,
+              height: 10,
+              borderRadius: "50%",
+              background: "#22C55E",
+              border: "2px solid #fff",
+              display: "block",
+              animation: "esmi-pulse-ring 2s ease infinite",
+            }}
           />
         </div>
+
+        {/* Name + status */}
         <div className="flex-1 min-w-0">
-          <div className="font-semibold text-sm text-ink leading-tight">Esmi</div>
-          <div className="flex items-center gap-1.5 mt-0.5 text-xs text-ink-3">
-            <span
-              className="inline-block w-1.5 h-1.5 rounded-full bg-[#22C55E] flex-shrink-0"
-              style={{ animation: "pulse 2.2s ease infinite" }}
-            />
+          <div
+            style={{
+              fontFamily: "var(--font-display)",
+              fontWeight: 600,
+              fontSize: 14,
+              color: "#06122A",
+              lineHeight: 1.2,
+            }}
+          >
+            Esmi
+          </div>
+          <div
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 11,
+              color: "rgba(10,37,64,0.45)",
+              letterSpacing: "0.02em",
+              lineHeight: 1.2,
+              marginTop: 2,
+            }}
+          >
             AI Receptionist · EN · ES
           </div>
         </div>
+
+        {/* New chat button */}
         <button
           type="button"
           onClick={resetConversation}
-          className="flex items-center gap-1.5 text-[12px] font-medium text-ink-3 bg-transparent border border-line rounded-lg px-2.5 py-1.5 cursor-pointer transition-colors hover:text-ink hover:border-line-strong flex-shrink-0"
-          title="New conversation"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 5,
+            fontFamily: "var(--font-display)",
+            fontSize: 12,
+            fontWeight: 500,
+            color: "rgba(10,37,64,0.45)",
+            background: "transparent",
+            border: "1px solid rgba(10,37,64,0.12)",
+            borderRadius: 8,
+            padding: "6px 10px",
+            cursor: "pointer",
+            transition: "color 0.15s, border-color 0.15s",
+            flexShrink: 0,
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = "#06122A";
+            e.currentTarget.style.borderColor = "rgba(10,37,64,0.25)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = "rgba(10,37,64,0.45)";
+            e.currentTarget.style.borderColor = "rgba(10,37,64,0.12)";
+          }}
         >
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
             <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
@@ -277,11 +405,18 @@ export default function EsmiChat() {
         </button>
       </div>
 
-      {/* ── Messages ────────────────────────────────────────────────── */}
+      {/* ── Messages ────────────────────────────────────────────────────── */}
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto px-4 pt-5 pb-3 flex flex-col gap-3"
-        style={{ scrollbarWidth: "thin" }}
+        className="flex-1 overflow-y-auto"
+        style={{
+          padding: "20px 18px 12px",
+          display: "flex",
+          flexDirection: "column",
+          gap: 12,
+          scrollbarWidth: "thin",
+          scrollbarColor: "rgba(10,37,64,0.12) transparent",
+        }}
       >
         {messages.map((msg) => (
           <MessageBubble key={msg.id} message={msg} onSlotSelect={sendMessage} />
@@ -292,30 +427,78 @@ export default function EsmiChat() {
         )}
       </div>
 
-      {/* ── Input ───────────────────────────────────────────────────── */}
+      {/* ── Input ───────────────────────────────────────────────────────── */}
       <form
         onSubmit={handleSubmit}
-        className="flex items-end gap-2 px-4 py-3 bg-surface border-t border-line flex-shrink-0"
+        style={{
+          display: "flex",
+          alignItems: "flex-end",
+          gap: 8,
+          padding: "12px 16px",
+          background: "#fff",
+          borderTop: "1px solid rgba(10,37,64,0.08)",
+          flexShrink: 0,
+        }}
       >
         <textarea
           ref={inputRef}
           value={input}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
-          placeholder="Ask Esmi anything — availability, services, pricing…"
+          placeholder="Ask Esmi anything…"
           rows={1}
           disabled={loading}
-          className="flex-1 resize-none rounded-xl border border-line-strong bg-surface-2 px-3.5 py-[11px] text-sm text-ink leading-snug placeholder:text-ink-4 outline-none transition-colors focus:border-teal-500 focus:bg-surface disabled:cursor-not-allowed"
-          style={{ maxHeight: 120, overflowY: "auto", fontFamily: "inherit" }}
+          style={{
+            flex: 1,
+            resize: "none",
+            borderRadius: 12,
+            border: "1.5px solid rgba(10,37,64,0.14)",
+            background: "#F7F8FA",
+            padding: "10px 14px",
+            fontSize: 14,
+            color: "#06122A",
+            lineHeight: 1.5,
+            fontFamily: "inherit",
+            outline: "none",
+            maxHeight: 120,
+            overflowY: "auto",
+            transition: "border-color 0.15s, box-shadow 0.15s",
+            cursor: loading ? "not-allowed" : "text",
+          }}
+          onFocus={(e) => {
+            e.currentTarget.style.borderColor = "#14B8A6";
+            e.currentTarget.style.boxShadow = "0 0 0 3px rgba(20,184,166,0.12)";
+            e.currentTarget.style.background = "#fff";
+          }}
+          onBlur={(e) => {
+            e.currentTarget.style.borderColor = "rgba(10,37,64,0.14)";
+            e.currentTarget.style.boxShadow = "none";
+            e.currentTarget.style.background = "#F7F8FA";
+          }}
         />
         <button
           type="submit"
           disabled={loading || !input.trim()}
-          className="w-[42px] h-[42px] rounded-xl border-none flex items-center justify-center flex-shrink-0 transition-colors"
           style={{
-            background: loading || !input.trim() ? "var(--color-line)" : "var(--color-teal-500)",
-            color: "#fff",
+            width: 40,
+            height: 40,
+            borderRadius: 11,
+            border: "none",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
             cursor: loading || !input.trim() ? "default" : "pointer",
+            background:
+              loading || !input.trim()
+                ? "rgba(10,37,64,0.08)"
+                : "linear-gradient(135deg, #14B8A6 0%, #0EA5A0 100%)",
+            color: loading || !input.trim() ? "rgba(10,37,64,0.30)" : "#fff",
+            boxShadow:
+              loading || !input.trim()
+                ? "none"
+                : "0 2px 8px rgba(20,184,166,0.35)",
+            transition: "background 0.15s, box-shadow 0.15s",
           }}
         >
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
@@ -340,13 +523,17 @@ function MessageBubble({
 
   if (isUser) {
     return (
-      <div className="flex justify-end">
+      <div style={{ display: "flex", justifyContent: "flex-end", animation: "esmi-msg-in 0.2s ease" }}>
         <div
-          className="max-w-[72%] px-4 py-3 text-sm leading-relaxed text-white"
           style={{
+            maxWidth: "72%",
+            padding: "11px 16px",
+            fontSize: 14,
+            lineHeight: 1.6,
+            color: "rgba(255,255,255,0.92)",
+            background: "linear-gradient(150deg, #0D2545 0%, #071A35 100%)",
             borderRadius: "18px 18px 4px 18px",
-            background: "linear-gradient(135deg, #0A2540 0%, #0e3460 100%)",
-            boxShadow: "0 2px 8px rgba(10,37,64,0.18)",
+            boxShadow: "0 2px 12px rgba(6,18,42,0.22)",
             whiteSpace: "pre-wrap",
             wordBreak: "break-word",
           }}
@@ -357,26 +544,47 @@ function MessageBubble({
     );
   }
 
-  // ── Assistant bubble ──────────────────────────────────────────────
+  // ── Assistant ──────────────────────────────────────────────────────
   const isStreaming = message.streaming;
   const hasContent = message.content.length > 0;
 
   return (
-    <div className="flex items-start gap-2.5">
+    <div style={{ display: "flex", alignItems: "flex-start", gap: 10, animation: "esmi-msg-in 0.2s ease" }}>
       {/* Avatar */}
       <div
-        className="flex-shrink-0 mt-0.5 rounded-[8px] flex items-center justify-center text-white font-bold text-[11px] select-none"
-        style={{ width: 28, height: 28, background: "linear-gradient(135deg, #0A2540 0%, #0e3460 100%)", letterSpacing: "0.02em" }}
+        style={{
+          width: 26,
+          height: 26,
+          background: "#06122A",
+          borderRadius: 7,
+          padding: 4,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexShrink: 0,
+          marginTop: 2,
+          boxShadow: "0 1px 3px rgba(6,18,42,0.20)",
+        }}
       >
-        E
+        <img
+          src="/esmi-logo.png"
+          alt="Esmi"
+          style={{ width: "100%", height: "auto", objectFit: "contain", display: "block" }}
+        />
       </div>
 
-      <div className="flex-1 min-w-0 flex flex-col gap-2">
-        {/* Typing dots — shown while streaming and no content yet */}
+      <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 8 }}>
+        {/* Typing dots */}
         {isStreaming && !hasContent && !message.toolActive && (
           <div
-            className="inline-flex px-4 py-3 bg-surface border border-line rounded-[4px_18px_18px_18px]"
-            style={{ boxShadow: "0 1px 3px rgba(10,37,64,0.05)" }}
+            style={{
+              display: "inline-flex",
+              padding: "12px 16px",
+              background: "#fff",
+              border: "1px solid rgba(10,37,64,0.08)",
+              borderRadius: "4px 18px 18px 18px",
+              boxShadow: "0 1px 3px rgba(10,37,64,0.05), 0 4px 12px rgba(10,37,64,0.04)",
+            }}
           >
             <TypingDots />
           </div>
@@ -384,7 +592,21 @@ function MessageBubble({
 
         {/* Tool status pill */}
         {message.toolActive && (
-          <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-teal-50 border border-teal-100 text-teal-700 text-xs font-medium self-start">
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "8px 12px 8px 10px",
+              background: "rgba(20,184,166,0.07)",
+              borderLeft: "3px solid #14B8A6",
+              borderRadius: "0 8px 8px 0",
+              fontSize: 12,
+              fontWeight: 500,
+              color: "#0D766B",
+              alignSelf: "flex-start",
+            }}
+          >
             <Spinner />
             {TOOL_LABELS[message.toolActive] ?? "Working…"}
           </div>
@@ -393,18 +615,33 @@ function MessageBubble({
         {/* Text content */}
         {hasContent && (
           <div
-            className="px-4 py-3 text-sm leading-relaxed text-ink bg-surface border border-line rounded-[4px_18px_18px_18px]"
             style={{
-              boxShadow: "0 1px 3px rgba(10,37,64,0.05)",
+              padding: "11px 16px",
+              fontSize: 14,
+              lineHeight: 1.65,
+              color: "#06122A",
+              background: "#fff",
+              border: "1px solid rgba(10,37,64,0.08)",
+              borderRadius: "4px 18px 18px 18px",
+              boxShadow: "0 1px 3px rgba(10,37,64,0.05), 0 4px 12px rgba(10,37,64,0.04)",
               whiteSpace: "pre-wrap",
               wordBreak: "break-word",
+              maxWidth: "82%",
             }}
           >
             {message.content}
             {isStreaming && (
               <span
-                className="inline-block w-0.5 h-3.5 rounded-sm align-text-bottom ml-0.5 bg-teal-500"
-                style={{ animation: "pulse 1s ease infinite" }}
+                style={{
+                  display: "inline-block",
+                  width: 2,
+                  height: 13,
+                  borderRadius: 2,
+                  verticalAlign: "text-bottom",
+                  marginLeft: 2,
+                  background: "#14B8A6",
+                  animation: "esmi-bounce 1s ease infinite",
+                }}
               />
             )}
           </div>
@@ -435,14 +672,26 @@ function SlotPicker({
   onSelect: (v: string) => void;
 }) {
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex items-center gap-1.5 text-[11px] font-semibold text-ink-2 uppercase tracking-wide">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round" className="text-teal-600">
+    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 6,
+          fontSize: 11,
+          fontWeight: 600,
+          color: "rgba(10,37,64,0.45)",
+          textTransform: "uppercase",
+          letterSpacing: "0.08em",
+          fontFamily: "var(--font-mono)",
+        }}
+      >
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ color: "#14B8A6" }}>
           <rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
         </svg>
-        {dateLabel ?? "Available slots"} — pick a time
+        {dateLabel ?? "Available slots"} — choose a time
       </div>
-      <div className="flex flex-wrap gap-2">
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
         {slots.map((slot, i) => {
           const { start, end } = parseSlot(slot);
           return (
@@ -450,11 +699,42 @@ function SlotPicker({
               key={i}
               type="button"
               onClick={() => onSelect(slot)}
-              className="flex flex-col items-center gap-0.5 px-3.5 py-2.5 rounded-xl border-[1.5px] border-teal-200 bg-surface text-ink text-[13px] font-semibold leading-tight cursor-pointer transition-all hover:border-teal-500 hover:bg-teal-50 hover:shadow-[0_4px_12px_rgba(20,184,166,0.15)] min-w-[76px]"
-              style={{ fontFamily: "inherit" }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 2,
+                padding: "9px 14px",
+                borderRadius: 11,
+                border: "1.5px solid rgba(20,184,166,0.30)",
+                background: "#fff",
+                color: "#06122A",
+                fontSize: 13,
+                fontWeight: 600,
+                lineHeight: 1.2,
+                cursor: "pointer",
+                minWidth: 78,
+                fontFamily: "inherit",
+                transition: "all 0.15s",
+                boxShadow: "0 1px 3px rgba(10,37,64,0.06)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = "#14B8A6";
+                e.currentTarget.style.background = "rgba(20,184,166,0.06)";
+                e.currentTarget.style.boxShadow = "0 4px 12px rgba(20,184,166,0.18)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "rgba(20,184,166,0.30)";
+                e.currentTarget.style.background = "#fff";
+                e.currentTarget.style.boxShadow = "0 1px 3px rgba(10,37,64,0.06)";
+              }}
             >
               <span>{start}</span>
-              {end && <span className="text-[11px] font-normal text-ink-3">– {end}</span>}
+              {end && (
+                <span style={{ fontSize: 11, fontWeight: 400, color: "rgba(10,37,64,0.45)" }}>
+                  – {end}
+                </span>
+              )}
             </button>
           );
         })}
@@ -469,19 +749,44 @@ function QuickReplies({
   chips,
   onSelect,
 }: {
-  chips: { label: string; value: string }[];
+  chips: { label: string; value: string; icon: React.ReactNode }[];
   onSelect: (v: string) => void;
 }) {
   return (
-    <div className="flex flex-wrap gap-2 pl-[38px]">
+    <div style={{ display: "flex", flexWrap: "wrap", gap: 8, paddingLeft: 36 }}>
       {chips.map((chip) => (
         <button
           key={chip.value}
           type="button"
           onClick={() => onSelect(chip.value)}
-          className="px-3.5 py-2 rounded-full border-[1.5px] border-line-strong bg-surface text-ink-2 text-[13px] font-medium cursor-pointer transition-all hover:border-navy-600 hover:bg-navy-600 hover:text-white"
-          style={{ fontFamily: "inherit" }}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 6,
+            padding: "8px 14px",
+            borderRadius: 999,
+            border: "1.5px solid rgba(10,37,64,0.14)",
+            background: "#fff",
+            color: "rgba(10,37,64,0.65)",
+            fontSize: 13,
+            fontWeight: 500,
+            cursor: "pointer",
+            fontFamily: "inherit",
+            transition: "all 0.15s",
+            boxShadow: "0 1px 2px rgba(10,37,64,0.05)",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = "#14B8A6";
+            e.currentTarget.style.background = "rgba(20,184,166,0.06)";
+            e.currentTarget.style.color = "#0D766B";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = "rgba(10,37,64,0.14)";
+            e.currentTarget.style.background = "#fff";
+            e.currentTarget.style.color = "rgba(10,37,64,0.65)";
+          }}
         >
+          <span style={{ color: "#14B8A6", display: "flex", flexShrink: 0 }}>{chip.icon}</span>
           {chip.label}
         </button>
       ))}
@@ -493,12 +798,18 @@ function QuickReplies({
 
 function TypingDots() {
   return (
-    <span className="inline-flex items-center gap-1">
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 5, height: 16 }}>
       {[0, 1, 2].map((i) => (
         <span
           key={i}
-          className="inline-block w-1.5 h-1.5 rounded-full bg-ink-4"
-          style={{ animation: `pulse 1.2s ease ${i * 0.2}s infinite` }}
+          style={{
+            display: "inline-block",
+            width: 6,
+            height: 6,
+            borderRadius: "50%",
+            background: "#14B8A6",
+            animation: `esmi-bounce 1.2s ease ${i * 0.18}s infinite`,
+          }}
         />
       ))}
     </span>
@@ -508,14 +819,14 @@ function TypingDots() {
 function Spinner() {
   return (
     <svg
-      width="11"
-      height="11"
+      width="12"
+      height="12"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
       strokeWidth="2.5"
       strokeLinecap="round"
-      style={{ animation: "esmi-spin 0.8s linear infinite" }}
+      style={{ animation: "esmi-spin 0.8s linear infinite", flexShrink: 0 }}
     >
       <path d="M21 12a9 9 0 1 1-6.219-8.56" />
     </svg>
