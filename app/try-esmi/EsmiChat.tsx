@@ -237,14 +237,18 @@ export default function EsmiChat() {
       {/* ── Header ──────────────────────────────────────────────────── */}
       <div className="flex items-center gap-3 px-4 py-3 bg-surface border-b border-line flex-shrink-0">
         <div className="relative flex-shrink-0">
-          <Image
-            src="/esmi-logo.png"
-            alt="Esmi"
-            width={38}
-            height={38}
-            className="rounded-[10px] object-cover"
-            style={{ width: 38, height: 38 }}
-          />
+          <div
+            className="rounded-[10px] flex items-center justify-center overflow-hidden"
+            style={{ width: 38, height: 38, background: "#0A2540", padding: 5 }}
+          >
+            <Image
+              src="/esmi-logo.png"
+              alt="Esmi"
+              width={566}
+              height={273}
+              style={{ width: "100%", height: "auto", objectFit: "contain" }}
+            />
+          </div>
           <span
             className="absolute bottom-[-1px] right-[-1px] w-[10px] h-[10px] rounded-full border-2 border-white bg-[#22C55E] block"
             style={{ animation: "pulse 2.2s ease infinite" }}
@@ -360,15 +364,11 @@ function MessageBubble({
   return (
     <div className="flex items-start gap-2.5">
       {/* Avatar */}
-      <div className="flex-shrink-0 mt-0.5">
-        <Image
-          src="/esmi-logo.png"
-          alt="Esmi"
-          width={28}
-          height={28}
-          className="rounded-[8px] object-cover"
-          style={{ width: 28, height: 28 }}
-        />
+      <div
+        className="flex-shrink-0 mt-0.5 rounded-[8px] flex items-center justify-center text-white font-bold text-[11px] select-none"
+        style={{ width: 28, height: 28, background: "linear-gradient(135deg, #0A2540 0%, #0e3460 100%)", letterSpacing: "0.02em" }}
+      >
+        E
       </div>
 
       <div className="flex-1 min-w-0 flex flex-col gap-2">
