@@ -129,7 +129,7 @@ function DemoHero({
       }}
     >
       <div
-        style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px" }}
+        style={{ maxWidth: 1200, margin: "0 auto" }}
         className="px-6 sm:px-8 lg:px-10"
       >
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-20">
@@ -644,7 +644,7 @@ function ExpectSection() {
   return (
     <section style={{ padding: "100px 0", background: "#fff" }}>
       <div
-        style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px" }}
+        style={{ maxWidth: 1200, margin: "0 auto" }}
         className="px-6 sm:px-8 lg:px-10"
       >
         <div style={{ maxWidth: 640, marginBottom: 64 }}>
@@ -655,7 +655,7 @@ function ExpectSection() {
               fontWeight: 600,
               fontSize: "clamp(28px, 4vw, 42px)",
               lineHeight: 1.1,
-              letterSpacing: "-0.026em",
+              letterSpacing: "-0.03em",
               color: "var(--ink)",
               margin: "16px 0 16px",
             }}
@@ -775,7 +775,7 @@ function ProofBand() {
       }}
     >
       <div
-        style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px" }}
+        style={{ maxWidth: 1200, margin: "0 auto" }}
         className="px-6 sm:px-8 lg:px-10"
       >
         {/* Testimonials */}
@@ -935,7 +935,7 @@ function FinalCTA() {
   return (
     <section style={{ padding: "80px 0" }}>
       <div
-        style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px" }}
+        style={{ maxWidth: 1200, margin: "0 auto" }}
         className="px-6 sm:px-8 lg:px-10"
       >
         <div

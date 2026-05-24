@@ -64,7 +64,7 @@ function HWHero() {
           </span>
 
           <h1
-            className="mt-6 mb-6 text-balance text-[40px] leading-[1.05] font-medium tracking-[-0.030em] sm:text-[56px] sm:leading-[1.03] lg:text-[68px] lg:leading-[1.02] lg:tracking-[-0.034em]"
+            className="mt-6 mb-6 text-balance text-[36px] leading-[1.05] font-medium tracking-[-0.036em] sm:text-[52px] sm:leading-[1.04] lg:text-[70px] lg:leading-[1.04]"
             style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
           >
             From first call to your first agent{" "}
@@ -274,11 +274,11 @@ function StepMap() {
           <div className="flex flex-col gap-6">
             <StepNum big="01" label="Week 1 · Discovery" />
             <div>
-              <h2 className="mb-2 text-[34px] font-semibold leading-[1.06] tracking-[-0.024em] sm:text-[42px] lg:text-[48px]"
+              <h2 className="mb-2 text-[28px] font-semibold leading-[1.06] tracking-[-0.03em] sm:text-[38px] lg:text-[46px]"
                 style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}>
                 Map the workflow.
               </h2>
-              <p className="text-[17px] font-medium leading-snug" style={{ fontFamily: "var(--font-display)", color: "var(--teal-700)" }}>
+              <p className="text-[17px] font-medium leading-snug" style={{ fontFamily: "var(--font-display)", color: "var(--teal-700)", letterSpacing: "-0.012em" }}>
                 A senior consultant. Your team. One workflow on the wall.
               </p>
             </div>
@@ -405,11 +405,11 @@ function StepDeploy() {
           <div className="flex flex-col gap-6 lg:order-2">
             <StepNum big="02" label="Days 8–14 · Build" />
             <div>
-              <h2 className="mb-2 text-[34px] font-semibold leading-[1.06] tracking-[-0.024em] sm:text-[42px] lg:text-[48px]"
+              <h2 className="mb-2 text-[28px] font-semibold leading-[1.06] tracking-[-0.03em] sm:text-[38px] lg:text-[46px]"
                 style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}>
                 Deploy in 14 days.
               </h2>
-              <p className="text-[17px] font-medium leading-snug" style={{ fontFamily: "var(--font-display)", color: "var(--teal-700)" }}>
+              <p className="text-[17px] font-medium leading-snug" style={{ fontFamily: "var(--font-display)", color: "var(--teal-700)", letterSpacing: "-0.012em" }}>
                 Your first agent lives in your existing tools, not a new one.
               </p>
             </div>
@@ -545,11 +545,11 @@ function StepAudit() {
           <div className="flex flex-col gap-6">
             <StepNum big="03" label="From day 1 · Live" />
             <div>
-              <h2 className="mb-2 text-[34px] font-semibold leading-[1.06] tracking-[-0.024em] sm:text-[42px] lg:text-[48px]"
+              <h2 className="mb-2 text-[28px] font-semibold leading-[1.06] tracking-[-0.03em] sm:text-[38px] lg:text-[46px]"
                 style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}>
                 Audit every action.
               </h2>
-              <p className="text-[17px] font-medium leading-snug" style={{ fontFamily: "var(--font-display)", color: "var(--teal-700)" }}>
+              <p className="text-[17px] font-medium leading-snug" style={{ fontFamily: "var(--font-display)", color: "var(--teal-700)", letterSpacing: "-0.012em" }}>
                 Approve, override, or coach the agent in one click.
               </p>
             </div>
@@ -640,11 +640,11 @@ function StepScale() {
           <div className="flex flex-col gap-6 lg:order-2">
             <StepNum big="04" label="Day 31 onward" />
             <div>
-              <h2 className="mb-2 text-[34px] font-semibold leading-[1.06] tracking-[-0.024em] sm:text-[42px] lg:text-[48px]"
+              <h2 className="mb-2 text-[28px] font-semibold leading-[1.06] tracking-[-0.03em] sm:text-[38px] lg:text-[46px]"
                 style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}>
                 Scale on your timeline.
               </h2>
-              <p className="text-[17px] font-medium leading-snug" style={{ fontFamily: "var(--font-display)", color: "var(--teal-700)" }}>
+              <p className="text-[17px] font-medium leading-snug" style={{ fontFamily: "var(--font-display)", color: "var(--teal-700)", letterSpacing: "-0.012em" }}>
                 Add the next agent only when the first has earned the room.
               </p>
             </div>
@@ -816,7 +816,7 @@ function Guarantees() {
             <span className="inline-block h-px w-[18px] bg-current opacity-70" />
             Why this works
           </span>
-          <h2 className="mb-3 text-[34px] font-semibold leading-[1.08] tracking-[-0.024em] sm:text-[40px]"
+          <h2 className="mb-3 text-[28px] font-semibold leading-[1.08] tracking-[-0.03em] sm:text-[38px] lg:text-[44px]"
             style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}>
             Built like a consultancy. Priced like software.
           </h2>

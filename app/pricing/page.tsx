@@ -16,6 +16,7 @@ export default function PricingPage() {
       <Nav />
       <main id="top">
         <PricingHero billing={billing} setBilling={setBilling} />
+        <HybridModel />
         <Tiers billing={billing} />
         <CompareTable />
         <FAQ />
@@ -47,18 +48,15 @@ function PricingHero({
           `,
           backgroundSize: "auto, 28px 28px",
           backgroundPosition: "center, 0 0",
-          maskImage:
-            "radial-gradient(ellipse 100% 80% at 50% 0%, black 30%, transparent 90%)",
-          WebkitMaskImage:
-            "radial-gradient(ellipse 100% 80% at 50% 0%, black 30%, transparent 90%)",
+          maskImage: "radial-gradient(ellipse 100% 80% at 50% 0%, black 30%, transparent 90%)",
+          WebkitMaskImage: "radial-gradient(ellipse 100% 80% at 50% 0%, black 30%, transparent 90%)",
         }}
       />
       <div
         aria-hidden="true"
         className="absolute inset-x-0 bottom-0 h-px"
         style={{
-          background:
-            "linear-gradient(90deg, transparent 0%, var(--color-line) 30%, var(--color-line) 70%, transparent 100%)",
+          background: "linear-gradient(90deg, transparent 0%, var(--color-line) 30%, var(--color-line) 70%, transparent 100%)",
         }}
       />
 
@@ -76,12 +74,12 @@ function PricingHero({
           className="mt-6 mb-6 text-balance text-[42px] leading-[1.05] font-medium tracking-[-0.032em] sm:text-[60px] sm:leading-[1.03] lg:text-[72px] lg:tracking-[-0.036em]"
           style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
         >
-          Pay for the work it{" "}
+          Pricing that grows with your{" "}
           <span
             className="bg-gradient-to-br from-navy-600 via-teal-500 to-teal-400 bg-clip-text font-normal italic"
             style={{ WebkitTextFillColor: "transparent" }}
           >
-            actually does
+            revenue
           </span>
           .
         </h1>
@@ -90,8 +88,9 @@ function PricingHero({
           className="mb-10 text-[17px] leading-[1.6] sm:text-[18px] lg:text-[19px]"
           style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
         >
-          A senior consultant, a focused two-week pilot, and a plan that grows
-          with the agents you trust. No long contracts. Cancel anytime.
+          We orchestrate intelligent agent systems that directly improve your
+          bottom line — generating more revenue and reducing operational costs.
+          Pay for the system that works for you.
         </p>
 
         {/* Billing toggle */}
@@ -136,11 +135,85 @@ function PricingHero({
   );
 }
 
+/* ─── Hybrid model explainer ─────────────────────────────────────────────── */
+
+function HybridModel() {
+  return (
+    <section
+      className="px-6 py-12 sm:px-8 sm:py-14 lg:px-10 lg:py-16"
+      style={{ background: "var(--surface-2)", borderTop: "1px solid var(--line)" }}
+    >
+      <div className="mx-auto max-w-[1200px]">
+        <div className="mb-8 text-center">
+          <span
+            className="inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.18em]"
+            style={{ fontFamily: "var(--font-mono)", color: "var(--navy-500)" }}
+          >
+            <span className="inline-block h-px w-[18px] bg-current opacity-70" />
+            How our pricing works
+            <span className="inline-block h-px w-[18px] bg-current opacity-70" />
+          </span>
+          <p
+            className="mx-auto mt-3 max-w-[560px] text-[16px] leading-[1.6]"
+            style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
+          >
+            We use a hybrid orchestration model designed around real business
+            outcomes. This aligns our success with yours.
+          </p>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:gap-6">
+          {[
+            {
+              num: "01",
+              title: "Base Orchestration Fee",
+              desc: "Covers system design, agent coordination, integrations, and ongoing optimization — the infrastructure that makes the system run.",
+            },
+            {
+              num: "02",
+              title: "Performance Component",
+              desc: "Ties part of your investment to measurable results — qualified leads, appointments booked, or time saved — above an agreed baseline.",
+            },
+          ].map((item) => (
+            <div
+              key={item.num}
+              className="flex gap-5 rounded-[18px] border bg-white p-6 sm:p-7"
+              style={{
+                borderColor: "var(--line)",
+                boxShadow: "0 2px 8px rgba(10,37,64,0.05)",
+              }}
+            >
+              <span
+                className="shrink-0 text-[13px] font-bold tabular-nums"
+                style={{ fontFamily: "var(--font-mono)", color: "var(--teal-500)" }}
+              >
+                {item.num}
+              </span>
+              <div>
+                <div
+                  className="mb-1.5 text-[15px] font-semibold leading-snug"
+                  style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
+                >
+                  {item.title}
+                </div>
+                <p
+                  className="text-[14px] leading-[1.6]"
+                  style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
+                >
+                  {item.desc}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ─── Tiers ───────────────────────────────────────────────────────────────── */
 
-type TierFeature =
-  | { head: string }
-  | { text: string };
+type TierFeature = { head: string } | { text: string };
 
 interface TierDef {
   id: string;
@@ -155,7 +228,6 @@ interface TierDef {
   badge?: string;
   ctaLabel: string;
   ctaHref: string;
-  ctaPrimary: boolean;
   features: TierFeature[];
 }
 
@@ -164,75 +236,82 @@ const TIERS: TierDef[] = [
     id: "pilot",
     name: "Pilot",
     sub: "01 / Prove it",
-    desc: "One agent, one workflow, instrumented end-to-end in two weeks. Read the scorecard, then decide.",
-    monthly: "$2,400",
-    annual: "$1,950",
-    noteMonthly: "14-day deployment included.",
-    noteAnnual: "Billed annually · 14-day deployment included.",
+    desc: "Test and prove ROI with one orchestrated agent before committing to a larger system.",
+    monthly: "$4,250",
+    annual: "$3,475",
+    noteMonthly: "Annual billing saves 18%.",
+    noteAnnual: "Billed at $41,700/year · save 18%.",
     featured: false,
-    ctaLabel: "Start a pilot",
+    ctaLabel: "Start with Pilot",
     ctaHref: "/book",
-    ctaPrimary: false,
     features: [
-      { text: "**One Orchelix agent** of your choice — Receptionist, Revenue-Ops, or Finance" },
-      { text: "Up to **1,500 agent actions** / month" },
-      { text: "EN · ES bilingual out of the box" },
-      { head: "Included" },
-      { text: "Senior consultant, weekly check-in" },
-      { text: "Operator console + full audit log" },
-      { text: "One CRM or ledger integration" },
-      { text: "Monday-morning scorecard, email + PDF" },
+      { text: "**1 fully orchestrated AI agent** (Esmi or custom workflow)" },
+      { text: "System design, integrations, and initial coordination" },
+      { text: "Defined success metrics and ROI tracking" },
+      { text: "Monthly performance reviews and optimization" },
+      { text: "Clear 60–90 day success criteria" },
     ],
   },
   {
-    id: "operate",
-    name: "Operate",
+    id: "growth",
+    name: "Growth",
     sub: "02 / Run it",
-    desc: "A full revenue-operations stack — three agents, one console, a senior consultant on the line.",
-    monthly: "$5,800",
-    annual: "$4,750",
+    desc: "Your first orchestrated AI revenue system — agents that work together to move revenue forward.",
+    monthly: "$8,500",
+    annual: "$6,967",
     noteMonthly: "No long contracts. Cancel anytime.",
-    noteAnnual: "Billed annually · save $12,600/yr.",
+    noteAnnual: "Billed at $83,600/year · save 18%.",
     featured: true,
     badge: "Most popular",
     ctaLabel: "Book a demo",
     ctaHref: "/book",
-    ctaPrimary: true,
     features: [
-      { text: "**All three agents** — Receptionist, Revenue-Ops, and Finance OS" },
-      { text: "Up to **10,000 agent actions** / month" },
-      { text: "EN · ES bilingual + French add-on available" },
-      { head: "Everything in Pilot, plus" },
-      { text: "**Dedicated senior consultant** with a 4-hour SLA" },
-      { text: "Unlimited integrations — CRM, ledger, calendar, phone" },
-      { text: "Monthly business review with revenue scorecard" },
-      { text: "PIPEDA-aligned audit trail · data residency on request" },
-      { text: "Priority phone & Slack support" },
+      { text: "**2–4 agents** orchestrated as one revenue system" },
+      { text: "Full system design and ongoing orchestration" },
+      { text: "Lead qualification + appointment setting workflows" },
+      { text: "Human handoff protocols and performance reporting" },
+      { text: "Monthly optimization focused on results" },
     ],
   },
   {
-    id: "orchestrate",
-    name: "Orchestrate",
+    id: "scale",
+    name: "Scale",
     sub: "03 / Scale it",
-    desc: "For multi-location operators and professional firms — custom workflows, SSO, and a named delivery team.",
+    desc: "A complete orchestrated system managing revenue operations from first contact through financial close.",
+    monthly: "$16,500",
+    annual: "$13,500",
+    noteMonthly: "Annual billing saves 18%.",
+    noteAnnual: "Billed at $162,000/year · save 18%.",
+    featured: false,
+    ctaLabel: "Book a demo",
+    ctaHref: "/book",
+    features: [
+      { text: "**Full multi-agent Revenue OS** — Receptionist + Sales-Ops + Finance" },
+      { text: "Custom agent orchestration and advanced workflows" },
+      { text: "Detailed analytics and performance dashboards" },
+      { text: "Priority support and monthly strategy optimization" },
+      { text: "Stronger performance component tied to results" },
+    ],
+  },
+  {
+    id: "enterprise",
+    name: "Enterprise",
+    sub: "04 / Custom",
+    desc: "A tailored AI revenue operating system built around your specific goals and scale.",
     monthly: "Custom",
     annual: "Custom",
-    noteMonthly: "From $14k/mo · scoped per engagement.",
-    noteAnnual: "From $14k/mo · scoped per engagement.",
+    noteMonthly: "Starting at $28,000+/month · scoped per engagement.",
+    noteAnnual: "Starting at $28,000+/month · scoped per engagement.",
     featured: false,
     ctaLabel: "Talk to sales",
     ctaHref: "/book",
-    ctaPrimary: false,
     features: [
-      { text: "**Unlimited agents** across multiple locations or business units" },
-      { text: "**Volume agent actions** — scaled to your operations" },
-      { text: "EN · ES · FR + custom language tuning" },
-      { head: "Everything in Operate, plus" },
-      { text: "**Named delivery team** — consultant + engineer + analyst" },
-      { text: "Custom integrations & bespoke agent workflows" },
-      { text: "SSO, role-based access, and approval workflows" },
-      { text: "SOC 2 reports, MSA, custom DPA" },
-      { text: "1-hour SLA · 24/7 on-call escalation" },
+      { text: "**Fully custom** multi-agent architecture" },
+      { text: "Dedicated orchestration and success management" },
+      { text: "Custom integrations and advanced workflows" },
+      { text: "Flexible outcome-based components" },
+      { text: "Quarterly business reviews and continuous optimization" },
+      { text: "Custom KPIs tied to revenue, cost savings, or efficiency" },
     ],
   },
 ];
@@ -255,7 +334,7 @@ function Tiers({ billing }: { billing: Billing }) {
       className="scroll-mt-20 px-6 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-24"
     >
       <div className="mx-auto max-w-[1200px]">
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
           {TIERS.map((tier) => (
             <TierCard key={tier.id} tier={tier} billing={billing} />
           ))}
@@ -273,7 +352,7 @@ function TierCard({ tier, billing }: { tier: TierDef; billing: Billing }) {
   if (tier.featured) {
     return (
       <article
-        className="relative overflow-hidden rounded-[22px] p-7 text-white"
+        className="relative overflow-hidden rounded-[22px] p-6 text-white"
         aria-labelledby={`tier-${tier.id}`}
         style={{
           background: `
@@ -285,7 +364,6 @@ function TierCard({ tier, billing }: { tier: TierDef; billing: Billing }) {
             "0 1px 0 rgba(255,255,255,0.10) inset, 0 0 0 1px rgba(20,184,166,0.12), 0 32px 80px -24px rgba(10,37,64,0.50), 0 20px 48px -16px rgba(20,184,166,0.20)",
         }}
       >
-        {/* Grid texture */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 opacity-30"
@@ -303,8 +381,7 @@ function TierCard({ tier, billing }: { tier: TierDef; billing: Billing }) {
           aria-hidden
           className="pointer-events-none absolute inset-x-[20%] top-0 h-px"
           style={{
-            background:
-              "linear-gradient(90deg, transparent, rgba(20,184,166,0.50), transparent)",
+            background: "linear-gradient(90deg, transparent, rgba(20,184,166,0.50), transparent)",
           }}
         />
 
@@ -324,7 +401,7 @@ function TierCard({ tier, billing }: { tier: TierDef; billing: Billing }) {
 
           <div className="mb-1 flex items-baseline justify-between">
             <div
-              className="text-[22px] font-semibold tracking-[-0.018em] text-white"
+              className="text-[21px] font-semibold tracking-[-0.018em] text-white"
               id={`tier-${tier.id}`}
               style={{ fontFamily: "var(--font-display)" }}
             >
@@ -339,31 +416,31 @@ function TierCard({ tier, billing }: { tier: TierDef; billing: Billing }) {
           </div>
 
           <p
-            className="mb-6 text-[14px] leading-[1.55] text-white/60"
+            className="mb-6 text-[13.5px] leading-[1.55] text-white/60"
             style={{ fontFamily: "var(--font-display)" }}
           >
             {tier.desc}
           </p>
 
-          <div className="mb-7 border-t border-white/[0.08] pt-6">
+          <div className="mb-6 border-t border-white/[0.08] pt-5">
             <div className="flex items-baseline gap-1.5">
               <span
-                className="text-[40px] font-semibold leading-none tracking-[-0.030em] text-white"
+                className="text-[36px] font-semibold leading-none tracking-[-0.030em] text-white"
                 style={{ fontFamily: "var(--font-display)" }}
               >
                 {price}
               </span>
               {!isCustom && (
                 <span
-                  className="text-[14px] text-white/50"
+                  className="text-[13px] text-white/50"
                   style={{ fontFamily: "var(--font-display)" }}
                 >
-                  / month
+                  / mo
                 </span>
               )}
             </div>
             <div
-              className="mt-1.5 text-[12px] text-white/45"
+              className="mt-1.5 text-[11.5px] text-white/45"
               style={{ fontFamily: "var(--font-mono)" }}
             >
               {note}
@@ -372,7 +449,7 @@ function TierCard({ tier, billing }: { tier: TierDef; billing: Billing }) {
 
           <a
             href={tier.ctaHref}
-            className="mb-7 flex h-11 items-center justify-center rounded-xl bg-white text-[14px] font-medium transition-opacity hover:opacity-90"
+            className="mb-6 flex h-11 items-center justify-center rounded-xl bg-white text-[14px] font-medium transition-opacity hover:opacity-90"
             style={{ fontFamily: "var(--font-display)", color: "var(--navy-700)" }}
           >
             {tier.ctaLabel} <span className="ml-1.5 opacity-70">→</span>
@@ -399,7 +476,7 @@ function TierCard({ tier, billing }: { tier: TierDef; billing: Billing }) {
                     </svg>
                   </span>
                   <span
-                    className="text-[13.5px] leading-[1.5] text-white/75"
+                    className="text-[13px] leading-[1.5] text-white/75"
                     style={{ fontFamily: "var(--font-display)" }}
                   >
                     {bold(f.text)}
@@ -415,7 +492,7 @@ function TierCard({ tier, billing }: { tier: TierDef; billing: Billing }) {
 
   return (
     <article
-      className="flex flex-col rounded-[22px] border p-7"
+      className="flex flex-col rounded-[22px] border p-6"
       aria-labelledby={`tier-${tier.id}`}
       style={{
         borderColor: "var(--line)",
@@ -425,7 +502,7 @@ function TierCard({ tier, billing }: { tier: TierDef; billing: Billing }) {
     >
       <div className="mb-1 flex items-baseline justify-between">
         <div
-          className="text-[22px] font-semibold tracking-[-0.018em]"
+          className="text-[21px] font-semibold tracking-[-0.018em]"
           id={`tier-${tier.id}`}
           style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
         >
@@ -440,34 +517,31 @@ function TierCard({ tier, billing }: { tier: TierDef; billing: Billing }) {
       </div>
 
       <p
-        className="mb-6 text-[14px] leading-[1.55]"
+        className="mb-6 text-[13.5px] leading-[1.55]"
         style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
       >
         {tier.desc}
       </p>
 
-      <div
-        className="mb-7 border-t pt-6"
-        style={{ borderColor: "var(--line)" }}
-      >
+      <div className="mb-6 border-t pt-5" style={{ borderColor: "var(--line)" }}>
         <div className="flex items-baseline gap-1.5">
           <span
-            className="text-[40px] font-semibold leading-none tracking-[-0.030em]"
+            className="text-[36px] font-semibold leading-none tracking-[-0.030em]"
             style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
           >
             {price}
           </span>
           {!isCustom && (
             <span
-              className="text-[14px]"
+              className="text-[13px]"
               style={{ fontFamily: "var(--font-display)", color: "var(--ink-3)" }}
             >
-              / month
+              / mo
             </span>
           )}
         </div>
         <div
-          className="mt-1.5 text-[12px]"
+          className="mt-1.5 text-[11.5px]"
           style={{ fontFamily: "var(--font-mono)", color: "var(--ink-3)" }}
         >
           {note}
@@ -476,7 +550,7 @@ function TierCard({ tier, billing }: { tier: TierDef; billing: Billing }) {
 
       <a
         href={tier.ctaHref}
-        className="mb-7 flex h-11 items-center justify-center rounded-xl border text-[14px] font-medium transition-colors hover:bg-surface-2"
+        className="mb-6 flex h-11 items-center justify-center rounded-xl border text-[14px] font-medium transition-colors hover:bg-surface-2"
         style={{
           fontFamily: "var(--font-display)",
           borderColor: "var(--line-strong)",
@@ -485,7 +559,7 @@ function TierCard({ tier, billing }: { tier: TierDef; billing: Billing }) {
         }}
       >
         {tier.ctaLabel}
-        {tier.id === "orchestrate" && <span className="ml-1.5 opacity-70">→</span>}
+        {tier.id === "enterprise" && <span className="ml-1.5 opacity-70">→</span>}
       </a>
 
       <ul className="flex flex-col gap-3">
@@ -509,7 +583,7 @@ function TierCard({ tier, billing }: { tier: TierDef; billing: Billing }) {
                 </svg>
               </span>
               <span
-                className="text-[13.5px] leading-[1.5]"
+                className="text-[13px] leading-[1.5]"
                 style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
               >
                 {bold(f.text)}
@@ -524,14 +598,15 @@ function TierCard({ tier, billing }: { tier: TierDef; billing: Billing }) {
 
 /* ─── Comparison table ───────────────────────────────────────────────────── */
 
-type CellVal = string; // "✓" | "—" | other text
+type CellVal = string;
 
 interface CompareRow {
   feat: string;
   hint?: string;
   pilot: CellVal;
-  operate: CellVal;
-  orchestrate: CellVal;
+  growth: CellVal;
+  scale: CellVal;
+  enterprise: CellVal;
 }
 
 interface CompareSection {
@@ -541,37 +616,35 @@ interface CompareSection {
 
 const COMPARE: CompareSection[] = [
   {
-    section: "Agents & capacity",
+    section: "Agents & orchestration",
     rows: [
-      { feat: "Agents included", hint: "Receptionist · Revenue-Ops · Finance OS", pilot: "1 of your choice", operate: "All 3", orchestrate: "Unlimited" },
-      { feat: "Agent actions / month", hint: "Calls answered, deals processed, lines reconciled", pilot: "1,500", operate: "10,000", orchestrate: "Volume" },
-      { feat: "Languages", pilot: "EN · ES", operate: "EN · ES (+ FR add-on)", orchestrate: "EN · ES · FR + custom" },
-      { feat: "Locations / business units", pilot: "1", operate: "Up to 3", orchestrate: "Unlimited" },
+      { feat: "Agents included", pilot: "1 agent", growth: "2–4 agents", scale: "Revenue OS (3)", enterprise: "Custom (unlimited)" },
+      { feat: "System design", pilot: "✓", growth: "✓", scale: "✓", enterprise: "Fully custom" },
+      { feat: "Orchestration", hint: "Ongoing agent coordination", pilot: "Initial", growth: "Ongoing", scale: "Advanced", enterprise: "Dedicated" },
+      { feat: "Custom workflows", pilot: "—", growth: "Combined", scale: "Full Revenue OS", enterprise: "Unlimited" },
     ],
   },
   {
-    section: "Integrations",
+    section: "Performance & reporting",
     rows: [
-      { feat: "CRM, ledger, calendar, phone", pilot: "1 integration", operate: "Unlimited", orchestrate: "Unlimited + custom" },
-      { feat: "Bespoke workflows", hint: "Agents shaped to your exact process", pilot: "—", operate: "2 / quarter", orchestrate: "Unlimited" },
-      { feat: "API access", pilot: "—", operate: "✓", orchestrate: "✓" },
+      { feat: "Success metrics & ROI tracking", pilot: "✓", growth: "✓", scale: "✓", enterprise: "✓" },
+      { feat: "Performance component", hint: "Tied to qualified leads or bookings", pilot: "Basic", growth: "✓", scale: "Stronger", enterprise: "Outcome guarantees" },
+      { feat: "Analytics dashboards", pilot: "Monthly scorecard", growth: "Performance reports", scale: "Advanced dashboards", enterprise: "Custom KPIs" },
     ],
   },
   {
-    section: "People & service",
+    section: "Support & people",
     rows: [
-      { feat: "Senior consultant", hint: "Named human you can call", pilot: "Weekly check-in", operate: "Dedicated", orchestrate: "Named delivery team" },
-      { feat: "Support SLA", pilot: "Next business day", operate: "4 hours", orchestrate: "1 hour · 24/7" },
-      { feat: "Business review", pilot: "Weekly scorecard", operate: "Monthly review", orchestrate: "QBRs + monthly" },
+      { feat: "Consultant access", pilot: "Monthly reviews", growth: "Monthly optimization", scale: "Priority support", enterprise: "Dedicated team" },
+      { feat: "Business reviews", pilot: "Monthly", growth: "Monthly", scale: "Monthly strategy", enterprise: "Quarterly + monthly" },
+      { feat: "Success criteria", pilot: "60–90 day window", growth: "Ongoing", scale: "Ongoing", enterprise: "Custom" },
     ],
   },
   {
-    section: "Security & compliance",
+    section: "Billing",
     rows: [
-      { feat: "PIPEDA-aligned audit trail", pilot: "✓", operate: "✓", orchestrate: "✓" },
-      { feat: "Data residency on request", pilot: "—", operate: "✓", orchestrate: "✓" },
-      { feat: "SSO & role-based access", pilot: "—", operate: "—", orchestrate: "✓" },
-      { feat: "SOC 2 report · custom DPA · MSA", pilot: "—", operate: "On request", orchestrate: "✓" },
+      { feat: "Monthly billing", pilot: "✓", growth: "✓", scale: "✓", enterprise: "Custom" },
+      { feat: "Annual discount", pilot: "18%", growth: "18%", scale: "18%", enterprise: "Custom" },
     ],
   },
 ];
@@ -590,18 +663,11 @@ function Cell({ val, mid }: { val: CellVal; mid?: boolean }) {
     );
   }
   if (val === "—") {
-    return (
-      <span
-        className="text-[14px]"
-        style={{ color: "var(--ink-4)" }}
-      >
-        —
-      </span>
-    );
+    return <span className="text-[14px]" style={{ color: "var(--ink-4)" }}>—</span>;
   }
   return (
     <span
-      className="text-[13.5px] leading-snug"
+      className="text-[13px] leading-snug"
       style={{
         fontFamily: "var(--font-display)",
         color: mid ? "var(--ink)" : "var(--ink-2)",
@@ -629,7 +695,7 @@ function CompareTable() {
             Compare plans
           </span>
           <h2
-            className="mb-3 text-[34px] font-semibold leading-[1.08] tracking-[-0.024em] sm:text-[40px]"
+            className="mb-3 text-[28px] font-semibold leading-[1.08] tracking-[-0.03em] sm:text-[38px] lg:text-[44px]"
             style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
           >
             What&apos;s in each plan, side by side.
@@ -638,18 +704,16 @@ function CompareTable() {
             className="text-[16px] leading-[1.6]"
             style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
           >
-            Everything we ship — agents, integrations, controls, and people.
-            Pick the row that matters most to you.
+            Agents, orchestration, performance, and people — pick the row that matters most to you.
           </p>
         </div>
 
-        {/* Scrollable table wrapper */}
         <div className="overflow-x-auto rounded-[18px] border" style={{ borderColor: "var(--line)" }}>
-          <table className="w-full min-w-[640px] border-collapse bg-white">
+          <table className="w-full min-w-[760px] border-collapse bg-white">
             <thead>
               <tr>
                 <th
-                  className="w-[40%] border-b py-4 pl-6 pr-4 text-left"
+                  className="w-[28%] border-b py-4 pl-6 pr-4 text-left"
                   style={{ borderColor: "var(--line)", background: "var(--surface-2)" }}
                 >
                   <div className="text-[10px] font-medium uppercase tracking-[0.16em]" style={{ fontFamily: "var(--font-mono)", color: "var(--ink-3)" }}>
@@ -660,19 +724,23 @@ function CompareTable() {
                   </div>
                 </th>
                 {[
-                  { sub: "01 · Prove it", name: "Pilot" },
-                  { sub: "02 · Run it · Most popular", name: "Operate", mid: true },
-                  { sub: "03 · Scale it", name: "Orchestrate" },
+                  { sub: "01 · Prove it", name: "Pilot", mid: false },
+                  { sub: "02 · Run it · Most popular", name: "Growth", mid: true },
+                  { sub: "03 · Scale it", name: "Scale", mid: false },
+                  { sub: "04 · Custom", name: "Enterprise", mid: false },
                 ].map(({ sub, name, mid }) => (
                   <th
                     key={name}
-                    className="border-b py-4 px-4 text-center"
+                    className="border-b py-4 px-3 text-center"
                     style={{
                       borderColor: "var(--line)",
                       background: mid ? "rgba(10,37,64,0.03)" : "var(--surface-2)",
                     }}
                   >
-                    <div className="text-[10px] font-medium uppercase tracking-[0.12em] truncate" style={{ fontFamily: "var(--font-mono)", color: mid ? "var(--teal-600)" : "var(--ink-3)" }}>
+                    <div
+                      className="truncate text-[10px] font-medium uppercase tracking-[0.12em]"
+                      style={{ fontFamily: "var(--font-mono)", color: mid ? "var(--teal-600)" : "var(--ink-3)" }}
+                    >
                       {sub}
                     </div>
                     <div className="text-[15px] font-semibold" style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}>
@@ -687,13 +755,9 @@ function CompareTable() {
                 <>
                   <tr key={group.section} style={{ background: "var(--surface-2)" }}>
                     <td
-                      colSpan={4}
+                      colSpan={5}
                       className="border-t py-2.5 pl-6 text-[11px] font-semibold uppercase tracking-[0.14em]"
-                      style={{
-                        borderColor: "var(--line)",
-                        fontFamily: "var(--font-mono)",
-                        color: "var(--ink-3)",
-                      }}
+                      style={{ borderColor: "var(--line)", fontFamily: "var(--font-mono)", color: "var(--ink-3)" }}
                     >
                       {group.section}
                     </td>
@@ -710,15 +774,10 @@ function CompareTable() {
                           </div>
                         )}
                       </td>
-                      <td className="py-3.5 px-4 text-center align-middle">
-                        <Cell val={row.pilot} />
-                      </td>
-                      <td className="py-3.5 px-4 text-center align-middle" style={{ background: "rgba(10,37,64,0.02)" }}>
-                        <Cell val={row.operate} mid />
-                      </td>
-                      <td className="py-3.5 px-4 text-center align-middle">
-                        <Cell val={row.orchestrate} />
-                      </td>
+                      <td className="py-3.5 px-3 text-center align-middle"><Cell val={row.pilot} /></td>
+                      <td className="py-3.5 px-3 text-center align-middle" style={{ background: "rgba(10,37,64,0.02)" }}><Cell val={row.growth} mid /></td>
+                      <td className="py-3.5 px-3 text-center align-middle"><Cell val={row.scale} /></td>
+                      <td className="py-3.5 px-3 text-center align-middle"><Cell val={row.enterprise} /></td>
                     </tr>
                   ))}
                 </>
@@ -735,36 +794,20 @@ function CompareTable() {
 
 const FAQS = [
   {
-    q: "What does a two-week pilot actually look like?",
-    a: "Week one, a senior consultant sits with your team and writes the workflow we'll automate. Week two, your first agent goes live in your tools — phone, inbox, CRM, or ledger — with a scorecard you can read on Monday morning. We measure against the goal you set at kickoff. If it doesn't move the number, we don't move forward.",
+    q: "How is the performance component calculated?",
+    a: "We work with you during onboarding to define clear, trackable metrics (such as qualified leads or appointments booked). The performance component is then tied to results above an agreed baseline.",
   },
   {
-    q: 'What counts as an "agent action"?',
-    a: "A discrete piece of work the agent performs: a call answered, a lead qualified, a transaction reconciled, a follow-up sent. Read-only operations and internal sync don't count. We show your live action count in the operator console — no surprise overages.",
+    q: "Can I start with Pilot and upgrade later?",
+    a: "Yes. Most clients begin with Pilot to validate results, then move to Growth once the impact is proven. Upgrades are designed to be seamless.",
   },
   {
-    q: "What happens if we exceed our monthly actions?",
-    a: "Nothing breaks. We notify you at 80% and your consultant works with you on the right next step — staying on the same tier, adding a top-up pack, or moving up. No service interruptions, no surprise charges.",
+    q: "Do you offer annual discounts?",
+    a: "Yes. Paying annually saves 18% compared to monthly billing across all tiers.",
   },
   {
-    q: "Are there setup fees?",
-    a: "No. The 14-day deployment is included in every plan. Custom integrations on Orchestrate are scoped separately, but anything in our standard connector library (CRMs, ledgers, calendars, phone, email) is included.",
-  },
-  {
-    q: "Can we start small and add agents later?",
-    a: "That's exactly how most clients onboard. Begin with the agent that has the clearest payback for you, then add the next one when the first has earned the room. Same console, same consultant, no re-platforming.",
-  },
-  {
-    q: "How are you different from a generic AI assistant?",
-    a: "Orchelix is a multi-agent system with operator-grade controls — every action is logged, every workflow is human-reviewable, and a senior consultant owns the deployment with you. We're a consultancy that ships software, not a chatbot with a billing page.",
-  },
-  {
-    q: "Where is data stored, and who can see it?",
-    a: "Data is encrypted in transit and at rest, stored in Canadian or US regions by default, and Canadian data residency is available on Operate and Orchestrate by request. PIPEDA-aligned by default. SOC 2 audit in progress; reports available on Orchestrate.",
-  },
-  {
-    q: "What if we want to cancel?",
-    a: "Monthly plans cancel anytime, effective end of cycle. Annual plans cancel with 30 days' notice. You keep export access to every agent action and audit log for 60 days after cancellation.",
+    q: "What if I need something more custom?",
+    a: "Our Enterprise tier is fully customizable. We'll work with you to design a system and pricing model aligned with your specific revenue goals.",
   },
 ];
 
@@ -801,7 +844,6 @@ function FAQ() {
               a chatbot. We answer the same day.
             </p>
 
-            {/* Help card */}
             <div
               className="rounded-[18px] border p-6"
               style={{ borderColor: "var(--line)", background: "#fff" }}
@@ -816,15 +858,15 @@ function FAQ() {
                 className="mb-4 text-[14px] leading-[1.55]"
                 style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
               >
-                Book a 30-minute call with a senior Orchelix consultant. No
-                deck, no slides — just your workflow.
+                Book a 30-minute strategy call with a senior Orchelix
+                consultant. No deck, no slides — just your workflow.
               </p>
               <a
                 href="/book"
                 className="inline-flex h-9 items-center rounded-[10px] px-4 text-[13px] font-medium text-white transition-opacity hover:opacity-90"
                 style={{ fontFamily: "var(--font-display)", background: "var(--navy-600)" }}
               >
-                Book a call →
+                Book a strategy call →
               </a>
             </div>
           </div>
@@ -898,15 +940,14 @@ function PricingFinalCTA() {
                 className="mb-4 text-[28px] font-semibold leading-[1.1] tracking-[-0.022em] text-white sm:text-[34px] lg:text-[40px]"
                 style={{ fontFamily: "var(--font-display)" }}
               >
-                Start with one agent. Pay for itself in 30 days.
+                Ready to orchestrate your revenue operations?
               </h2>
               <p
                 className="max-w-[540px] text-[16px] leading-[1.6] text-white/60 sm:text-[17px]"
                 style={{ fontFamily: "var(--font-display)" }}
               >
-                A focused two-week pilot, a senior consultant on the line, and
-                a scorecard you can read on Monday morning. Add the next agent
-                only when the first one has earned the room.
+                Let&apos;s build a system that delivers measurable results for
+                your business.
               </p>
             </div>
             <div className="flex flex-wrap gap-3 lg:shrink-0">
@@ -915,14 +956,14 @@ function PricingFinalCTA() {
                 className="inline-flex h-12 items-center rounded-xl border border-white/20 px-6 text-[15px] font-medium text-white/90 transition-colors hover:bg-white/10"
                 style={{ fontFamily: "var(--font-display)" }}
               >
-                Talk to a consultant
+                Book a strategy call
               </a>
               <a
                 href="/book"
                 className="inline-flex h-12 items-center rounded-xl bg-white px-6 text-[15px] font-medium transition-opacity hover:opacity-90"
                 style={{ fontFamily: "var(--font-display)", color: "var(--navy-600)" }}
               >
-                Book a demo <span className="ml-1.5 opacity-70">→</span>
+                Start with Pilot <span className="ml-1.5 opacity-70">→</span>
               </a>
             </div>
           </div>

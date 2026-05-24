@@ -5,7 +5,7 @@ import Footer from "@/app/components/sections/Footer";
 export const metadata: Metadata = {
   title: "Solutions — Orchelix AI Consulting",
   description:
-    "Three intelligent agents, one operator console. Revenue-Ops, Esmi Virtual Receptionist, and Accounting & Finance OS — built to run alongside your team.",
+    "Three intelligent agents, one operator console. Esmi Virtual Receptionist, Revenue-Ops, and Accounting & Finance OS — built to run alongside your team.",
 };
 
 export default function SolutionsPage() {
@@ -14,8 +14,8 @@ export default function SolutionsPage() {
       <Nav />
       <main id="top">
         <SolHero />
-        <AgentRevOps />
         <AgentEsmi />
+        <AgentRevOps />
         <AgentFinance />
         <SolFinalCTA />
       </main>
@@ -98,7 +98,7 @@ function SolHero() {
                 Book a demo <span className="ml-1.5 opacity-85">→</span>
               </a>
               <a
-                href="#agent-revops"
+                href="#agent-esmi"
                 className="inline-flex h-12 items-center rounded-xl border px-6 text-[15px] font-medium transition-colors hover:bg-surface-2"
                 style={{
                   fontFamily: "var(--font-display)",
@@ -124,15 +124,15 @@ function IndexCard() {
   const items = [
     {
       num: "01",
-      name: "Revenue-Ops Agents",
-      sub: "Pipeline qualification & close-the-loop follow-through",
-      href: "#agent-revops",
-    },
-    {
-      num: "02",
       name: "Esmi · Virtual Receptionist",
       sub: "24/7 bilingual call handling and booking",
       href: "#agent-esmi",
+    },
+    {
+      num: "02",
+      name: "Revenue-Ops Agents",
+      sub: "Pipeline qualification & close-the-loop follow-through",
+      href: "#agent-revops",
     },
     {
       num: "03",
@@ -440,12 +440,12 @@ function AgentRevOps() {
     <section
       id="agent-revops"
       className="scroll-mt-24 border-t py-20 sm:py-24 lg:py-32"
-      style={{ borderColor: "var(--line)" }}
+      style={{ borderColor: "var(--line)", background: "var(--surface-2)" }}
     >
       <div className="mx-auto max-w-[1200px] px-6 sm:px-8 lg:px-10">
         <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
-          <div className="flex flex-col gap-7">
-            <AgentMeta num="01 / Revenue" category="Sales & Marketing" />
+          <div className="flex flex-col gap-7 lg:order-2">
+            <AgentMeta num="02 / Revenue" category="Sales & Marketing" />
             <div>
               <h2
                 className="mb-3 text-[34px] font-semibold leading-[1.06] tracking-[-0.024em] sm:text-[42px] lg:text-[48px]"
@@ -489,9 +489,11 @@ function AgentRevOps() {
             />
           </div>
 
-          <FigurePanel title="orchelix · revenue-ops" tag="live · qualifying">
-            <PipelineFigure />
-          </FigurePanel>
+          <div className="lg:order-1">
+            <FigurePanel title="orchelix · revenue-ops" tag="live · qualifying">
+              <PipelineFigure />
+            </FigurePanel>
+          </div>
         </div>
       </div>
     </section>
@@ -662,13 +664,12 @@ function AgentEsmi() {
     <section
       id="agent-esmi"
       className="scroll-mt-24 border-t py-20 sm:py-24 lg:py-32"
-      style={{ borderColor: "var(--line)", background: "var(--surface-2)" }}
+      style={{ borderColor: "var(--line)" }}
     >
       <div className="mx-auto max-w-[1200px] px-6 sm:px-8 lg:px-10">
-        {/* Figure left on desktop: copy gets lg:order-2, figure gets lg:order-1 */}
         <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
-          <div className="flex flex-col gap-7 lg:order-2">
-            <AgentMeta num="02 / Voice" category="Virtual Receptionist · Esmi" />
+          <div className="flex flex-col gap-7">
+            <AgentMeta num="01 / Voice" category="Virtual Receptionist · Esmi" />
             <div>
               <h2
                 className="mb-3 text-[34px] font-semibold leading-[1.06] tracking-[-0.024em] sm:text-[42px] lg:text-[48px]"
@@ -712,11 +713,9 @@ function AgentEsmi() {
             />
           </div>
 
-          <div className="lg:order-1">
-            <FigurePanel title="esmi · live call" tag="recording · 01:42">
-              <EsmiFigure />
-            </FigurePanel>
-          </div>
+          <FigurePanel title="esmi · live call" tag="recording · 01:42">
+            <EsmiFigure />
+          </FigurePanel>
         </div>
       </div>
     </section>
@@ -728,10 +727,10 @@ function EsmiFigure() {
     <>
       <div className="mb-4 flex items-center gap-3">
         <div
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[13px] font-bold"
-          style={{ background: "rgba(20,184,166,0.25)", color: "#5EEAD4" }}
+          className="flex h-9 shrink-0 items-center justify-center rounded-xl px-2.5"
+          style={{ background: "rgba(20,184,166,0.20)" }}
         >
-          ES
+          <img src="/esmi-logo.png" alt="Esmi" style={{ height: 16, width: "auto" }} />
         </div>
         <div className="min-w-0 flex-1">
           <div
@@ -788,11 +787,8 @@ function EsmiFigure() {
         </div>
 
         <div className="flex flex-col items-end gap-1">
-          <span
-            className="text-[9.5px] font-medium uppercase tracking-[0.14em] text-teal-400/70"
-            style={{ fontFamily: "var(--font-mono)" }}
-          >
-            Esmi
+          <span className="inline-flex items-center">
+            <img src="/esmi-logo.png" alt="Esmi" style={{ height: 10, width: "auto", opacity: 0.7 }} />
           </span>
           <div
             className="rounded-[10px] rounded-tr-sm p-2.5 text-[12px] leading-[1.55] text-white/90"
@@ -825,11 +821,8 @@ function EsmiFigure() {
         </div>
 
         <div className="flex flex-col items-end gap-1">
-          <span
-            className="text-[9.5px] font-medium uppercase tracking-[0.14em] text-teal-400/70"
-            style={{ fontFamily: "var(--font-mono)" }}
-          >
-            Esmi
+          <span className="inline-flex items-center">
+            <img src="/esmi-logo.png" alt="Esmi" style={{ height: 10, width: "auto", opacity: 0.7 }} />
           </span>
           <div
             className="rounded-[10px] rounded-tr-sm p-2.5 text-[12px] leading-[1.55] text-white/90"
