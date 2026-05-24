@@ -127,6 +127,11 @@ body {
   50%       { opacity: 0.55; }
 }
 
+/* Spinner used in Esmi chat tool-status pill */
+@keyframes esmi-spin {
+  to { transform: rotate(360deg); }
+}
+
 /* Nav link — animated teal underline on hover */
 .nav-link {
   position: relative;
