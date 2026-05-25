@@ -26,17 +26,26 @@ function buildHtml(fields: {
 }): string {
   const { name, company, email, phone, useCase, message } = fields;
 
-  const row = (label: string, value: string) =>
-    value
+  const submittedAt = new Date().toLocaleString("en-CA", {
+    year: "numeric", month: "long", day: "numeric",
+    hour: "2-digit", minute: "2-digit", timeZone: "America/Toronto",
+  });
+
+  // isLast removes the bottom border so it doesn't double up with the card border
+  const fieldRow = (label: string, value: string, isLast = false) =>
+    value.trim()
       ? `<tr>
-          <td style="padding:10px 0;border-bottom:1px solid #E8EDF2;width:130px;vertical-align:top;
+          <td style="padding:14px 20px;${isLast ? "" : "border-bottom:1px solid #EEF2F6;"}
+                     width:110px;vertical-align:top;
                      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-                     font-size:13px;font-weight:600;color:#0A2540;white-space:nowrap;">
+                     font-size:10px;font-weight:700;color:#94A3B8;
+                     letter-spacing:0.12em;text-transform:uppercase;white-space:nowrap;">
             ${label}
           </td>
-          <td style="padding:10px 0 10px 16px;border-bottom:1px solid #E8EDF2;vertical-align:top;
+          <td style="padding:14px 20px;${isLast ? "" : "border-bottom:1px solid #EEF2F6;"}
+                     vertical-align:top;
                      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-                     font-size:14px;color:#3F5570;line-height:1.5;">
+                     font-size:14px;font-weight:500;color:#0A2540;line-height:1.55;">
             ${value.replace(/\n/g, "<br>")}
           </td>
         </tr>`
@@ -48,91 +57,175 @@ function buildHtml(fields: {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>New lead — Orchelix</title>
+  <style>
+    @media only screen and (max-width:600px) {
+      .ow { padding:12px 8px !important; }
+      .hp { padding:20px 22px 0 !important; }
+      .bp { padding:24px 22px !important; }
+      .cp { padding:20px 22px !important; }
+      .fp { padding:18px 22px !important; }
+    }
+  </style>
 </head>
-<body style="margin:0;padding:0;background:#F4F6F9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+<body style="margin:0;padding:0;background:#EEF2F6;">
 
-  <table width="100%" cellpadding="0" cellspacing="0" role="presentation"
-         style="background:#F4F6F9;padding:40px 16px;">
+  <table class="ow" width="100%" cellpadding="0" cellspacing="0" role="presentation"
+         style="background:#EEF2F6;padding:32px 16px;">
     <tr>
       <td align="center">
         <table width="600" cellpadding="0" cellspacing="0" role="presentation"
-               style="max-width:600px;width:100%;border-radius:12px;overflow:hidden;
-                      box-shadow:0 2px 12px rgba(10,37,64,0.10);">
+               style="max-width:600px;width:100%;border-radius:16px;overflow:hidden;
+                      box-shadow:0 4px 24px rgba(10,37,64,0.14),0 1px 4px rgba(10,37,64,0.06);">
 
-          <!-- Header -->
+          <!-- ── HEADER ── -->
           <tr>
-            <td style="background:linear-gradient(135deg,#0A2540 0%,#0D2E4D 100%);
-                       padding:28px 36px;border-bottom:3px solid #14B8A6;">
+            <td class="hp" style="background:#0A2540;padding:26px 36px 0;">
+
+              <!-- Logo + NEW LEAD badge -->
               <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
                 <tr>
-                  <td>
-                    <span style="font-size:20px;font-weight:700;color:#FFFFFF;
-                                 letter-spacing:-0.02em;">Orchelix</span>
-                    <span style="font-size:11px;font-weight:500;color:rgba(255,255,255,0.5);
-                                 letter-spacing:0.14em;text-transform:uppercase;
-                                 margin-left:10px;">AI Consulting</span>
+                  <td style="vertical-align:middle;padding-bottom:26px;">
+                    <img src="https://orchelix-website.vercel.app/orchelix-lockup-horizontal.png"
+                         alt="Orchelix AI Consulting" width="152" height="38"
+                         style="display:block;height:38px;width:auto;max-width:152px;border:0;">
                   </td>
-                  <td align="right">
-                    <span style="display:inline-block;background:rgba(20,184,166,0.18);
-                                 color:#14B8A6;font-size:11px;font-weight:600;
-                                 letter-spacing:0.1em;text-transform:uppercase;
-                                 padding:5px 12px;border-radius:999px;
-                                 border:1px solid rgba(20,184,166,0.30);">
-                      New Lead
-                    </span>
+                  <td align="right" style="vertical-align:middle;padding-bottom:26px;">
+                    <table cellpadding="0" cellspacing="0" role="presentation">
+                      <tr>
+                        <td style="background:rgba(20,184,166,0.14);
+                                   border:1px solid rgba(20,184,166,0.32);
+                                   border-radius:999px;padding:6px 14px;">
+                          <span style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+                                       font-size:10px;font-weight:700;color:#2DD4BF;
+                                       letter-spacing:0.16em;text-transform:uppercase;">
+                            &#9679;&nbsp; New Lead
+                          </span>
+                        </td>
+                      </tr>
+                    </table>
                   </td>
                 </tr>
               </table>
-            </td>
-          </tr>
 
-          <!-- Body -->
-          <tr>
-            <td style="background:#FFFFFF;padding:36px 36px 28px;">
-              <p style="margin:0 0 6px;font-size:22px;font-weight:600;color:#0A2540;
-                         letter-spacing:-0.018em;">
-                ${name} wants to connect
-              </p>
-              <p style="margin:0 0 28px;font-size:14px;color:#6D7F95;line-height:1.5;">
-                Submitted via the Orchelix website contact form.
-                Reply directly to this email to reach ${name}.
-              </p>
-
+              <!-- Teal accent line -->
               <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
-                ${row("Name", name)}
-                ${row("Company", company)}
-                ${row("Email", `<a href="mailto:${email}" style="color:#0D9488;text-decoration:none;">${email}</a>`)}
-                ${row("Phone", phone ? `<a href="tel:${phone}" style="color:#0D9488;text-decoration:none;">${phone}</a>` : "")}
-                ${row("Use case", useCase)}
-                ${row("Message", message)}
+                <tr>
+                  <td style="height:2px;background:#14B8A6;font-size:0;line-height:0;">&nbsp;</td>
+                </tr>
               </table>
+
+              <!-- Hero: name + summary line -->
+              <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+                <tr>
+                  <td style="padding:28px 0 32px;">
+                    <p style="margin:0 0 6px;
+                               font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+                               font-size:10px;font-weight:700;color:#14B8A6;
+                               letter-spacing:0.16em;text-transform:uppercase;">
+                      New submission
+                    </p>
+                    <h1 style="margin:0 0 10px;
+                                font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+                                font-size:30px;font-weight:700;color:#FFFFFF;
+                                letter-spacing:-0.025em;line-height:1.1;">
+                      ${name}
+                    </h1>
+                    <p style="margin:0;
+                               font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+                               font-size:13px;color:rgba(255,255,255,0.48);line-height:1.6;">
+                      ${company ? `${company}&nbsp;&nbsp;&middot;&nbsp;&nbsp;` : ""}${email}${phone ? `&nbsp;&nbsp;&middot;&nbsp;&nbsp;${phone}` : ""}
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
             </td>
           </tr>
 
-          <!-- Quick-reply CTA -->
+          <!-- ── BODY ── -->
           <tr>
-            <td style="background:#F8FAFC;padding:20px 36px;border-top:1px solid #E8EDF2;">
-              <table cellpadding="0" cellspacing="0" role="presentation">
+            <td class="bp" style="background:#FFFFFF;padding:32px 36px;">
+
+              <p style="margin:0 0 14px;
+                         font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+                         font-size:10px;font-weight:700;color:#94A3B8;
+                         letter-spacing:0.14em;text-transform:uppercase;">
+                Submission details
+              </p>
+
+              <!-- Details card -->
+              <table width="100%" cellpadding="0" cellspacing="0" role="presentation"
+                     style="border:1px solid #E8EDF2;border-radius:10px;overflow:hidden;">
+                ${fieldRow("Name",     name,    false)}
+                ${fieldRow("Company",  company, false)}
+                ${fieldRow("Email",    `<a href="mailto:${email}" style="color:#0D9488;text-decoration:none;">${email}</a>`, false)}
+                ${phone   ? fieldRow("Phone",    `<a href="tel:${phone}" style="color:#0D9488;text-decoration:none;">${phone}</a>`, false) : ""}
+                ${fieldRow("Use case", useCase, true)}
+              </table>
+
+              ${message ? `
+              <!-- Message card -->
+              <p style="margin:28px 0 14px;
+                         font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+                         font-size:10px;font-weight:700;color:#94A3B8;
+                         letter-spacing:0.14em;text-transform:uppercase;">
+                Message
+              </p>
+              <table width="100%" cellpadding="0" cellspacing="0" role="presentation"
+                     style="border:1px solid #E8EDF2;border-radius:10px;overflow:hidden;">
                 <tr>
-                  <td style="border-radius:8px;background:#0A2540;">
-                    <a href="mailto:${email}?subject=Re: Your Orchelix inquiry"
-                       style="display:inline-block;padding:11px 22px;
-                              font-size:13px;font-weight:600;color:#FFFFFF;
+                  <td style="padding:20px 22px;background:#F8FAFC;">
+                    <p style="margin:0;
+                               font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+                               font-size:14px;color:#3F5570;line-height:1.75;font-style:italic;">
+                      &ldquo;${message.replace(/\n/g, "<br>")}&rdquo;
+                    </p>
+                  </td>
+                </tr>
+              </table>` : ""}
+
+            </td>
+          </tr>
+
+          <!-- ── CTA ── -->
+          <tr>
+            <td class="cp" style="background:#F8FAFC;padding:24px 36px;border-top:1px solid #E8EDF2;">
+              <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+                <tr>
+                  <td style="border-radius:10px;background:#0A2540;text-align:center;">
+                    <a href="mailto:${email}?subject=Re%3A%20Your%20Orchelix%20inquiry"
+                       style="display:block;padding:16px 24px;
+                              font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+                              font-size:14px;font-weight:600;color:#FFFFFF;
                               text-decoration:none;letter-spacing:0.01em;">
-                      Reply to ${name} →
+                      Reply to ${name} &rarr;
                     </a>
                   </td>
                 </tr>
               </table>
+              <p style="margin:12px 0 0;text-align:center;
+                         font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+                         font-size:12px;color:#94A3B8;line-height:1.5;">
+                Clicking reply sends directly to <strong style="color:#6D7F95;">${email}</strong>
+              </p>
             </td>
           </tr>
 
-          <!-- Footer -->
+          <!-- ── FOOTER ── -->
           <tr>
-            <td style="background:#F0F3F7;padding:16px 36px;border-top:1px solid #E2E8F0;">
-              <p style="margin:0;font-size:11px;color:#94A3B8;line-height:1.6;">
-                This message was sent from the contact form at orhelix.com.<br>
-                Orchelix AI Consulting Inc. · Greater Toronto Area, Ontario, Canada
+            <td class="fp" style="background:#081D33;padding:22px 36px;border-top:2px solid #14B8A6;">
+              <p style="margin:0 0 4px;
+                         font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+                         font-size:12px;font-weight:600;color:rgba(255,255,255,0.55);">
+                Orchelix AI Consulting Inc.
+              </p>
+              <p style="margin:0;
+                         font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+                         font-size:11px;color:rgba(255,255,255,0.28);line-height:1.7;">
+                Greater Toronto Area, Ontario, Canada
+                &nbsp;&middot;&nbsp;
+                <a href="https://orhelix.com" style="color:rgba(255,255,255,0.35);text-decoration:none;">orhelix.com</a>
+                &nbsp;&middot;&nbsp; Submitted ${submittedAt}
               </p>
             </td>
           </tr>
