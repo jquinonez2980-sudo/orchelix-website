@@ -3,22 +3,18 @@
  *
  * SETUP (one-time):
  *   1. Create a free account at https://resend.com
- *   2. Add your sending domain (orchelix.com) → Resend → Domains → Add Domain
- *      (adds a few DNS records; takes ~5 min to verify)
+ *   2. Verify your sending domain (orchelix.com) in Resend → Domains
  *   3. Create an API key → Resend → API Keys → Create API Key
  *   4. In Vercel → Project → Settings → Environment Variables, add:
  *        RESEND_API_KEY = re_xxxxxxxxxxxxxxxxxxxx
  *      and redeploy.
- *
- *   Until the domain is verified you can test with from: "onboarding@resend.dev"
- *   and to: your personal email (Resend sandbox only delivers to verified addresses).
  */
 
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
 const TO_ADDRESS = "info@orchelix.com";
-const FROM_ADDRESS = "Orchelix Website <noreply@orchelix.com>";
+const FROM_ADDRESS = "Orchelix <info@orchelix.com>";
 
 function buildHtml(fields: {
   name: string;
