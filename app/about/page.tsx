@@ -74,7 +74,7 @@ function Hero() {
           Building reliable AI systems that actually{" "}
           <span
             className="bg-gradient-to-br from-navy-600 via-teal-500 to-teal-400 bg-clip-text font-normal italic"
-            style={{ WebkitTextFillColor: "transparent" }}
+            style={{ WebkitTextFillColor: "transparent", paddingRight: "0.1em" }}
           >
             run revenue operations.
           </span>

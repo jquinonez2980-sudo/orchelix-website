@@ -70,7 +70,7 @@ function HWHero() {
             From first call to your first agent{" "}
             <span
               className="bg-gradient-to-br from-navy-600 via-teal-500 to-teal-400 bg-clip-text font-normal italic"
-              style={{ WebkitTextFillColor: "transparent" }}
+              style={{ WebkitTextFillColor: "transparent", paddingRight: "0.1em" }}
             >
               in 14 days
             </span>
