@@ -168,31 +168,48 @@ function buildText(fields: {
 }
 
 export async function POST(req: NextRequest) {
+  // 1. Parse body — bad JSON is a client error, not a server error
+  let body: Record<string, unknown>;
   try {
-    const body = await req.json();
-    const name    = (body.name    as string | undefined)?.trim() ?? "";
-    const company = (body.company as string | undefined)?.trim() ?? "";
-    const email   = (body.email   as string | undefined)?.trim() ?? "";
-    const phone   = (body.phone   as string | undefined)?.trim() ?? "";
-    const useCase = (body.useCase as string | undefined)?.trim() ?? "";
-    const message = (body.message as string | undefined)?.trim() ?? "";
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
+  }
 
-    if (!name || !email || !useCase) {
-      return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
-    }
+  // 2. Extract and sanitise fields
+  const name    = (body.name    as string | undefined)?.trim() ?? "";
+  const company = (body.company as string | undefined)?.trim() ?? "";
+  const email   = (body.email   as string | undefined)?.trim() ?? "";
+  const phone   = (body.phone   as string | undefined)?.trim() ?? "";
+  const useCase = (body.useCase as string | undefined)?.trim() ?? "";
+  const message = (body.message as string | undefined)?.trim() ?? "";
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json({ error: "Invalid email address." }, { status: 400 });
-    }
+  // 3. Validate required fields — tell the caller exactly what's missing
+  const missing: string[] = [];
+  if (!name)    missing.push("name");
+  if (!email)   missing.push("email");
+  if (!useCase) missing.push("useCase");
+  if (missing.length > 0) {
+    return NextResponse.json(
+      { error: `Missing required field(s): ${missing.join(", ")}.` },
+      { status: 400 },
+    );
+  }
 
-    const apiKey = process.env.RESEND_API_KEY;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return NextResponse.json({ error: "Invalid email address." }, { status: 400 });
+  }
 
-    if (!apiKey) {
-      console.error("[contact] RESEND_API_KEY is not set. Add it to Vercel → Project → Settings → Environment Variables and redeploy.");
-      return NextResponse.json({ error: "Email service is not configured." }, { status: 500 });
-    }
+  // 4. Check API key before touching Resend
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    console.error("[contact] RESEND_API_KEY is not set — add it in Vercel → Settings → Environment Variables and redeploy.");
+    return NextResponse.json({ error: "Email service is not configured." }, { status: 500 });
+  }
 
+  // 5. Send via Resend
+  try {
     const resend = new Resend(apiKey);
 
     const { data, error } = await resend.emails.send({
@@ -205,15 +222,26 @@ export async function POST(req: NextRequest) {
     });
 
     if (error) {
-      console.error("[contact] Resend error:", JSON.stringify(error));
-      return NextResponse.json({ error: "Failed to send. Please email us directly." }, { status: 500 });
+      // Log the full Resend error (name + message + statusCode) for Vercel function logs
+      console.error(
+        `[contact] Resend rejected the request — name: ${error.name}, message: ${error.message}`,
+      );
+      return NextResponse.json(
+        { error: "Failed to send your message. Please email us directly at info@orchelix.com." },
+        { status: 500 },
+      );
     }
 
-    console.log("[contact] Email sent. Resend ID:", data?.id);
-
+    console.log(`[contact] Email sent — Resend ID: ${data?.id}, to: ${email}`);
     return NextResponse.json({ ok: true });
+
   } catch (err) {
-    console.error("[contact] Unexpected error:", err);
-    return NextResponse.json({ error: "Server error." }, { status: 500 });
+    // Network failure, timeout, or unexpected Resend SDK error
+    const message = err instanceof Error ? err.message : String(err);
+    console.error(`[contact] Unexpected error calling Resend: ${message}`);
+    return NextResponse.json(
+      { error: "An unexpected error occurred. Please try again or email us at info@orchelix.com." },
+      { status: 500 },
+    );
   }
 }
