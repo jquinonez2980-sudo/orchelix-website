@@ -68,12 +68,12 @@ function Hero() {
         </span>
 
         <h1
-          className="mt-7 mb-7 max-w-[860px] text-balance text-[38px] leading-[1.06] font-semibold tracking-[-0.03em] sm:text-[54px] sm:leading-[1.04] lg:text-[66px] lg:leading-[1.02] lg:tracking-[-0.036em]"
+          className="mt-7 mb-7 max-w-[860px] text-balance text-[38px] leading-[1.06] font-medium tracking-[-0.03em] sm:text-[54px] sm:leading-[1.04] lg:text-[66px] lg:leading-[1.02] lg:tracking-[-0.036em]"
           style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
         >
           Building reliable AI systems that actually{" "}
           <span
-            className="bg-gradient-to-br from-navy-600 via-teal-500 to-teal-400 bg-clip-text font-medium italic"
+            className="bg-gradient-to-br from-navy-600 via-teal-500 to-teal-400 bg-clip-text font-normal italic"
             style={{ WebkitTextFillColor: "transparent" }}
           >
             run revenue operations.
