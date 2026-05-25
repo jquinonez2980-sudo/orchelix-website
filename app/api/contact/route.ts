@@ -13,7 +13,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const TO_ADDRESS = "info@orhelix.com";
+const TO_ADDRESS = "info@orchelix.com";
 const FROM_ADDRESS = "Orchelix <noreply@orchelix.com>";
 
 function buildHtml(fields: {
@@ -228,7 +228,7 @@ function buildHtml(fields: {
                          font-size:11px;color:rgba(255,255,255,0.28);line-height:1.7;">
                 Greater Toronto Area, Ontario, Canada
                 &nbsp;&middot;&nbsp;
-                <a href="https://orhelix.com" style="color:rgba(255,255,255,0.35);text-decoration:none;">orhelix.com</a>
+                <a href="https://orchelix.com" style="color:rgba(255,255,255,0.35);text-decoration:none;">orchelix.com</a>
                 &nbsp;&middot;&nbsp; Submitted ${submittedAt}
               </p>
             </td>
@@ -258,7 +258,7 @@ function buildText(fields: {
     `Use case: ${useCase}`,
     message ? `\nMessage:\n${message}` : null,
     "\n" + "=".repeat(40),
-    "Submitted via orhelix.com contact form.",
+    "Submitted via orchelix.com contact form.",
   ]
     .filter(Boolean)
     .join("\n");
@@ -324,7 +324,7 @@ export async function POST(req: NextRequest) {
         `[contact] Resend rejected the request — name: ${error.name}, message: ${error.message}`,
       );
       return NextResponse.json(
-        { error: "Failed to send your message. Please email us directly at info@orhelix.com." },
+        { error: "Failed to send your message. Please email us directly at info@orchelix.com." },
         { status: 500 },
       );
     }
@@ -337,7 +337,7 @@ export async function POST(req: NextRequest) {
     const message = err instanceof Error ? err.message : String(err);
     console.error(`[contact] Unexpected error calling Resend: ${message}`);
     return NextResponse.json(
-      { error: "An unexpected error occurred. Please try again or email us at info@orhelix.com." },
+      { error: "An unexpected error occurred. Please try again or email us at info@orchelix.com." },
       { status: 500 },
     );
   }

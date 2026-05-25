@@ -17,7 +17,7 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-const SITE_URL = "https://orhelix.com";
+const SITE_URL = "https://orchelix.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
