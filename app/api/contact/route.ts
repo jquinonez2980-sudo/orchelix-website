@@ -13,7 +13,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const TO_ADDRESS = "info@orchelix.com";
+const TO_ADDRESS = "jquinonez2980@gmail.com";
 const FROM_ADDRESS = "Orchelix <noreply@orchelix.com>";
 
 function buildHtml(fields: {
