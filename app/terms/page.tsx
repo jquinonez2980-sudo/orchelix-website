@@ -47,7 +47,7 @@ export default function TermsPage() {
             >
               Terms of Service
             </h1>
-            <p style={{ color: "var(--ink-3)", fontSize: 14 }}>
+            <p style={{ color: "var(--ink-2)", fontSize: 14 }}>
               Effective date: June 1, 2026 · Last updated: June 1, 2026
             </p>
           </div>
@@ -55,22 +55,6 @@ export default function TermsPage() {
 
         <section style={{ padding: "64px 24px 100px" }}>
           <div style={{ maxWidth: 760, margin: "0 auto" }}>
-            <div
-              style={{
-                background: "rgba(20,184,166,0.07)",
-                borderLeft: "3px solid var(--teal-500)",
-                borderRadius: "0 8px 8px 0",
-                padding: "16px 20px",
-                marginBottom: 40,
-                fontSize: 14,
-                color: "var(--ink-2)",
-                lineHeight: 1.6,
-              }}
-            >
-              <strong style={{ color: "var(--ink)" }}>Notice:</strong> These Terms of Service are a working draft pending legal review.
-              Full terms will be published prior to commercial launch. {/* TODO: Remove this notice when finalized */}
-            </div>
-
             <Prose>
               <p>
                 These Terms of Service (&quot;Terms&quot;) govern your access to and use of the website and services provided by Orchelix AI Consulting Inc. (&quot;Orchelix&quot;, &quot;we&quot;, &quot;us&quot;). By accessing our website or using our services, you agree to be bound by these Terms.
@@ -118,8 +102,8 @@ export default function TermsPage() {
 
               <h2>8. Contact</h2>
               <p>
-                Questions about these Terms: {/* TODO: legal@orhelix.com */}<br />
-                Orchelix AI Consulting Inc., Ontario, Canada
+                Questions about these Terms: <a href="mailto:legal@orchelix.com">legal@orchelix.com</a><br />
+                Orchelix AI Consulting Inc., Greater Toronto Area, Ontario, Canada
               </p>
             </Prose>
           </div>
@@ -139,6 +123,7 @@ function Prose({ children }: { children: React.ReactNode }) {
         .orchelix-prose-t p{margin:0 0 16px;}
         .orchelix-prose-t ul{margin:0 0 16px;padding-left:20px;}
         .orchelix-prose-t li{margin-bottom:8px;}
+        .orchelix-prose-t a{color:var(--teal-700);}
         .orchelix-prose-t strong{color:var(--ink);font-weight:600;}
       `}</style>
       <div className="orchelix-prose-t">{children}</div>

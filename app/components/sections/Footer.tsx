@@ -13,9 +13,9 @@ const columns = [
   {
     h: "Company",
     links: [
-      { label: "About",    href: "#about" },
-      { label: "Pricing",  href: "/pricing" },
-      { label: "Try Esmi", href: "/try-esmi" },
+      { label: "Contact",    href: "/#contact" },
+      { label: "Pricing",    href: "/pricing" },
+      { label: "Try Esmi",   href: "/try-esmi" },
       { label: "Book a demo", href: "/book" },
     ],
   },
@@ -135,6 +135,59 @@ export default function Footer() {
               >
                 Now booking Q3 pilots
               </span>
+            </div>
+
+            <div style={{ display: "flex", gap: 8, marginTop: 20 }}>
+              <a
+                href="https://instagram.com/orchelix"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Orchelix on Instagram"
+                className="social-icon-link"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: 36,
+                  height: 36,
+                  borderRadius: 10,
+                  border: "1px solid var(--line)",
+                  color: "var(--ink-2)",
+                  background: "#fff",
+                  textDecoration: "none",
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                </svg>
+              </a>
+              <a
+                href="https://linkedin.com/company/orchelix-ai-consulting"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Orchelix on LinkedIn"
+                className="social-icon-link"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: 36,
+                  height: 36,
+                  borderRadius: 10,
+                  border: "1px solid var(--line)",
+                  color: "var(--ink-2)",
+                  background: "#fff",
+                  textDecoration: "none",
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                  <rect x="2" y="9" width="4" height="12"/>
+                  <circle cx="4" cy="4" r="2"/>
+                </svg>
+              </a>
             </div>
           </div>
 

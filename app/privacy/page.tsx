@@ -47,8 +47,8 @@ export default function PrivacyPage() {
             >
               Privacy Policy
             </h1>
-            <p style={{ color: "var(--ink-3)", fontSize: 14 }}>
-              Effective date: {/* TODO: insert effective date */} June 1, 2026 · Last updated: June 1, 2026
+            <p style={{ color: "var(--ink-2)", fontSize: 14 }}>
+              Effective date: June 1, 2026 · Last updated: June 1, 2026
             </p>
           </div>
         </section>
@@ -66,11 +66,10 @@ export default function PrivacyPage() {
               <h2>1. Who We Are</h2>
               <p>
                 Orchelix AI Consulting Inc. is incorporated in Ontario, Canada. Our principal place of business is in the Greater Toronto Area, Ontario.
-                {/* TODO: Add registered address */}
               </p>
               <p>
-                <strong>Privacy Officer:</strong> {/* TODO: Insert name and contact email */}<br />
-                <strong>Contact:</strong> {/* TODO: privacy@orhelix.com */}
+                <strong>Privacy Officer:</strong> Jorge Quinonez<br />
+                <strong>Contact:</strong> <a href="mailto:privacy@orchelix.com">privacy@orchelix.com</a>
               </p>
 
               <h2>2. Information We Collect</h2>
@@ -105,14 +104,18 @@ export default function PrivacyPage() {
                 <li><strong>Service providers</strong> — third-party tools used to operate our services (e.g., scheduling software, cloud infrastructure, AI model providers). These parties are contractually bound to protect your data.</li>
                 <li><strong>Legal requirements</strong> — when required by law, court order, or government authority.</li>
               </ul>
-              <p>
-                {/* TODO: List specific sub-processors — e.g., OpenAI, Railway, Vercel, Cal.com/Calendly */}
-                A full list of our sub-processors is available upon request.
-              </p>
+              <p>Our current sub-processors include:</p>
+              <ul>
+                <li><strong>Vercel Inc.</strong> — website hosting and edge functions (United States)</li>
+                <li><strong>OpenAI, LLC</strong> — AI language model inference (United States)</li>
+                <li><strong>Railway Corp.</strong> — backend API hosting (United States)</li>
+                <li><strong>Cal.com, Inc.</strong> — appointment scheduling (United States)</li>
+              </ul>
+              <p>Each sub-processor is bound by a data processing agreement and GDPR/PIPEDA-compatible contractual obligations. An updated list is available upon request.</p>
 
               <h2>6. Data Retention</h2>
               <p>
-                We retain personal information only as long as necessary for the purposes outlined in this policy, or as required by law. Chat conversation data is retained for {/* TODO: specify retention period */} 90 days by default. Client contract data is retained for 7 years per Canadian accounting regulations.
+                We retain personal information only as long as necessary for the purposes outlined in this policy, or as required by law. Chat conversation data is retained for 90 days by default. Client contract data is retained for 7 years per Canadian accounting regulations.
               </p>
 
               <h2>7. Data Residency</h2>
@@ -122,7 +125,7 @@ export default function PrivacyPage() {
 
               <h2>8. Security</h2>
               <p>
-                We implement industry-standard technical and organizational measures to protect your personal information, including encryption in transit (TLS), access controls, and regular security reviews. We are pursuing SOC 2 Type II certification, expected {/* TODO: confirm timeline */} Q4 2026.
+                We implement industry-standard technical and organizational measures to protect your personal information, including encryption in transit (TLS), access controls, and regular security reviews. We are pursuing SOC 2 Type II certification, expected Q4 2026.
               </p>
 
               <h2>9. Your Rights</h2>
@@ -134,7 +137,7 @@ export default function PrivacyPage() {
                 <li>File a complaint with the Office of the Privacy Commissioner of Canada</li>
               </ul>
               <p>
-                To exercise any of these rights, contact our Privacy Officer at {/* TODO: privacy@orhelix.com */}.
+                To exercise any of these rights, contact our Privacy Officer at <a href="mailto:privacy@orchelix.com">privacy@orchelix.com</a>.
               </p>
 
               <h2>10. Cookies and Tracking</h2>
@@ -155,11 +158,10 @@ export default function PrivacyPage() {
               <h2>13. Contact Us</h2>
               <p>
                 For privacy-related questions or to exercise your rights:<br />
-                {/* TODO: Add complete contact details */}
                 <strong>Orchelix AI Consulting Inc.</strong><br />
-                Privacy Officer: {/* TODO: Name */}<br />
-                Email: {/* TODO: privacy@orhelix.com */}<br />
-                Address: {/* TODO: Registered address, Ontario, Canada */}
+                Privacy Officer: Jorge Quinonez<br />
+                Email: <a href="mailto:privacy@orchelix.com">privacy@orchelix.com</a><br />
+                Address: Greater Toronto Area, Ontario, Canada
               </p>
               <p>
                 You also have the right to contact the Office of the Privacy Commissioner of Canada at{" "}

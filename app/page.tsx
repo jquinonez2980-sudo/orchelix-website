@@ -4,6 +4,7 @@ import Trust from "./components/sections/Trust";
 import Solutions from "./components/sections/Solutions";
 import HowItWorks from "./components/sections/HowItWorks";
 import Why from "./components/sections/Why";
+import ContactForm from "./components/sections/ContactForm";
 import FinalCTA from "./components/sections/FinalCTA";
 import Footer from "./components/sections/Footer";
 
@@ -17,6 +18,7 @@ export default function Home() {
         <Solutions />
         <HowItWorks />
         <Why />
+        <ContactForm />
         <FinalCTA />
       </main>
       <Footer />

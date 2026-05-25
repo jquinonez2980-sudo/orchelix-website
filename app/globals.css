@@ -196,6 +196,22 @@ body {
 }
 .sol-card:hover .sol-arrow { transform: translateX(5px); opacity: 1; }
 
+/* Social icon links in Footer */
+.social-icon-link {
+  transition: border-color 180ms var(--ease-standard), color 180ms var(--ease-standard);
+}
+.social-icon-link:hover {
+  border-color: var(--teal-400) !important;
+  color: var(--teal-700) !important;
+}
+
+/* Contact form inputs */
+.contact-input:focus {
+  outline: none;
+  border-color: var(--teal-500) !important;
+  box-shadow: 0 0 0 3px rgba(20,184,166,0.15);
+}
+
 /* Nav link — animated teal underline on hover */
 .nav-link {
   position: relative;
