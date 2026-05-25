@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     template: "%s | Orchelix",
   },
   description:
-    "AI agents that actually run your revenue operations. Multi-agent systems for sales, marketing, and finance — deployed in 14 days.",
+    "Multi-agent AI systems that qualify leads, handle calls, close deals, and run financial operations — with human oversight and senior consultants.",
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
@@ -35,14 +35,15 @@ export const metadata: Metadata = {
     siteName: "Orchelix",
     title: "Orchelix | AI Agents for Revenue Operations",
     description:
-      "AI agents that actually run your revenue operations. Multi-agent systems for sales, marketing, and finance.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Orchelix AI Consulting" }],
+      "Multi-agent systems for lead qualification, call handling, deal closing, and financial close. Human-in-the-loop with senior consultants.",
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Orchelix - Orchestrating the Future of AI" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Orchelix | AI Agents for Revenue Operations",
-    description: "AI agents that actually run your revenue operations.",
-    images: ["/og-image.png"],
+    description:
+      "Multi-agent systems for lead qualification, call handling, deal closing, and financial close. Human-in-the-loop with senior consultants.",
+    images: ["/og-image.jpg"],
   },
   icons: {
     icon: "/favicon.ico",
