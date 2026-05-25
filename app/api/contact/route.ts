@@ -13,7 +13,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
-const TO_ADDRESS = "jquinonez2980@gmail.com";
+const TO_ADDRESS = "info@orhelix.com";
 const FROM_ADDRESS = "Orchelix <noreply@orchelix.com>";
 
 function buildHtml(fields: {
@@ -324,7 +324,7 @@ export async function POST(req: NextRequest) {
         `[contact] Resend rejected the request — name: ${error.name}, message: ${error.message}`,
       );
       return NextResponse.json(
-        { error: "Failed to send your message. Please email us directly at info@orchelix.com." },
+        { error: "Failed to send your message. Please email us directly at info@orhelix.com." },
         { status: 500 },
       );
     }
@@ -337,7 +337,7 @@ export async function POST(req: NextRequest) {
     const message = err instanceof Error ? err.message : String(err);
     console.error(`[contact] Unexpected error calling Resend: ${message}`);
     return NextResponse.json(
-      { error: "An unexpected error occurred. Please try again or email us at info@orchelix.com." },
+      { error: "An unexpected error occurred. Please try again or email us at info@orhelix.com." },
       { status: 500 },
     );
   }
