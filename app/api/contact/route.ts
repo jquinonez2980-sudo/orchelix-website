@@ -14,7 +14,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
 const TO_ADDRESS = "info@orchelix.com";
-const FROM_ADDRESS = "Orchelix Website <noreply@orchelix.com>";
+const FROM_ADDRESS = "Orchelix <noreply@orchelix.com>";
 
 function buildHtml(fields: {
   name: string;
@@ -85,9 +85,13 @@ function buildHtml(fields: {
               <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
                 <tr>
                   <td style="vertical-align:middle;padding-bottom:26px;">
-                    <img src="https://orchelix-website.vercel.app/orchelix-lockup-horizontal.png"
-                         alt="Orchelix AI Consulting" width="152" height="38"
-                         style="display:block;height:38px;width:auto;max-width:152px;border:0;">
+                    <span style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+                                 font-size:22px;font-weight:700;color:#FFFFFF;
+                                 letter-spacing:-0.03em;">Orchelix</span>
+                    <span style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+                                 font-size:11px;font-weight:600;color:#14B8A6;
+                                 letter-spacing:0.14em;text-transform:uppercase;
+                                 margin-left:10px;vertical-align:middle;">AI Consulting</span>
                   </td>
                   <td align="right" style="vertical-align:middle;padding-bottom:26px;">
                     <table cellpadding="0" cellspacing="0" role="presentation">
