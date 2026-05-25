@@ -22,6 +22,16 @@ type ChatEvent =
   | { type: "done"; full_text: string; slots?: string[]; date_label?: string }
   | { type: "error"; message: string };
 
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function stripSlotLines(text: string): string {
+  return text
+    .replace(/\n\s*[-•]\s*\d{1,2}:\d{2}\s*(?:AM|PM)\s*[–-]\s*\d{1,2}:\d{2}\s*(?:AM|PM)/g, "")
+    .replace(/\n\s*\d{1,2}:\d{2}\s*(?:AM|PM)\s*[–-]\s*\d{1,2}:\d{2}\s*(?:AM|PM)/g, "")
+    .replace(/Which of these works best for you\?\s*/g, "")
+    .trim();
+}
+
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 const WELCOME_TEXT =
@@ -596,7 +606,7 @@ function MessageBubble({
           </div>
         )}
 
-        {/* Text content */}
+        {/* Text content — strip slot lines during streaming so cards don't flash in as bullets first */}
         {hasContent && (
           <div
             style={{
@@ -613,7 +623,7 @@ function MessageBubble({
               maxWidth: "82%",
             }}
           >
-            {message.content}
+            {isStreaming ? stripSlotLines(message.content) : message.content}
             {isStreaming && (
               <span
                 style={{
