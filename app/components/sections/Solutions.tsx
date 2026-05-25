@@ -1,7 +1,3 @@
-"use client";
-
-import { useState } from "react";
-
 const solutions = [
   {
     num: "01 / Revenue",
@@ -54,8 +50,6 @@ const solutions = [
 ];
 
 export default function Solutions() {
-  const [hovered, setHovered] = useState<number | null>(null);
-
   return (
     <section id="solutions" className="py-20 sm:py-24 lg:py-32">
       <div className="mx-auto max-w-[1200px] px-6 sm:px-8 lg:px-10">
@@ -88,13 +82,11 @@ export default function Solutions() {
             <a
               key={s.num}
               href={s.href}
-              onMouseEnter={() => setHovered(i)}
-              onMouseLeave={() => setHovered(null)}
-              className={i === 2 ? "sm:col-span-2 lg:col-span-1" : ""}
+              className={`sol-card${i === 2 ? " sm:col-span-2 lg:col-span-1" : ""}`}
               style={{
                 background:
                   "radial-gradient(ellipse 80% 40% at 50% 0%, rgba(20,184,166,0.04), transparent 60%), linear-gradient(180deg, #FFFFFF 0%, #FCFCFD 100%)",
-                border: `1px solid ${hovered === i ? "var(--line-strong)" : "var(--line)"}`,
+                border: "1px solid var(--line)",
                 borderRadius: 18,
                 padding: "36px 32px 32px",
                 display: "flex",
@@ -104,15 +96,11 @@ export default function Solutions() {
                 color: "inherit",
                 position: "relative",
                 overflow: "hidden",
-                transform: hovered === i ? "translateY(-3px)" : "translateY(0)",
-                boxShadow: hovered === i
-                  ? "0 1px 0 rgba(255,255,255,0.6) inset, 0 24px 56px -16px rgba(10,37,64,0.14), 0 6px 14px -4px rgba(10,37,64,0.06)"
-                  : "0 1px 0 rgba(255,255,255,0.8) inset, 0 1px 0 rgba(10,37,64,0.02)",
-                transition: "transform 320ms var(--ease-standard), border-color 320ms var(--ease-standard), box-shadow 320ms var(--ease-standard)",
               }}
             >
               {/* Top hairline reveal */}
               <div
+                className="sol-hairline"
                 style={{
                   position: "absolute",
                   left: 28,
@@ -121,9 +109,6 @@ export default function Solutions() {
                   height: 2,
                   background: "linear-gradient(90deg, var(--navy-600), var(--teal-500))",
                   borderRadius: "0 0 4px 4px",
-                  transform: hovered === i ? "scaleX(1)" : "scaleX(0)",
-                  transformOrigin: "left",
-                  transition: "transform 460ms var(--ease-standard)",
                 }}
               />
 
@@ -243,15 +228,7 @@ export default function Solutions() {
                 }}
               >
                 {s.foot}
-                <span
-                  style={{
-                    transition: "transform 260ms var(--ease-standard)",
-                    transform: hovered === i ? "translateX(5px)" : "translateX(0)",
-                    opacity: hovered === i ? 1 : 0.85,
-                  }}
-                >
-                  →
-                </span>
+                <span className="sol-arrow">→</span>
               </div>
             </a>
           ))}

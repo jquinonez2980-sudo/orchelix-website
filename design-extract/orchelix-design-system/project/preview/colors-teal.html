@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Colors · Brand teal</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  .card { padding: 24px 28px; }
+  .scale { display: grid; grid-template-columns: repeat(10, 1fr); border-radius: 10px; overflow: hidden; box-shadow: var(--shadow-xs); }
+  .sw { aspect-ratio: 1 / 1.5; display: flex; align-items: flex-end; padding: 8px; }
+  .sw small { font: 600 9.5px/1 var(--font-mono); letter-spacing: 0.04em; opacity: .8; }
+  .head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; }
+  .title { font: 700 14px/1 var(--font-display); letter-spacing: -0.01em; }
+  .hex   { font: 500 11px/1 var(--font-mono); color: var(--ink-3); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="head">
+    <div class="title">Teal — accent</div>
+    <div class="hex">500 · #14B8A6</div>
+  </div>
+  <div class="scale" id="scale"></div>
+</div>
+<script>
+  const stops = [['50','#E6FAF7'],['100','#C2F2EA'],['200','#8AE5D7'],['300','#4FD3BF'],['400','#22C2A8'],['500','#14B8A6'],['600','#0F9989'],['700','#0C7A6E'],['800','#095C53'],['900','#053D37']];
+  const el = document.getElementById('scale');
+  stops.forEach(([k,v],i) => {
+    const d = document.createElement('div');
+    d.className = 'sw';
+    d.style.background = v;
+    d.style.color = i < 4 ? '#053D37' : '#E6FAF7';
+    d.innerHTML = `<small>${k}</small>`;
+    el.appendChild(d);
+  });
+</script>
+</body>
+</html>

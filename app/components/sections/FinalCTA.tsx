@@ -95,7 +95,7 @@ export default function FinalCTA() {
             style={{ position: "relative", zIndex: 1 }}
           >
             <a
-              href="/book"
+              href="/try-esmi"
               style={{
                 fontFamily: "var(--font-display)",
                 fontWeight: 500,
@@ -113,7 +113,7 @@ export default function FinalCTA() {
                 transition: "all 220ms var(--ease-standard)",
               }}
             >
-              Talk to a consultant
+              Try Esmi live
             </a>
             <a
               href="/book"

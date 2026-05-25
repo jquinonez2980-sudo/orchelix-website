@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Type · Body & supporting</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  .card { padding: 28px 32px; }
+  .row { display: grid; grid-template-columns: 90px 1fr; gap: 18px; padding: 10px 0; align-items: baseline; }
+  .row + .row { border-top: 1px dashed var(--line); }
+  .meta { font: 500 11px/1.4 var(--font-mono); color: var(--ink-3); }
+  .eb { font: 600 11px/1 var(--font-display); letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); }
+  .lead { font: 400 20px/1.5 var(--font-body); color: var(--ink-2); }
+  .body { font: 400 16px/1.6 var(--font-body); color: var(--ink-2); }
+  .small { font: 400 14px/1.5 var(--font-body); color: var(--ink-2); }
+  .micro { font: 400 12px/1.4 var(--font-body); color: var(--ink-3); }
+  .code { font: 500 13px/1.4 var(--font-mono); color: var(--ink); background: var(--surface-2); padding: 2px 6px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="row"><div class="meta">Eyebrow<br>12 / 600</div><div class="eb">AI&nbsp;&nbsp;CONSULTING</div></div>
+  <div class="row"><div class="meta">Lead<br>20 / 400</div><div class="lead">Multi-agent systems that handle real revenue work.</div></div>
+  <div class="row"><div class="meta">Body<br>16 / 400</div><div class="body">A virtual receptionist that answers, qualifies, and books — across English and Spanish, 24 hours a day.</div></div>
+  <div class="row"><div class="meta">Small<br>14 / 400</div><div class="small">Connects to your CRM, accounting platform, and calendar.</div></div>
+  <div class="row"><div class="meta">Micro<br>12 / 400</div><div class="micro">Updated 14 minutes ago · Toronto, ON</div></div>
+  <div class="row"><div class="meta">Mono<br>13 / 500</div><div><span class="code">orchelix.agents.run("daily-close")</span></div></div>
+</div>
+</body>
+</html>

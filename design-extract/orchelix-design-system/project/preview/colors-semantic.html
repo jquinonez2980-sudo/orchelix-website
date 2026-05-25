@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Colors · Semantic</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  .card { padding: 24px 28px; }
+  .head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
+  .title { font: 700 14px/1 var(--font-display); letter-spacing: -0.01em; }
+  .sub { font: 400 11px/1 var(--font-body); color: var(--ink-3); }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .item { border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: #fff; }
+  .dot  { width: 28px; height: 28px; border-radius: 10px; }
+  .nm   { font: 600 13px/1.2 var(--font-display); color: var(--ink); margin-top: 10px; }
+  .desc { font: 400 11px/1.3 var(--font-body); color: var(--ink-3); margin-top: 2px; }
+  .hx   { font: 500 10.5px/1 var(--font-mono); color: var(--ink-3); margin-top: 6px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="head">
+    <div class="title">Semantic colors</div>
+    <div class="sub">Derived from palette, restrained.</div>
+  </div>
+  <div class="grid">
+    <div class="item"><div class="dot" style="background:#0F9989"></div><div class="nm">Success</div><div class="desc">Completed runs, healthy agents.</div><div class="hx">#0F9989</div></div>
+    <div class="item"><div class="dot" style="background:#2E6FB0"></div><div class="nm">Info</div><div class="desc">Neutral notice, in-progress.</div><div class="hx">#2E6FB0</div></div>
+    <div class="item"><div class="dot" style="background:#C28A1A"></div><div class="nm">Warning</div><div class="desc">Needs attention, soft alert.</div><div class="hx">#C28A1A</div></div>
+    <div class="item"><div class="dot" style="background:#C0413B"></div><div class="nm">Danger</div><div class="desc">Failures, destructive actions.</div><div class="hx">#C0413B</div></div>
+  </div>
+</div>
+</body>
+</html>

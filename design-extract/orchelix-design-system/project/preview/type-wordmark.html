@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Type · Wordmark anatomy</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  .card { padding: 28px 32px; display: grid; grid-template-columns: 1fr 200px; gap: 24px; align-items: center; }
+  .name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 52px;
+    letter-spacing: 0;
+    color: var(--navy-600);
+    line-height: 1;
+  }
+  .sub {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: 0.32em;
+    /* nudge right to optically center despite trailing letter-spacing */
+    padding-left: 0.32em;
+    color: var(--navy-500);
+    margin-top: 4px;
+  }
+  .legend { font: 400 11.5px/1.5 var(--font-body); color: var(--ink-3); display: grid; gap: 6px; }
+  .legend b { color: var(--ink); font-weight: 600; }
+  .swatch { display: inline-block; width: 8px; height: 8px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div style="text-align:center;">
+    <div class="name">ORCHELIX</div>
+    <div class="sub">AI&nbsp;&nbsp;CONSULTING</div>
+  </div>
+  <div class="legend">
+    <div><span class="swatch" style="background:var(--navy-600)"></span><b>ORCHELIX</b> · Montserrat 600 · 0 tracking</div>
+    <div><span class="swatch" style="background:var(--navy-500)"></span><b>AI&nbsp;CONSULTING</b> · 500 · 0.32em · width-matched</div>
+    <div style="color:var(--ink-3)">Wordmark sits 4× cap-height below the mark.</div>
+  </div>
+</div>
+</body>
+</html>

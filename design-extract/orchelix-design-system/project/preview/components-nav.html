@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Components · Navigation</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  .card { padding: 0; }
+  .nav {
+    display: flex; align-items: center; gap: 28px;
+    padding: 16px 24px;
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: saturate(140%) blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav .brand { display: flex; align-items: center; gap: 10px; }
+  .nav .brand img { width: 22px; height: auto; }
+  .nav .brand .nm { font: 800 16px/1 var(--font-display); letter-spacing: -0.01em; color: var(--navy-600); }
+  .nav .links { display: flex; gap: 22px; }
+  .nav .links a {
+    font: 500 13.5px/1 var(--font-display); color: var(--ink-2);
+    text-decoration: none; border-bottom: 0; position: relative; padding: 4px 0;
+  }
+  .nav .links a.active { color: var(--navy-600); font-weight: 600; }
+  .nav .links a.active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -18px; height: 2px; background: var(--teal-500); border-radius: 2px; }
+  .nav .links a:hover { color: var(--navy-600); }
+  .nav .right { margin-left: auto; display: flex; gap: 10px; align-items: center; }
+  .nav .right .signin { font: 500 13.5px/1 var(--font-display); color: var(--ink-2); }
+  .nav .right .cta {
+    background: var(--navy-600); color: #fff; padding: 9px 14px; border-radius: 8px;
+    font: 600 13px/1 var(--font-display);
+  }
+
+  /* Sidebar */
+  .sidebar {
+    display: grid; grid-template-columns: 220px 1fr; height: 220px;
+    border-top: 1px solid var(--line);
+  }
+  .sidebar .side {
+    background: #fff; padding: 16px 12px; display: flex; flex-direction: column; gap: 2px;
+    border-right: 1px solid var(--line);
+  }
+  .sidebar .side .group { font: 600 10.5px/1 var(--font-display); letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3); padding: 10px 10px 6px; }
+  .sidebar .side .item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px; border-radius: 8px;
+    font: 500 13px/1 var(--font-display); color: var(--ink-2);
+  }
+  .sidebar .side .item .ic { width: 16px; height: 16px; border-radius: 4px; background: var(--ink-4); }
+  .sidebar .side .item.active { background: var(--navy-600); color: #fff; }
+  .sidebar .side .item.active .ic { background: var(--teal-400); }
+  .sidebar .side .item:hover:not(.active) { background: var(--surface-2); }
+  .sidebar .main { background: var(--paper); padding: 18px; font: 500 11px/1 var(--font-mono); color: var(--ink-3); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="nav">
+    <div class="brand"><img src="../assets/orchelix-mark.png"><div class="nm">Orchelix</div></div>
+    <div class="links">
+      <a class="active" href="#">Agents</a>
+      <a href="#">Platform</a>
+      <a href="#">Industries</a>
+      <a href="#">Pricing</a>
+      <a href="#">About</a>
+    </div>
+    <div class="right">
+      <a class="signin" href="#">Sign in</a>
+      <a class="cta" href="#">Book a call</a>
+    </div>
+  </div>
+  <div class="sidebar">
+    <div class="side">
+      <div class="group">Workspace</div>
+      <div class="item active"><div class="ic"></div>Overview</div>
+      <div class="item"><div class="ic"></div>Agents</div>
+      <div class="item"><div class="ic"></div>Inbox</div>
+      <div class="group">Setup</div>
+      <div class="item"><div class="ic"></div>Integrations</div>
+      <div class="item"><div class="ic"></div>Team</div>
+    </div>
+    <div class="main">// nav surface preview</div>
+  </div>
+</div>
+</body>
+</html>

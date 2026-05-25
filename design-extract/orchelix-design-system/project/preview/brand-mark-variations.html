@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Brand · Mark variations</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  .card { padding: 28px; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .tile {
+    aspect-ratio: 1 / 1;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--line);
+    padding: 10px;
+  }
+  .tile img { width: 78%; height: auto; }
+  .t1 { background: #fff; }
+  .t2 { background: var(--surface-2); }
+  .t3 { background: var(--navy-600); border-color: var(--navy-600); }
+  .t4 { background: var(--teal-500); border-color: var(--teal-500); }
+  .cap { margin-top: 8px; font: 600 10px/1 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); text-align:center; }
+  .col-item { display: flex; flex-direction: column; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="grid">
+    <div class="col-item">
+      <div class="tile t1"><img src="../assets/orchelix-mark.png"></div>
+      <div class="cap">mark · paper</div>
+    </div>
+    <div class="col-item">
+      <div class="tile t2"><img src="../assets/orchelix-mark.png"></div>
+      <div class="cap">mark · sunken</div>
+    </div>
+    <div class="col-item">
+      <div class="tile t3"><img src="../assets/orchelix-mark-light.png"></div>
+      <div class="cap">mark · navy</div>
+    </div>
+    <div class="col-item">
+      <div class="tile t4"><img src="../assets/orchelix-mark-navy-white.png"></div>
+      <div class="cap">mark · teal</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

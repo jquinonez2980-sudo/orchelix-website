@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Components · Form inputs</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  .card { padding: 28px 32px; }
+  .head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
+  .title { font: 700 14px/1 var(--font-display); }
+  .sub { font: 400 11px/1 var(--font-body); color: var(--ink-3); }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 18px; }
+  .field label {
+    display: block; font: 600 11px/1 var(--font-display); color: var(--ink-2);
+    letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .input, .select {
+    width: 100%; box-sizing: border-box;
+    font-family: var(--font-body); font-size: 14px;
+    color: var(--ink); background: #fff;
+    border: 1px solid var(--line-strong); border-radius: 10px;
+    padding: 10px 12px;
+    transition: border-color 150ms, box-shadow 150ms;
+  }
+  .input::placeholder { color: var(--ink-4); }
+  .input:focus, .select:focus {
+    outline: none; border-color: var(--teal-500);
+    box-shadow: 0 0 0 3px rgba(20,184,166,0.25);
+  }
+  .input.err { border-color: #C0413B; box-shadow: 0 0 0 3px rgba(192,65,59,0.18); }
+  .help { font: 400 11px/1.3 var(--font-body); color: var(--ink-3); margin-top: 6px; }
+  .help.err { color: #C0413B; }
+  .check { display: flex; align-items: center; gap: 10px; font: 400 14px/1.2 var(--font-body); color: var(--ink); }
+  .check input { width: 16px; height: 16px; accent-color: var(--teal-600); }
+  .toggle { width: 36px; height: 20px; background: var(--ink-4); border-radius: 999px; position: relative; transition: background 150ms; }
+  .toggle.on { background: var(--teal-500); }
+  .toggle::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; background: #fff; border-radius: 50%; transition: left 150ms; }
+  .toggle.on::after { left: 18px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="head">
+    <div class="title">Form inputs</div>
+    <div class="sub">Teal focus ring. Square-ish radius (10).</div>
+  </div>
+  <div class="grid">
+    <div class="field">
+      <label>Work email</label>
+      <input class="input" type="email" value="ana@northstaracct.ca">
+    </div>
+    <div class="field">
+      <label>Company size</label>
+      <select class="select"><option>11 – 50 employees</option></select>
+    </div>
+    <div class="field">
+      <label>Phone</label>
+      <input class="input" placeholder="+1 (416) ···">
+    </div>
+    <div class="field">
+      <label>Domain</label>
+      <input class="input err" value="northstar..ca">
+      <div class="help err">Looks like a typo — check the dots.</div>
+    </div>
+    <div class="field" style="grid-column: 1 / -1; display:flex; gap:24px; align-items:center;">
+      <div class="check"><input type="checkbox" checked> English & Spanish handoff</div>
+      <div class="check" style="cursor:pointer"><div class="toggle on"></div>After-hours mode</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

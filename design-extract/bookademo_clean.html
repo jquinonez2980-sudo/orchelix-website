@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Book a demo — Orchelix AI Consulting</title>
+  <meta name="description" content="Book a 30-minute call with a senior Orchelix consultant. See live agents, get a custom recommendation, and decide on your own time. No deck, no slides — just your workflow.">
+  <link rel="stylesheet" href="demo.css">
+
+  <template id="__bundler_thumbnail" data-bg-color="#0B1220">
+    <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1200" height="800" fill="#0B1220"/>
+      <g transform="translate(600 400)" fill="none" stroke="#14B8A6" stroke-width="6" stroke-linecap="round">
+        <path d="M-120 -160 C 40 -100, 40 100, -120 160" opacity="0.9"/>
+        <path d="M 120 -160 C -40 -100, -40 100, 120 160" opacity="0.9"/>
+        <g stroke="#5EEAD4" stroke-width="4" opacity="0.7">
+          <line x1="-96" y1="-130" x2="96" y2="-130"/>
+          <line x1="-58" y1="-65" x2="58" y2="-65"/>
+          <line x1="-40" y1="0" x2="40" y2="0"/>
+          <line x1="-58" y1="65" x2="58" y2="65"/>
+          <line x1="-96" y1="130" x2="96" y2="130"/>
+        </g>
+      </g>
+      <text x="600" y="640" text-anchor="middle" font-family="Georgia, serif" font-size="44" font-weight="600" fill="#F8FAFC" letter-spacing="6">BOOK A DEMO</text>
+    </svg>
+  </template>
+</head>
+<body data-screen-label="Book a demo">
+
+<!-- ====================================================== NAV -->
+<header class="site-nav">
+  <div class="container row">
+    <a class="brand" href="Orchelix Homepage.html" aria-label="Orchelix — Home">
+      <img src="assets/orchelix-lockup-horizontal.png" alt="Orchelix AI Consulting">
+    </a>
+    <nav class="links" aria-label="Primary">
+      <a href="Orchelix Solutions.html">Agents</a>
+      <a href="Orchelix How It Works.html">Platform</a>
+      <a href="Orchelix Homepage.html#why">Industries</a>
+      <a href="Orchelix Pricing.html">Pricing</a>
+      <a href="#about">About</a>
+    </nav>
+    <div class="right">
+      <a class="btn btn-ghost" href="#signin">Sign in</a>
+      <a class="btn btn-primary" href="#form" aria-current="page">Book a demo</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ====================================================== HERO + FORM -->
+  <section class="demo-hero">
+    <div class="container">
+      <div class="grid">
+
+        <!-- Left: copy + promise -->
+        <div>
+          <span class="eyebrow">Book a demo</span>
+          <h1>See how Orchelix would work <span class="accent">for your business</span>.</h1>
+          <p class="lead">
+            A 30-minute call with a senior consultant — not a sales engineer
+            and not a deck. We'll watch a live agent handle a real workflow,
+            then talk through the one we'd pilot for you.
+          </p>
+
+          <ul class="promise">
+            <li>
+              <span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+              <span><strong>30 minutes</strong> — your time is worth more to us than a long discovery call.</span>
+            </li>
+            <li>
+              <span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/></svg></span>
+              <span><strong>You'll talk to a senior operator</strong> — not a tier-one rep. Same person who'd own your deployment.</span>
+            </li>
+            <li>
+              <span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></span>
+              <span><strong>You'll leave with a one-page proposal</strong> — the workflow, the scorecard, the timeline. Decide on your own time.</span>
+            </li>
+            <li>
+              <span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></span>
+              <span><strong>EN · ES · FR</strong> — schedule with a bilingual consultant if you prefer.</span>
+            </li>
+          </ul>
+
+          <div class="consultant">
+            <div class="av">DR</div>
+            <div class="who">Daniela Reyes
+              <span class="role">Senior consultant · Toronto · responds within 4h</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: form card -->
+        <div>
+          <form class="form-card" id="form" novalidate>
+            <div class="fc-head">
+              <div class="h">Tell us about your business
+                <span class="sub">We'll come back within one business day to schedule.</span>
+              </div>
+              <span class="tag">30 min · no obligation</span>
+            </div>
+
+            <div class="form-grid">
+
+              <div class="field">
+                <label for="f-name">Full name</label>
+                <input id="f-name" name="name" type="text" placeholder="Carolina Mendez" required autocomplete="name">
+              </div>
+
+              <div class="field">
+                <label for="f-email">Work email</label>
+                <input id="f-email" name="email" type="email" placeholder="carolina@yourcompany.com" required autocomplete="email">
+              </div>
+
+              <div class="field">
+                <label for="f-company">Company</label>
+                <input id="f-company" name="company" type="text" placeholder="Riverstone Clinic" required autocomplete="organization">
+              </div>
+
+              <div class="field">
+                <label for="f-phone">Phone <span class="opt">Optional</span></label>
+                <input id="f-phone" name="phone" type="tel" placeholder="+1 (416) 555-0148" autocomplete="tel">
+              </div>
+
+              <div class="field full">
+                <label for="f-industry">Industry</label>
+                <select id="f-industry" name="industry">
+                  <option value="">Select your industry…</option>
+                  <option>Professional services (legal, accounting, consulting)</option>
+                  <option>Healthcare &amp; dental</option>
+                  <option>Home services &amp; HVAC</option>
+                  <option>Faith &amp; non-profit</option>
+                  <option>Retail &amp; e-commerce</option>
+                  <option>Real estate &amp; property</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+              <div class="field full">
+                <label for="f-workflow">What are you looking to automate?</label>
+                <textarea id="f-workflow" name="workflow" placeholder="A few sentences about the workflow you'd like an agent to run — e.g. 'we miss 30% of after-hours calls', or 'month-end close takes two weeks'." required></textarea>
+                <span class="hint">No need to be polished — your senior consultant reads this before the call.</span>
+              </div>
+
+              <div class="field full">
+                <label>Preferred demo time</label>
+                <div class="opts" role="radiogroup" aria-label="Preferred demo time">
+                  <span class="pair"><input id="t1" type="radio" name="time" value="this-week"><label for="t1">This week</label></span>
+                  <span class="pair"><input id="t2" type="radio" name="time" value="next-week" checked><label for="t2">Next week</label></span>
+                  <span class="pair"><input id="t3" type="radio" name="time" value="two-weeks"><label for="t3">In 2 weeks</label></span>
+                  <span class="pair"><input id="t4" type="radio" name="time" value="flexible"><label for="t4">Flexible — propose a time</label></span>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="fc-submit">
+              <button class="btn btn-primary btn-lg btn-arrow" type="submit">Book the call</button>
+              <p class="privacy">
+                We'll only use your details to schedule and prepare. No marketing list, no resale —
+                see our <a href="#privacy">privacy policy</a>.
+              </p>
+            </div>
+
+            <div class="fc-success" role="status" aria-live="polite">
+              <div class="ok">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12.5l5 5 9-11"/>
+                </svg>
+              </div>
+              <h3>Got it — we'll be in touch.</h3>
+              <p>A senior consultant will reply within one business day with two or three times that match your preference. Watch for an email from <strong>hello@orchelix.ai</strong>.</p>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================== WHAT TO EXPECT -->
+  <section class="expect">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow eyebrow-navy">What to expect</span>
+        <h2>What actually happens in the call.</h2>
+        <p>No deck, no slides, no twenty-minute company introduction. Four things, in order — then your time back.</p>
+      </div>
+
+      <div class="grid">
+        <div class="ex-card">
+          <div class="ex-top">
+            <span class="ex-n"></span>
+            <span class="ex-when">Minutes 0 – 5</span>
+          </div>
+          <h3 class="ex-h">Your workflow, in your words.</h3>
+          <p class="ex-p">A senior consultant asks about the one workflow that costs you the most time or revenue right now. That's the whole intake.</p>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-top">
+            <span class="ex-n"></span>
+            <span class="ex-when">Minutes 5 – 20</span>
+          </div>
+          <h3 class="ex-h">A live agent, on a real call.</h3>
+          <p class="ex-p">We dial in a sample inbound call, lead, or ledger to a production Orchelix agent — so you see the audit trail, not just a polished demo video.</p>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-top">
+            <span class="ex-n"></span>
+            <span class="ex-when">Minutes 20 – 28</span>
+          </div>
+          <h3 class="ex-h">A specific recommendation.</h3>
+          <p class="ex-p">Your consultant proposes one workflow to pilot, a 14-day timeline, and the scorecard we'd both grade success against. Tailored to your business, not a template.</p>
+        </div>
+
+        <div class="ex-card">
+          <div class="ex-top">
+            <span class="ex-n"></span>
+            <span class="ex-when">After the call</span>
+          </div>
+          <h3 class="ex-h">A one-page proposal — no hard sell.</h3>
+          <p class="ex-p">We email a single page: scope, timeline, scorecard, and price. Decide on your own time. If it's not the right fit, we'll say so first.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================== TESTIMONIALS + TRUST -->
+  <section class="proof-band">
+    <div class="container">
+      <div class="row">
+        <article class="testimonial">
+          <span class="stat">412</span>
+          <blockquote>
+            The receptionist agent picked up 412 calls in its first month — bilingually, on weekends, and without missing a single appointment. It paid for itself before the pilot ended.
+          </blockquote>
+          <div class="who">
+            <div class="av">MS</div>
+            <div class="name">Marisol Santiago
+              <span class="role">Office manager · Riverstone Clinic</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="testimonial">
+          <span class="stat">3.4×</span>
+          <blockquote>
+            Nuestro cierre mensual pasó de dos semanas a tres días — y por primera vez en cinco años, dormimos durante el fin de mes.
+            <span class="es">"Our month-end close went from two weeks to three days — and for the first time in five years, we slept through the close."</span>
+          </blockquote>
+          <div class="who">
+            <div class="av">JC</div>
+            <div class="name">Javier Cárdenas
+              <span class="role">Controller · Northstar Accounting</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="logos" aria-label="Operators using Orchelix">
+        <span class="lbl">Trusted by operators</span>
+        <span class="logo">NORTHSTAR&nbsp; Accounting</span>
+        <span class="logo">Riverstone Clinic</span>
+        <span class="logo">Bloom &amp; Co.</span>
+        <span class="logo">Maplewood HVAC</span>
+        <span class="logo">Iglesia Pueblo</span>
+      </div>
+
+      <div class="compliance">
+        <span>PIPEDA-aligned</span>
+        <span>SOC&nbsp;2 in-progress</span>
+        <span>EN · ES · FR</span>
+        <span>Canadian data residency</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================== FINAL CTA -->
+  <section class="final-cta">
+    <div class="container">
+      <div class="band">
+        <div>
+          <h3>Thirty minutes. One workflow. A real recommendation.</h3>
+          <p>Book the call. We'll come back within one business day with two or three times to choose from — and a consultant who reads your form before they show up.</p>
+        </div>
+        <div class="actions">
+          <a class="btn btn-secondary btn-lg" href="#contact">Email instead</a>
+          <a class="btn btn-light btn-lg btn-arrow" href="#form">Book the call</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ====================================================== FOOTER -->
+<footer class="site-foot" id="about">
+  <div class="container">
+    <div class="grid">
+      <div>
+        <div class="brand">
+          <img src="assets/orchelix-lockup-horizontal.png" alt="Orchelix AI Consulting">
+        </div>
+        <p class="desc">
+          AI agents for SMEs, professional firms, and service organizations
+          across North America. Toronto · Mississauga · remote across the US
+          and Canada.
+        </p>
+      </div>
+      <div class="col">
+        <h5>Agents</h5>
+        <a href="Orchelix Solutions.html#agent-esmi">Virtual Receptionist</a>
+        <a href="Orchelix Solutions.html#agent-revops">Sales &amp; Marketing</a>
+        <a href="Orchelix Solutions.html#agent-finance">Accounting OS</a>
+        <a href="#agents-insights">Revenue Insights</a>
+      </div>
+      <div class="col">
+        <h5>Company</h5>
+        <a href="#about">About</a>
+        <a href="#careers">Careers</a>
+        <a href="#contact">Contact</a>
+        <a href="#press">Press kit</a>
+      </div>
+      <div class="col">
+        <h5>Trust</h5>
+        <a href="#security">Security</a>
+        <a href="#pipeda">PIPEDA</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#status">Status</a>
+      </div>
+    </div>
+    <div class="legal">
+      <span>© 2026 Orchelix AI Consulting Inc. · Made in Ontario.</span>
+      <span>EN · ES · FR</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Demo form: show success state on submit (no backend wired)
+(function () {
+  const form = document.getElementById('form');
+  if (!form) return;
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    form.classList.add('submitted');
+    window.scrollTo({ top: form.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
+  });
+})();
+</script>
+
+</body>
+</html>

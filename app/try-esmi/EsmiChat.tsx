@@ -273,26 +273,6 @@ export default function EsmiChat() {
       className="flex flex-col h-full"
       style={{ fontFamily: "var(--font-display), ui-sans-serif, system-ui, sans-serif", background: "#F7F8FA" }}
     >
-      <style>{`
-        @keyframes esmi-msg-in {
-          from { opacity: 0; transform: translateY(6px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes esmi-bounce {
-          0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
-          30%           { transform: translateY(-5px); opacity: 1; }
-        }
-        @keyframes esmi-spin {
-          from { transform: rotate(0deg); }
-          to   { transform: rotate(360deg); }
-        }
-        @keyframes esmi-pulse-ring {
-          0%   { box-shadow: 0 0 0 0 rgba(34,197,94,0.40); }
-          70%  { box-shadow: 0 0 0 5px rgba(34,197,94,0); }
-          100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
-        }
-      `}</style>
-
       {/* ── Header ──────────────────────────────────────────────────────── */}
       <div
         className="flex items-center gap-3 flex-shrink-0"
@@ -440,7 +420,11 @@ export default function EsmiChat() {
           flexShrink: 0,
         }}
       >
+        <label htmlFor="esmi-input" style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap" }}>
+          Message Esmi
+        </label>
         <textarea
+          id="esmi-input"
           ref={inputRef}
           value={input}
           onChange={handleInputChange}

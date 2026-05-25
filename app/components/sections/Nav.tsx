@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const NAV_LINKS = [
   { label: "Agents",     href: "/solutions" },
@@ -15,6 +15,13 @@ const NAV_LINKS = [
 export default function Nav() {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") close(); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
 
   return (
     <header
@@ -82,29 +89,11 @@ export default function Nav() {
           ))}
         </nav>
 
-        {/* Desktop actions — hidden below lg */}
+        {/* Desktop CTA — hidden below lg */}
         <div
           className="hidden lg:flex"
           style={{ marginLeft: "auto", gap: 8, alignItems: "center" }}
         >
-          <a
-            href="#signin"
-            style={{
-              fontFamily: "var(--font-display)",
-              fontWeight: 500,
-              fontSize: 14,
-              lineHeight: 1,
-              padding: "13px 14px",
-              borderRadius: 10,
-              color: "var(--ink-2)",
-              textDecoration: "none",
-              display: "inline-flex",
-              alignItems: "center",
-              transition: "color 200ms var(--ease-standard)",
-            }}
-          >
-            Sign in
-          </a>
           <a
             href="/book"
             style={{
@@ -191,29 +180,7 @@ export default function Nav() {
             ))}
           </nav>
 
-          <div style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 8 }}>
-            <a
-              href="#signin"
-              onClick={close}
-              style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 500,
-                fontSize: 15,
-                lineHeight: 1,
-                padding: "15px 20px",
-                borderRadius: 10,
-                border: "1px solid var(--line-strong)",
-                background: "#fff",
-                color: "var(--navy-600)",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                transition: "background 200ms var(--ease-standard)",
-              }}
-            >
-              Sign in
-            </a>
+          <div style={{ marginTop: 20 }}>
             <a
               href="/book"
               onClick={close}

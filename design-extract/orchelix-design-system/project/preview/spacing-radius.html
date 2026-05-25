@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Spacing · Radius</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  .card { padding: 28px 32px; }
+  .head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px; }
+  .title { font: 700 14px/1 var(--font-display); }
+  .sub { font: 400 11px/1 var(--font-body); color: var(--ink-3); }
+  .grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+  .item { text-align: center; }
+  .swatch {
+    width: 100%; aspect-ratio: 1 / 1; background: var(--surface-2);
+    box-shadow: var(--shadow-inset-hairline); border: 1px solid var(--line);
+  }
+  .lbl { font: 500 11px/1.2 var(--font-mono); color: var(--ink-2); margin-top: 8px; }
+  .val { font: 500 11px/1.2 var(--font-mono); color: var(--ink-3); margin-top: 2px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="head">
+    <div class="title">Corner radius</div>
+    <div class="sub">Controls → md (10). Cards → lg (14).</div>
+  </div>
+  <div class="grid">
+    <div class="item"><div class="swatch" style="border-radius:4px"></div><div class="lbl">xs</div><div class="val">4</div></div>
+    <div class="item"><div class="swatch" style="border-radius:6px"></div><div class="lbl">sm</div><div class="val">6</div></div>
+    <div class="item"><div class="swatch" style="border-radius:10px"></div><div class="lbl">md</div><div class="val">10</div></div>
+    <div class="item"><div class="swatch" style="border-radius:14px"></div><div class="lbl">lg</div><div class="val">14</div></div>
+    <div class="item"><div class="swatch" style="border-radius:20px"></div><div class="lbl">xl</div><div class="val">20</div></div>
+    <div class="item"><div class="swatch" style="border-radius:999px"></div><div class="lbl">pill</div><div class="val">∞</div></div>
+  </div>
+</div>
+</body>
+</html>

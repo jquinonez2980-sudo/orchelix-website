@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Colors · Neutrals</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  .card { padding: 24px 28px; }
+  .head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
+  .title { font: 700 14px/1 var(--font-display); letter-spacing: -0.01em; }
+  .sub   { font: 400 11px/1 var(--font-body); color: var(--ink-3); }
+  .grid  { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .sw    { border-radius: 10px; padding: 14px; height: 92px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow-inset-hairline); }
+  .sw .nm { font: 600 12px/1 var(--font-display); }
+  .sw .hx { font: 500 10.5px/1 var(--font-mono); opacity: .65; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="head">
+    <div class="title">Neutrals & ink</div>
+    <div class="sub">Cooler than gray — sits next to navy.</div>
+  </div>
+  <div class="grid">
+    <div class="sw" style="background:#FBFBFC;color:#0A2540"><div class="nm">paper</div><div class="hx">#FBFBFC</div></div>
+    <div class="sw" style="background:#FFFFFF;color:#0A2540;box-shadow:inset 0 0 0 1px #E4E8EE"><div class="nm">surface</div><div class="hx">#FFFFFF</div></div>
+    <div class="sw" style="background:#F4F6F9;color:#0A2540"><div class="nm">sunken</div><div class="hx">#F4F6F9</div></div>
+    <div class="sw" style="background:#E4E8EE;color:#0A2540"><div class="nm">line</div><div class="hx">#E4E8EE</div></div>
+    <div class="sw" style="background:#A9B7C7;color:#0A2540"><div class="nm">ink-4</div><div class="hx">#A9B7C7</div></div>
+    <div class="sw" style="background:#6D7F95;color:#fff"><div class="nm">ink-3</div><div class="hx">#6D7F95</div></div>
+    <div class="sw" style="background:#3F5570;color:#fff"><div class="nm">ink-2</div><div class="hx">#3F5570</div></div>
+    <div class="sw" style="background:#0A2540;color:#fff"><div class="nm">ink</div><div class="hx">#0A2540</div></div>
+  </div>
+</div>
+</body>
+</html>

@@ -4,28 +4,28 @@ const columns = [
   {
     h: "Agents",
     links: [
-      { label: "Virtual Receptionist", href: "#agents-receptionist" },
-      { label: "Sales & Marketing",    href: "#agents-revops" },
-      { label: "Accounting OS",        href: "#agents-accounting" },
-      { label: "Revenue Insights",     href: "#agents-insights" },
+      { label: "Virtual Receptionist", href: "/solutions" },
+      { label: "Sales & Marketing",    href: "/solutions" },
+      { label: "Accounting OS",        href: "/solutions" },
+      { label: "Revenue Insights",     href: "/solutions" },
     ],
   },
   {
     h: "Company",
     links: [
       { label: "About",    href: "#about" },
-      { label: "Careers",  href: "#careers" },
-      { label: "Contact",  href: "#contact" },
-      { label: "Press kit", href: "#press" },
+      { label: "Pricing",  href: "/pricing" },
+      { label: "Try Esmi", href: "/try-esmi" },
+      { label: "Book a demo", href: "/book" },
     ],
   },
   {
     h: "Trust",
     links: [
-      { label: "Security", href: "#security" },
-      { label: "PIPEDA",   href: "#pipeda" },
-      { label: "Privacy",  href: "#privacy" },
-      { label: "Status",   href: "#status" },
+      { label: "Privacy Policy", href: "/privacy" },
+      { label: "Terms of Service", href: "/terms" },
+      { label: "PIPEDA",          href: "/privacy" },
+      { label: "Security",        href: "/privacy" },
     ],
   },
 ];
@@ -81,7 +81,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-10 lg:grid-cols-[1.6fr_1fr_1fr_1fr] lg:gap-14">
           {/* Brand column */}
           <div>
-            <a href="#top" style={{ display: "inline-flex", alignItems: "center", textDecoration: "none" }}>
+            <a href="/" style={{ display: "inline-flex", alignItems: "center", textDecoration: "none" }}>
               <Image
                 src="/orchelix-lockup-horizontal.png"
                 alt="Orchelix AI Consulting"
@@ -161,7 +161,7 @@ export default function Footer() {
                 }}
               >
                 {col.links.map((l) => (
-                  <li key={l.href}>
+                  <li key={l.label}>
                     <a
                       href={l.href}
                       style={{
@@ -196,12 +196,10 @@ export default function Footer() {
           }}
         >
           <span>© 2026 Orchelix AI Consulting Inc. · Made in Ontario.</span>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
-            <span>EN</span>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 16 }}>
+            <a href="/privacy" style={{ color: "inherit", textDecoration: "none" }}>Privacy</a>
             <span style={{ width: 3, height: 3, borderRadius: "50%", background: "var(--ink-4)", display: "inline-block" }} />
-            <span>ES</span>
-            <span style={{ width: 3, height: 3, borderRadius: "50%", background: "var(--ink-4)", display: "inline-block" }} />
-            <span>FR</span>
+            <a href="/terms" style={{ color: "inherit", textDecoration: "none" }}>Terms</a>
           </span>
         </div>
       </div>

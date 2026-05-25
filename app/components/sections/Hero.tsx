@@ -14,7 +14,8 @@ export default function Hero() {
           alt="Business professional using Orchelix AI agents with analytics overlays"
           fill
           priority
-          quality={90}
+          quality={75}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
           style={{ objectFit: "cover", objectPosition: "65% center" }}
         />
       </div>

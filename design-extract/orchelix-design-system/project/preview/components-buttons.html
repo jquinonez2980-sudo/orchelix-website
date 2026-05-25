@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Components · Buttons</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  .card { padding: 28px 32px; }
+  .head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
+  .title { font: 700 14px/1 var(--font-display); }
+  .sub { font: 400 11px/1 var(--font-body); color: var(--ink-3); }
+  .stack { display: grid; gap: 18px; }
+  .group { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .group .lab { width: 70px; font: 500 11px/1 var(--font-mono); color: var(--ink-3); }
+
+  .btn {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1;
+    padding: 11px 18px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 150ms cubic-bezier(0.2, 0.6, 0.2, 1);
+  }
+  .btn.sm { font-size: 13px; padding: 8px 14px; border-radius: 8px; }
+  .btn.lg { font-size: 15px; padding: 14px 22px; border-radius: 12px; }
+
+  .btn-primary { background: var(--navy-600); color: #fff; }
+  .btn-primary:hover { background: var(--navy-500); }
+  .btn-accent  { background: var(--teal-500); color: #042B26; }
+  .btn-accent:hover { background: var(--teal-400); }
+  .btn-secondary { background: #fff; color: var(--navy-600); border-color: var(--line-strong); box-shadow: var(--shadow-xs); }
+  .btn-secondary:hover { border-color: var(--navy-400); }
+  .btn-ghost { background: transparent; color: var(--navy-600); }
+  .btn-ghost:hover { background: var(--surface-2); }
+  .btn-danger { background: #C0413B; color: #fff; }
+  .btn[disabled] { opacity: 0.45; cursor: not-allowed; }
+
+  .arr { font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="head">
+    <div class="title">Buttons</div>
+    <div class="sub">Primary = navy. Accent = teal. CTA only.</div>
+  </div>
+  <div class="stack">
+    <div class="group"><div class="lab">Primary</div>
+      <button class="btn btn-primary">Book a consultation</button>
+      <button class="btn btn-primary"><span>Continue</span><span class="arr">→</span></button>
+      <button class="btn btn-primary" disabled>Disabled</button>
+    </div>
+    <div class="group"><div class="lab">Accent</div>
+      <button class="btn btn-accent">Start free pilot</button>
+      <button class="btn btn-accent sm">Run agent</button>
+    </div>
+    <div class="group"><div class="lab">Secondary</div>
+      <button class="btn btn-secondary">See pricing</button>
+      <button class="btn btn-secondary sm">Cancel</button>
+      <button class="btn btn-ghost">Learn more</button>
+    </div>
+    <div class="group"><div class="lab">Sizes</div>
+      <button class="btn btn-primary sm">Small</button>
+      <button class="btn btn-primary">Default</button>
+      <button class="btn btn-primary lg">Large</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

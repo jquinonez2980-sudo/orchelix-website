@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import localFont from "next/font/local";
-import { JetBrains_Mono } from "next/font/google";
+import { Montserrat, JetBrains_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 
-const montserrat = localFont({
-  src: [
-    { path: "./fonts/Montserrat-VariableFont_wght.ttf", weight: "100 900", style: "normal" },
-    { path: "./fonts/Montserrat-Italic-VariableFont_wght.ttf", weight: "100 900", style: "italic" },
-  ],
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-display",
   display: "swap",
 });
@@ -19,11 +17,58 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+const SITE_URL = "https://orhelix.com";
+
 export const metadata: Metadata = {
-  title: "Orchelix | AI Agents for Revenue Operations",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Orchelix | AI Agents for Revenue Operations",
+    template: "%s | Orchelix",
+  },
   description:
-    "AI agents that actually run your revenue operations. Multi-agent systems for sales, marketing, and finance.",
-  icons: { icon: "/favicon.ico" },
+    "AI agents that actually run your revenue operations. Multi-agent systems for sales, marketing, and finance — deployed in 14 days.",
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "en_CA",
+    url: SITE_URL,
+    siteName: "Orchelix",
+    title: "Orchelix | AI Agents for Revenue Operations",
+    description:
+      "AI agents that actually run your revenue operations. Multi-agent systems for sales, marketing, and finance.",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Orchelix AI Consulting" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Orchelix | AI Agents for Revenue Operations",
+    description: "AI agents that actually run your revenue operations.",
+    images: ["/og-image.png"],
+  },
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Orchelix AI Consulting Inc.",
+  url: SITE_URL,
+  logo: `${SITE_URL}/orchelix-lockup-horizontal.png`,
+  description:
+    "AI agents for revenue operations — AI receptionist, sales automation, and financial operations for SMEs.",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Toronto",
+    addressRegion: "ON",
+    addressCountry: "CA",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -33,7 +78,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${montserrat.variable} ${jetbrainsMono.variable}`}
       style={{ fontFamily: "var(--font-display), ui-sans-serif, system-ui, sans-serif" }}
     >
-      <body>{children}</body>
+      <head>
+        <meta name="theme-color" content="#0A2540" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
+      <body>
+        <a href="#main-content" className="skip-link">Skip to main content</a>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }

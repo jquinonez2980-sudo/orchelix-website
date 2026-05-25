@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Spacing · Scale</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  .card { padding: 28px 32px; }
+  .head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
+  .title { font: 700 14px/1 var(--font-display); }
+  .sub { font: 400 11px/1 var(--font-body); color: var(--ink-3); }
+  .row { display: grid; grid-template-columns: 60px 60px 1fr; align-items: center; gap: 14px; padding: 5px 0; }
+  .token { font: 500 11px/1 var(--font-mono); color: var(--ink-2); }
+  .px { font: 500 11px/1 var(--font-mono); color: var(--ink-3); text-align: right; }
+  .bar { height: 14px; background: var(--teal-500); border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="head">
+    <div class="title">Spacing scale</div>
+    <div class="sub">4-pt base. Use tokens, not raw px.</div>
+  </div>
+  <div id="rows"></div>
+</div>
+<script>
+  const stops=[['1',4],['2',8],['3',12],['4',16],['5',20],['6',24],['7',32],['8',40],['9',48],['10',64],['11',80],['12',112]];
+  const root=document.getElementById('rows');
+  stops.forEach(([k,v])=>{
+    const r=document.createElement('div'); r.className='row';
+    r.innerHTML=`<div class="token">--space-${k}</div><div class="px">${v}px</div><div class="bar" style="width:${v}px"></div>`;
+    root.appendChild(r);
+  });
+</script>
+</body>
+</html>

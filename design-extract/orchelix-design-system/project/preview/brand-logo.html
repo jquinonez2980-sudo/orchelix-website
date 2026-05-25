@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Brand · Logo lockup</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  .card { display: grid; grid-template-columns: 1fr 1fr; gap: 0; padding: 0; }
+  .panel {
+    padding: 28px;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 320px;
+  }
+  .panel + .panel { border-left: 1px solid var(--line); }
+  .light { background: #FBFBFC; }
+  .dark  { background: var(--navy-700); }
+  .panel img { width: 80%; max-width: 240px; height: auto; display: block; }
+  .tag {
+    position: absolute; bottom: 12px; left: 14px;
+    font: 600 10px/1 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .panel { position: relative; }
+  .dark .tag { color: rgba(255,255,255,0.5); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="panel light">
+    <img src="../assets/orchelix-lockup.png" alt="Orchelix AI Consulting">
+    <span class="tag">on paper</span>
+  </div>
+  <div class="panel dark">
+    <img src="../assets/orchelix-lockup-light.png" alt="Orchelix AI Consulting">
+    <span class="tag">on navy</span>
+  </div>
+</div>
+</body>
+</html>

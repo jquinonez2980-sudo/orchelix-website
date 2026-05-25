@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Components · Cards</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  .card { padding: 22px; background: var(--surface-2); }
+  .head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; padding: 0 4px; }
+  .title { font: 700 14px/1 var(--font-display); }
+  .sub { font: 400 11px/1 var(--font-body); color: var(--ink-3); }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  /* Product card — Esmi (Virtual Receptionist) */
+  .pcard {
+    background: #fff; border-radius: 14px; padding: 0;
+    border: 1px solid var(--line); overflow: hidden;
+    display: flex; flex-direction: column;
+    transition: box-shadow 200ms, transform 200ms;
+  }
+  .pcard:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+  .pcard .cover {
+    height: 110px;
+    background:
+      radial-gradient(80% 100% at 50% 50%, rgba(80,200,255,0.18) 0%, transparent 70%),
+      var(--navy-800);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .pcard .cover img { height: 56px; width: auto; display: block; object-fit: contain; }
+  .pcard .body { padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; }
+  .pcard h3 { font: 700 16px/1.2 var(--font-display); margin: 0; color: var(--ink); letter-spacing: -0.01em; }
+  .pcard .role { font: 600 10.5px/1 var(--font-display); letter-spacing: 0.14em; text-transform: uppercase; color: var(--teal-700); }
+  .pcard p { font: 400 13.5px/1.5 var(--font-body); color: var(--ink-2); margin: 0; }
+  .pcard .meta { display: flex; gap: 8px; align-items: center; font: 500 11px/1 var(--font-mono); color: var(--ink-3); margin-top: 4px; }
+  .pcard .meta .badge { background: var(--teal-50); color: var(--teal-800); padding: 3px 7px; border-radius: 999px; font: 600 10.5px/1 var(--font-display); letter-spacing: 0.02em; }
+
+  /* Metric card */
+  .mcard {
+    background: var(--navy-600); color: #fff; border-radius: 14px; padding: 18px;
+    display: flex; flex-direction: column; gap: 6px;
+    background-image: radial-gradient(120% 140% at 100% 0%, rgba(20,184,166,0.25) 0%, transparent 60%);
+  }
+  .mcard .lbl { font: 600 11px/1 var(--font-display); letter-spacing: 0.16em; text-transform: uppercase; color: var(--teal-200); }
+  .mcard .num { font: 800 36px/1.05 var(--font-display); letter-spacing: -0.02em; }
+  .mcard .delta { font: 500 12px/1 var(--font-mono); color: var(--teal-200); }
+  .mcard .row { display: flex; gap: 6px; align-items: center; margin-top: 8px; font: 500 11px/1.4 var(--font-mono); color: rgba(255,255,255,0.6); }
+  .mcard .row .av { height: 22px; display: inline-flex; align-items: center; justify-content: center; }
+  .mcard .row .av img { height: 100%; width: auto; display: block; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="head"><div class="title">Cards</div><div class="sub">Product card · metric card</div></div>
+  <div class="grid">
+    <div class="pcard">
+      <div class="cover"><img src="../assets/esmi-logo.png" alt="Esmi"></div>
+      <div class="body">
+        <div class="role">Virtual Receptionist</div>
+        <h3>Esmi</h3>
+        <p>Answers, qualifies, and books — bilingually, 24/7. Routes urgent calls to a human.</p>
+        <div class="meta"><span class="badge">LIVE</span>· avg 14s pickup · EN · ES</div>
+      </div>
+    </div>
+    <div class="mcard">
+      <div class="lbl">Calls handled · 30d</div>
+      <div class="num">1,284</div>
+      <div class="delta">▲ 18% vs. last month</div>
+      <div class="row">
+        <span class="av"><img src="../assets/orchelix-mark-light.png"></span>
+        Across 6 deployed agents
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

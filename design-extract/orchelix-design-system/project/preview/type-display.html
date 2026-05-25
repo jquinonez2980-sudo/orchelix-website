@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Type · Display scale</title>
+<link rel="stylesheet" href="_card.css">
+<style>
+  .card { padding: 28px 32px; }
+  .row { display: grid; grid-template-columns: 80px 1fr; align-items: baseline; gap: 18px; padding: 8px 0; }
+  .row + .row { border-top: 1px dashed var(--line); }
+  .meta { font: 500 11px/1 var(--font-mono); color: var(--ink-3); }
+  .sample { color: var(--ink); letter-spacing: -0.02em; font-weight: 800; }
+  .d1 { font-size: 56px; line-height: 1.05; }
+  .d2 { font-size: 40px; line-height: 1.05; }
+  .h1 { font-size: 32px; line-height: 1.1; font-weight: 700; }
+  .h2 { font-size: 24px; line-height: 1.2; font-weight: 700; letter-spacing: -0.01em; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="row"><div class="meta">Display&nbsp;1<br>56 / 800</div><div class="sample d1">Orchestrate revenue.</div></div>
+  <div class="row"><div class="meta">Display&nbsp;2<br>40 / 800</div><div class="sample d2">Agents that ship outcomes.</div></div>
+  <div class="row"><div class="meta">H1<br>32 / 700</div><div class="sample h1">Built for Canadian SMEs.</div></div>
+  <div class="row"><div class="meta">H2<br>24 / 700</div><div class="sample h2">Finance, sales, and operations.</div></div>
+</div>
+</body>
+</html>
