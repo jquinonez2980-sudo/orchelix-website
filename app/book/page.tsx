@@ -332,7 +332,7 @@ function FormCard({
           }}
         >
           A senior consultant will reply within one business day with two or three times that match your preference.
-          Watch for an email from <strong>hello@orchelix.ai</strong>.
+          Watch for an email from <strong>info@orchelix.com</strong>.
         </p>
       </div>
     );
@@ -998,7 +998,7 @@ function FinalCTA() {
             style={{ display: "flex", gap: 12, flexWrap: "wrap", position: "relative", flexShrink: 0 }}
           >
             <a
-              href="mailto:hello@orchelix.ai"
+              href="mailto:info@orchelix.com"
               style={{
                 fontFamily: "var(--font-display)",
                 fontWeight: 500,
