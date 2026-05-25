@@ -9,70 +9,6 @@ export const metadata: Metadata = {
     "Orchelix builds reliable AI systems that run revenue operations for SMEs — lead qualification, call handling, deal closing, and financial close with human oversight.",
 };
 
-/* ─── Shared style objects ─────────────────────────────────────────────── */
-
-const eyebrowStyle: React.CSSProperties = {
-  display: "inline-flex",
-  alignItems: "center",
-  gap: 10,
-  fontFamily: "var(--font-mono)",
-  fontWeight: 500,
-  fontSize: 11,
-  lineHeight: 1,
-  letterSpacing: "0.18em",
-  textTransform: "uppercase",
-  color: "var(--teal-700)",
-};
-
-const eyebrowLightStyle: React.CSSProperties = {
-  ...eyebrowStyle,
-  color: "var(--teal-400)",
-};
-
-const sectionH2: React.CSSProperties = {
-  fontFamily: "var(--font-display)",
-  fontWeight: 600,
-  fontSize: 46,
-  lineHeight: 1.06,
-  letterSpacing: "-0.028em",
-  color: "var(--ink)",
-  margin: 0,
-};
-
-const sectionH2Light: React.CSSProperties = {
-  ...sectionH2,
-  color: "#fff",
-};
-
-const sectionP: React.CSSProperties = {
-  fontFamily: "var(--font-display)",
-  fontWeight: 400,
-  fontSize: 18,
-  lineHeight: 1.6,
-  color: "var(--ink-2)",
-  margin: 0,
-};
-
-function Eyebrow({ children, light }: { children: React.ReactNode; light?: boolean }) {
-  return (
-    <span style={light ? eyebrowLightStyle : eyebrowStyle}>
-      <span
-        style={{
-          width: 18,
-          height: 1,
-          background: "currentColor",
-          opacity: 0.7,
-          display: "inline-block",
-          flexShrink: 0,
-        }}
-      />
-      {children}
-    </span>
-  );
-}
-
-/* ─── Page ─────────────────────────────────────────────────────────────── */
-
 export default function AboutPage() {
   return (
     <>
@@ -95,183 +31,107 @@ export default function AboutPage() {
 
 function Hero() {
   return (
-    <section
-      style={{
-        position: "relative",
-        overflow: "hidden",
-        background: "var(--navy-700)",
-        backgroundImage: `
-          radial-gradient(ellipse 70% 80% at 0% 0%, rgba(20,184,166,0.22), transparent 60%),
-          radial-gradient(ellipse 60% 70% at 100% 100%, rgba(20,184,166,0.14), transparent 55%),
-          linear-gradient(160deg, #0A2540 0%, #061626 100%)
-        `,
-        borderBottom: "1px solid rgba(20,184,166,0.12)",
-      }}
-    >
-      {/* Grid overlay */}
+    <section className="relative overflow-hidden px-6 pt-24 pb-20 sm:px-8 sm:pt-28 sm:pb-24 lg:px-10 lg:pt-[132px] lg:pb-[120px]">
+      {/* Dot grid + teal radial — matches solutions/pricing */}
       <div
         aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
         style={{
-          position: "absolute",
-          inset: 0,
-          opacity: 0.28,
-          pointerEvents: "none",
-          backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)
+          background: `
+            radial-gradient(ellipse 60% 80% at 78% 20%, rgba(20,184,166,0.07), transparent 60%),
+            radial-gradient(circle at 1px 1px, rgba(10,37,64,0.05) 1px, transparent 1.5px)
           `,
-          backgroundSize: "32px 32px",
-          maskImage: "radial-gradient(ellipse 90% 100% at 30% 0%, black, transparent 75%)",
-          WebkitMaskImage: "radial-gradient(ellipse 90% 100% at 30% 0%, black, transparent 75%)",
+          backgroundSize: "auto, 28px 28px",
+          backgroundPosition: "center, 0 0",
+          maskImage:
+            "radial-gradient(ellipse 100% 80% at 50% 30%, black 30%, transparent 90%)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse 100% 80% at 50% 30%, black 30%, transparent 90%)",
         }}
       />
-      {/* Helix watermark */}
       <div
         aria-hidden="true"
+        className="absolute inset-x-0 bottom-0 h-px"
         style={{
-          position: "absolute",
-          right: -60,
-          bottom: -80,
-          width: 460,
-          height: 460,
-          pointerEvents: "none",
-          opacity: 0.055,
+          background:
+            "linear-gradient(90deg, transparent 0%, var(--color-line) 30%, var(--color-line) 70%, transparent 100%)",
         }}
-      >
-        <Image
-          src="/orchelix-mark-light.png"
-          alt=""
-          width={460}
-          height={460}
-          quality={40}
-          style={{ objectFit: "contain" }}
-        />
-      </div>
+      />
 
-      <div
-        className="mx-auto max-w-[1200px] px-6 sm:px-8 lg:px-10"
-        style={{ position: "relative", zIndex: 1, paddingTop: 96, paddingBottom: 96 }}
-      >
-        <div style={{ maxWidth: 760 }}>
-          <Eyebrow light>About Orchelix</Eyebrow>
+      <div className="relative z-10 mx-auto max-w-[1200px]">
+        <span
+          className="inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.18em]"
+          style={{ fontFamily: "var(--font-mono)", color: "var(--teal-700)" }}
+        >
+          <span className="inline-block h-px w-[18px] bg-current opacity-70" />
+          About Orchelix
+        </span>
 
-          <h1
-            className="text-[38px] sm:text-[52px] lg:text-[64px]"
+        <h1
+          className="mt-7 mb-7 max-w-[860px] text-balance text-[38px] leading-[1.06] font-semibold tracking-[-0.03em] sm:text-[54px] sm:leading-[1.04] lg:text-[66px] lg:leading-[1.02] lg:tracking-[-0.036em]"
+          style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
+        >
+          Building reliable AI systems that actually{" "}
+          <span
+            className="bg-gradient-to-br from-navy-600 via-teal-500 to-teal-400 bg-clip-text font-medium italic"
+            style={{ WebkitTextFillColor: "transparent" }}
+          >
+            run revenue operations.
+          </span>
+        </h1>
+
+        <p
+          className="mb-10 max-w-[580px] text-[17px] leading-[1.6] sm:text-[18px] lg:text-[19px]"
+          style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
+        >
+          Orchelix deploys multi-agent AI systems that qualify leads, handle inbound
+          calls, manage deal pipelines, and close the books — with a senior consultant
+          overseeing every deployment and human-in-the-loop controls your team can trust.
+        </p>
+
+        <div className="flex flex-wrap gap-3">
+          <a
+            href="/book"
+            className="inline-flex h-12 items-center rounded-xl px-6 text-[15px] font-medium text-white shadow-[0_1px_0_rgba(255,255,255,0.08)_inset,0_1px_2px_rgba(10,37,64,0.10)] transition-opacity hover:opacity-90"
+            style={{ fontFamily: "var(--font-display)", background: "var(--navy-600)" }}
+          >
+            Book a strategy call <span className="ml-1.5 opacity-85">→</span>
+          </a>
+          <a
+            href="/solutions"
+            className="inline-flex h-12 items-center rounded-xl border px-6 text-[15px] font-medium transition-colors hover:bg-surface-2"
             style={{
               fontFamily: "var(--font-display)",
-              fontWeight: 700,
-              lineHeight: 1.04,
-              letterSpacing: "-0.032em",
-              color: "#fff",
-              margin: "24px 0 0",
+              borderColor: "var(--line-strong)",
+              background: "#fff",
+              color: "var(--navy-600)",
             }}
           >
-            Building reliable AI systems that actually run revenue operations.
-          </h1>
-
-          <p
-            className="text-[17px] sm:text-[19px]"
-            style={{
-              fontFamily: "var(--font-display)",
-              fontWeight: 400,
-              lineHeight: 1.6,
-              color: "rgba(255,255,255,0.72)",
-              margin: "24px 0 0",
-              maxWidth: 620,
-            }}
-          >
-            Orchelix deploys multi-agent AI systems that qualify leads, handle inbound calls, manage
-            deal pipelines, and close the books — with a senior consultant overseeing every
-            deployment and human-in-the-loop controls your team can trust.
-          </p>
-
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 40 }}>
-            <a
-              href="/book"
-              style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 600,
-                fontSize: 15,
-                lineHeight: 1,
-                padding: "16px 28px",
-                borderRadius: 12,
-                background: "#fff",
-                color: "var(--navy-600)",
-                textDecoration: "none",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                boxShadow: "0 1px 3px rgba(10,37,64,0.18)",
-              }}
-            >
-              Book a strategy call
-            </a>
-            <a
-              href="/solutions"
-              style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 500,
-                fontSize: 15,
-                lineHeight: 1,
-                padding: "16px 28px",
-                borderRadius: 12,
-                border: "1px solid rgba(255,255,255,0.18)",
-                background: "rgba(255,255,255,0.06)",
-                color: "#fff",
-                textDecoration: "none",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-              }}
-            >
-              See our agents
-              <span style={{ fontSize: 14, opacity: 0.8 }}>→</span>
-            </a>
-          </div>
+            See our agents
+          </a>
         </div>
 
         {/* Stat strip */}
         <div
-          className="grid grid-cols-2 lg:grid-cols-4"
-          style={{
-            marginTop: 72,
-            borderTop: "1px solid rgba(255,255,255,0.1)",
-            paddingTop: 40,
-            gap: "32px 0",
-          }}
+          className="mt-16 grid grid-cols-2 gap-y-8 border-t pt-10 lg:grid-cols-4"
+          style={{ borderColor: "var(--line)" }}
         >
           {[
             { value: "14 days", label: "Average time to first live agent" },
-            { value: "3 agents", label: "Revenue, Receptionist, Accounting" },
+            { value: "3 agents", label: "Revenue, Receptionist & Accounting" },
             { value: "PIPEDA", label: "Compliant from day one" },
             { value: "GTA-based", label: "Senior consultants, no help desk" },
           ].map(({ value, label }) => (
-            <div
-              key={label}
-              style={{ paddingRight: 24 }}
-            >
+            <div key={label}>
               <p
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontWeight: 700,
-                  fontSize: 28,
-                  lineHeight: 1,
-                  letterSpacing: "-0.022em",
-                  color: "var(--teal-400)",
-                  margin: "0 0 8px",
-                }}
+                className="text-[26px] font-semibold leading-none tracking-[-0.022em]"
+                style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
               >
                 {value}
               </p>
               <p
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontWeight: 400,
-                  fontSize: 13,
-                  lineHeight: 1.5,
-                  color: "rgba(255,255,255,0.48)",
-                  margin: 0,
-                }}
+                className="mt-2 text-[13px] leading-snug"
+                style={{ fontFamily: "var(--font-display)", color: "var(--ink-3)" }}
               >
                 {label}
               </p>
@@ -303,71 +163,64 @@ function Challenge() {
 
   return (
     <section
-      className="py-20 sm:py-24 lg:py-32"
-      style={{
-        borderBottom: "1px solid var(--line)",
-        background:
-          "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(10,37,64,0.025), transparent 70%), var(--surface-2)",
-      }}
+      className="px-6 py-20 sm:px-8 sm:py-24 lg:px-10 lg:py-32"
+      style={{ background: "var(--surface-2)", borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)" }}
     >
-      <div className="mx-auto max-w-[1200px] px-6 sm:px-8 lg:px-10">
-        <div
-          className="grid grid-cols-1 lg:grid-cols-2 lg:gap-20"
-          style={{ alignItems: "start", gap: 48 }}
-        >
-          {/* Left column */}
-          <div style={{ display: "grid", gap: 20 }}>
-            <Eyebrow>The problem</Eyebrow>
-            <h2 style={{ ...sectionH2, fontSize: 40 }}>
+      <div className="mx-auto max-w-[1200px]">
+        <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-2 lg:gap-20">
+          {/* Left */}
+          <div className="flex flex-col gap-5">
+            <span
+              className="inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.18em]"
+              style={{ fontFamily: "var(--font-mono)", color: "var(--teal-700)" }}
+            >
+              <span className="inline-block h-px w-[18px] bg-current opacity-70" />
+              The problem
+            </span>
+            <h2
+              className="text-[34px] font-semibold leading-[1.07] tracking-[-0.026em] sm:text-[42px] lg:text-[48px]"
+              style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
+            >
               Most AI projects create complexity. Few create revenue.
             </h2>
-            <p style={sectionP}>
-              Companies investing in AI for revenue operations run into the same three walls:
-              tools that don&apos;t fit, projects that stall, and vendors who disappear after go-live.
-              The result is a growing graveyard of expensive pilots that never touched a real
-              customer.
+            <p
+              className="text-[17px] leading-[1.65]"
+              style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
+            >
+              Companies investing in AI for revenue operations run into the same three
+              walls: tools that don&apos;t fit, projects that stall, and vendors who
+              disappear after go-live. The result is a growing graveyard of expensive
+              pilots that never touched a real customer.
             </p>
-            <p style={{ ...sectionP, fontSize: 16 }}>
-              Orchelix was built to close that gap — production-grade agents, deployed in weeks,
-              with a consultant alongside you for as long as you need.
+            <p
+              className="text-[16px] leading-[1.65]"
+              style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
+            >
+              Orchelix was built to close that gap — production-grade agents, deployed
+              in weeks, with a consultant alongside you for as long as you need.
             </p>
           </div>
 
-          {/* Right column — pain point cards */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          {/* Right — pain cards */}
+          <div className="flex flex-col gap-4">
             {pains.map(({ title, desc }) => (
               <div
                 key={title}
+                className="rounded-[18px] border bg-white p-6 sm:p-7"
                 style={{
-                  background: "#fff",
-                  border: "1px solid var(--line)",
-                  borderRadius: 14,
-                  padding: "24px 28px",
-                  boxShadow: "var(--shadow-sm)",
+                  borderColor: "var(--line)",
+                  boxShadow: "0 2px 8px rgba(10,37,64,0.05)",
                 }}
               >
                 <h3
-                  style={{
-                    fontFamily: "var(--font-display)",
-                    fontWeight: 600,
-                    fontSize: 17,
-                    lineHeight: 1.3,
-                    letterSpacing: "-0.012em",
-                    color: "var(--ink)",
-                    margin: "0 0 8px",
-                  }}
+                  className="mb-2 text-[15px] font-semibold leading-snug"
+                  style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
                 >
                   {title}
                 </h3>
                 <p
-                  style={{
-                    fontFamily: "var(--font-display)",
-                    fontWeight: 400,
-                    fontSize: 14.5,
-                    lineHeight: 1.65,
-                    color: "var(--ink-2)",
-                    margin: 0,
-                  }}
+                  className="text-[14px] leading-[1.65]"
+                  style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
                 >
                   {desc}
                 </p>
@@ -388,101 +241,90 @@ const methodSteps = [
     n: "01",
     title: "Map the workflow in depth.",
     desc: "A senior consultant joins your team to document the exact process we'll automate — the handoffs, exceptions, and edge cases that trip up generic tools. We leave with a signed-off blueprint, not a slide deck.",
-    accent: "var(--teal-500)",
   },
   {
     label: "Design",
     n: "02",
     title: "Architect the right agent stack.",
     desc: "We select and configure the models, tools, memory layers, and guardrails for your specific workflow. Every architectural decision is tied to a measurable outcome — calls answered, leads qualified, invoices reconciled.",
-    accent: "var(--teal-500)",
   },
   {
     label: "Deploy",
     n: "03",
     title: "Go live in 14 days.",
     desc: "Your first agent integrates with your existing phone system, inbox, CRM, or ERP. We run it in shadow mode first, validate outputs against your benchmarks, then flip the switch with you in the room.",
-    accent: "var(--teal-500)",
   },
   {
     label: "Optimize",
     n: "04",
     title: "Improve continuously.",
-    desc: "Every action is logged and reviewable. We tune prompts, retrain on your edge cases, and add the next agent only when the first one has demonstrably earned the expansion. No revenue left on the table, no runaway automation.",
-    accent: "var(--teal-500)",
+    desc: "Every action is logged and reviewable. We tune prompts, retrain on your edge cases, and add the next agent only when the first one has demonstrably earned the expansion. No revenue left on the table.",
   },
 ];
 
 function Approach() {
   return (
-    <section className="py-20 sm:py-24 lg:py-32" style={{ background: "#fff" }}>
-      <div className="mx-auto max-w-[1200px] px-6 sm:px-8 lg:px-10">
-        <div style={{ display: "grid", gap: 18, maxWidth: 720, marginBottom: 64 }}>
-          <Eyebrow>Our methodology</Eyebrow>
-          <h2 style={sectionH2}>Discover. Design. Deploy. Optimize.</h2>
-          <p style={sectionP}>
+    <section className="px-6 py-20 sm:px-8 sm:py-24 lg:px-10 lg:py-32">
+      <div className="mx-auto max-w-[1200px]">
+        <div className="mb-14">
+          <span
+            className="mb-4 inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.18em]"
+            style={{ fontFamily: "var(--font-mono)", color: "var(--teal-700)" }}
+          >
+            <span className="inline-block h-px w-[18px] bg-current opacity-70" />
+            Our methodology
+          </span>
+          <h2
+            className="mb-4 max-w-[680px] text-[34px] font-semibold leading-[1.07] tracking-[-0.026em] sm:text-[42px] lg:text-[48px]"
+            style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
+          >
+            Discover. Design. Deploy. Optimize.
+          </h2>
+          <p
+            className="max-w-[580px] text-[17px] leading-[1.6]"
+            style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
+          >
             A repeatable four-phase process that turns a messy revenue workflow into a
             production-grade AI system — with a consultant accountable at every stage.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" style={{ gap: 24 }}>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {methodSteps.map((step, i) => (
             <div
               key={step.n}
+              className="relative overflow-hidden rounded-[20px] border p-7"
               style={{
-                position: "relative",
+                borderColor: "var(--line)",
                 background: "var(--surface-2)",
-                border: "1px solid var(--line)",
-                borderRadius: 18,
-                padding: "32px 28px 28px",
-                overflow: "hidden",
+                boxShadow: "0 2px 8px rgba(10,37,64,0.05)",
               }}
             >
-              {/* Top accent bar */}
+              {/* Teal top accent */}
               <div
+                className="absolute inset-x-7 top-0 h-[2px] rounded-b"
                 style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 28,
-                  right: 28,
-                  height: 2,
-                  background: "linear-gradient(90deg, var(--teal-500), var(--teal-300))",
-                  borderRadius: "0 0 2px 2px",
+                  background: "linear-gradient(90deg, var(--color-teal-500), var(--color-teal-300))",
                 }}
               />
 
-              {/* Step number + label */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  marginBottom: 24,
-                }}
-              >
+              {/* Label + ghost number */}
+              <div className="mb-6 flex items-center justify-between">
                 <span
+                  className="inline-flex items-center rounded-full px-3 py-1 text-[10px] font-medium uppercase tracking-[0.14em]"
                   style={{
                     fontFamily: "var(--font-mono)",
-                    fontWeight: 600,
-                    fontSize: 11,
-                    letterSpacing: "0.16em",
-                    textTransform: "uppercase",
                     color: "var(--teal-700)",
-                    background: "var(--teal-50)",
-                    border: "1px solid var(--teal-100)",
-                    borderRadius: 999,
-                    padding: "5px 12px",
+                    background: "var(--color-teal-50)",
+                    border: "1px solid var(--color-teal-100)",
                   }}
                 >
                   {step.label}
                 </span>
                 <span
+                  className="text-[22px] font-semibold leading-none tabular-nums"
                   style={{
                     fontFamily: "var(--font-mono)",
-                    fontWeight: 500,
-                    fontSize: 24,
-                    lineHeight: 1,
                     color: "rgba(10,37,64,0.08)",
                     letterSpacing: "-0.02em",
                   }}
@@ -492,51 +334,26 @@ function Approach() {
               </div>
 
               <h3
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontWeight: 600,
-                  fontSize: 18,
-                  lineHeight: 1.3,
-                  letterSpacing: "-0.014em",
-                  color: "var(--ink)",
-                  margin: "0 0 12px",
-                }}
+                className="mb-3 text-[17px] font-semibold leading-snug tracking-[-0.012em]"
+                style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
               >
                 {step.title}
               </h3>
               <p
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontWeight: 400,
-                  fontSize: 14,
-                  lineHeight: 1.7,
-                  color: "var(--ink-2)",
-                  margin: 0,
-                }}
+                className="text-[13.5px] leading-[1.7]"
+                style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
               >
                 {step.desc}
               </p>
 
-              {/* Step connector arrow — desktop only, all but last */}
+              {/* Connector arrow — desktop only, all but last */}
               {i < methodSteps.length - 1 && (
                 <div
-                  className="hidden lg:block"
+                  className="absolute top-1/2 -right-3 hidden h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full border bg-white text-[12px] lg:flex"
                   style={{
-                    position: "absolute",
-                    top: "50%",
-                    right: -13,
-                    transform: "translateY(-50%)",
-                    width: 24,
-                    height: 24,
-                    background: "#fff",
-                    border: "1px solid var(--line)",
-                    borderRadius: "50%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    zIndex: 2,
+                    borderColor: "var(--line)",
                     color: "var(--teal-600)",
-                    fontSize: 12,
+                    zIndex: 2,
                   }}
                 >
                   →
@@ -555,50 +372,56 @@ function Approach() {
 function WhoWeAre() {
   return (
     <section
-      className="py-20 sm:py-24 lg:py-32"
-      style={{
-        borderTop: "1px solid var(--line)",
-        borderBottom: "1px solid var(--line)",
-        background:
-          "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(10,37,64,0.025), transparent 70%), var(--surface-2)",
-      }}
+      className="px-6 py-20 sm:px-8 sm:py-24 lg:px-10 lg:py-32"
+      style={{ background: "var(--surface-2)", borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)" }}
     >
-      <div className="mx-auto max-w-[1200px] px-6 sm:px-8 lg:px-10">
-        <div
-          className="grid grid-cols-1 lg:grid-cols-2 lg:gap-24"
-          style={{ alignItems: "center", gap: 56 }}
-        >
+      <div className="mx-auto max-w-[1200px]">
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-24">
           {/* Left */}
-          <div style={{ display: "grid", gap: 20 }}>
-            <Eyebrow>Who we are</Eyebrow>
-            <h2 style={{ ...sectionH2, fontSize: 40 }}>
+          <div className="flex flex-col gap-5">
+            <span
+              className="inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.18em]"
+              style={{ fontFamily: "var(--font-mono)", color: "var(--teal-700)" }}
+            >
+              <span className="inline-block h-px w-[18px] bg-current opacity-70" />
+              Who we are
+            </span>
+            <h2
+              className="text-[34px] font-semibold leading-[1.07] tracking-[-0.026em] sm:text-[42px] lg:text-[48px]"
+              style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
+            >
               Senior operators. Not a help desk.
             </h2>
-            <p style={sectionP}>
-              Orchelix is a Toronto-based AI consulting firm led by practitioners with backgrounds
-              in enterprise software, revenue operations, and applied AI. We&apos;ve built and
-              scaled revenue systems — and we bring that operating experience into every engagement.
+            <p
+              className="text-[17px] leading-[1.65]"
+              style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
+            >
+              Orchelix is a Toronto-based AI consulting firm led by practitioners with
+              backgrounds in enterprise software, revenue operations, and applied AI.
+              We&apos;ve built and scaled revenue systems — and we bring that operating
+              experience into every engagement.
             </p>
-            <p style={{ ...sectionP, fontSize: 16 }}>
-              Each client works directly with a named senior consultant, not a rotating cast of
-              account managers. Our specialist network — spanning LLM engineering, CRM integration,
-              telephony, and accounting automation — is engaged on demand, not padded into a
-              retainer you&apos;ll pay for regardless.
+            <p
+              className="text-[16px] leading-[1.65]"
+              style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
+            >
+              Each client works directly with a named senior consultant, not a rotating
+              cast of account managers. Our specialist network — spanning LLM
+              engineering, CRM integration, telephony, and accounting automation — is
+              engaged on demand, not padded into a retainer.
             </p>
-            <p style={{ ...sectionP, fontSize: 16 }}>
-              We operate in English and Spanish natively, serve clients across Canada and the
-              United States, and maintain PIPEDA-compliant data practices from day one.
+            <p
+              className="text-[16px] leading-[1.65]"
+              style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
+            >
+              We operate in English and Spanish natively, serve clients across Canada
+              and the United States, and maintain PIPEDA-compliant data practices from
+              day one.
             </p>
           </div>
 
-          {/* Right — attribute cards */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 16,
-            }}
-          >
+          {/* Right — attribute cards 2×2 */}
+          <div className="grid grid-cols-2 gap-4">
             {[
               {
                 icon: (
@@ -640,57 +463,37 @@ function WhoWeAre() {
             ].map(({ icon, title, desc }) => (
               <div
                 key={title}
+                className="flex flex-col gap-3 rounded-[18px] border bg-white p-5 sm:p-6"
                 style={{
-                  background: "#fff",
-                  border: "1px solid var(--line)",
-                  borderRadius: 14,
-                  padding: "22px 20px",
-                  boxShadow: "var(--shadow-sm)",
-                  display: "grid",
-                  gap: 10,
+                  borderColor: "var(--line)",
+                  boxShadow: "0 2px 8px rgba(10,37,64,0.05)",
                 }}
               >
                 <div
+                  className="flex h-10 w-10 items-center justify-center rounded-[11px]"
                   style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 11,
-                    background: "linear-gradient(135deg, var(--teal-50) 0%, #fff 100%)",
-                    border: "1px solid var(--teal-100)",
+                    background: "linear-gradient(135deg, var(--color-teal-50) 0%, #fff 100%)",
+                    border: "1px solid var(--color-teal-100)",
                     color: "var(--teal-700)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
                     boxShadow: "0 1px 0 rgba(255,255,255,0.9) inset, 0 4px 10px -4px rgba(20,184,166,0.15)",
                   }}
                 >
                   {icon}
                 </div>
-                <h3
-                  style={{
-                    fontFamily: "var(--font-display)",
-                    fontWeight: 600,
-                    fontSize: 15,
-                    lineHeight: 1.3,
-                    letterSpacing: "-0.01em",
-                    color: "var(--ink)",
-                    margin: 0,
-                  }}
-                >
-                  {title}
-                </h3>
-                <p
-                  style={{
-                    fontFamily: "var(--font-display)",
-                    fontWeight: 400,
-                    fontSize: 13.5,
-                    lineHeight: 1.55,
-                    color: "var(--ink-2)",
-                    margin: 0,
-                  }}
-                >
-                  {desc}
-                </p>
+                <div>
+                  <h3
+                    className="mb-1 text-[14px] font-semibold leading-snug"
+                    style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
+                  >
+                    {title}
+                  </h3>
+                  <p
+                    className="text-[13px] leading-[1.55]"
+                    style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
+                  >
+                    {desc}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
@@ -706,9 +509,9 @@ const differentiators = [
   {
     label: "Real Oversight",
     title: "Human-in-the-loop, not human-out-of-the-loop.",
-    desc: "Every agent action is reviewable, overridable, and auditable. You approve what gets automated and you coach the system when it misses — through a console designed for operators, not engineers.",
+    desc: "Every agent action is reviewable, overridable, and auditable. You approve what gets automated and coach the system when it misses — through a console designed for operators, not engineers.",
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M11 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
         <path d="M19 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/>
         <path d="m17 8 2 2 4-4"/>
@@ -720,7 +523,7 @@ const differentiators = [
     title: "We measure success in dollars, not tokens.",
     desc: "Our agents are scoped to revenue-generating workflows: qualified leads, booked meetings, closed deals, reconciled invoices. Every deployment ships with a revenue scorecard — not a dashboard of API calls.",
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
       </svg>
     ),
@@ -730,7 +533,7 @@ const differentiators = [
     title: "Consultancy quality at software scale.",
     desc: "Flat-rate monthly pricing, no surprise project fees. Your senior consultant stays on retainer — available to tune, scale, or pivot the system as your business changes. Cancel anytime, keep everything.",
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M18 20V10M12 20V4M6 20v-6"/>
       </svg>
     ),
@@ -739,42 +542,49 @@ const differentiators = [
 
 function WhyOrchelix() {
   return (
-    <section className="py-20 sm:py-24 lg:py-32" style={{ background: "#fff" }}>
-      <div className="mx-auto max-w-[1200px] px-6 sm:px-8 lg:px-10">
-        <div style={{ display: "grid", gap: 18, maxWidth: 680, marginBottom: 64 }}>
-          <Eyebrow>Why Orchelix</Eyebrow>
-          <h2 style={sectionH2}>Built like a consultancy. Priced like software.</h2>
-          <p style={sectionP}>
-            Three principles that separate a reliable revenue system from another expensive pilot.
+    <section className="px-6 py-20 sm:px-8 sm:py-24 lg:px-10 lg:py-32">
+      <div className="mx-auto max-w-[1200px]">
+        <div className="mb-14">
+          <span
+            className="mb-4 inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.18em]"
+            style={{ fontFamily: "var(--font-mono)", color: "var(--teal-700)" }}
+          >
+            <span className="inline-block h-px w-[18px] bg-current opacity-70" />
+            Why Orchelix
+          </span>
+          <h2
+            className="mb-4 max-w-[640px] text-[34px] font-semibold leading-[1.07] tracking-[-0.026em] sm:text-[42px] lg:text-[48px]"
+            style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
+          >
+            Built like a consultancy. Priced like software.
+          </h2>
+          <p
+            className="max-w-[520px] text-[17px] leading-[1.6]"
+            style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
+          >
+            Three principles that separate a reliable revenue system from another
+            expensive pilot.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3" style={{ gap: 24 }}>
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
           {differentiators.map(({ label, title, desc, icon }) => (
             <div
               key={label}
+              className="flex flex-col gap-5 rounded-[20px] border p-7 sm:p-8"
               style={{
+                borderColor: "var(--line)",
                 background: "var(--surface-2)",
-                border: "1px solid var(--line)",
-                borderRadius: 20,
-                padding: "36px 32px",
-                display: "grid",
-                gap: 16,
-                alignContent: "start",
+                boxShadow: "0 2px 8px rgba(10,37,64,0.05)",
               }}
             >
-              {/* Icon */}
+              {/* Icon in navy tile */}
               <div
+                className="flex h-12 w-12 items-center justify-center rounded-[14px]"
                 style={{
-                  width: 52,
-                  height: 52,
-                  borderRadius: 15,
-                  background: "linear-gradient(135deg, var(--navy-600) 0%, var(--navy-500) 100%)",
+                  background: "linear-gradient(135deg, var(--color-navy-600) 0%, var(--color-navy-500) 100%)",
                   color: "var(--teal-400)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  boxShadow: "0 1px 0 rgba(255,255,255,0.08) inset, 0 8px 20px -8px rgba(10,37,64,0.3)",
+                  boxShadow: "0 1px 0 rgba(255,255,255,0.08) inset, 0 8px 20px -8px rgba(10,37,64,0.30)",
                 }}
               >
                 {icon}
@@ -782,49 +592,31 @@ function WhyOrchelix() {
 
               {/* Label chip */}
               <span
+                className="inline-flex w-fit rounded-full px-3 py-1 text-[10px] font-medium uppercase tracking-[0.14em]"
                 style={{
-                  alignSelf: "start",
                   fontFamily: "var(--font-mono)",
-                  fontWeight: 500,
-                  fontSize: 10,
-                  letterSpacing: "0.16em",
-                  textTransform: "uppercase",
                   color: "var(--teal-700)",
-                  background: "var(--teal-50)",
-                  border: "1px solid var(--teal-100)",
-                  borderRadius: 999,
-                  padding: "4px 10px",
-                  display: "inline-block",
+                  background: "var(--color-teal-50)",
+                  border: "1px solid var(--color-teal-100)",
                 }}
               >
                 {label}
               </span>
 
-              <h3
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontWeight: 600,
-                  fontSize: 20,
-                  lineHeight: 1.28,
-                  letterSpacing: "-0.016em",
-                  color: "var(--ink)",
-                  margin: 0,
-                }}
-              >
-                {title}
-              </h3>
-              <p
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontWeight: 400,
-                  fontSize: 15,
-                  lineHeight: 1.65,
-                  color: "var(--ink-2)",
-                  margin: 0,
-                }}
-              >
-                {desc}
-              </p>
+              <div>
+                <h3
+                  className="mb-3 text-[18px] font-semibold leading-[1.28] tracking-[-0.014em]"
+                  style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
+                >
+                  {title}
+                </h3>
+                <p
+                  className="text-[14.5px] leading-[1.65]"
+                  style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
+                >
+                  {desc}
+                </p>
+              </div>
             </div>
           ))}
         </div>
@@ -836,106 +628,58 @@ function WhyOrchelix() {
 /* ─── 6. Track Record ───────────────────────────────────────────────────── */
 
 const results = [
-  {
-    stat: "94%",
-    detail: "of inbound calls resolved without human transfer",
-  },
-  {
-    stat: "3.4×",
-    detail: "average increase in qualified leads per sales rep",
-  },
-  {
-    stat: "< 14 days",
-    detail: "from contract signature to first live agent",
-  },
-  {
-    stat: "100%",
-    detail: "of deployments maintained PIPEDA compliance at launch",
-  },
+  { stat: "94%",      detail: "Of inbound calls resolved without human transfer" },
+  { stat: "3.4×",     detail: "Average increase in qualified leads per sales rep" },
+  { stat: "< 14 days", detail: "From contract signature to first live agent" },
+  { stat: "100%",     detail: "Of deployments PIPEDA-compliant at launch" },
 ];
 
 function TrackRecord() {
   return (
     <section
-      style={{
-        position: "relative",
-        overflow: "hidden",
-        background: "var(--navy-600)",
-        backgroundImage: `
-          radial-gradient(ellipse 70% 80% at 100% 0%, rgba(20,184,166,0.18), transparent 55%),
-          radial-gradient(ellipse 60% 60% at 0% 100%, rgba(20,184,166,0.10), transparent 50%),
-          linear-gradient(160deg, #0A2540 0%, #081D33 100%)
-        `,
-        borderTop: "1px solid rgba(20,184,166,0.1)",
-        borderBottom: "1px solid rgba(20,184,166,0.1)",
-      }}
+      className="px-6 py-20 sm:px-8 sm:py-24 lg:px-10 lg:py-32"
+      style={{ background: "var(--surface-2)", borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)" }}
     >
-      {/* Watermark */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          left: -100,
-          top: -60,
-          width: 380,
-          height: 380,
-          pointerEvents: "none",
-          opacity: 0.04,
-        }}
-      >
-        <Image
-          src="/orchelix-mark-light.png"
-          alt=""
-          width={380}
-          height={380}
-          quality={40}
-          style={{ objectFit: "contain" }}
-        />
-      </div>
-
-      <div
-        className="mx-auto max-w-[1200px] px-6 sm:px-8 lg:px-10"
-        style={{ position: "relative", zIndex: 1, paddingTop: 80, paddingBottom: 80 }}
-      >
-        <div style={{ display: "grid", gap: 16, maxWidth: 620, marginBottom: 64 }}>
-          <Eyebrow light>Our track record</Eyebrow>
-          <h2 style={sectionH2Light}>
+      <div className="mx-auto max-w-[1200px]">
+        <div className="mb-14 max-w-[620px]">
+          <span
+            className="mb-4 inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.18em]"
+            style={{ fontFamily: "var(--font-mono)", color: "var(--teal-700)" }}
+          >
+            <span className="inline-block h-px w-[18px] bg-current opacity-70" />
+            Our track record
+          </span>
+          <h2
+            className="mb-4 text-[34px] font-semibold leading-[1.07] tracking-[-0.026em] sm:text-[42px] lg:text-[48px]"
+            style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
+          >
             Results that show up on a revenue report, not a vanity dashboard.
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" style={{ gap: 2 }}>
+        <div
+          className="grid grid-cols-2 overflow-hidden rounded-[20px] border lg:grid-cols-4"
+          style={{ borderColor: "var(--line)", background: "#fff" }}
+        >
           {results.map(({ stat, detail }, i) => (
             <div
               key={i}
-              style={{
-                padding: "32px 28px",
-                borderLeft: i > 0 ? "1px solid rgba(255,255,255,0.08)" : undefined,
-              }}
-              className={i > 0 ? "border-l-0 sm:border-l border-t sm:border-t-0 border-white/[0.08]" : ""}
+              className={[
+                "p-7 sm:p-8",
+                i > 0 ? "border-l" : "",
+                i >= 2 ? "border-t lg:border-t-0" : "",
+              ].filter(Boolean).join(" ")}
+              style={{ borderColor: "var(--line)" }}
             >
               <p
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontWeight: 700,
-                  fontSize: 42,
-                  lineHeight: 1,
-                  letterSpacing: "-0.028em",
-                  color: "var(--teal-400)",
-                  margin: "0 0 12px",
-                }}
+                className="mb-2.5 text-[38px] font-semibold leading-none tracking-[-0.028em] sm:text-[44px]"
+                style={{ fontFamily: "var(--font-display)", color: "var(--teal-600)" }}
               >
                 {stat}
               </p>
               <p
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontWeight: 400,
-                  fontSize: 14,
-                  lineHeight: 1.55,
-                  color: "rgba(255,255,255,0.55)",
-                  margin: 0,
-                }}
+                className="text-[13.5px] leading-[1.55]"
+                style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
               >
                 {detail}
               </p>
@@ -944,13 +688,8 @@ function TrackRecord() {
         </div>
 
         <p
-          style={{
-            fontFamily: "var(--font-display)",
-            fontWeight: 400,
-            fontSize: 12,
-            color: "rgba(255,255,255,0.25)",
-            marginTop: 40,
-          }}
+          className="mt-6 text-[12px]"
+          style={{ fontFamily: "var(--font-display)", color: "var(--ink-3)" }}
         >
           Based on deployments to date across Orchelix client engagements.
         </p>
@@ -966,144 +705,49 @@ function CtaBanner() {
     <section className="px-6 pb-20 pt-16 sm:px-8 sm:pb-24 sm:pt-20 lg:px-10 lg:pb-32 lg:pt-[72px]">
       <div className="mx-auto max-w-[1200px]">
         <div
-          className="flex flex-col gap-7 sm:gap-8 lg:flex-row lg:items-center lg:gap-10"
+          className="overflow-hidden rounded-[24px] p-10 sm:p-12 lg:p-16"
           style={{
-            position: "relative",
-            overflow: "hidden",
-            background: "var(--navy-700)",
-            backgroundImage: `
-              radial-gradient(ellipse 60% 100% at 100% 50%, rgba(20,184,166,0.28), transparent 65%),
-              radial-gradient(ellipse 50% 90% at 0% 100%, rgba(20,184,166,0.12), transparent 60%),
-              radial-gradient(ellipse 80% 50% at 50% 0%, rgba(20,184,166,0.10), transparent 70%),
-              linear-gradient(135deg, #0A2540 0%, #051A31 100%)
+            background: `
+              radial-gradient(ellipse 80% 60% at 100% 0%, rgba(20,184,166,0.18), transparent 60%),
+              radial-gradient(ellipse 60% 80% at 0% 100%, rgba(20,184,166,0.10), transparent 60%),
+              linear-gradient(180deg, #0D2238 0%, #061B33 100%)
             `,
-            borderRadius: 26,
-            padding: "48px 40px",
-            color: "#fff",
-            border: "1px solid rgba(20,184,166,0.18)",
-            boxShadow: `
-              0 1px 0 rgba(255,255,255,0.08) inset,
-              0 0 0 1px rgba(20,184,166,0.06),
-              0 40px 100px -30px rgba(10,37,64,0.45),
-              0 24px 60px -20px rgba(20,184,166,0.14)
-            `,
+            boxShadow:
+              "0 40px 100px -30px rgba(10,37,64,0.55), 0 1px 0 rgba(255,255,255,0.08) inset",
           }}
         >
-          {/* Grid overlay */}
-          <div
-            aria-hidden="true"
-            style={{
-              position: "absolute",
-              inset: 0,
-              opacity: 0.35,
-              pointerEvents: "none",
-              backgroundImage: `
-                linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)
-              `,
-              backgroundSize: "32px 32px",
-              maskImage: "radial-gradient(ellipse 80% 100% at 50% 0%, black, transparent 80%)",
-              WebkitMaskImage: "radial-gradient(ellipse 80% 100% at 50% 0%, black, transparent 80%)",
-            }}
-          />
-          {/* Watermark */}
-          <div
-            aria-hidden="true"
-            style={{
-              position: "absolute",
-              right: -60,
-              top: -40,
-              width: 280,
-              height: 280,
-              pointerEvents: "none",
-              opacity: 0.06,
-            }}
-          >
-            <Image
-              src="/orchelix-mark-light.png"
-              alt=""
-              width={280}
-              height={280}
-              quality={40}
-              style={{ objectFit: "contain" }}
-            />
-          </div>
-
-          <div style={{ position: "relative", zIndex: 1 }}>
-            <h2
-              className="text-[26px] sm:text-[32px] lg:text-[38px]"
-              style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 600,
-                lineHeight: 1.12,
-                letterSpacing: "-0.026em",
-                margin: 0,
-                maxWidth: 520,
-                color: "#fff",
-              }}
-            >
-              Ready to see what a real AI deployment looks like?
-            </h2>
-            <p
-              style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 400,
-                fontSize: 16,
-                lineHeight: 1.6,
-                color: "rgba(255,255,255,0.72)",
-                margin: "14px 0 0",
-                maxWidth: 460,
-              }}
-            >
-              Book a 30-minute strategy call with a senior consultant. We&apos;ll map one revenue
-              workflow you can automate in under 14 days — at no cost to you.
-            </p>
-          </div>
-
-          <div
-            className="flex flex-wrap gap-3 lg:ml-auto lg:shrink-0"
-            style={{ position: "relative", zIndex: 1 }}
-          >
-            <a
-              href="/try-esmi"
-              style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 500,
-                fontSize: 15,
-                lineHeight: 1,
-                padding: "15px 24px",
-                borderRadius: 12,
-                border: "1px solid rgba(255,255,255,0.18)",
-                background: "rgba(255,255,255,0.06)",
-                color: "#fff",
-                textDecoration: "none",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-              }}
-            >
-              Try Esmi live
-            </a>
-            <a
-              href="/book"
-              style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 600,
-                fontSize: 15,
-                lineHeight: 1,
-                padding: "15px 24px",
-                borderRadius: 12,
-                background: "#fff",
-                color: "var(--navy-600)",
-                textDecoration: "none",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-              }}
-            >
-              Book a strategy call
-              <span style={{ fontSize: 14, opacity: 0.85 }}>→</span>
-            </a>
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:gap-16">
+            <div className="flex-1">
+              <h2
+                className="mb-4 text-[28px] font-semibold leading-[1.1] tracking-[-0.022em] text-white sm:text-[34px] lg:text-[40px]"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
+                Ready to see what a real AI deployment looks like?
+              </h2>
+              <p
+                className="max-w-[540px] text-[16px] leading-[1.6] text-white/60 sm:text-[17px]"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
+                Book a 30-minute strategy call with a senior consultant. We&apos;ll map
+                one revenue workflow you can automate in under 14 days — at no cost to you.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3 lg:shrink-0">
+              <a
+                href="/try-esmi"
+                className="inline-flex h-12 items-center rounded-xl border border-white/20 px-6 text-[15px] font-medium text-white/90 transition-colors hover:bg-white/10"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
+                Try Esmi live
+              </a>
+              <a
+                href="/book"
+                className="inline-flex h-12 items-center rounded-xl bg-white px-6 text-[15px] font-medium transition-opacity hover:opacity-90"
+                style={{ fontFamily: "var(--font-display)", color: "var(--navy-600)" }}
+              >
+                Book a strategy call <span className="ml-1.5 opacity-70">→</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
