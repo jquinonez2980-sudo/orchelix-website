@@ -22,10 +22,10 @@ const columns = [
   {
     h: "Trust",
     links: [
-      { label: "Privacy Policy", href: "/privacy" },
+      { label: "Privacy Policy",   href: "/privacy" },
       { label: "Terms of Service", href: "/terms" },
-      { label: "PIPEDA",          href: "/privacy" },
-      { label: "Security",        href: "/privacy" },
+      { label: "PIPEDA",           href: "/privacy" },
+      { label: "Security",         href: "/privacy" },
     ],
   },
 ];
@@ -42,7 +42,7 @@ export default function Footer() {
       }}
       className="px-6 pb-8 pt-20 sm:px-8 sm:pt-24 lg:px-10 lg:pt-24"
     >
-      {/* Subtle helix watermark, bottom-left */}
+      {/* Subtle helix watermark — via next/image so it gets AVIF/WebP */}
       <div
         aria-hidden="true"
         style={{
@@ -51,16 +51,20 @@ export default function Footer() {
           bottom: -120,
           width: 420,
           height: 420,
-          backgroundImage: "url('/orchelix-mark.png')",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-          backgroundSize: "contain",
-          opacity: 0.04,
           pointerEvents: "none",
           maskImage: "radial-gradient(circle at 50% 50%, black 30%, transparent 70%)",
           WebkitMaskImage: "radial-gradient(circle at 50% 50%, black 30%, transparent 70%)",
         }}
-      />
+      >
+        <Image
+          src="/orchelix-mark.png"
+          alt=""
+          width={420}
+          height={420}
+          quality={50}
+          style={{ opacity: 0.04, objectFit: "contain" }}
+        />
+      </div>
 
       {/* Top hairline accent */}
       <div
@@ -126,7 +130,7 @@ export default function Footer() {
                   lineHeight: 1,
                   letterSpacing: "0.18em",
                   textTransform: "uppercase",
-                  color: "var(--ink-3)",
+                  color: "var(--ink-2)",
                 }}
               >
                 Now booking Q3 pilots
@@ -137,7 +141,7 @@ export default function Footer() {
           {/* Link columns */}
           {columns.map((col) => (
             <div key={col.h}>
-              <h5
+              <h3
                 style={{
                   fontFamily: "var(--font-mono)",
                   fontWeight: 500,
@@ -145,12 +149,12 @@ export default function Footer() {
                   lineHeight: 1,
                   letterSpacing: "0.18em",
                   textTransform: "uppercase",
-                  color: "var(--ink-3)",
+                  color: "var(--ink-2)",
                   margin: "0 0 22px",
                 }}
               >
                 {col.h}
-              </h5>
+              </h3>
               <ul
                 style={{
                   listStyle: "none",
@@ -192,13 +196,13 @@ export default function Footer() {
             fontSize: 11.5,
             lineHeight: 1,
             letterSpacing: "0.02em",
-            color: "var(--ink-3)",
+            color: "var(--ink-2)",
           }}
         >
           <span>© 2026 Orchelix AI Consulting Inc. · Made in Ontario.</span>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 16 }}>
             <a href="/privacy" style={{ color: "inherit", textDecoration: "none" }}>Privacy</a>
-            <span style={{ width: 3, height: 3, borderRadius: "50%", background: "var(--ink-4)", display: "inline-block" }} />
+            <span aria-hidden="true" style={{ width: 3, height: 3, borderRadius: "50%", background: "var(--ink-4)", display: "inline-block" }} />
             <a href="/terms" style={{ color: "inherit", textDecoration: "none" }}>Terms</a>
           </span>
         </div>

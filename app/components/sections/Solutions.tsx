@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const solutions = [
   {
     num: "01 / Revenue",
@@ -154,7 +156,7 @@ export default function Solutions() {
                     fontSize: 11,
                     lineHeight: 1,
                     letterSpacing: "0.18em",
-                    color: "var(--ink-3)",
+                    color: "var(--ink-2)",
                     textTransform: "uppercase",
                   }}
                 >
@@ -247,20 +249,19 @@ export default function Solutions() {
           }}
         >
           <div
+            aria-hidden="true"
             style={{
               position: "absolute",
               right: -60,
               top: -40,
               width: 220,
               height: 220,
-              backgroundImage: "url('/orchelix-mark.png')",
-              backgroundSize: "contain",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
               opacity: 0.04,
               pointerEvents: "none",
             }}
-          />
+          >
+            <Image src="/orchelix-mark.png" alt="" width={220} height={220} quality={50} style={{ objectFit: "contain" }} />
+          </div>
           <div
             style={{
               flexShrink: 0,

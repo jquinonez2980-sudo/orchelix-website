@@ -135,19 +135,18 @@ body {
 /* Skip-to-content link for keyboard accessibility */
 .skip-link {
   position: absolute;
-  top: -100%;
-  left: 8px;
+  left: -9999px;
+  top: 8px;
   padding: 8px 16px;
   background: var(--navy-600);
   color: #fff;
   font-size: 14px;
   font-weight: 500;
-  border-radius: 0 0 8px 8px;
+  border-radius: 8px;
   text-decoration: none;
   z-index: 9999;
-  transition: top 0.1s;
 }
-.skip-link:focus { top: 0; }
+.skip-link:focus { left: 8px; }
 
 /* Focus ring — all interactive elements */
 :focus-visible {

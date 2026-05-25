@@ -48,7 +48,7 @@ export default function Trust() {
               lineHeight: 1,
               letterSpacing: "0.18em",
               textTransform: "uppercase",
-              color: "var(--ink-3)",
+              color: "var(--ink-2)",
             }}
           >
             Trusted by

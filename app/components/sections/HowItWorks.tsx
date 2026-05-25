@@ -85,7 +85,7 @@ export default function HowItWorks() {
                 {step.n}
               </div>
 
-              <h4
+              <h3
                 style={{
                   fontFamily: "var(--font-display)",
                   fontWeight: 600,
@@ -97,7 +97,7 @@ export default function HowItWorks() {
                 }}
               >
                 {step.title}
-              </h4>
+              </h3>
               <p
                 style={{
                   fontFamily: "var(--font-display)",

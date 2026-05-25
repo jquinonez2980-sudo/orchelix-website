@@ -127,7 +127,7 @@ export default function Why() {
                   />
                 </div>
                 <div>
-                  <h4
+                  <h3
                     style={{
                       fontFamily: "var(--font-display)",
                       fontWeight: 600,
@@ -139,7 +139,7 @@ export default function Why() {
                     }}
                   >
                     {item.title}
-                  </h4>
+                  </h3>
                   <p
                     style={{
                       fontFamily: "var(--font-display)",

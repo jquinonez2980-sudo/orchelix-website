@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function FinalCTA() {
   return (
     <section className="px-6 pb-20 pt-16 sm:px-8 sm:pb-24 sm:pt-20 lg:px-10 lg:pb-32 lg:pt-[72px]">
@@ -43,25 +45,31 @@ export default function FinalCTA() {
                 "radial-gradient(ellipse 80% 100% at 50% 0%, black, transparent 80%)",
             }}
           />
-          {/* Helix watermark */}
+          {/* Helix watermark — via next/image so it gets AVIF/WebP */}
           <div
+            aria-hidden="true"
             style={{
               position: "absolute",
               right: -80,
               top: -40,
               width: 300,
               height: 300,
-              backgroundImage: "url('/orchelix-mark-light.png')",
-              backgroundSize: "contain",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
-              opacity: 0.06,
               pointerEvents: "none",
+              opacity: 0.06,
             }}
-          />
+          >
+            <Image
+              src="/orchelix-mark-light.png"
+              alt=""
+              width={300}
+              height={300}
+              quality={50}
+              style={{ objectFit: "contain" }}
+            />
+          </div>
 
           <div style={{ position: "relative", zIndex: 1 }}>
-            <h3
+            <h2
               className="text-[26px] sm:text-[32px] lg:text-[38px]"
               style={{
                 fontFamily: "var(--font-display)",
@@ -74,7 +82,7 @@ export default function FinalCTA() {
               }}
             >
               Start with one agent. See results in 30 days.
-            </h3>
+            </h2>
             <p
               style={{
                 fontFamily: "var(--font-display)",
