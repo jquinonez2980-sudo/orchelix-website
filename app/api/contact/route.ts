@@ -85,13 +85,9 @@ function buildHtml(fields: {
               <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
                 <tr>
                   <td style="vertical-align:middle;padding-bottom:26px;">
-                    <span style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-                                 font-size:22px;font-weight:700;color:#FFFFFF;
-                                 letter-spacing:-0.03em;">Orchelix</span>
-                    <span style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-                                 font-size:11px;font-weight:600;color:#14B8A6;
-                                 letter-spacing:0.14em;text-transform:uppercase;
-                                 margin-left:10px;vertical-align:middle;">AI Consulting</span>
+                    <img src="https://orchelix-website.vercel.app/logo-white.jpg"
+                         alt="Orchelix AI Consulting" width="160" height="40"
+                         style="display:block;height:40px;width:auto;max-width:160px;border:0;">
                   </td>
                   <td align="right" style="vertical-align:middle;padding-bottom:26px;">
                     <table cellpadding="0" cellspacing="0" role="presentation">
