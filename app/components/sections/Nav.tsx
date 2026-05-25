@@ -9,7 +9,7 @@ const NAV_LINKS = [
   { label: "Industries", href: "/industries" },
   { label: "Pricing",    href: "/pricing" },
   { label: "Try Esmi",   href: "/try-esmi" },
-  { label: "About",      href: "#about" },
+  { label: "About",      href: "/about" },
 ];
 
 export default function Nav() {
