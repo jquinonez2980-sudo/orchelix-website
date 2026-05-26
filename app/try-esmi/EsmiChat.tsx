@@ -38,7 +38,7 @@ const WELCOME_TEXT =
   "Hi there! I'm Esmi, your AI receptionist at Orchelix. I can book appointments, check availability, and answer any questions about our services or pricing. How can I help you today?";
 
 const WELCOME_TEXT_ES =
-  "¡Hola! Soy Esmi, tu recepcionista virtual de Orchelix. Puedo agendar citas, verificar disponibilidad y responder preguntas sobre nuestros servicios y precios. ¿En qué te puedo ayudar?";
+  "¡Hola! Soy Esmi, la recepcionista virtual de Orchelix. Puedo agendar citas, revisar disponibilidad y responder preguntas sobre nuestros servicios y precios. ¿En qué le puedo ayudar?";
 
 const calIcon = (
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -69,10 +69,10 @@ const QUICK_REPLIES = [
 ];
 
 const QUICK_REPLIES_ES = [
-  { label: "Agendar una cita",     value: "Quiero agendar una cita",                icon: calIcon   },
-  { label: "Ver disponibilidad",   value: "¿Qué disponibilidad hay esta semana?",   icon: clockIcon },
-  { label: "Precios",              value: "¿Cuáles son sus paquetes de precios?",   icon: dollarIcon },
-  { label: "Servicios",            value: "¿Qué servicios ofrecen?",                icon: checkIcon },
+  { label: "Agendar una cita",     value: "Quiero agendar una cita",                      icon: calIcon   },
+  { label: "Ver disponibilidad",   value: "¿Qué disponibilidad tienen esta semana?",      icon: clockIcon },
+  { label: "Precios",              value: "¿Cuáles son sus paquetes de precios?",         icon: dollarIcon },
+  { label: "Servicios",            value: "¿Qué servicios ofrecen?",                      icon: checkIcon },
 ];
 
 const TOOL_LABELS: Record<string, string> = {
