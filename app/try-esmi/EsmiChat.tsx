@@ -122,8 +122,24 @@ export default function EsmiChat() {
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    setThreadId(getOrCreateThreadId());
+    const id = getOrCreateThreadId();
+    setThreadId(id);
+    try {
+      const saved = localStorage.getItem(`esmi-messages-${id}`);
+      if (saved) {
+        const parsed: Message[] = JSON.parse(saved);
+        if (parsed.length > 0) setMessages(parsed);
+      }
+    } catch { /* ok */ }
   }, []);
+
+  useEffect(() => {
+    if (!threadId || messages.some((m) => m.streaming)) return;
+    try {
+      const toSave = messages.slice(-30).map((m) => ({ ...m, toolActive: null }));
+      localStorage.setItem(`esmi-messages-${threadId}`, JSON.stringify(toSave));
+    } catch { /* ok */ }
+  }, [messages, threadId]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -246,13 +262,14 @@ export default function EsmiChat() {
   );
 
   const resetConversation = useCallback(() => {
+    try { localStorage.removeItem(`esmi-messages-${threadId}`); } catch { /* ok */ }
     const newThread = uid();
     try { localStorage.setItem("esmi-thread-id", newThread); } catch { /* ok */ }
     setThreadId(newThread);
     setMessages([{ ...welcomeMessage(), content: "Fresh start! I'm Esmi — how can I help you today?" }]);
     setInput("");
     setLoading(false);
-  }, []);
+  }, [threadId]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
