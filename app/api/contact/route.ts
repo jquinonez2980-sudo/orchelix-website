@@ -85,7 +85,7 @@ function buildHtml(fields: {
               <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
                 <tr>
                   <td style="vertical-align:middle;padding-bottom:26px;">
-                    <img src="https://orchelix-website.vercel.app/logo-white.jpg"
+                    <img src="https://orchelix.com/logo_white.jpg"
                          alt="Orchelix AI Consulting" width="160" height="40"
                          style="display:block;height:40px;width:auto;max-width:160px;border:0;">
                   </td>

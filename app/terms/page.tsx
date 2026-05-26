@@ -86,8 +86,25 @@ export default function TermsPage() {
 
               <h2>5. Limitation of Liability</h2>
               <p>
-                {/* TODO: Have legal counsel complete this section */}
-                To the maximum extent permitted by applicable law, Orchelix shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the website or services.
+                To the maximum extent permitted by applicable law:
+              </p>
+              <p>
+                <strong>(a) Cap on Liability.</strong> Orchelix&apos;s total cumulative liability to you for any and all claims arising out of or related to these Terms or the Services, regardless of the form of action or the basis of the claim (including contract, tort, negligence, or otherwise), shall not exceed the greater of: (i) the total fees paid by you to Orchelix in the twelve (12) months immediately preceding the event giving rise to the claim; or (ii) five hundred Canadian dollars (CAD $500).
+              </p>
+              <p>
+                <strong>(b) Exclusion of Consequential Damages.</strong> In no event shall Orchelix, its directors, officers, employees, agents, or licensors be liable for any indirect, incidental, special, exemplary, consequential, or punitive damages of any kind, including but not limited to: loss of revenue or profits; loss of business or contracts; loss of anticipated savings; loss of data or corruption of data; loss of goodwill or reputation; or costs of procuring substitute services — even if Orchelix has been advised of the possibility of such damages or such damages were reasonably foreseeable.
+              </p>
+              <p>
+                <strong>(c) Essential Basis.</strong> The parties acknowledge that the limitations of liability set out in this section reflect a reasonable and negotiated allocation of commercial risk between sophisticated parties and form an essential basis of the bargain between them. Orchelix would not provide the Services or enter into these Terms without the benefit of these limitations.
+              </p>
+              <p>
+                <strong>(d) Exceptions.</strong> Nothing in these Terms limits or excludes Orchelix&apos;s liability for: (i) death or personal injury caused by Orchelix&apos;s negligence; (ii) fraud or fraudulent misrepresentation by Orchelix; or (iii) any other liability that cannot be excluded or limited under the laws of the Province of Ontario or the federal laws of Canada applicable therein, including applicable consumer protection legislation where it applies.
+              </p>
+              <p>
+                <strong>(e) Jurisdiction Variance.</strong> Certain jurisdictions do not permit the exclusion of implied warranties or the limitation or exclusion of liability for incidental or consequential damages. If such laws apply to you, some or all of the limitations above may not apply, and you may have additional legal rights.
+              </p>
+              <p style={{ fontSize: 13, color: "var(--ink-3)", borderLeft: "3px solid var(--line)", paddingLeft: 14, marginTop: 8 }}>
+                <em>This section has been drafted for legal review. The terms above are subject to the executed Service Agreement between Orchelix and the client, which governs in the event of any conflict. For questions, contact <a href="mailto:legal@orchelix.com">legal@orchelix.com</a>.</em>
               </p>
 
               <h2>6. Governing Law</h2>

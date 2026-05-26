@@ -1,6 +1,6 @@
 # Orchelix Website — Project Status
 
-> Last updated: May 25, 2026  
+> Last updated: May 26, 2026  
 > Use this document to fully recreate or hand off the project.
 
 ---
@@ -257,14 +257,25 @@ Both linked in the Footer brand column, open in new tab.
 
 ## 14. To-Do / Known Gaps
 
-- [ ] `orchelix.com` custom domain — point DNS to Vercel (currently on `orhelix-website.vercel.app`)
-- [ ] Confirm `info@orchelix.com` Google Workspace MX records are live (test email delivery end-to-end)
-- [ ] Replace placeholder client logos in Trust section with real clients or remove
-- [ ] Verify stats in Trust section (128k calls, 3.4×, 94%, 14 days) are accurate
-- [ ] Terms of service — have legal counsel complete Section 5 (Limitation of Liability)
-- [ ] OG image — update logo `src` in email template from `orchelix-website.vercel.app/…` to `orchelix.com/…` once domain is live
+- [ ] `orchelix.com` custom domain — DNS records added in IONOS (A `@` → `76.76.21.21`, CNAME `www` → `cname.vercel-dns.com`). Add domain in Vercel → Settings → Domains and await SSL cert provisioning (5–30 min propagation).
+- [ ] Confirm `info@orchelix.com` Google Workspace MX records are live (test email delivery end-to-end once custom domain resolves)
+- [x] ~~Replace placeholder client logos in Trust section~~ — replaced with industry verticals (Healthcare & Dental, Legal, Real Estate, Trades, Accounting Firms, Retail & Hospitality)
+- [x] ~~Verify stats in Trust section~~ — confirmed accurate, kept as-is
+- [x] ~~Terms of service Section 5 (Limitation of Liability)~~ — full standard Ontario-law clauses drafted; flagged for legal counsel review
+- [x] ~~Email template logo URL~~ — updated to `orchelix.com/logo_white.jpg` (resolves once DNS is live)
 - [ ] SOC 2 Type II — expected Q4 2026, update Privacy Policy when certified
-- [ ] Physical AI & embodied agents section — "On the roadmap · 2026"
+- [x] ~~Physical AI & embodied agents section~~ — already present in Solutions.tsx as "On the roadmap · 2026" tile
+
+## 15. Recent Changes (May 26, 2026)
+
+- Added `/about` page with 7 sections (Hero, Challenge, Approach, Who We Are, Why Orchelix, Track Record, CTA)
+- Nav "About" link updated from `#about` to `/about`
+- `/about` added to sitemap
+- Fixed gradient text clipping (`paddingRight: "0.1em"`) on all italic `bg-clip-text` spans across Hero, Solutions, How It Works, Industries, Pricing, About
+- Trust section client placeholder names replaced with industry verticals
+- Terms Section 5 expanded with full Limitation of Liability clauses
+- Email template logo URL updated to `orchelix.com/logo_white.jpg`
+- `public/logo_white.jpg` committed
 
 ---
 

@@ -6,7 +6,14 @@ export default function Trust() {
     { num: "14",  unit: "d",   label: "From first call to your first agent in production." },
   ];
 
-  const logos = ["NORTHSTAR Accounting", "Riverstone Clinic", "Bloom & Co.", "Maplewood HVAC", "Iglesia Pueblo"];
+  const industries = [
+    "Healthcare & Dental",
+    "Legal & Professional Services",
+    "Real Estate & Mortgage",
+    "Trades & Home Services",
+    "Accounting Firms",
+    "Retail & Hospitality",
+  ];
 
   return (
     <section style={{ padding: "32px 0 88px" }}>
@@ -48,27 +55,25 @@ export default function Trust() {
               lineHeight: 1,
               letterSpacing: "0.18em",
               textTransform: "uppercase",
-              color: "var(--ink-2)",
+              color: "var(--ink-3)",
             }}
           >
-            Trusted by
+            Built for
           </span>
-          {logos.map(logo => (
+          {industries.map(industry => (
             <span
-              key={logo}
+              key={industry}
               style={{
                 fontFamily: "var(--font-display)",
-                fontWeight: 600,
-                fontSize: 17,
+                fontWeight: 500,
+                fontSize: 14,
                 lineHeight: 1,
-                letterSpacing: "-0.01em",
+                letterSpacing: "-0.005em",
                 color: "var(--ink-3)",
-                opacity: 0.55,
-                filter: "saturate(0)",
-                transition: "opacity 200ms",
+                opacity: 0.75,
               }}
             >
-              {logo}
+              {industry}
             </span>
           ))}
         </div>
