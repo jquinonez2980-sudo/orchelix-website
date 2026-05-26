@@ -1,6 +1,6 @@
 # Orchelix Website — Project Status
 
-> Last updated: May 26, 2026  
+> Last updated: May 26, 2026 — **LIVE at orchelix.com**  
 > Use this document to fully recreate or hand off the project.
 
 ---
@@ -257,8 +257,8 @@ Both linked in the Footer brand column, open in new tab.
 
 ## 14. To-Do / Known Gaps
 
-- [ ] `orchelix.com` custom domain — DNS records added in IONOS (A `@` → `76.76.21.21`, CNAME `www` → `cname.vercel-dns.com`). Add domain in Vercel → Settings → Domains and await SSL cert provisioning (5–30 min propagation).
-- [ ] Confirm `info@orchelix.com` Google Workspace MX records are live (test email delivery end-to-end once custom domain resolves)
+- [x] ~~`orchelix.com` custom domain~~ — **LIVE**. DNS via IONOS (A `@` → `76.76.21.21`, CNAME `www` → `cname.vercel-dns.com`). SSL active. Apex redirects to `www`. Verified May 26, 2026.
+- [x] ~~Confirm email delivery end-to-end~~ — test submission sent from `orchelix.com/api/contact`, received at `info@orchelix.com` with logo rendering correctly. Verified May 26, 2026.
 - [x] ~~Replace placeholder client logos in Trust section~~ — replaced with industry verticals (Healthcare & Dental, Legal, Real Estate, Trades, Accounting Firms, Retail & Hospitality)
 - [x] ~~Verify stats in Trust section~~ — confirmed accurate, kept as-is
 - [x] ~~Terms of service Section 5 (Limitation of Liability)~~ — full standard Ontario-law clauses drafted; flagged for legal counsel review
@@ -276,6 +276,7 @@ Both linked in the Footer brand column, open in new tab.
 - Terms Section 5 expanded with full Limitation of Liability clauses
 - Email template logo URL updated to `orchelix.com/logo_white.jpg`
 - `public/logo_white.jpg` committed
+- **Domain orchelix.com is live** — DNS propagated, SSL active, email delivery confirmed end-to-end
 
 ---
 
