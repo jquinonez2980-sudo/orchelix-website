@@ -37,49 +37,54 @@ function stripSlotLines(text: string): string {
 const WELCOME_TEXT =
   "Hi there! I'm Esmi, your AI receptionist at Orchelix. I can book appointments, check availability, and answer any questions about our services or pricing. How can I help you today?";
 
+const WELCOME_TEXT_ES =
+  "¡Hola! Soy Esmi, tu recepcionista virtual de Orchelix. Puedo agendar citas, verificar disponibilidad y responder preguntas sobre nuestros servicios y precios. ¿En qué te puedo ayudar?";
+
+const calIcon = (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/>
+  </svg>
+);
+const clockIcon = (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+  </svg>
+);
+const dollarIcon = (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+  </svg>
+);
+const checkIcon = (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+  </svg>
+);
+
 const QUICK_REPLIES = [
-  {
-    label: "Book an appointment",
-    value: "Book an appointment",
-    icon: (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/>
-      </svg>
-    ),
-  },
-  {
-    label: "Check availability",
-    value: "What's available this week?",
-    icon: (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
-      </svg>
-    ),
-  },
-  {
-    label: "Pricing",
-    value: "What are your pricing packages?",
-    icon: (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-      </svg>
-    ),
-  },
-  {
-    label: "Services",
-    value: "What services do you offer?",
-    icon: (
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
-      </svg>
-    ),
-  },
+  { label: "Book an appointment",  value: "Book an appointment",          icon: calIcon   },
+  { label: "Check availability",   value: "What's available this week?",  icon: clockIcon },
+  { label: "Pricing",              value: "What are your pricing packages?", icon: dollarIcon },
+  { label: "Services",             value: "What services do you offer?",  icon: checkIcon },
+];
+
+const QUICK_REPLIES_ES = [
+  { label: "Agendar una cita",     value: "Quiero agendar una cita",                icon: calIcon   },
+  { label: "Ver disponibilidad",   value: "¿Qué disponibilidad hay esta semana?",   icon: clockIcon },
+  { label: "Precios",              value: "¿Cuáles son sus paquetes de precios?",   icon: dollarIcon },
+  { label: "Servicios",            value: "¿Qué servicios ofrecen?",                icon: checkIcon },
 ];
 
 const TOOL_LABELS: Record<string, string> = {
   list_available_slots:  "Checking your calendar…",
   book_appointment:      "Booking your appointment…",
   search_knowledge_base: "Looking that up…",
+};
+
+const TOOL_LABELS_ES: Record<string, string> = {
+  list_available_slots:  "Consultando el calendario…",
+  book_appointment:      "Agendando tu cita…",
+  search_knowledge_base: "Buscando información…",
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -107,19 +112,28 @@ function parseSlot(slot: string): { start: string; end: string } {
   return { start: parts[0]?.trim() ?? slot, end: parts[1]?.trim() ?? "" };
 }
 
-function welcomeMessage(): Message {
-  return { id: uid(), role: "assistant", content: WELCOME_TEXT };
-}
-
 // ── Main component ────────────────────────────────────────────────────────────
 
-export default function EsmiChat() {
-  const [messages, setMessages] = useState<Message[]>(() => [welcomeMessage()]);
+export default function EsmiChat({ defaultLocale = "en" }: { defaultLocale?: "en" | "es" }) {
+  const [locale, setLocale] = useState<"en" | "es">(defaultLocale);
+  const isEs = locale === "es";
+  const welcomeText = isEs ? WELCOME_TEXT_ES : WELCOME_TEXT;
+  const quickReplies = isEs ? QUICK_REPLIES_ES : QUICK_REPLIES;
+  const toolLabels = isEs ? TOOL_LABELS_ES : TOOL_LABELS;
+
+  const [messages, setMessages] = useState<Message[]>(() => [{ id: uid(), role: "assistant", content: defaultLocale === "es" ? WELCOME_TEXT_ES : WELCOME_TEXT }]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [threadId, setThreadId] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  const switchLocale = useCallback((next: "en" | "es") => {
+    if (next === locale) return;
+    setLocale(next);
+    setMessages([{ id: uid(), role: "assistant", content: next === "es" ? WELCOME_TEXT_ES : WELCOME_TEXT }]);
+    setInput("");
+  }, [locale]);
 
   useEffect(() => {
     const id = getOrCreateThreadId();
@@ -266,10 +280,10 @@ export default function EsmiChat() {
     const newThread = uid();
     try { localStorage.setItem("esmi-thread-id", newThread); } catch { /* ok */ }
     setThreadId(newThread);
-    setMessages([{ ...welcomeMessage(), content: "Fresh start! I'm Esmi — how can I help you today?" }]);
+    setMessages([{ id: uid(), role: "assistant", content: isEs ? "¡Empecemos de nuevo! Soy Esmi — ¿en qué te puedo ayudar hoy?" : "Fresh start! I'm Esmi — how can I help you today?" }]);
     setInput("");
     setLoading(false);
-  }, [threadId]);
+  }, [threadId, isEs]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -290,10 +304,7 @@ export default function EsmiChat() {
   };
 
   const lastMsg = messages[messages.length - 1];
-  const showQuickReplies =
-    !loading &&
-    messages.length === 1 &&
-    lastMsg.role === "assistant";
+  const showQuickReplies = !loading && messages.length === 1 && lastMsg.role === "assistant";
 
   return (
     <div
@@ -362,17 +373,41 @@ export default function EsmiChat() {
           >
             Esmi
           </div>
-          <div
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: 11,
-              color: "rgba(10,37,64,0.45)",
-              letterSpacing: "0.02em",
-              lineHeight: 1.2,
-              marginTop: 2,
-            }}
-          >
-            AI Receptionist · EN · ES
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 3 }}>
+            <span
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: 11,
+                color: "rgba(10,37,64,0.45)",
+                letterSpacing: "0.02em",
+              }}
+            >
+              {isEs ? "Recepcionista Virtual" : "AI Receptionist"}
+            </span>
+            <span style={{ color: "rgba(10,37,64,0.20)", fontSize: 10 }}>·</span>
+            {(["en", "es"] as const).map((lang) => (
+              <button
+                key={lang}
+                type="button"
+                onClick={() => switchLocale(lang)}
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 10,
+                  fontWeight: 600,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  padding: "2px 6px",
+                  borderRadius: 4,
+                  border: locale === lang ? "1px solid rgba(20,184,166,0.5)" : "1px solid transparent",
+                  background: locale === lang ? "rgba(20,184,166,0.08)" : "transparent",
+                  color: locale === lang ? "#0D766B" : "rgba(10,37,64,0.35)",
+                  cursor: "pointer",
+                  transition: "all 0.15s",
+                }}
+              >
+                {lang.toUpperCase()}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -408,7 +443,7 @@ export default function EsmiChat() {
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
             <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
           </svg>
-          New chat
+          {isEs ? "Nueva conversación" : "New chat"}
         </button>
       </div>
 
@@ -426,11 +461,11 @@ export default function EsmiChat() {
         }}
       >
         {messages.map((msg) => (
-          <MessageBubble key={msg.id} message={msg} onSlotSelect={sendMessage} />
+          <MessageBubble key={msg.id} message={msg} onSlotSelect={sendMessage} toolLabels={toolLabels} />
         ))}
 
         {showQuickReplies && (
-          <QuickReplies chips={QUICK_REPLIES} onSelect={sendMessage} />
+          <QuickReplies chips={quickReplies} onSelect={sendMessage} />
         )}
       </div>
 
@@ -448,7 +483,7 @@ export default function EsmiChat() {
         }}
       >
         <label htmlFor="esmi-input" style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap" }}>
-          Message Esmi
+          {isEs ? "Mensaje a Esmi" : "Message Esmi"}
         </label>
         <textarea
           id="esmi-input"
@@ -456,7 +491,7 @@ export default function EsmiChat() {
           value={input}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
-          placeholder="Ask Esmi anything…"
+          placeholder={isEs ? "Escríbele a Esmi…" : "Ask Esmi anything…"}
           rows={1}
           disabled={loading}
           style={{
@@ -526,9 +561,11 @@ export default function EsmiChat() {
 function MessageBubble({
   message,
   onSlotSelect,
+  toolLabels,
 }: {
   message: Message;
   onSlotSelect: (v: string) => void;
+  toolLabels: Record<string, string>;
 }) {
   const isUser = message.role === "user";
 
@@ -619,7 +656,7 @@ function MessageBubble({
             }}
           >
             <Spinner />
-            {TOOL_LABELS[message.toolActive] ?? "Working…"}
+            {toolLabels[message.toolActive] ?? "Working…"}
           </div>
         )}
 
