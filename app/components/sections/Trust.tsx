@@ -7,12 +7,12 @@ export default function Trust() {
   ];
 
   const industries = [
-    "Healthcare & Dental",
+    "Architecture & Interior Design",
+    "Stone & Fabrication",
+    "Field Service & Construction",
+    "Manufacturing & Distribution",
+    "Healthcare & Medical Offices",
     "Legal & Professional Services",
-    "Real Estate & Mortgage",
-    "Trades & Home Services",
-    "Accounting Firms",
-    "Retail & Hospitality",
   ];
 
   return (
