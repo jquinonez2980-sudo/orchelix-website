@@ -28,7 +28,7 @@ function buildHtml(fields: {
 
   const submittedAt = new Date().toLocaleString("en-CA", {
     year: "numeric", month: "long", day: "numeric",
-    hour: "2-digit", minute: "2-digit", timeZone: "America/Toronto",
+    hour: "2-digit", minute: "2-digit", timeZone: "America/New_York",
   });
 
   // isLast removes the bottom border so it doesn't double up with the card border
@@ -222,7 +222,7 @@ function buildHtml(fields: {
               <p style="margin:0;
                          font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
                          font-size:11px;color:rgba(255,255,255,0.28);line-height:1.7;">
-                Greater Toronto Area, Ontario, Canada
+                West Palm Beach, FL · South Florida · GTA Ontario
                 &nbsp;&middot;&nbsp;
                 <a href="https://orchelix.com" style="color:rgba(255,255,255,0.35);text-decoration:none;">orchelix.com</a>
                 &nbsp;&middot;&nbsp; Submitted ${submittedAt}

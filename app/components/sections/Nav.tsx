@@ -92,8 +92,23 @@ export default function Nav() {
         {/* Desktop CTA — hidden below lg */}
         <div
           className="hidden lg:flex"
-          style={{ marginLeft: "auto", gap: 8, alignItems: "center" }}
+          style={{ marginLeft: "auto", gap: 16, alignItems: "center" }}
         >
+          <a
+            href="tel:+15615661066"
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontWeight: 500,
+              fontSize: 13,
+              lineHeight: 1,
+              letterSpacing: "0.04em",
+              color: "var(--ink-2)",
+              textDecoration: "none",
+              transition: "color 180ms",
+            }}
+          >
+            (561) 566-1066
+          </a>
           <a
             href="/book"
             style={{

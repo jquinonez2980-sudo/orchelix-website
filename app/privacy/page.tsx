@@ -65,7 +65,7 @@ export default function PrivacyPage() {
 
               <h2>1. Who We Are</h2>
               <p>
-                Orchelix AI Consulting Inc. is incorporated in Ontario, Canada. Our principal place of business is in the Greater Toronto Area, Ontario.
+                Orchelix AI Consulting Inc. is incorporated in Ontario, Canada. Our principal place of business is in West Palm Beach, Florida, USA. We serve clients across South Florida, the Greater Toronto Area, and North America.
               </p>
               <p>
                 <strong>Privacy Officer:</strong> Jorge Quinonez<br />
@@ -161,7 +161,7 @@ export default function PrivacyPage() {
                 <strong>Orchelix AI Consulting Inc.</strong><br />
                 Privacy Officer: Jorge Quinonez<br />
                 Email: <a href="mailto:privacy@orchelix.com">privacy@orchelix.com</a><br />
-                Address: Greater Toronto Area, Ontario, Canada
+                Address: West Palm Beach, FL, USA · Serving South Florida, GTA Ontario &amp; North America
               </p>
               <p>
                 You also have the right to contact the Office of the Privacy Commissioner of Canada at{" "}

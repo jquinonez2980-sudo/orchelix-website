@@ -120,7 +120,7 @@ function Hero() {
             { value: "14 days", label: "Average time to first live agent" },
             { value: "3 agents", label: "Revenue, Receptionist & Accounting" },
             { value: "PIPEDA", label: "Compliant from day one" },
-            { value: "GTA-based", label: "Senior consultants, no help desk" },
+            { value: "WPB-based", label: "Senior consultants, no help desk" },
           ].map(({ value, label }) => (
             <div key={label}>
               <p
@@ -396,8 +396,8 @@ function WhoWeAre() {
               className="text-[17px] leading-[1.65]"
               style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
             >
-              Orchelix is a Toronto-based AI consulting firm led by practitioners with
-              backgrounds in enterprise software, revenue operations, and applied AI.
+              Orchelix is a West Palm Beach-based AI consulting firm led by practitioners
+              with backgrounds in enterprise software, revenue operations, and applied AI.
               We&apos;ve built and scaled revenue systems — and we bring that operating
               experience into every engagement.
             </p>
@@ -414,9 +414,9 @@ function WhoWeAre() {
               className="text-[16px] leading-[1.65]"
               style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
             >
-              We operate in English and Spanish natively, serve clients across Canada
-              and the United States, and maintain PIPEDA-compliant data practices from
-              day one.
+              We operate in English and Spanish natively, serve clients across South
+              Florida, the GTA in Ontario, and all of North America, and maintain
+              PIPEDA-compliant data practices from day one.
             </p>
           </div>
 
@@ -457,8 +457,8 @@ function WhoWeAre() {
                     <rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18M9 21V9"/>
                   </svg>
                 ),
-                title: "GTA-headquartered",
-                desc: "On-site availability across Greater Toronto Area.",
+                title: "WPB-headquartered",
+                desc: "On-site in South Florida · GTA Ontario · remote across North America.",
               },
             ].map(({ icon, title, desc }) => (
               <div

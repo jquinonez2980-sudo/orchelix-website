@@ -120,7 +120,7 @@ export default function TermsPage() {
               <h2>8. Contact</h2>
               <p>
                 Questions about these Terms: <a href="mailto:legal@orchelix.com">legal@orchelix.com</a><br />
-                Orchelix AI Consulting Inc., Greater Toronto Area, Ontario, Canada
+                Orchelix AI Consulting Inc., West Palm Beach, FL, USA
               </p>
             </Prose>
           </div>

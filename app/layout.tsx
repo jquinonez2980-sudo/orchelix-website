@@ -64,12 +64,14 @@ const jsonLd = {
   logo: `${SITE_URL}/orchelix-lockup-horizontal.png`,
   description:
     "AI agents for revenue operations — AI receptionist, sales automation, and financial operations for SMEs.",
+  telephone: "+15615661066",
   address: {
     "@type": "PostalAddress",
-    addressLocality: "Toronto",
-    addressRegion: "ON",
-    addressCountry: "CA",
+    addressLocality: "West Palm Beach",
+    addressRegion: "FL",
+    addressCountry: "US",
   },
+  areaServed: ["South Florida", "Greater Toronto Area", "North America"],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

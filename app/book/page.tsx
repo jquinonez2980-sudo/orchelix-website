@@ -257,7 +257,7 @@ function DemoHero({
                     lineHeight: 1.3,
                   }}
                 >
-                  Senior consultant · Toronto · responds within 4h
+                  Senior consultant · West Palm Beach, FL · responds within 4h
                 </span>
               </div>
             </div>

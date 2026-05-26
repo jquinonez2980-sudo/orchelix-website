@@ -119,6 +119,14 @@ function ProofBar() {
       className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] leading-none font-medium tracking-[0.02em] text-white/45"
       style={{ fontFamily: "var(--font-mono)" }}
     >
+      <a
+        href="tel:+15615661066"
+        className="text-white/60 hover:text-white/90 transition-colors"
+        style={{ textDecoration: "none", letterSpacing: "0.04em" }}
+      >
+        (561)&nbsp;566-1066
+      </a>
+      <span className="inline-block h-1 w-1 rounded-full bg-teal-500" />
       <span>EN&nbsp;·&nbsp;ES&nbsp;bilingual</span>
       <span className="inline-block h-1 w-1 rounded-full bg-teal-500" />
       <span>SOC&nbsp;2&nbsp;in-progress</span>

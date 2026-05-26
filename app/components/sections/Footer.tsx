@@ -106,8 +106,8 @@ export default function Footer() {
               }}
             >
               AI agents for SMEs, professional firms, and service organizations
-              across North America. Toronto · Mississauga · remote across the
-              US and Canada.
+              across North America. West Palm Beach, FL · South Florida · GTA
+              Ontario · remote across the US and Canada.
             </p>
 
             <div style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
@@ -137,7 +137,24 @@ export default function Footer() {
               </span>
             </div>
 
-            <div style={{ display: "flex", gap: 8, marginTop: 20 }}>
+            <div style={{ marginTop: 16 }}>
+              <a
+                href="tel:+15615661066"
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontWeight: 500,
+                  fontSize: 13,
+                  lineHeight: 1,
+                  letterSpacing: "0.04em",
+                  color: "var(--teal-700)",
+                  textDecoration: "none",
+                }}
+              >
+                (561) 566-1066
+              </a>
+            </div>
+
+            <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
               <a
                 href="https://instagram.com/orchelix"
                 target="_blank"
@@ -252,7 +269,7 @@ export default function Footer() {
             color: "var(--ink-2)",
           }}
         >
-          <span>© 2026 Orchelix AI Consulting Inc. · Made in Ontario.</span>
+          <span>© 2026 Orchelix AI Consulting Inc. · West Palm Beach, FL.</span>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 16 }}>
             <a href="/privacy" style={{ color: "inherit", textDecoration: "none" }}>Privacy</a>
             <span aria-hidden="true" style={{ width: 3, height: 3, borderRadius: "50%", background: "var(--ink-4)", display: "inline-block" }} />
