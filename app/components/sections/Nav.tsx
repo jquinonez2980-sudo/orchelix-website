@@ -90,6 +90,22 @@ export default function Nav() {
               {label}
             </a>
           ))}
+          <a
+            href={isEs ? "/" : "/es"}
+            className="nav-link"
+            style={{
+              fontFamily: "var(--font-display)",
+              fontWeight: 500,
+              fontSize: 14,
+              lineHeight: 1,
+              color: "var(--teal-700)",
+              textDecoration: "none",
+              padding: "8px 0",
+              transition: "color 180ms",
+            }}
+          >
+            {isEs ? "English" : "Español"}
+          </a>
         </nav>
 
         {/* Desktop CTA — hidden below lg */}
@@ -97,25 +113,6 @@ export default function Nav() {
           className="hidden lg:flex"
           style={{ marginLeft: "auto", gap: 16, alignItems: "center" }}
         >
-          <a
-            href={isEs ? "/" : "/es"}
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontWeight: 500,
-              fontSize: 11,
-              lineHeight: 1,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              padding: "6px 11px",
-              borderRadius: 8,
-              border: "1px solid var(--line)",
-              color: "var(--ink-2)",
-              textDecoration: "none",
-              transition: "border-color 180ms, color 180ms",
-            }}
-          >
-            {isEs ? "EN" : "ES"}
-          </a>
           <a
             href="tel:+15615661066"
             style={{
@@ -215,9 +212,26 @@ export default function Nav() {
                 {label}
               </a>
             ))}
+            <a
+              href={isEs ? "/" : "/es"}
+              onClick={close}
+              style={{
+                fontFamily: "var(--font-display)",
+                fontWeight: 500,
+                fontSize: 15,
+                lineHeight: 1,
+                color: "var(--teal-700)",
+                textDecoration: "none",
+                padding: "14px 0",
+                borderBottom: "1px solid rgba(228,232,238,0.7)",
+                transition: "color 180ms",
+              }}
+            >
+              {isEs ? "English" : "Español"}
+            </a>
           </nav>
 
-          <div style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 10 }}>
+          <div style={{ marginTop: 20 }}>
             <a
               href="/book"
               onClick={close}
@@ -239,29 +253,6 @@ export default function Nav() {
               }}
             >
               Book a demo
-            </a>
-            <a
-              href={isEs ? "/" : "/es"}
-              onClick={close}
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontWeight: 500,
-                fontSize: 13,
-                lineHeight: 1,
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                padding: "12px 20px",
-                borderRadius: 10,
-                border: "1px solid var(--line)",
-                background: "#fff",
-                color: "var(--ink-2)",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              {isEs ? "Switch to English" : "Ver en Español"}
             </a>
           </div>
         </div>
