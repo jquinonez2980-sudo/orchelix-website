@@ -1,6 +1,6 @@
 # Orchelix Website — Project Status
 
-> Last updated: May 26, 2026 — **LIVE at orchelix.com**  
+> Last updated: May 26, 2026 (session 2) — **LIVE at orchelix.com**  
 > Use this document to fully recreate or hand off the project.
 
 ---
@@ -9,7 +9,9 @@
 
 **Company:** Orchelix AI Consulting Inc.  
 **Tagline:** AI agents for revenue operations — virtual receptionist, sales automation, and financial operations for SMEs.  
-**Location:** Greater Toronto Area, Ontario, Canada  
+**Headquarters:** West Palm Beach, FL, USA  
+**Service areas:** South Florida · Greater Toronto Area, Ontario · North America  
+**Phone:** (561) 566-1066 — `tel:+15615661066`  
 **Website domain:** `orchelix.com`  
 **Email domain:** `orchelix.com` (Google Workspace)  
 **Primary inbox:** `info@orchelix.com`  
@@ -72,7 +74,7 @@ app/
 ├── layout.tsx                  # Root layout: fonts, metadata, JSON-LD, Analytics, skip link
 ├── globals.css                 # Design tokens, Tailwind theme, component CSS (skip link, sol-card, contact-input…)
 ├── page.tsx                    # Homepage — composes all sections
-├── sitemap.ts                  # XML sitemap (9 routes)
+├── sitemap.ts                  # XML sitemap (11 routes)
 ├── not-found.tsx               # Branded 404
 ├── error.tsx                   # "use client" error boundary
 │
@@ -81,24 +83,26 @@ app/
 │   └── chat/                   # Esmi SSE proxy to Railway FastAPI
 │
 ├── components/sections/
-│   ├── Nav.tsx                 # Sticky nav, mobile drawer, Escape key handler
-│   ├── Hero.tsx                # LCP image, priority, quality 75
-│   ├── Trust.tsx               # Logos + stats strip
+│   ├── Nav.tsx                 # Sticky nav, mobile drawer, EN/ES toggle, phone link
+│   ├── Hero.tsx                # LCP image, priority, quality 75; phone in ProofBar
+│   ├── Trust.tsx               # Industry verticals + 4 stats
 │   ├── Solutions.tsx           # 3 agent cards — pure server component, CSS hover
 │   ├── HowItWorks.tsx          # 4-step process
 │   ├── Why.tsx                 # 4-feature grid
-│   ├── ContactForm.tsx         # "use client" lead capture form → /api/contact
+│   ├── ContactForm.tsx         # "use client" lead capture form → /api/contact; locale="es" supported
 │   ├── FinalCTA.tsx            # Dark navy CTA banner
-│   └── Footer.tsx              # 4-column footer + social icons + legal row
+│   └── Footer.tsx              # 4-column footer + phone + social icons + legal row
 │
 ├── book/page.tsx               # Demo booking page (Cal.com embed)
 ├── try-esmi/
-│   ├── page.tsx                # Esmi demo page
-│   └── EsmiChat.tsx            # "use client" SSE chat widget
+│   ├── page.tsx                # Esmi demo page + "Call Esmi now" CTA
+│   └── EsmiChat.tsx            # "use client" SSE chat widget; defaultLocale prop + in-widget EN/ES toggle
+├── es/page.tsx                 # Spanish landing page (LatAm) — 8 sections
 ├── solutions/page.tsx          # Agent details page
 ├── pricing/page.tsx            # Pricing page
 ├── how-it-works/page.tsx       # How it works detail page
 ├── industries/page.tsx         # Industries page
+├── about/page.tsx              # About page — 7 sections
 ├── privacy/page.tsx            # PIPEDA-compliant privacy policy
 └── terms/page.tsx              # Terms of service
 
@@ -167,7 +171,7 @@ Defined in `app/globals.css` under `@theme {}`:
 - Bordered detail card (Name / Company / Email / Phone / Use case)
 - Separate message quote card (italic, shown only if message provided)
 - Full-width "Reply to [Name] →" CTA button
-- Dark footer with submission timestamp (Toronto timezone)
+- Dark footer with submission timestamp (Eastern Time / America/New_York)
 - Mobile-responsive via `@media` shorthand classes
 
 **Error handling:**
@@ -184,8 +188,9 @@ Defined in `app/globals.css` under `@theme {}`:
 - **Frontend:** `EsmiChat.tsx` — "use client" SSE streaming chat widget
 - **Backend:** FastAPI on Railway — handles conversation, tool calls, Cal.com slot availability
 - **Protocol:** Server-Sent Events (SSE) — events: `token`, `tool_start`, `tool_end`, `done`, `error`
-- **Languages:** English + Spanish
+- **Languages:** English + Spanish (in-widget toggle; `defaultLocale` prop sets starting language)
 - **Features:** Streaming responses, appointment slot display, booking handoff
+- **Spanish page:** `/es` embeds `<EsmiChat defaultLocale="es" />` — starts in Spanish
 
 ---
 
@@ -199,8 +204,8 @@ Defined in `app/globals.css` under `@theme {}`:
 | OG alt | `Orchelix - Orchestrating the Future of AI` |
 | Canonical | `https://orchelix.com` |
 | Locale | `en_CA` |
-| JSON-LD | `Organization` schema with Toronto address |
-| Sitemap | `/sitemap.xml` — 9 routes |
+| JSON-LD | `Organization` schema — West Palm Beach/FL/US, `telephone`, `areaServed` |
+| Sitemap | `/sitemap.xml` — 11 routes (includes `/about` and `/es`) |
 | Robots | `public/robots.txt` — disallows `/api/` |
 | Apple icon | `/apple-touch-icon.png` |
 | Theme color | `#0A2540` |
@@ -239,8 +244,10 @@ Defined in `app/globals.css` under `@theme {}`:
 
 | Page | Status | Key info |
 |---|---|---|
-| `/privacy` | Live — PIPEDA compliant | Privacy Officer: Jorge Quinonez, `privacy@orchelix.com`. Sub-processors: Vercel, OpenAI, Railway, Cal.com. Retention: 90 days chat / 7 years contracts. SOC 2 Type II expected Q4 2026. |
-| `/terms` | Live — draft (pending legal review) | Governed by Ontario law. Contact: `legal@orchelix.com`. |
+| `/privacy` | Live — PIPEDA compliant | Privacy Officer: Jorge Quinonez, `privacy@orchelix.com`. Operating address updated to West Palm Beach, FL (incorporated in Ontario). Sub-processors: Vercel, OpenAI, Railway, Cal.com. Retention: 90 days chat / 7 years contracts. SOC 2 Type II expected Q4 2026. |
+| `/terms` | Live — draft (pending legal review) | Governed by Ontario law (incorporation jurisdiction). Contact: `legal@orchelix.com`. Address updated to West Palm Beach, FL. |
+
+> **Legal note:** Both pages retain Ontario governing law because the entity is incorporated in Ontario. If Orchelix re-incorporates in Florida or wants FL/US law to govern, update Sections 6 (Terms) and the privacy policy jurisdiction clause — flag for legal counsel.
 
 ---
 
@@ -255,28 +262,52 @@ Both linked in the Footer brand column, open in new tab.
 
 ---
 
-## 14. To-Do / Known Gaps
+## 14. Spanish Page (`/es`)
+
+Full Latin American Spanish landing page. All 8 sections self-contained in `app/es/page.tsx` (server component). Reuses `Nav`, `Footer`, `ContactForm locale="es"`, and `EsmiChat defaultLocale="es"`.
+
+| Section | Notes |
+|---|---|
+| Hero | Same image, gradient H1: *"Agentes de IA que de verdad mueven tus operaciones de ingresos."* |
+| Trust | Spanish industry names + translated stats |
+| Solutions | 3 agent cards in Spanish (Recepcionista Virtual, Agente de Ventas, Accounting OS) |
+| How It Works | 4 steps — Auditoría → Diseño → Piloto → Operación continua |
+| Why | 4 features — Consultores / Bilingüe / Cumplimiento / Humano en el ciclo |
+| Esmi Demo | Live chat widget defaulted to Spanish; in-widget EN/ES toggle available |
+| Contact | `ContactForm locale="es"` — fully translated labels, use cases, success/error messages |
+| Final CTA | Dark banner — "Reserva una demo" + "Prueba Esmi" |
+
+**Nav language switching:** "Español" link (teal) in main nav row on English pages; "English" on `/es`. Both desktop and mobile.
+
+**Metadata:** `title` and `description` in Spanish, OG locale `es_MX`, canonical `/es`.
+
+---
+
+## 15. To-Do / Known Gaps
 
 - [x] ~~`orchelix.com` custom domain~~ — **LIVE**. DNS via IONOS (A `@` → `76.76.21.21`, CNAME `www` → `cname.vercel-dns.com`). SSL active. Apex redirects to `www`. Verified May 26, 2026.
 - [x] ~~Confirm email delivery end-to-end~~ — test submission sent from `orchelix.com/api/contact`, received at `info@orchelix.com` with logo rendering correctly. Verified May 26, 2026.
-- [x] ~~Replace placeholder client logos in Trust section~~ — replaced with industry verticals (Healthcare & Dental, Legal, Real Estate, Trades, Accounting Firms, Retail & Hospitality)
+- [x] ~~Replace placeholder client logos in Trust section~~ — replaced with industry verticals matching Industries page
 - [x] ~~Verify stats in Trust section~~ — confirmed accurate, kept as-is
 - [x] ~~Terms of service Section 5 (Limitation of Liability)~~ — full standard Ontario-law clauses drafted; flagged for legal counsel review
-- [x] ~~Email template logo URL~~ — updated to `orchelix.com/logo_white.jpg` (resolves once DNS is live)
+- [x] ~~Email template logo URL~~ — updated to `orchelix.com/logo_white.jpg`
+- [x] ~~Add phone number~~ — (561) 566-1066 in Nav, Hero ProofBar, Footer, Try Esmi CTA
+- [x] ~~Update location to West Palm Beach, FL~~ — all copy, JSON-LD, email footer, About, book page
+- [x] ~~Spanish landing page~~ — live at `/es`
 - [ ] SOC 2 Type II — expected Q4 2026, update Privacy Policy when certified
-- [x] ~~Physical AI & embodied agents section~~ — already present in Solutions.tsx as "On the roadmap · 2026" tile
+- [ ] Legal review — governing law in Terms/Privacy currently Ontario; update if re-incorporating in FL
 
-## 15. Recent Changes (May 26, 2026)
+## 16. Recent Changes (May 26, 2026 — Session 2)
 
-- Added `/about` page with 7 sections (Hero, Challenge, Approach, Who We Are, Why Orchelix, Track Record, CTA)
-- Nav "About" link updated from `#about` to `/about`
-- `/about` added to sitemap
-- Fixed gradient text clipping (`paddingRight: "0.1em"`) on all italic `bg-clip-text` spans across Hero, Solutions, How It Works, Industries, Pricing, About
-- Trust section client placeholder names replaced with industry verticals
-- Terms Section 5 expanded with full Limitation of Liability clauses
-- Email template logo URL updated to `orchelix.com/logo_white.jpg`
-- `public/logo_white.jpg` committed
-- **Domain orchelix.com is live** — DNS propagated, SSL active, email delivery confirmed end-to-end
+- **Phone number** (561) 566-1066 added to: Nav (desktop), Hero ProofBar, Footer brand column, Try Esmi "Call Esmi now" CTA
+- **Location updated** across all copy: headquarters now West Palm Beach, FL; service areas South Florida · GTA Ontario · North America
+- JSON-LD Organization schema updated: `addressLocality/Region/Country` → West Palm Beach/FL/US + `telephone` + `areaServed`
+- Contact email timezone updated to `America/New_York`
+- **Spanish landing page** `/es` created — full LatAm Spanish, 8 sections
+- `EsmiChat` updated: `defaultLocale` prop + in-widget EN/ES toggle buttons
+- `ContactForm` updated: `locale` prop with full Spanish translation
+- Nav: "Español" / "English" link added to main nav row (desktop + mobile)
+- Sitemap updated to 11 routes (added `/about`, `/es`)
 
 ---
 
