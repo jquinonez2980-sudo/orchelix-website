@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 const NAV_LINKS = [
   { label: "Agents",     href: "/solutions" },
@@ -15,6 +16,8 @@ const NAV_LINKS = [
 export default function Nav() {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
+  const pathname = usePathname();
+  const isEs = pathname.startsWith("/es");
 
   useEffect(() => {
     if (!open) return;
@@ -94,6 +97,25 @@ export default function Nav() {
           className="hidden lg:flex"
           style={{ marginLeft: "auto", gap: 16, alignItems: "center" }}
         >
+          <a
+            href={isEs ? "/" : "/es"}
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontWeight: 500,
+              fontSize: 11,
+              lineHeight: 1,
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              padding: "6px 11px",
+              borderRadius: 8,
+              border: "1px solid var(--line)",
+              color: "var(--ink-2)",
+              textDecoration: "none",
+              transition: "border-color 180ms, color 180ms",
+            }}
+          >
+            {isEs ? "EN" : "ES"}
+          </a>
           <a
             href="tel:+15615661066"
             style={{
@@ -195,7 +217,7 @@ export default function Nav() {
             ))}
           </nav>
 
-          <div style={{ marginTop: 20 }}>
+          <div style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 10 }}>
             <a
               href="/book"
               onClick={close}
@@ -217,6 +239,29 @@ export default function Nav() {
               }}
             >
               Book a demo
+            </a>
+            <a
+              href={isEs ? "/" : "/es"}
+              onClick={close}
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontWeight: 500,
+                fontSize: 13,
+                lineHeight: 1,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                padding: "12px 20px",
+                borderRadius: 10,
+                border: "1px solid var(--line)",
+                background: "#fff",
+                color: "var(--ink-2)",
+                textDecoration: "none",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {isEs ? "Switch to English" : "Ver en Español"}
             </a>
           </div>
         </div>

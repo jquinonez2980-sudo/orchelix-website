@@ -117,7 +117,6 @@ function parseSlot(slot: string): { start: string; end: string } {
 export default function EsmiChat({ defaultLocale = "en" }: { defaultLocale?: "en" | "es" }) {
   const [locale, setLocale] = useState<"en" | "es">(defaultLocale);
   const isEs = locale === "es";
-  const welcomeText = isEs ? WELCOME_TEXT_ES : WELCOME_TEXT;
   const quickReplies = isEs ? QUICK_REPLIES_ES : QUICK_REPLIES;
   const toolLabels = isEs ? TOOL_LABELS_ES : TOOL_LABELS;
 
