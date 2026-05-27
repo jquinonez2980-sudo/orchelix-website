@@ -231,7 +231,24 @@ export default function Nav() {
             </a>
           </nav>
 
-          <div style={{ marginTop: 20 }}>
+          <div style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 12 }}>
+            <a
+              href="tel:+15615661066"
+              onClick={close}
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontWeight: 500,
+                fontSize: 14,
+                lineHeight: 1,
+                letterSpacing: "0.04em",
+                color: "var(--ink-2)",
+                textDecoration: "none",
+                textAlign: "center",
+                padding: "12px 0",
+              }}
+            >
+              (561) 566-1066
+            </a>
             <a
               href="/book"
               onClick={close}
