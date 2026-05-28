@@ -1,6 +1,6 @@
 # Orchelix Website — Project Status
 
-> Last updated: May 26, 2026 (session 2) — **LIVE at orchelix.com**  
+> Last updated: May 28, 2026 (session 3) — **LIVE at orchelix.com**  
 > Use this document to fully recreate or hand off the project.
 
 ---
@@ -308,6 +308,28 @@ Full Latin American Spanish landing page. All 8 sections self-contained in `app/
 - `ContactForm` updated: `locale` prop with full Spanish translation
 - Nav: "Español" / "English" link added to main nav row (desktop + mobile)
 - Sitemap updated to 11 routes (added `/about`, `/es`)
+
+---
+
+## 17. Recent Changes (May 28, 2026 — Session 3)
+
+- **Mobile nav phone number** — tap-to-call `(561) 566-1066` added to mobile drawer above "Book a demo" button
+- **Pricing page full overhaul** (`app/pricing/page.tsx`):
+  - Removed billing toggle (monthly/annual) — replaced with setup + monthly managed service model
+  - 3 offerings (was 4): Esmi AI Virtual Receptionist & Lead Qualification System ($8,500 setup / $1,099+ mo), Revenue Operations Agents ($9,500 / $1,299+ mo), Custom Multi-Agent Operations System "Firm OS" ($24,000 / $2,499+ mo)
+  - `HowItWorks` 4-step section replaces old `HybridModel` section
+  - Removed `CompareTable` — replaced with cleaner FAQ (5 new Q&As)
+  - `IdealFor` field added to each tier card
+  - `bold()` helper extracted to `app/lib/bold.ts` (shared utility)
+- **Cross-page consistency audit** — reviewed all 8 pages + shared components:
+  - Fixed Footer Agents column: orphaned "Revenue Insights" → "Industries" (`/industries`)
+  - Fixed launch timeline contradiction: Pricing FAQ now "2–3 weeks for Esmi/Sales; 4–6 weeks first phase for Firm OS" (aligns with About/HowItWorks/Homepage)
+- **Solutions page Agent 03 reframed** (`app/solutions/page.tsx`):
+  - Renamed from standalone "Accounting & Finance OS" → "Firm OS — Accounting & Finance"
+  - Positioned as a core module inside Firm OS (consistent with Pricing page)
+  - CTA secondary button now links to `/pricing` with label "See Firm OS pricing"
+- **Naming consistency** — "AI Sales & Lead Management Assistant" unified to "Revenue Operations Agents" across Solutions and Pricing pages
+- **Refactor** — duplicated "Ideal for" JSX block in `TierCard` extracted into `IdealFor` component; removed redundant `color` inheritance on inner span
 
 ---
 
