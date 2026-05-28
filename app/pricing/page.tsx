@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Nav from "@/app/components/sections/Nav";
 import Footer from "@/app/components/sections/Footer";
+import { bold } from "@/app/lib/bold";
 
 /* ─── Page ────────────────────────────────────────────────────────────────── */
 
@@ -268,17 +269,6 @@ const TIERS: TierDef[] = [
   },
 ];
 
-function bold(text: string) {
-  const parts = text.split(/\*\*(.*?)\*\*/g);
-  return (
-    <>
-      {parts.map((part, i) =>
-        i % 2 === 1 ? <strong key={i}>{part}</strong> : part
-      )}
-    </>
-  );
-}
-
 function Tiers() {
   return (
     <section
@@ -299,7 +289,7 @@ function Tiers() {
 function IdealFor({ text, featured }: { text: string; featured: boolean }) {
   return featured ? (
     <div
-      className="mt-5 pt-4 border-t border-white/[0.08] text-[12px] leading-[1.5] text-white/40"
+      className="mt-auto pt-5 border-t border-white/[0.08] text-[12px] leading-[1.5] text-white/40"
       style={{ fontFamily: "var(--font-display)" }}
     >
       <span className="font-semibold text-white/55 uppercase tracking-[0.07em] text-[10px]" style={{ fontFamily: "var(--font-mono)" }}>Ideal for · </span>
@@ -307,7 +297,7 @@ function IdealFor({ text, featured }: { text: string; featured: boolean }) {
     </div>
   ) : (
     <div
-      className="mt-5 pt-4 border-t text-[12px] leading-[1.5]"
+      className="mt-auto pt-5 border-t text-[12px] leading-[1.5]"
       style={{ borderColor: "var(--line)", fontFamily: "var(--font-display)", color: "var(--ink-3)" }}
     >
       <span className="font-semibold uppercase tracking-[0.07em] text-[10px]" style={{ fontFamily: "var(--font-mono)" }}>Ideal for · </span>
@@ -320,7 +310,7 @@ function TierCard({ tier }: { tier: TierDef }) {
   if (tier.featured) {
     return (
       <article
-        className="relative overflow-hidden rounded-[22px] p-6 text-white"
+        className="relative flex flex-col overflow-hidden rounded-[22px] p-6 text-white"
         aria-labelledby={`tier-${tier.id}`}
         style={{
           background: `
@@ -353,7 +343,7 @@ function TierCard({ tier }: { tier: TierDef }) {
           }}
         />
 
-        <div className="relative">
+        <div className="relative flex flex-1 flex-col">
           {tier.badge && (
             <span
               className="mb-5 inline-flex rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em]"
@@ -598,7 +588,6 @@ function FAQ() {
     >
       <div className="mx-auto max-w-[1200px]">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[360px_1fr] lg:gap-20">
-          {/* Intro */}
           <div>
             <span
               className="mb-4 inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.18em]"
@@ -648,7 +637,6 @@ function FAQ() {
             </div>
           </div>
 
-          {/* Questions */}
           <div className="flex flex-col divide-y" style={{ borderColor: "var(--line)" }}>
             {FAQS.map((faq, i) => (
               <div key={i} style={{ borderColor: "var(--line)" }}>
@@ -726,15 +714,13 @@ function PricingFinalCTA() {
                 Book a free 30-minute strategy call to find the best system for your business.
               </p>
             </div>
-            <div className="flex flex-wrap gap-3 lg:shrink-0">
-              <a
-                href="/book"
-                className="inline-flex h-12 items-center rounded-xl bg-white px-6 text-[15px] font-medium transition-opacity hover:opacity-90"
-                style={{ fontFamily: "var(--font-display)", color: "var(--navy-600)" }}
-              >
-                Book a Free Strategy Call <span className="ml-1.5 opacity-70">→</span>
-              </a>
-            </div>
+            <a
+              href="/book"
+              className="inline-flex h-12 items-center rounded-xl bg-white px-6 text-[15px] font-medium transition-opacity hover:opacity-90 lg:shrink-0"
+              style={{ fontFamily: "var(--font-display)", color: "var(--navy-600)" }}
+            >
+              Book a Free Strategy Call <span className="ml-1.5 opacity-70">→</span>
+            </a>
           </div>
         </div>
       </div>

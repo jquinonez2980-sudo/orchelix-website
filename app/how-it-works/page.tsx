@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Nav from "@/app/components/sections/Nav";
 import Footer from "@/app/components/sections/Footer";
+import { bold } from "@/app/lib/bold";
 
 export const metadata: Metadata = {
   title: "How It Works — Orchelix AI Consulting",
@@ -170,8 +171,6 @@ function StepNum({ big, label }: { big: string; label: string }) {
 }
 
 function StepFeature({ text }: { text: string }) {
-  const parts = text.split(/\*\*(.*?)\*\*/g);
-  const content = parts.map((p, i) => i % 2 === 1 ? <strong key={i}>{p}</strong> : p);
   return (
     <li className="flex gap-3">
       <span
@@ -186,7 +185,7 @@ function StepFeature({ text }: { text: string }) {
         className="text-[14px] leading-[1.6]"
         style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
       >
-        {content}
+        {bold(text)}
       </span>
     </li>
   );
