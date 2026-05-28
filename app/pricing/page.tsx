@@ -296,6 +296,26 @@ function Tiers() {
   );
 }
 
+function IdealFor({ text, featured }: { text: string; featured: boolean }) {
+  return featured ? (
+    <div
+      className="mt-5 pt-4 border-t border-white/[0.08] text-[12px] leading-[1.5] text-white/40"
+      style={{ fontFamily: "var(--font-display)" }}
+    >
+      <span className="font-semibold text-white/55 uppercase tracking-[0.07em] text-[10px]" style={{ fontFamily: "var(--font-mono)" }}>Ideal for · </span>
+      {text}
+    </div>
+  ) : (
+    <div
+      className="mt-5 pt-4 border-t text-[12px] leading-[1.5]"
+      style={{ borderColor: "var(--line)", fontFamily: "var(--font-display)", color: "var(--ink-3)" }}
+    >
+      <span className="font-semibold uppercase tracking-[0.07em] text-[10px]" style={{ fontFamily: "var(--font-mono)" }}>Ideal for · </span>
+      {text}
+    </div>
+  );
+}
+
 function TierCard({ tier }: { tier: TierDef }) {
   if (tier.featured) {
     return (
@@ -432,13 +452,7 @@ function TierCard({ tier }: { tier: TierDef }) {
             )}
           </ul>
 
-          <div
-            className="mt-5 pt-4 border-t border-white/[0.08] text-[12px] leading-[1.5] text-white/40"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
-            <span className="font-semibold text-white/55 uppercase tracking-[0.07em] text-[10px]" style={{ fontFamily: "var(--font-mono)" }}>Ideal for · </span>
-            {tier.idealFor}
-          </div>
+          <IdealFor text={tier.idealFor} featured />
         </div>
       </article>
     );
@@ -544,13 +558,7 @@ function TierCard({ tier }: { tier: TierDef }) {
         )}
       </ul>
 
-      <div
-        className="mt-5 pt-4 border-t text-[12px] leading-[1.5]"
-        style={{ borderColor: "var(--line)", fontFamily: "var(--font-display)", color: "var(--ink-3)" }}
-      >
-        <span className="font-semibold uppercase tracking-[0.07em] text-[10px]" style={{ fontFamily: "var(--font-mono)", color: "var(--ink-3)" }}>Ideal for · </span>
-        {tier.idealFor}
-      </div>
+      <IdealFor text={tier.idealFor} featured={false} />
     </article>
   );
 }
