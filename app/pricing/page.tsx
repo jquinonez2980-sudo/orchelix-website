@@ -193,6 +193,7 @@ interface TierDef {
   badge?: string;
   ctaLabel: string;
   ctaHref: string;
+  idealFor: string;
   features: TierFeature[];
 }
 
@@ -201,62 +202,68 @@ const TIERS: TierDef[] = [
     id: "esmi",
     name: "Esmi AI Virtual Receptionist & Lead Qualification System",
     sub: "01",
-    desc: "Intelligent 24/7 AI agent that qualifies leads, answers FAQs, books appointments, and integrates with your CRM or calendar. Bilingual support available.",
+    desc: "24/7 AI agent that qualifies inbound leads, answers FAQs, books appointments, and escalates when needed — via voice, SMS, and email. EN/ES bilingual.",
     setupPrice: "$8,500",
     monthlyNote: "From $1,099 / mo · managed service",
     featured: true,
     badge: "Most Popular",
-    ctaLabel: "Book a Free Strategy Call",
+    ctaLabel: "Get Started with Esmi",
     ctaHref: "/book",
+    idealFor: "Any business that receives inbound leads or inquiries.",
     features: [
       { text: "**Custom LangGraph AI agent** (voice + SMS + email)" },
-      { text: "Advanced lead qualification with scoring" },
+      { text: "Advanced lead qualification with scoring and routing" },
       { text: "FAQ answering trained on your business" },
       { text: "Appointment booking + calendar sync" },
       { text: "CRM or Google Workspace integration" },
-      { text: "Custom dashboard with analytics" },
-      { text: "Monthly monitoring & optimization" },
+      { text: "Custom Streamlit dashboard with analytics" },
+      { text: "Monthly monitoring, optimization & updates" },
+      { text: "Human-in-the-loop design with escalation paths" },
     ],
   },
   {
     id: "sales",
-    name: "AI Sales & Lead Management Assistant",
+    name: "Revenue Operations Agents",
     sub: "02",
-    desc: "AI sales co-pilot that enriches leads, qualifies them, runs personalized follow-ups, prepares meetings, and keeps your pipeline clean.",
+    desc: "AI sales co-pilot that enriches leads, scores them against your ICP, runs personalized follow-ups, preps meetings, and keeps your pipeline clean — with human approvals.",
     setupPrice: "$9,500",
     monthlyNote: "From $1,299 / mo · managed service",
     featured: false,
-    ctaLabel: "Book a Free Strategy Call",
+    ctaLabel: "Get the Sales Assistant",
     ctaHref: "/book",
+    idealFor: "Sales teams and businesses with active lead flow.",
     features: [
-      { text: "Lead enrichment & research" },
-      { text: "Qualification scoring based on your criteria" },
-      { text: "Personalized follow-up sequences" },
+      { text: "Lead enrichment & research agent" },
+      { text: "Qualification scoring based on your ICP" },
+      { text: "Personalized follow-up sequence agent" },
       { text: "Meeting preparation summaries" },
-      { text: "Pipeline hygiene & deal updates" },
-      { text: "CRM integration & logging" },
+      { text: "Pipeline hygiene & deal stage automation" },
+      { text: "CRM integration & automated logging" },
       { text: "Custom sales dashboard" },
-      { text: "Monthly optimization & reporting" },
+      { text: "Monthly optimization and performance reporting" },
+      { text: "Human-in-the-loop approvals" },
     ],
   },
   {
     id: "firmos",
-    name: "Custom Multi-Agent Operations System",
+    name: 'Custom Multi-Agent Operations System ("Firm OS")',
     sub: "03 / Firm OS",
-    desc: "A coordinated team of AI agents that handle lead qualification, sales support, document processing, and financial operations together.",
+    desc: "A coordinated team of 2–4 AI agents handling lead qualification, sales, document processing, and financial operations — all sharing memory under one dashboard.",
     setupPrice: "$24,000",
     monthlyNote: "From $2,499 / mo · managed service · phased delivery",
     featured: false,
     ctaLabel: "Book a Free Strategy Call",
     ctaHref: "/book",
+    idealFor: "Growing businesses ready for coordinated AI operations.",
     features: [
-      { text: "**Multiple AI agents** working together" },
+      { text: "**2–4 orchestrated AI agents** (lead qualification + sales + document processing + financial ops)" },
       { text: "Shared memory across agents" },
-      { text: "Central custom oversight dashboard" },
-      { text: "Bookkeeping automation module available" },
-      { text: "Deep integrations with your tools" },
-      { text: "Advanced guardrails & audit logs" },
-      { text: "Monthly strategy calls + optimization" },
+      { text: "Central custom Streamlit oversight dashboard" },
+      { text: "Deep integrations with your existing tools" },
+      { text: "Bookkeeping automation module (categorization, invoice extraction, reconciliation)" },
+      { text: "Advanced guardrails and audit logs" },
+      { text: "Monthly strategy calls + continuous optimization" },
+      { text: "Full team training and documentation" },
     ],
   },
 ];
@@ -424,6 +431,14 @@ function TierCard({ tier }: { tier: TierDef }) {
               )
             )}
           </ul>
+
+          <div
+            className="mt-5 pt-4 border-t border-white/[0.08] text-[12px] leading-[1.5] text-white/40"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            <span className="font-semibold text-white/55 uppercase tracking-[0.07em] text-[10px]" style={{ fontFamily: "var(--font-mono)" }}>Ideal for · </span>
+            {tier.idealFor}
+          </div>
         </div>
       </article>
     );
@@ -528,6 +543,14 @@ function TierCard({ tier }: { tier: TierDef }) {
           )
         )}
       </ul>
+
+      <div
+        className="mt-5 pt-4 border-t text-[12px] leading-[1.5]"
+        style={{ borderColor: "var(--line)", fontFamily: "var(--font-display)", color: "var(--ink-3)" }}
+      >
+        <span className="font-semibold uppercase tracking-[0.07em] text-[10px]" style={{ fontFamily: "var(--font-mono)", color: "var(--ink-3)" }}>Ideal for · </span>
+        {tier.idealFor}
+      </div>
     </article>
   );
 }
@@ -537,7 +560,7 @@ function TierCard({ tier }: { tier: TierDef }) {
 const FAQS = [
   {
     q: "How long does it take to launch?",
-    a: "Most systems launch in 3–8 weeks. Larger projects use phased delivery.",
+    a: "Esmi and the Sales Assistant typically launch in 2–3 weeks. The Firm OS uses phased delivery, with the first phase live in 4–6 weeks.",
   },
   {
     q: "Can I start with one system and add more later?",

@@ -136,8 +136,8 @@ function IndexCard() {
     },
     {
       num: "03",
-      name: "Accounting & Finance OS",
-      sub: "Bookkeeping, reconciliation, and a reviewable close",
+      name: "Firm OS — Accounting & Finance",
+      sub: "Multi-agent operations with financial automation built in",
       href: "#agent-finance",
     },
   ];
@@ -923,29 +923,30 @@ function AgentFinance() {
       <div className="mx-auto max-w-[1200px] px-6 sm:px-8 lg:px-10">
         <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="flex flex-col gap-7">
-            <AgentMeta num="03 / Finance" category="Accounting & Bookkeeping" />
+            <AgentMeta num="03 / Firm OS" category="Accounting & Finance Module" />
             <div>
               <h2
                 className="mb-3 text-[34px] font-semibold leading-[1.06] tracking-[-0.024em] sm:text-[42px] lg:text-[48px]"
                 style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
               >
-                Accounting & Finance OS
+                Firm OS — Accounting & Finance
               </h2>
               <p
                 className="text-[17px] font-medium leading-snug"
                 style={{ fontFamily: "var(--font-display)", color: "var(--teal-700)" }}
               >
-                A reviewable close, every morning.
+                A coordinated agent system with a reviewable financial close built in.
               </p>
             </div>
             <p
               className="text-[16px] leading-[1.65]"
               style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
             >
-              Automated bookkeeping, reconciliations, and a month-end close you can
-              defend to an auditor. The agent categorizes, matches, and flags — your
-              bookkeeper opens to a triaged inbox of decisions worth a human&apos;s
-              time.
+              Accounting & Finance is a core module inside Firm OS — our full
+              multi-agent revenue operating system. It delivers automated bookkeeping,
+              reconciliations, and a month-end close you can defend to an auditor. The
+              agent categorizes, matches, and flags — your bookkeeper opens to a triaged
+              inbox of decisions worth a human&apos;s time.
             </p>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {features.map((f) => (
@@ -962,12 +963,12 @@ function AgentFinance() {
             <AgentButtons
               primaryHref="#book"
               primaryLabel="Book a demo"
-              secondaryHref="#book"
-              secondaryLabel="See the Accounting OS"
+              secondaryHref="/pricing"
+              secondaryLabel="See Firm OS pricing"
             />
           </div>
 
-          <FigurePanel title="orchelix · finance os · close" tag="closing · may 2026">
+          <FigurePanel title="orchelix · firm os · accounting" tag="closing · may 2026">
             <FinanceFigure />
           </FigurePanel>
         </div>

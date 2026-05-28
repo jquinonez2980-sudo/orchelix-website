@@ -7,7 +7,7 @@ const columns = [
       { label: "Virtual Receptionist", href: "/solutions" },
       { label: "Sales & Marketing",    href: "/solutions" },
       { label: "Accounting OS",        href: "/solutions" },
-      { label: "Revenue Insights",     href: "/solutions" },
+      { label: "Industries",            href: "/industries" },
     ],
   },
   {
