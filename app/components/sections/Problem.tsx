@@ -135,7 +135,16 @@ export default function Problem() {
           }}
         >
           None of this is a people problem. It&apos;s an operating-model problem &mdash;{" "}
-          <span style={{ color: "var(--teal-700)" }}>and that&apos;s exactly what an agent stack is built to fix.</span>
+          <span
+            style={{
+              background: "linear-gradient(135deg, var(--navy-600) 0%, var(--teal-500) 55%, var(--teal-400) 100%)",
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
+            and that&apos;s exactly what an agent stack is built to fix.
+          </span>
         </p>
       </div>
     </section>

@@ -56,7 +56,7 @@ export default function Hero() {
           >
             AI agents that{" "}
             <span
-              className="bg-gradient-to-br from-teal-300 via-teal-400 to-teal-500 bg-clip-text font-normal italic"
+              className="bg-gradient-to-br from-teal-200 via-teal-400 to-teal-600 bg-clip-text font-normal italic"
               style={{ WebkitTextFillColor: "transparent", paddingRight: "0.1em" }}
             >
               actually run
