@@ -4,10 +4,10 @@ import Footer from "../components/sections/Footer";
 import EsmiChat from "./EsmiChat";
 
 const STATS = [
-  { k: "Pickup time", v: "12.4", u: "s",          meta: "vs. industry avg. 48s" },
-  { k: "Languages",   v: "EN",   u: " · ES · FR", meta: "Mid-call switching" },
-  { k: "Resolution",  v: "87",   u: "%",          meta: "No human handoff needed" },
-  { k: "Coverage",    v: "24/7", u: "",           meta: "Nights · weekends · holidays" },
+  { k: "Pickup",    v: "1st",  u: " ring",      meta: "Answered instantly — no hold queue, no voicemail" },
+  { k: "Languages", v: "EN",   u: " · ES · FR", meta: "Mid-call switching" },
+  { k: "Handoff",   v: "Full", u: " context",   meta: "Escalates to a human with the whole call summary" },
+  { k: "Coverage",  v: "24/7", u: "",           meta: "Nights · weekends · holidays" },
 ];
 
 const CAPABILITIES = [
@@ -43,8 +43,8 @@ const CAPABILITIES = [
     ),
     h: "Escalates urgency.",
     p: "When a caller is hurt, angry, or in real distress, Esmi recognizes the signal in two languages — and pages the right on-call human in seconds.",
-    v: "10s",
-    l: "Median time to page your on-call human.",
+    v: "Real-time",
+    l: "Pages your on-call human the moment it detects urgency.",
   },
 ];
 
