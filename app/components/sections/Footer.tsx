@@ -30,14 +30,37 @@ const columns = [
   },
 ];
 
-export default function Footer() {
+export default function Footer({ theme = "light" }: { theme?: "light" | "dark" }) {
+  const dark = theme === "dark";
+  const c = dark
+    ? {
+        bg: "#080C16",
+        border: "rgba(255,255,255,0.10)",
+        text: "rgba(234,242,255,0.66)",
+        accent: "#00F0FF",
+        iconBg: "rgba(255,255,255,0.05)",
+        iconBorder: "rgba(255,255,255,0.12)",
+        legalDot: "rgba(234,242,255,0.30)",
+        logoFilter: "brightness(0) invert(1)" as const,
+      }
+    : {
+        bg: "var(--surface-2)",
+        border: "var(--line)",
+        text: "var(--ink-2)",
+        accent: "var(--teal-700)",
+        iconBg: "#fff",
+        iconBorder: "var(--line)",
+        legalDot: "var(--ink-4)",
+        logoFilter: undefined,
+      };
+
   return (
     <footer
       id="about"
       style={{
         position: "relative",
-        background: "var(--surface-2)",
-        borderTop: "1px solid var(--line)",
+        background: c.bg,
+        borderTop: `1px solid ${c.border}`,
         overflow: "hidden",
       }}
       className="px-6 pb-8 pt-20 sm:px-8 sm:pt-24 lg:px-10 lg:pt-24"
@@ -57,12 +80,12 @@ export default function Footer() {
         }}
       >
         <Image
-          src="/orchelix-mark.png"
+          src={dark ? "/orchelix-mark-light.png" : "/orchelix-mark.png"}
           alt=""
           width={420}
           height={420}
           quality={50}
-          style={{ opacity: 0.04, objectFit: "contain" }}
+          style={{ opacity: dark ? 0.06 : 0.04, objectFit: "contain" }}
         />
       </div>
 
@@ -75,9 +98,10 @@ export default function Footer() {
           right: 0,
           top: 0,
           height: 1,
-          background:
-            "linear-gradient(90deg, transparent 0%, var(--teal-200) 30%, var(--navy-300) 70%, transparent 100%)",
-          opacity: 0.4,
+          background: dark
+            ? "linear-gradient(90deg, transparent 0%, rgba(0,240,255,0.5) 30%, rgba(168,85,247,0.5) 70%, transparent 100%)"
+            : "linear-gradient(90deg, transparent 0%, var(--teal-200) 30%, var(--navy-300) 70%, transparent 100%)",
+          opacity: dark ? 0.55 : 0.4,
         }}
       />
 
@@ -91,7 +115,7 @@ export default function Footer() {
                 alt="Orchelix AI Consulting"
                 width={170}
                 height={42}
-                style={{ height: 42, width: "auto" }}
+                style={{ height: 42, width: "auto", filter: c.logoFilter }}
               />
             </a>
             <p
@@ -100,7 +124,7 @@ export default function Footer() {
                 fontWeight: 400,
                 fontSize: 14,
                 lineHeight: 1.65,
-                color: "var(--ink-2)",
+                color: c.text,
                 margin: "20px 0 24px",
                 maxWidth: 360,
               }}
@@ -116,8 +140,8 @@ export default function Footer() {
                   width: 6,
                   height: 6,
                   borderRadius: "50%",
-                  background: "var(--teal-500)",
-                  boxShadow: "0 0 0 3px rgba(20,184,166,0.18)",
+                  background: dark ? "#00F0FF" : "var(--teal-500)",
+                  boxShadow: dark ? "0 0 0 3px rgba(0,240,255,0.22)" : "0 0 0 3px rgba(20,184,166,0.18)",
                   display: "inline-block",
                   animation: "pulse 2.4s ease-in-out infinite",
                 }}
@@ -130,7 +154,7 @@ export default function Footer() {
                   lineHeight: 1,
                   letterSpacing: "0.18em",
                   textTransform: "uppercase",
-                  color: "var(--ink-2)",
+                  color: c.text,
                 }}
               >
                 Now booking Q3 pilots
@@ -146,7 +170,7 @@ export default function Footer() {
                   fontSize: 13,
                   lineHeight: 1,
                   letterSpacing: "0.04em",
-                  color: "var(--teal-700)",
+                  color: c.accent,
                   textDecoration: "none",
                 }}
               >
@@ -168,9 +192,9 @@ export default function Footer() {
                   width: 36,
                   height: 36,
                   borderRadius: 10,
-                  border: "1px solid var(--line)",
-                  color: "var(--ink-2)",
-                  background: "#fff",
+                  border: `1px solid ${c.iconBorder}`,
+                  color: c.text,
+                  background: c.iconBg,
                   textDecoration: "none",
                 }}
               >
@@ -193,9 +217,9 @@ export default function Footer() {
                   width: 36,
                   height: 36,
                   borderRadius: 10,
-                  border: "1px solid var(--line)",
-                  color: "var(--ink-2)",
-                  background: "#fff",
+                  border: `1px solid ${c.iconBorder}`,
+                  color: c.text,
+                  background: c.iconBg,
                   textDecoration: "none",
                 }}
               >
@@ -219,7 +243,7 @@ export default function Footer() {
                   lineHeight: 1,
                   letterSpacing: "0.18em",
                   textTransform: "uppercase",
-                  color: "var(--ink-2)",
+                  color: c.text,
                   margin: "0 0 22px",
                 }}
               >
@@ -243,7 +267,7 @@ export default function Footer() {
                         fontWeight: 500,
                         fontSize: 14,
                         lineHeight: 1,
-                        color: "var(--ink-2)",
+                        color: c.text,
                         textDecoration: "none",
                         transition: "color 180ms var(--ease-standard)",
                       }}
@@ -259,20 +283,21 @@ export default function Footer() {
 
         {/* Legal row */}
         <div
-          className="mt-16 flex flex-col gap-3 border-t border-[var(--line)] pt-6 sm:flex-row sm:items-center sm:justify-between"
+          className="mt-16 flex flex-col gap-3 pt-6 sm:flex-row sm:items-center sm:justify-between"
           style={{
+            borderTop: `1px solid ${c.border}`,
             fontFamily: "var(--font-mono)",
             fontWeight: 500,
             fontSize: 11.5,
             lineHeight: 1,
             letterSpacing: "0.02em",
-            color: "var(--ink-2)",
+            color: c.text,
           }}
         >
           <span>© 2026 Orchelix AI Consulting Inc. · West Palm Beach, FL.</span>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 16 }}>
             <a href="/privacy" style={{ color: "inherit", textDecoration: "none" }}>Privacy</a>
-            <span aria-hidden="true" style={{ width: 3, height: 3, borderRadius: "50%", background: "var(--ink-4)", display: "inline-block" }} />
+            <span aria-hidden="true" style={{ width: 3, height: 3, borderRadius: "50%", background: c.legalDot, display: "inline-block" }} />
             <a href="/terms" style={{ color: "inherit", textDecoration: "none" }}>Terms</a>
           </span>
         </div>

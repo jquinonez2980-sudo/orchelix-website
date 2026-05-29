@@ -22,6 +22,8 @@ type ChatEvent =
   | { type: "done"; full_text: string; slots?: string[]; date_label?: string }
   | { type: "error"; message: string };
 
+type Activity = "idle" | "thinking" | "speaking";
+
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 function stripSlotLines(text: string): string {
@@ -86,6 +88,8 @@ const TOOL_LABELS_ES: Record<string, string> = {
   book_appointment:      "Agendando tu cita…",
   search_knowledge_base: "Buscando información…",
 };
+
+const CYAN = "#00F0FF";
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -305,19 +309,31 @@ export default function EsmiChat({ defaultLocale = "en" }: { defaultLocale?: "en
   const lastMsg = messages[messages.length - 1];
   const showQuickReplies = !loading && messages.length === 1 && lastMsg.role === "assistant";
 
+  // Drive the waveform from real chat activity: streaming tokens = "speaking",
+  // waiting on the model / a tool = "thinking", otherwise idle.
+  const activity: Activity = loading
+    ? lastMsg.role === "assistant" && lastMsg.content.length > 0 && !lastMsg.toolActive
+      ? "speaking"
+      : "thinking"
+    : "idle";
+
   return (
     <div
       className="flex flex-col h-full"
-      style={{ fontFamily: "var(--font-display), ui-sans-serif, system-ui, sans-serif", background: "#F7F8FA" }}
+      style={{
+        fontFamily: "var(--font-display), ui-sans-serif, system-ui, sans-serif",
+        background: "linear-gradient(180deg, #0A0F1C 0%, #0D1526 100%)",
+      }}
     >
       {/* ── Header ──────────────────────────────────────────────────────── */}
       <div
         className="flex items-center gap-3 flex-shrink-0"
         style={{
           padding: "13px 18px",
-          background: "#fff",
-          borderBottom: "1px solid rgba(10,37,64,0.08)",
-          boxShadow: "0 1px 0 rgba(255,255,255,0.8)",
+          background: "rgba(255,255,255,0.04)",
+          borderBottom: "1px solid rgba(255,255,255,0.08)",
+          backdropFilter: "blur(14px)",
+          WebkitBackdropFilter: "blur(14px)",
         }}
       >
         {/* Avatar with online dot */}
@@ -332,7 +348,8 @@ export default function EsmiChat({ defaultLocale = "en" }: { defaultLocale?: "en
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              boxShadow: "0 1px 3px rgba(6,18,42,0.25)",
+              border: "1px solid rgba(0,240,255,0.28)",
+              boxShadow: "0 0 16px rgba(0,240,255,0.25)",
             }}
           >
             <Image
@@ -352,7 +369,7 @@ export default function EsmiChat({ defaultLocale = "en" }: { defaultLocale?: "en
               height: 10,
               borderRadius: "50%",
               background: "#22C55E",
-              border: "2px solid #fff",
+              border: "2px solid #0A0F1C",
               display: "block",
               animation: "esmi-pulse-ring 2s ease infinite",
             }}
@@ -366,7 +383,7 @@ export default function EsmiChat({ defaultLocale = "en" }: { defaultLocale?: "en
               fontFamily: "var(--font-display)",
               fontWeight: 600,
               fontSize: 14,
-              color: "#06122A",
+              color: "#EAF2FF",
               lineHeight: 1.2,
             }}
           >
@@ -377,13 +394,13 @@ export default function EsmiChat({ defaultLocale = "en" }: { defaultLocale?: "en
               style={{
                 fontFamily: "var(--font-mono)",
                 fontSize: 11,
-                color: "rgba(10,37,64,0.45)",
+                color: "rgba(234,242,255,0.45)",
                 letterSpacing: "0.02em",
               }}
             >
               {isEs ? "Recepcionista Virtual" : "AI Receptionist"}
             </span>
-            <span style={{ color: "rgba(10,37,64,0.20)", fontSize: 10 }}>·</span>
+            <span style={{ color: "rgba(234,242,255,0.20)", fontSize: 10 }}>·</span>
             {(["en", "es"] as const).map((lang) => (
               <button
                 key={lang}
@@ -397,9 +414,9 @@ export default function EsmiChat({ defaultLocale = "en" }: { defaultLocale?: "en
                   textTransform: "uppercase",
                   padding: "2px 6px",
                   borderRadius: 4,
-                  border: locale === lang ? "1px solid rgba(20,184,166,0.5)" : "1px solid transparent",
-                  background: locale === lang ? "rgba(20,184,166,0.08)" : "transparent",
-                  color: locale === lang ? "#0D766B" : "rgba(10,37,64,0.35)",
+                  border: locale === lang ? "1px solid rgba(0,240,255,0.5)" : "1px solid transparent",
+                  background: locale === lang ? "rgba(0,240,255,0.10)" : "transparent",
+                  color: locale === lang ? CYAN : "rgba(234,242,255,0.40)",
                   cursor: "pointer",
                   transition: "all 0.15s",
                 }}
@@ -409,6 +426,9 @@ export default function EsmiChat({ defaultLocale = "en" }: { defaultLocale?: "en
             ))}
           </div>
         </div>
+
+        {/* Reactive voice waveform */}
+        <VoiceWave activity={activity} />
 
         {/* New chat button */}
         <button
@@ -421,9 +441,9 @@ export default function EsmiChat({ defaultLocale = "en" }: { defaultLocale?: "en
             fontFamily: "var(--font-display)",
             fontSize: 12,
             fontWeight: 500,
-            color: "rgba(10,37,64,0.45)",
+            color: "rgba(234,242,255,0.50)",
             background: "transparent",
-            border: "1px solid rgba(10,37,64,0.12)",
+            border: "1px solid rgba(255,255,255,0.14)",
             borderRadius: 8,
             padding: "6px 10px",
             cursor: "pointer",
@@ -431,32 +451,30 @@ export default function EsmiChat({ defaultLocale = "en" }: { defaultLocale?: "en
             flexShrink: 0,
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.color = "#06122A";
-            e.currentTarget.style.borderColor = "rgba(10,37,64,0.25)";
+            e.currentTarget.style.color = "#EAF2FF";
+            e.currentTarget.style.borderColor = "rgba(0,240,255,0.4)";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.color = "rgba(10,37,64,0.45)";
-            e.currentTarget.style.borderColor = "rgba(10,37,64,0.12)";
+            e.currentTarget.style.color = "rgba(234,242,255,0.50)";
+            e.currentTarget.style.borderColor = "rgba(255,255,255,0.14)";
           }}
         >
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
             <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
           </svg>
-          {isEs ? "Nueva conversación" : "New chat"}
+          <span className="hidden sm:inline">{isEs ? "Nueva conversación" : "New chat"}</span>
         </button>
       </div>
 
       {/* ── Messages ────────────────────────────────────────────────────── */}
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto"
+        className="flex-1 overflow-y-auto esmi-scroll"
         style={{
           padding: "20px 18px 12px",
           display: "flex",
           flexDirection: "column",
           gap: 12,
-          scrollbarWidth: "thin",
-          scrollbarColor: "rgba(10,37,64,0.12) transparent",
         }}
       >
         {messages.map((msg) => (
@@ -476,8 +494,10 @@ export default function EsmiChat({ defaultLocale = "en" }: { defaultLocale?: "en
           alignItems: "flex-end",
           gap: 8,
           padding: "12px 16px",
-          background: "#fff",
-          borderTop: "1px solid rgba(10,37,64,0.08)",
+          background: "rgba(255,255,255,0.04)",
+          borderTop: "1px solid rgba(255,255,255,0.08)",
+          backdropFilter: "blur(14px)",
+          WebkitBackdropFilter: "blur(14px)",
           flexShrink: 0,
         }}
       >
@@ -486,6 +506,7 @@ export default function EsmiChat({ defaultLocale = "en" }: { defaultLocale?: "en
         </label>
         <textarea
           id="esmi-input"
+          className="esmi-input"
           ref={inputRef}
           value={input}
           onChange={handleInputChange}
@@ -497,11 +518,11 @@ export default function EsmiChat({ defaultLocale = "en" }: { defaultLocale?: "en
             flex: 1,
             resize: "none",
             borderRadius: 12,
-            border: "1.5px solid rgba(10,37,64,0.14)",
-            background: "#F7F8FA",
+            border: "1.5px solid rgba(255,255,255,0.14)",
+            background: "rgba(255,255,255,0.05)",
             padding: "10px 14px",
             fontSize: 14,
-            color: "#06122A",
+            color: "#EAF2FF",
             lineHeight: 1.5,
             fontFamily: "inherit",
             outline: "none",
@@ -511,14 +532,14 @@ export default function EsmiChat({ defaultLocale = "en" }: { defaultLocale?: "en
             cursor: loading ? "not-allowed" : "text",
           }}
           onFocus={(e) => {
-            e.currentTarget.style.borderColor = "#14B8A6";
-            e.currentTarget.style.boxShadow = "0 0 0 3px rgba(20,184,166,0.12)";
-            e.currentTarget.style.background = "#fff";
+            e.currentTarget.style.borderColor = "rgba(0,240,255,0.6)";
+            e.currentTarget.style.boxShadow = "0 0 0 3px rgba(0,240,255,0.14)";
+            e.currentTarget.style.background = "rgba(255,255,255,0.07)";
           }}
           onBlur={(e) => {
-            e.currentTarget.style.borderColor = "rgba(10,37,64,0.14)";
+            e.currentTarget.style.borderColor = "rgba(255,255,255,0.14)";
             e.currentTarget.style.boxShadow = "none";
-            e.currentTarget.style.background = "#F7F8FA";
+            e.currentTarget.style.background = "rgba(255,255,255,0.05)";
           }}
         />
         <button
@@ -536,13 +557,13 @@ export default function EsmiChat({ defaultLocale = "en" }: { defaultLocale?: "en
             cursor: loading || !input.trim() ? "default" : "pointer",
             background:
               loading || !input.trim()
-                ? "rgba(10,37,64,0.08)"
-                : "linear-gradient(135deg, #14B8A6 0%, #0EA5A0 100%)",
-            color: loading || !input.trim() ? "rgba(10,37,64,0.30)" : "#fff",
+                ? "rgba(255,255,255,0.06)"
+                : "linear-gradient(135deg, #00F0FF 0%, #38BDF8 100%)",
+            color: loading || !input.trim() ? "rgba(234,242,255,0.30)" : "#04121A",
             boxShadow:
               loading || !input.trim()
                 ? "none"
-                : "0 2px 8px rgba(20,184,166,0.35)",
+                : "0 0 18px rgba(0,240,255,0.45)",
             transition: "background 0.15s, box-shadow 0.15s",
           }}
         >
@@ -551,6 +572,51 @@ export default function EsmiChat({ defaultLocale = "en" }: { defaultLocale?: "en
           </svg>
         </button>
       </form>
+    </div>
+  );
+}
+
+// ── VoiceWave ─────────────────────────────────────────────────────────────────
+// Animated bar waveform that reacts to chat activity. Idle = gentle low pulse;
+// thinking = medium bounce; speaking = bright, fast, glowing.
+
+function VoiceWave({ activity }: { activity: Activity }) {
+  const bars = [0, 1, 2, 3, 4];
+  const speaking = activity === "speaking";
+  const idle = activity === "idle";
+
+  const anim = idle ? "esmi-wave-idle" : "esmi-wave";
+  const duration = speaking ? 0.7 : activity === "thinking" ? 1 : 2.4;
+  const color = idle ? "rgba(0,240,255,0.45)" : CYAN;
+  const glow = speaking ? "0 0 8px rgba(0,240,255,0.7)" : "none";
+
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 3,
+        height: 22,
+        padding: "0 4px",
+        flexShrink: 0,
+      }}
+    >
+      {bars.map((i) => (
+        <span
+          key={i}
+          data-esmi-motion
+          style={{
+            width: 3,
+            height: 18,
+            borderRadius: 2,
+            background: color,
+            boxShadow: glow,
+            transformOrigin: "center",
+            animation: `${anim} ${duration}s ease-in-out ${i * 0.12}s infinite`,
+          }}
+        />
+      ))}
     </div>
   );
 }
@@ -577,10 +643,13 @@ function MessageBubble({
             padding: "11px 16px",
             fontSize: 14,
             lineHeight: 1.6,
-            color: "rgba(255,255,255,0.92)",
-            background: "linear-gradient(150deg, #0D2545 0%, #071A35 100%)",
+            color: "#EAF2FF",
+            background: "linear-gradient(135deg, rgba(0,240,255,0.16) 0%, rgba(168,85,247,0.18) 100%)",
+            border: "1px solid rgba(0,240,255,0.28)",
             borderRadius: "18px 18px 4px 18px",
-            boxShadow: "0 2px 12px rgba(6,18,42,0.22)",
+            boxShadow: "0 2px 16px rgba(0,240,255,0.10)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
             whiteSpace: "pre-wrap",
             wordBreak: "break-word",
           }}
@@ -610,7 +679,8 @@ function MessageBubble({
           justifyContent: "center",
           flexShrink: 0,
           marginTop: 2,
-          boxShadow: "0 1px 3px rgba(6,18,42,0.20)",
+          border: "1px solid rgba(0,240,255,0.22)",
+          boxShadow: "0 0 10px rgba(0,240,255,0.20)",
         }}
       >
         <img
@@ -627,10 +697,11 @@ function MessageBubble({
             style={{
               display: "inline-flex",
               padding: "12px 16px",
-              background: "#fff",
-              border: "1px solid rgba(10,37,64,0.08)",
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid rgba(255,255,255,0.10)",
               borderRadius: "4px 18px 18px 18px",
-              boxShadow: "0 1px 3px rgba(10,37,64,0.05), 0 4px 12px rgba(10,37,64,0.04)",
+              backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
             }}
           >
             <TypingDots />
@@ -645,12 +716,12 @@ function MessageBubble({
               alignItems: "center",
               gap: 8,
               padding: "8px 12px 8px 10px",
-              background: "rgba(20,184,166,0.07)",
-              borderLeft: "3px solid #14B8A6",
+              background: "rgba(0,240,255,0.08)",
+              borderLeft: `3px solid ${CYAN}`,
               borderRadius: "0 8px 8px 0",
               fontSize: 12,
               fontWeight: 500,
-              color: "#0D766B",
+              color: CYAN,
               alignSelf: "flex-start",
             }}
           >
@@ -666,11 +737,13 @@ function MessageBubble({
               padding: "11px 16px",
               fontSize: 14,
               lineHeight: 1.65,
-              color: "#06122A",
-              background: "#fff",
-              border: "1px solid rgba(10,37,64,0.08)",
+              color: "#EAF2FF",
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid rgba(255,255,255,0.10)",
               borderRadius: "4px 18px 18px 18px",
-              boxShadow: "0 1px 3px rgba(10,37,64,0.05), 0 4px 12px rgba(10,37,64,0.04)",
+              boxShadow: "0 2px 16px rgba(10,15,28,0.4)",
+              backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
               whiteSpace: "pre-wrap",
               wordBreak: "break-word",
               maxWidth: "82%",
@@ -686,7 +759,7 @@ function MessageBubble({
                   borderRadius: 2,
                   verticalAlign: "text-bottom",
                   marginLeft: 2,
-                  background: "#14B8A6",
+                  background: CYAN,
                   animation: "esmi-bounce 1s ease infinite",
                 }}
               />
@@ -727,13 +800,13 @@ function SlotPicker({
           gap: 6,
           fontSize: 11,
           fontWeight: 600,
-          color: "rgba(10,37,64,0.45)",
+          color: "rgba(234,242,255,0.45)",
           textTransform: "uppercase",
           letterSpacing: "0.08em",
           fontFamily: "var(--font-mono)",
         }}
       >
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ color: "#14B8A6" }}>
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ color: CYAN }}>
           <rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
         </svg>
         {dateLabel ?? "Available slots"} — choose a time
@@ -753,9 +826,9 @@ function SlotPicker({
                 gap: 2,
                 padding: "9px 14px",
                 borderRadius: 11,
-                border: "1.5px solid rgba(20,184,166,0.30)",
-                background: "#fff",
-                color: "#06122A",
+                border: "1.5px solid rgba(0,240,255,0.30)",
+                background: "rgba(255,255,255,0.04)",
+                color: "#EAF2FF",
                 fontSize: 13,
                 fontWeight: 600,
                 lineHeight: 1.2,
@@ -763,22 +836,23 @@ function SlotPicker({
                 minWidth: 78,
                 fontFamily: "inherit",
                 transition: "all 0.15s",
-                boxShadow: "0 1px 3px rgba(10,37,64,0.06)",
+                backdropFilter: "blur(8px)",
+                WebkitBackdropFilter: "blur(8px)",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "#14B8A6";
-                e.currentTarget.style.background = "rgba(20,184,166,0.06)";
-                e.currentTarget.style.boxShadow = "0 4px 12px rgba(20,184,166,0.18)";
+                e.currentTarget.style.borderColor = CYAN;
+                e.currentTarget.style.background = "rgba(0,240,255,0.12)";
+                e.currentTarget.style.boxShadow = "0 0 18px rgba(0,240,255,0.30)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "rgba(20,184,166,0.30)";
-                e.currentTarget.style.background = "#fff";
-                e.currentTarget.style.boxShadow = "0 1px 3px rgba(10,37,64,0.06)";
+                e.currentTarget.style.borderColor = "rgba(0,240,255,0.30)";
+                e.currentTarget.style.background = "rgba(255,255,255,0.04)";
+                e.currentTarget.style.boxShadow = "none";
               }}
             >
               <span>{start}</span>
               {end && (
-                <span style={{ fontSize: 11, fontWeight: 400, color: "rgba(10,37,64,0.45)" }}>
+                <span style={{ fontSize: 11, fontWeight: 400, color: "rgba(234,242,255,0.45)" }}>
                   – {end}
                 </span>
               )}
@@ -812,28 +886,29 @@ function QuickReplies({
             gap: 6,
             padding: "8px 14px",
             borderRadius: 999,
-            border: "1.5px solid rgba(10,37,64,0.14)",
-            background: "#fff",
-            color: "rgba(10,37,64,0.65)",
+            border: "1.5px solid rgba(255,255,255,0.14)",
+            background: "rgba(255,255,255,0.04)",
+            color: "rgba(234,242,255,0.72)",
             fontSize: 13,
             fontWeight: 500,
             cursor: "pointer",
             fontFamily: "inherit",
             transition: "all 0.15s",
-            boxShadow: "0 1px 2px rgba(10,37,64,0.05)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = "#14B8A6";
-            e.currentTarget.style.background = "rgba(20,184,166,0.06)";
-            e.currentTarget.style.color = "#0D766B";
+            e.currentTarget.style.borderColor = "rgba(0,240,255,0.5)";
+            e.currentTarget.style.background = "rgba(0,240,255,0.10)";
+            e.currentTarget.style.color = CYAN;
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = "rgba(10,37,64,0.14)";
-            e.currentTarget.style.background = "#fff";
-            e.currentTarget.style.color = "rgba(10,37,64,0.65)";
+            e.currentTarget.style.borderColor = "rgba(255,255,255,0.14)";
+            e.currentTarget.style.background = "rgba(255,255,255,0.04)";
+            e.currentTarget.style.color = "rgba(234,242,255,0.72)";
           }}
         >
-          <span style={{ color: "#14B8A6", display: "flex", flexShrink: 0 }}>{chip.icon}</span>
+          <span style={{ color: CYAN, display: "flex", flexShrink: 0 }}>{chip.icon}</span>
           {chip.label}
         </button>
       ))}
@@ -854,7 +929,7 @@ function TypingDots() {
             width: 6,
             height: 6,
             borderRadius: "50%",
-            background: "#14B8A6",
+            background: CYAN,
             animation: `esmi-bounce 1.2s ease ${i * 0.18}s infinite`,
           }}
         />

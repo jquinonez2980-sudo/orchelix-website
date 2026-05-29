@@ -13,11 +13,44 @@ const NAV_LINKS = [
   { label: "About",      href: "/about" },
 ];
 
-export default function Nav() {
+export default function Nav({ theme = "light" }: { theme?: "light" | "dark" }) {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
   const pathname = usePathname();
   const isEs = pathname.startsWith("/es");
+
+  const dark = theme === "dark";
+  const c = dark
+    ? {
+        headerBg: "rgba(10,15,28,0.72)",
+        border: "rgba(255,255,255,0.10)",
+        link: "rgba(234,242,255,0.66)",
+        accent: "#00F0FF",
+        phone: "rgba(234,242,255,0.66)",
+        ctaBg: "linear-gradient(135deg, #00F0FF 0%, #38BDF8 100%)",
+        ctaColor: "#04121A",
+        ctaShadow: "0 0 20px rgba(0,240,255,0.35)",
+        btnBg: "rgba(255,255,255,0.06)",
+        btnColor: "rgba(234,242,255,0.80)",
+        drawerBg: "rgba(10,15,28,0.96)",
+        mobileLink: "#EAF2FF",
+        mobileBorder: "rgba(255,255,255,0.08)",
+      }
+    : {
+        headerBg: "rgba(251,251,252,0.78)",
+        border: "var(--line)",
+        link: "var(--ink-2)",
+        accent: "var(--teal-700)",
+        phone: "var(--ink-2)",
+        ctaBg: "var(--navy-600)",
+        ctaColor: "#fff",
+        ctaShadow: "0 1px 0 rgba(255,255,255,0.08) inset, 0 1px 2px rgba(10,37,64,0.10)",
+        btnBg: "#fff",
+        btnColor: "var(--ink-2)",
+        drawerBg: "var(--paper)",
+        mobileLink: "var(--ink)",
+        mobileBorder: "rgba(228,232,238,0.7)",
+      };
 
   useEffect(() => {
     if (!open) return;
@@ -32,10 +65,10 @@ export default function Nav() {
         position: "sticky",
         top: 0,
         zIndex: 50,
-        background: "rgba(251,251,252,0.78)",
+        background: c.headerBg,
         backdropFilter: "saturate(140%) blur(14px)",
         WebkitBackdropFilter: "saturate(140%) blur(14px)",
-        borderBottom: "1px solid var(--line)",
+        borderBottom: `1px solid ${c.border}`,
       }}
     >
       <div
@@ -61,7 +94,7 @@ export default function Nav() {
             width={160}
             height={40}
             priority
-            style={{ height: 40, width: "auto" }}
+            style={{ height: 40, width: "auto", filter: dark ? "brightness(0) invert(1)" : undefined }}
           />
         </a>
 
@@ -81,7 +114,7 @@ export default function Nav() {
                 fontWeight: 500,
                 fontSize: 14,
                 lineHeight: 1,
-                color: "var(--ink-2)",
+                color: c.link,
                 textDecoration: "none",
                 padding: "8px 0",
                 transition: "color 180ms",
@@ -98,7 +131,7 @@ export default function Nav() {
               fontWeight: 500,
               fontSize: 14,
               lineHeight: 1,
-              color: "var(--teal-700)",
+              color: c.accent,
               textDecoration: "none",
               padding: "8px 0",
               transition: "color 180ms",
@@ -121,7 +154,7 @@ export default function Nav() {
               fontSize: 13,
               lineHeight: 1,
               letterSpacing: "0.04em",
-              color: "var(--ink-2)",
+              color: c.phone,
               textDecoration: "none",
               transition: "color 180ms",
             }}
@@ -137,12 +170,12 @@ export default function Nav() {
               lineHeight: 1,
               padding: "13px 20px",
               borderRadius: 10,
-              background: "var(--navy-600)",
-              color: "#fff",
+              background: c.ctaBg,
+              color: c.ctaColor,
               textDecoration: "none",
               display: "inline-flex",
               alignItems: "center",
-              boxShadow: "0 1px 0 rgba(255,255,255,0.08) inset, 0 1px 2px rgba(10,37,64,0.10)",
+              boxShadow: c.ctaShadow,
               transition: "background 220ms var(--ease-standard)",
             }}
           >
@@ -162,9 +195,9 @@ export default function Nav() {
             width: 40,
             height: 40,
             borderRadius: 10,
-            border: "1px solid var(--line)",
-            background: "#fff",
-            color: "var(--ink-2)",
+            border: `1px solid ${c.border}`,
+            background: c.btnBg,
+            color: c.btnColor,
             cursor: "pointer",
             flexShrink: 0,
           }}
@@ -186,8 +219,10 @@ export default function Nav() {
         <div
           className="lg:hidden"
           style={{
-            borderTop: "1px solid var(--line)",
-            background: "var(--paper)",
+            borderTop: `1px solid ${c.border}`,
+            background: c.drawerBg,
+            backdropFilter: dark ? "blur(14px)" : undefined,
+            WebkitBackdropFilter: dark ? "blur(14px)" : undefined,
             padding: "8px 24px 24px",
           }}
         >
@@ -202,10 +237,10 @@ export default function Nav() {
                   fontWeight: 500,
                   fontSize: 15,
                   lineHeight: 1,
-                  color: "var(--ink)",
+                  color: c.mobileLink,
                   textDecoration: "none",
                   padding: "14px 0",
-                  borderBottom: "1px solid rgba(228,232,238,0.7)",
+                  borderBottom: `1px solid ${c.mobileBorder}`,
                   transition: "color 180ms",
                 }}
               >
@@ -220,10 +255,10 @@ export default function Nav() {
                 fontWeight: 500,
                 fontSize: 15,
                 lineHeight: 1,
-                color: "var(--teal-700)",
+                color: c.accent,
                 textDecoration: "none",
                 padding: "14px 0",
-                borderBottom: "1px solid rgba(228,232,238,0.7)",
+                borderBottom: `1px solid ${c.mobileBorder}`,
                 transition: "color 180ms",
               }}
             >
@@ -241,7 +276,7 @@ export default function Nav() {
                 fontSize: 14,
                 lineHeight: 1,
                 letterSpacing: "0.04em",
-                color: "var(--ink-2)",
+                color: c.phone,
                 textDecoration: "none",
                 textAlign: "center",
                 padding: "12px 0",
@@ -259,13 +294,13 @@ export default function Nav() {
                 lineHeight: 1,
                 padding: "15px 20px",
                 borderRadius: 10,
-                background: "var(--navy-600)",
-                color: "#fff",
+                background: c.ctaBg,
+                color: c.ctaColor,
                 textDecoration: "none",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                boxShadow: "0 1px 0 rgba(255,255,255,0.08) inset",
+                boxShadow: c.ctaShadow,
                 transition: "background 200ms var(--ease-standard)",
               }}
             >
