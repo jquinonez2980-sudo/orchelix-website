@@ -459,7 +459,7 @@ function StepDeploy() {
               <div className="flex flex-col gap-2">
                 {phases.map((ph) => (
                   <div
-                    key={ph.n}
+                    key={ph.name}
                     className="flex items-start gap-3 rounded-[11px] px-3.5 py-3"
                     style={{
                       background: ph.active ? "rgba(20,184,166,0.12)" : "rgba(255,255,255,0.04)",

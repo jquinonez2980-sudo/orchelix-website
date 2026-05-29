@@ -20,8 +20,8 @@ const CAPABILITIES = [
     ),
     h: "Books appointments end-to-end.",
     p: "Esmi reads your live calendar, offers the right slots, books the visit, and sends a bilingual SMS confirmation — all on one call.",
-    v: "87%",
-    l: "of bookings auto-confirmed without staff handoff.",
+    v: "End-to-end",
+    l: "Books the visit and confirms by bilingual SMS — no staff handoff.",
   },
   {
     icon: (

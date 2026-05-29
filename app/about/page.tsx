@@ -628,10 +628,10 @@ function WhyOrchelix() {
 /* ─── 6. Track Record ───────────────────────────────────────────────────── */
 
 const results = [
-  { stat: "94%",      detail: "Of inbound calls resolved without human transfer" },
-  { stat: "3.4×",     detail: "Average increase in qualified leads per sales rep" },
-  { stat: "< 14 days", detail: "From contract signature to first live agent" },
-  { stat: "100%",     detail: "Of deployments PIPEDA-compliant at launch" },
+  { stat: "24/7",      detail: "Every call answered — day, night, and weekends, in English and Spanish" },
+  { stat: "< 14 days", detail: "From contract signature to your first live agent in production" },
+  { stat: "Human-led", detail: "A senior consultant owns every deployment — no tier-one tickets" },
+  { stat: "100%",      detail: "Of deployments PIPEDA-aligned at launch, with a full audit trail" },
 ];
 
 function TrackRecord() {
@@ -647,13 +647,13 @@ function TrackRecord() {
             style={{ fontFamily: "var(--font-mono)", color: "var(--teal-700)" }}
           >
             <span className="inline-block h-px w-[18px] bg-current opacity-70" />
-            Our track record
+            How we operate
           </span>
           <h2
             className="mb-4 text-[34px] font-semibold leading-[1.07] tracking-[-0.026em] sm:text-[42px] lg:text-[48px]"
             style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
           >
-            Results that show up on a revenue report, not a vanity dashboard.
+            Commitments that show up in your operations, not a vanity dashboard.
           </h2>
         </div>
 
@@ -691,7 +691,7 @@ function TrackRecord() {
           className="mt-6 text-[12px]"
           style={{ fontFamily: "var(--font-display)", color: "var(--ink-3)" }}
         >
-          Based on deployments to date across Orchelix client engagements.
+          The baseline every Orchelix engagement is built to deliver.
         </p>
       </div>
     </section>

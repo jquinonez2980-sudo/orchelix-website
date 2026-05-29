@@ -162,10 +162,10 @@ function EsHero() {
 
 function EsTrust() {
   const stats = [
-    { num: "128", unit: "k",   label: "Llamadas atendidas por agentes Orchelix este año." },
-    { num: "3",   unit: ".4×", label: "Más rápido el cierre mensual con Accounting OS." },
-    { num: "94",  unit: "%",   label: "De prospectos calificados transferidos con contexto completo." },
-    { num: "14",  unit: "d",   label: "De la primera llamada a tu primer agente en producción." },
+    { num: "24",    unit: "/7",   label: "Cobertura que nunca duerme: cada llamada atendida, de día o de noche." },
+    { num: "14",    unit: "-días", label: "De tu primera llamada a tu primer agente en producción." },
+    { num: "EN",    unit: " · ES", label: "Bilingüe nativo en cada agente, con francés disponible bajo solicitud." },
+    { num: "Audit", unit: "able",  label: "Cada llamada, correo y conciliación registrada y lista para revisión." },
   ];
 
   const industries = [
@@ -286,7 +286,7 @@ function EsSolutions() {
       name: "Recepcionista Virtual",
       subtitle: "Atención al cliente · Automatización de llamadas",
       desc: "Atiende cada llamada en menos de 15 segundos — bilingüe, fines de semana, sin perder una sola cita. Se integra con tu calendario y CRM el primer día.",
-      stats: [{ v: "12s", l: "Tiempo de atención" }, { v: "24/7", l: "Disponible" }],
+      stats: [{ v: "24/7", l: "Siempre disponible" }, { v: "EN · ES", l: "Bilingüe nativo" }],
       accent: "from-teal-500 to-teal-400",
     },
     {
@@ -294,7 +294,7 @@ function EsSolutions() {
       name: "Agente de Ventas",
       subtitle: "Calificación de prospectos · CRM",
       desc: "Califica prospectos, mueve leads por el pipeline y alerta a tu equipo cuando hay un trato listo para cerrar — todo antes de que el teléfono deje de sonar.",
-      stats: [{ v: "94%", l: "Tasa de entrega" }, { v: "<1m", l: "Brief al CRM" }],
+      stats: [{ v: "<1m", l: "Brief al CRM" }, { v: "EN · ES", l: "Bilingüe nativo" }],
       accent: "from-blue-500 to-teal-500",
     },
     {
@@ -302,7 +302,7 @@ function EsSolutions() {
       name: "Accounting OS",
       subtitle: "Operaciones financieras · Cierre mensual",
       desc: "Conciliación automática, cierre mensual y alertas de anomalías — para que tu contador invierta su tiempo en análisis, no en hojas de cálculo.",
-      stats: [{ v: "3.4×", l: "Más rápido" }, { v: "14d", l: "Primer cierre" }],
+      stats: [{ v: "Diario", l: "Conciliación al día" }, { v: "Auditable", l: "Cada transacción registrada" }],
       accent: "from-navy-600 to-blue-600",
     },
   ];

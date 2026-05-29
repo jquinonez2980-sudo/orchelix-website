@@ -1,9 +1,9 @@
 export default function Trust() {
   const stats = [
-    { num: "128", unit: "k",   label: "Calls handled by Orchelix agents this year." },
-    { num: "3",   unit: ".4×", label: "Faster month-end close after Accounting OS." },
-    { num: "94",  unit: "%",   label: "Of qualified leads handed off with full context." },
-    { num: "14",  unit: "d",   label: "From first call to your first agent in production." },
+    { num: "24", unit: "/7",     label: "Coverage that never sleeps — every call answered, day or night." },
+    { num: "14", unit: "-day",   label: "From your first call to your first agent live in production." },
+    { num: "EN", unit: " · ES",  label: "Native bilingual on every agent, with French available on request." },
+    { num: "Audit", unit: "-ready", label: "Every call, email, and reconciled line logged and reviewable." },
   ];
 
   const industries = [

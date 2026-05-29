@@ -955,9 +955,9 @@ function AgentFinance() {
             </div>
             <OutcomeBar
               outcomes={[
-                { value: "3.4", unit: "×", label: "Faster month-end close after one quarter." },
-                { value: "$184", unit: "k", label: "Median AR collected in the first 30 days." },
-                { value: "96", unit: "%", label: "Transactions categorized without human touch." },
+                { value: "Daily", label: "Reconciliations kept current — so month-end isn't a scramble." },
+                { value: "Audit", unit: "-ready", label: "Every transaction categorized, matched, and logged for review." },
+                { value: "Human", unit: "-reviewed", label: "Your bookkeeper approves the decisions worth their time." },
               ]}
             />
             <AgentButtons
