@@ -58,7 +58,7 @@ export default function Hero() {
             <span
               className="font-normal italic"
               style={{
-                background: "linear-gradient(120deg, var(--teal-200) 0%, var(--teal-300) 45%, var(--teal-500) 100%)",
+                background: "linear-gradient(115deg, #E6FAF7 0%, var(--teal-300) 42%, var(--teal-600) 100%)",
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
                 WebkitTextFillColor: "transparent",
