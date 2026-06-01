@@ -41,7 +41,12 @@
       "Bash(n' | Select-String -Pattern 'preload)",
       "Bash(powershell -Command \"\\(Get-Content '.next\\\\server\\\\app\\\\page.html' -Raw\\) -split '`n' | Select-String -Pattern 'preload)",
       "Bash(hero-main)",
-      "Bash(fetchpriority' | Select-Object -First 10\")"
+      "Bash(fetchpriority' | Select-Object -First 10\")",
+      "Bash(vercel logs *)",
+      "Bash(xargs grep -l \"bold\\\\|split.*\\\\*\\\\*\")",
+      "WebFetch(domain:orhelix-website.vercel.app)",
+      "PowerShell(Get-CimInstance *)",
+      "PowerShell(Get-NetTCPConnection *)"
     ]
   }
 }
