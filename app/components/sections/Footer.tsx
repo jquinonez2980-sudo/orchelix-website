@@ -15,6 +15,7 @@ const columns = [
     links: [
       { label: "Contact",    href: "/#contact" },
       { label: "Pricing",    href: "/pricing" },
+      { label: "Blog",       href: "/blog" },
       { label: "Try Esmi",   href: "/try-esmi" },
       { label: "Book a demo", href: "/book" },
     ],

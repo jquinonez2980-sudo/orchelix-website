@@ -9,6 +9,7 @@ const NAV_LINKS = [
   { label: "Platform",   href: "/how-it-works" },
   { label: "Industries", href: "/industries" },
   { label: "Pricing",    href: "/pricing" },
+  { label: "Blog",       href: "/blog" },
   { label: "Try Esmi",   href: "/try-esmi" },
   { label: "About",      href: "/about" },
 ];
