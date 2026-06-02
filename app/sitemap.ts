@@ -35,6 +35,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/ai-receptionist/residential-design`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/ai-receptionist/stone-distribution`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/ai-receptionist/stone-fabrication`,  lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE}/es/blog`,                            lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
+    { url: `${BASE}/es/blog/que-es-un-recepcionista-ia`,                         lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE}/es/blog/recepcionista-ia-vs-servicio-de-contestadora`,        lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE}/es/blog/cuanto-cuesta-un-recepcionista-ia`,                  lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     ...blogPosts,
   ];
 }

@@ -1,44 +1,37 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Nav from "../../components/sections/Nav";
-import Footer from "../../components/sections/Footer";
-import JsonLd from "../../components/JsonLd";
-import ArticleBody from "../ArticleBody";
-import { getAllSlugs, getPost } from "../posts";
+import Nav from "../../../components/sections/Nav";
+import Footer from "../../../components/sections/Footer";
+import JsonLd from "../../../components/JsonLd";
+import ArticleBody from "../../../blog/ArticleBody";
+import { getAllEsSlugs, getEsPost } from "../es-posts";
 
 const SITE_URL = "https://www.orchelix.com";
-
-const EN_ES_SLUG_MAP: Record<string, string> = {
-  "what-is-an-ai-receptionist": "que-es-un-recepcionista-ia",
-  "ai-receptionist-vs-answering-service": "recepcionista-ia-vs-servicio-de-contestadora",
-  "how-much-does-an-ai-receptionist-cost": "cuanto-cuesta-un-recepcionista-ia",
-};
 
 type Props = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
-  return getAllSlugs().map((slug) => ({ slug }));
+  return getAllEsSlugs().map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = getEsPost(slug);
   if (!post) return {};
 
-  const url = `${SITE_URL}/blog/${post.slug}`;
+  const pagePath = `/es/blog/${post.slug}`;
+  const url = `${SITE_URL}${pagePath}`;
   return {
     title: post.title,
     description: post.description,
     keywords: post.keywords,
     alternates: {
-      canonical: `/blog/${post.slug}`,
-      ...(EN_ES_SLUG_MAP[post.slug] && {
-        languages: {
-          "en-US": `/blog/${post.slug}`,
-          "es-ES": `/es/blog/${EN_ES_SLUG_MAP[post.slug]}`,
-          "x-default": `/blog/${post.slug}`,
-        },
-      }),
+      canonical: pagePath,
+      languages: {
+        "en-US": `/blog/${post.enSlug}`,
+        "es-ES": pagePath,
+        "x-default": `/blog/${post.enSlug}`,
+      },
     },
     openGraph: {
       type: "article",
@@ -47,6 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: post.description,
       publishedTime: post.datePublished,
       modifiedTime: post.dateModified ?? post.datePublished,
+      locale: "es_MX",
     },
     twitter: {
       card: "summary_large_image",
@@ -57,19 +51,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 function formatDate(iso: string): string {
-  return new Date(iso + "T00:00:00").toLocaleDateString("en-US", {
+  return new Date(iso + "T00:00:00").toLocaleDateString("es-MX", {
     year: "numeric",
     month: "long",
     day: "numeric",
   });
 }
 
-export default async function ArticlePage({ params }: Props) {
+export default async function EsArticlePage({ params }: Props) {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = getEsPost(slug);
   if (!post) notFound();
 
-  const url = `${SITE_URL}/blog/${post.slug}`;
+  const pagePath = `/es/blog/${post.slug}`;
+  const url = `${SITE_URL}${pagePath}`;
 
   const articleJsonLd = {
     "@context": "https://schema.org",
@@ -78,6 +73,7 @@ export default async function ArticlePage({ params }: Props) {
     description: post.description,
     datePublished: post.datePublished,
     dateModified: post.dateModified ?? post.datePublished,
+    inLanguage: "es",
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
     url,
     image: `${SITE_URL}/og-image.jpg`,
@@ -90,8 +86,8 @@ export default async function ArticlePage({ params }: Props) {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE_URL}/blog` },
+      { "@type": "ListItem", position: 1, name: "Inicio", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE_URL}/es/blog` },
       { "@type": "ListItem", position: 3, name: post.title, item: url },
     ],
   };
@@ -100,15 +96,18 @@ export default async function ArticlePage({ params }: Props) {
     <>
       <JsonLd data={[articleJsonLd, breadcrumbJsonLd]} />
       <Nav />
-      <main id="main-content" className="px-6 pt-24 pb-20 sm:px-8 sm:pt-28 sm:pb-24 lg:px-10 lg:pt-[132px] lg:pb-28">
+      <main
+        id="main-content"
+        className="px-6 pt-24 pb-20 sm:px-8 sm:pt-28 sm:pb-24 lg:px-10 lg:pt-[132px] lg:pb-28"
+      >
         <article className="mx-auto max-w-[720px]">
           <nav className="mb-6" style={{ fontFamily: "var(--font-mono)" }}>
             <a
-              href="/blog"
+              href="/es/blog"
               className="text-[12px] font-medium uppercase tracking-[0.12em]"
               style={{ color: "var(--teal-700)" }}
             >
-              ← All articles
+              ← Todos los artículos
             </a>
           </nav>
 
@@ -119,7 +118,7 @@ export default async function ArticlePage({ params }: Props) {
             >
               <time dateTime={post.datePublished}>{formatDate(post.datePublished)}</time>
               <span className="inline-block h-1 w-1 rounded-full bg-teal-500" />
-              <span>{post.readingMinutes} min read</span>
+              <span>{post.readingMinutes} min de lectura</span>
             </div>
             <h1
               className="text-[34px] font-medium leading-[1.08] tracking-[-0.03em] sm:text-[44px]"
@@ -143,7 +142,6 @@ export default async function ArticlePage({ params }: Props) {
 
           <ArticleBody body={post.body} />
 
-          {/* Related / next steps */}
           <aside
             className="mt-14 rounded-[18px] border p-6 sm:p-7"
             style={{ borderColor: "var(--line)", background: "var(--surface-2)" }}
@@ -152,7 +150,7 @@ export default async function ArticlePage({ params }: Props) {
               className="mb-4 text-[16px] font-semibold"
               style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
             >
-              Keep reading
+              Seguir leyendo
             </h2>
             <ul className="flex flex-col gap-2.5">
               {post.related.map((r) => (
