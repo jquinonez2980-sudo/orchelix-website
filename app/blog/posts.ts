@@ -295,6 +295,340 @@ export const POSTS: Post[] = [
       { label: "AI Receptionist — how Esmi works", href: "/ai-receptionist" },
     ],
   },
+  {
+    slug: "best-ai-receptionist-for-small-business",
+    title: "Best AI Receptionist for Small Business (2026 Buyer's Guide)",
+    description:
+      "A practical buyer's guide to AI receptionists for small business: the features that actually matter, what to look for, how much it costs, and which types of businesses see the fastest ROI.",
+    datePublished: "2026-06-03",
+    author: "Orchelix",
+    readingMinutes: 8,
+    keywords: [
+      "best ai receptionist for small business",
+      "ai receptionist small business",
+      "top ai receptionist",
+      "ai phone answering small business",
+    ],
+    body: [
+      {
+        type: "p",
+        text: "Most small businesses don't lose leads because of their product or service. They lose them because no one answered the phone. An AI receptionist solves that — but not all of them solve it the same way. This guide breaks down what actually matters when evaluating one for a small business.",
+      },
+      { type: "h2", text: "What to look for in a small business AI receptionist" },
+      {
+        type: "p",
+        text: "The feature list on any AI receptionist's website will look roughly the same. What separates a useful tool from a frustrating one comes down to a few specifics.",
+      },
+      { type: "h3", text: "24/7 availability — not just extended hours" },
+      {
+        type: "p",
+        text: "Some services answer calls until 9 PM. Others answer at 2 AM when a homeowner's AC breaks or a client needs to know their rights. Know which you're actually buying.",
+      },
+      { type: "h3", text: "Appointment booking that actually works" },
+      {
+        type: "p",
+        text: "Many AI receptionists capture a message and say someone will call back. That's an answering service with a chatbot in front of it. **Real appointment booking** means the AI reads your live calendar, offers available slots, and confirms the booking before the caller hangs up — no callback required.",
+      },
+      { type: "h3", text: "Lead qualification, not just lead capture" },
+      {
+        type: "p",
+        text: "There's a difference between 'someone called' and 'a qualified lead called, here's what they need, and here's when they're booked.' The second is what your team actually needs to show up prepared and close more.",
+      },
+      { type: "h3", text: "Bilingual support if your market needs it" },
+      {
+        type: "p",
+        text: "In South Florida, South Texas, or any bilingual market, an AI receptionist that only speaks English is leaving a significant portion of your callers underserved. [Esmi](/ai-receptionist) handles both English and Spanish on the same call — callers don't need to select a language option, it adapts.",
+      },
+      { type: "h3", text: "Human handoff with context" },
+      {
+        type: "p",
+        text: "When a call genuinely needs a person, the handoff should come with a summary — who's calling, why, and what's already been covered. Starting from scratch after a transfer is a bad experience that costs you the conversion.",
+      },
+      { type: "h3", text: "Transparent pricing" },
+      {
+        type: "p",
+        text: "Watch for per-minute billing, call overage fees, and setup charges that appear after you've signed. Look for flat monthly pricing that covers standard usage without surprises. See [how Orchelix prices Esmi](/pricing).",
+      },
+      { type: "h2", text: "Which small businesses benefit most?" },
+      {
+        type: "p",
+        text: "Any business that relies on inbound calls to generate revenue benefits from an AI receptionist. The ROI is highest where:",
+      },
+      {
+        type: "ul",
+        items: [
+          "**Missed calls equal missed jobs** — HVAC, plumbing, home services, auto repair",
+          "**New client intake is time-sensitive** — law firms, dental offices, medical practices",
+          "**Leads come in outside business hours** — real estate, home renovation, event services",
+          "**Staff time is expensive** — professional services where every hour has a billing rate",
+        ],
+      },
+      {
+        type: "p",
+        text: "We've built industry-specific versions of Esmi for [HVAC companies](/ai-receptionist/hvac), [dental offices](/ai-receptionist/dental), [law firms](/ai-receptionist/law-firm), [real estate agents](/ai-receptionist/real-estate), [interior designers](/ai-receptionist/residential-design), [stone distributors](/ai-receptionist/stone-distribution), and [stone fabricators](/ai-receptionist/stone-fabrication).",
+      },
+      { type: "h2", text: "How much does a small business AI receptionist cost?" },
+      {
+        type: "p",
+        text: "AI receptionist pricing ranges from around $200/month on the low end to $1,500+/month for full-service implementations with custom integration, dedicated support, and high call volumes. We cover this in detail in our [AI receptionist cost breakdown](/blog/how-much-does-an-ai-receptionist-cost).",
+      },
+      {
+        type: "p",
+        text: "The useful benchmark isn't the cost of the tool — it's the cost of not having it. A single missed HVAC installation, a law firm intake call that went to voicemail, or a real estate lead that booked with a competitor typically exceeds a month of AI receptionist fees.",
+      },
+      {
+        type: "callout",
+        text: "Esmi pilots start with a dedicated setup session and go live in 2–3 weeks. No long contracts. [See pricing →](/pricing)",
+      },
+      { type: "h2", text: "Questions to ask before you buy" },
+      {
+        type: "ul",
+        items: [
+          "Does it read my live calendar and book real appointments, or does it take messages?",
+          "What happens when the AI can't handle a call — how does the handoff work?",
+          "Is setup included, or is there a separate onboarding fee?",
+          "How are scripts updated when my business changes?",
+          "Is pricing flat monthly, or are there per-minute or overage charges?",
+        ],
+      },
+      { type: "h2", text: "The bottom line" },
+      {
+        type: "p",
+        text: "The best AI receptionist for a small business is the one that fits how your operation actually works — your calendar, your scripts, your escalation rules — and that stays out of the way while making sure every caller is heard. [Try Esmi live](/try-esmi) to see what that looks like in practice, or [book a demo](/book) and we'll configure a version specific to your business.",
+      },
+    ],
+    related: [
+      { label: "How much does an AI receptionist cost?", href: "/blog/how-much-does-an-ai-receptionist-cost" },
+      { label: "AI receptionist vs. answering service", href: "/blog/ai-receptionist-vs-answering-service" },
+      { label: "AI Receptionist — how Esmi works", href: "/ai-receptionist" },
+    ],
+  },
+
+  {
+    slug: "ai-receptionist-for-hvac-companies",
+    title: "How HVAC Companies Are Using AI to Handle Calls 24/7",
+    description:
+      "HVAC companies are using AI receptionists to answer emergency calls, book service appointments, and qualify jobs without adding staff. Here's how it works and what to expect.",
+    datePublished: "2026-06-03",
+    author: "Orchelix",
+    readingMinutes: 6,
+    keywords: [
+      "ai receptionist for hvac",
+      "hvac answering service ai",
+      "ai phone answering hvac",
+      "virtual receptionist hvac company",
+    ],
+    body: [
+      {
+        type: "p",
+        text: "The phone is the lifeline of any HVAC business. Customers don't schedule an AC repair weeks in advance — they call when something stops working, often outside business hours, often during the same heat wave that's already flooded your schedule. The companies winning in that moment aren't hiring more office staff. They're using AI to answer every call.",
+      },
+      { type: "h2", text: "The HVAC call problem" },
+      {
+        type: "p",
+        text: "The economics of missed HVAC calls are harsh. A single installation job is worth $3,000–$10,000. A service call is $150–$600. And the margin on each job depends on booking efficiency — how fast you get a tech to the right job with the right information.",
+      },
+      {
+        type: "p",
+        text: "When calls go unanswered — during lunch, after 5 PM, on weekends, or during the summer surge — that work goes to whoever picks up the phone first. In most markets, that's a competitor.",
+      },
+      {
+        type: "callout",
+        text: "During peak season, a single missed call can mean losing a $5,000+ installation to a competitor who answered.",
+      },
+      { type: "h2", text: "What an AI receptionist does for an HVAC company" },
+      {
+        type: "p",
+        text: "An [AI receptionist for HVAC](/ai-receptionist/hvac) handles the first conversation with every caller — whether that's a homeowner with a broken unit, a property manager scheduling preventive maintenance, or a commercial account asking about a service contract.",
+      },
+      {
+        type: "p",
+        text: "On a typical call, Esmi:",
+      },
+      {
+        type: "ul",
+        items: [
+          "Greets the caller and identifies the type of request (repair, installation, maintenance)",
+          "Collects job details: unit type, symptoms, age, property address",
+          "Checks your calendar and books the appointment — or routes emergency calls to your on-call tech",
+          "Sends a confirmation to the caller and a job summary to your dispatch team",
+        ],
+      },
+      {
+        type: "p",
+        text: "Your team picks up the route with everything they need to show up prepared. No callbacks, no missing information, no repeat conversations.",
+      },
+      { type: "h2", text: "Handling the after-hours emergency" },
+      {
+        type: "p",
+        text: "After-hours emergency calls are where most HVAC businesses lose the most revenue. A unit that fails at 9 PM generates a call that hits voicemail, a callback that comes the next morning, and a customer who may have already called three other companies by then.",
+      },
+      {
+        type: "p",
+        text: "Esmi handles emergency calls around the clock. You set the escalation rules: for true emergencies (complete failure, elderly resident, commercial account), Esmi connects the caller to your on-call tech immediately. For non-urgent after-hours calls, it books a first-available appointment and sends the summary.",
+      },
+      {
+        type: "p",
+        text: "The caller gets a response. Your tech gets context. You get the job.",
+      },
+      { type: "h2", text: "Appointment booking and dispatch" },
+      {
+        type: "p",
+        text: "Most answering services take a message and leave a callback. That creates a loop: you call back, the customer doesn't pick up, they call back, you're on a job. The loop costs time and loses leads.",
+      },
+      {
+        type: "p",
+        text: "Esmi reads your live calendar and books the appointment in real time — before the caller hangs up. Your dispatch board fills with confirmed, qualified appointments instead of a list of callbacks.",
+      },
+      {
+        type: "p",
+        text: "For multi-tech operations, Esmi can route bookings by territory, service type, or technician availability — configured during setup to match how you actually dispatch.",
+      },
+      { type: "h2", text: "What it costs and what you get back" },
+      {
+        type: "p",
+        text: "AI receptionist costs for home service businesses typically run $300–$800/month for full-service implementation. [See our pricing page](/pricing) for what's included.",
+      },
+      {
+        type: "p",
+        text: "The comparison that matters: a single recovered installation worth $5,000 that would otherwise have gone to voicemail pays for more than a year of service. Most HVAC businesses recover the cost in the first month. See the full [AI receptionist cost breakdown](/blog/how-much-does-an-ai-receptionist-cost).",
+      },
+      { type: "h2", text: "Is an AI receptionist right for your HVAC company?" },
+      {
+        type: "p",
+        text: "If you're getting more than 10 inbound calls per day and any of those calls are going unanswered, to voicemail, or to a part-time assistant who can't book appointments — an AI receptionist will likely pay for itself quickly.",
+      },
+      {
+        type: "p",
+        text: "The businesses that see the fastest ROI are those with seasonal volume spikes, after-hours emergency call volume, or multi-tech operations where dispatch coordination is a bottleneck.",
+      },
+      {
+        type: "p",
+        text: "[Try Esmi live](/try-esmi) to hear what the AI sounds like, or [book a demo](/book) and we'll configure it for your service area and calendar.",
+      },
+    ],
+    related: [
+      { label: "AI Receptionist for HVAC Companies", href: "/ai-receptionist/hvac" },
+      { label: "Best AI receptionist for small business", href: "/blog/best-ai-receptionist-for-small-business" },
+      { label: "How much does an AI receptionist cost?", href: "/blog/how-much-does-an-ai-receptionist-cost" },
+    ],
+  },
+
+  {
+    slug: "law-firm-missed-calls-ai-receptionist",
+    title: "Why Law Firms Lose Clients to Voicemail (And How to Fix It)",
+    description:
+      "Most law firms lose new client inquiries to voicemail without realizing it. Here's why it happens, what it's costing your firm, and how AI intake solves it for practices of all sizes.",
+    datePublished: "2026-06-03",
+    author: "Orchelix",
+    readingMinutes: 6,
+    keywords: [
+      "law firm missed calls",
+      "ai receptionist for law firms",
+      "legal intake ai",
+      "law firm voicemail clients",
+    ],
+    body: [
+      {
+        type: "p",
+        text: "A potential client with a legal problem calls your firm. They get voicemail. They hang up and call the next firm on the list. You never know the call happened.",
+      },
+      {
+        type: "p",
+        text: "This is not a rare scenario. For most law firms, it's a daily occurrence — and the cost is invisible because you can't count the clients you never knew you lost.",
+      },
+      { type: "h2", text: "The law firm voicemail problem" },
+      {
+        type: "p",
+        text: "Legal matters arrive urgently. Someone was just in an accident. Someone received a lawsuit. Someone needs to understand their rights before a deadline. These calls don't wait.",
+      },
+      {
+        type: "p",
+        text: "The firm that answers — at 7 PM on a Tuesday, on a Saturday morning, or in the middle of a trial week — gets the case. The firm that sends the call to voicemail gets a callback that may never come.",
+      },
+      {
+        type: "callout",
+        text: "In competitive legal markets, the average caller contacts 3–5 firms before booking a consultation. Whoever answers first wins.",
+      },
+      { type: "h2", text: "What happens when potential clients reach voicemail" },
+      {
+        type: "p",
+        text: "Most people who reach voicemail when they have an urgent legal question don't leave a message — they move on. Of those who do leave a message, a significant share have already found another firm by the time you call back.",
+      },
+      {
+        type: "p",
+        text: "For high-value practice areas — personal injury, criminal defense, business litigation, estate planning — a single missed intake call can represent $5,000–$50,000 in lost revenue.",
+      },
+      { type: "h2", text: "How much are missed calls costing your firm?" },
+      {
+        type: "p",
+        text: "A rough calculation: if your firm misses 3 potential client calls per week, and 1 in 4 would have become a client at an average case value of $8,000:",
+      },
+      {
+        type: "ul",
+        items: [
+          "3 missed calls/week × 52 weeks = 156 missed calls/year",
+          "1 in 4 converts = 39 potential clients lost",
+          "At $8,000 average case value = $312,000 in missed revenue per year",
+        ],
+      },
+      {
+        type: "p",
+        text: "The numbers shift by practice area and average case value — but the direction is always the same. Understanding the [full cost of an AI receptionist](/blog/how-much-does-an-ai-receptionist-cost) becomes straightforward when set against numbers like these.",
+      },
+      { type: "h2", text: "What AI intake looks like for a law firm" },
+      {
+        type: "p",
+        text: "An [AI receptionist for law firms](/ai-receptionist/law-firm) handles the first contact with every potential client — 24/7, consistently, without the variable quality of whoever happens to answer the phone that day.",
+      },
+      {
+        type: "p",
+        text: "On a typical intake call, Esmi:",
+      },
+      {
+        type: "ul",
+        items: [
+          "Answers immediately, greets the caller professionally, and identifies the nature of the matter",
+          "Asks qualifying questions: practice area, urgency, brief description of the situation",
+          "Books a consultation on the attorney's calendar, or escalates urgent matters to the on-call attorney immediately",
+          "Sends a full call summary to the intake coordinator or attorney before the consultation",
+        ],
+      },
+      {
+        type: "p",
+        text: "The result is a consistent intake process that runs at any hour, at any call volume, without pulling attorneys or paralegals off billable work.",
+      },
+      { type: "h2", text: "What to look for in an AI receptionist for legal" },
+      {
+        type: "p",
+        text: "Not every AI receptionist is built for the specific requirements of legal intake. When evaluating options:",
+      },
+      {
+        type: "ul",
+        items: [
+          "**24/7 intake** — not extended hours, but genuinely around the clock including weekends",
+          "**Escalation for urgent matters** — arrests, accidents, and time-sensitive situations need immediate routing, not a next-morning callback",
+          "**Configurable by practice area** — a personal injury firm and a real estate law firm need different intake flows",
+          "**Minimum data collection** — collect what's needed to qualify and schedule; leave detailed case information for the consultation",
+          "**Bilingual capability** — if any portion of your client base speaks Spanish, this is non-negotiable",
+        ],
+      },
+      { type: "h2", text: "The bottom line" },
+      {
+        type: "p",
+        text: "The math on AI intake for law firms is straightforward: if you're missing more than one potential client call per month, the cost of an AI receptionist is covered. Everything after that is recovered revenue.",
+      },
+      {
+        type: "p",
+        text: "[Try Esmi live](/try-esmi) to hear what intake sounds like for a law firm, or [book a demo](/book) and we'll walk you through a configuration specific to your practice area.",
+      },
+    ],
+    related: [
+      { label: "AI Receptionist for Law Firms", href: "/ai-receptionist/law-firm" },
+      { label: "Best AI receptionist for small business", href: "/blog/best-ai-receptionist-for-small-business" },
+      { label: "What is an AI receptionist?", href: "/blog/what-is-an-ai-receptionist" },
+    ],
+  },
 ];
 
 export function getAllSlugs(): string[] {
