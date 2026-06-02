@@ -122,7 +122,7 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 function ProofBar() {
   return (
     <div
-      className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] leading-none font-medium tracking-[0.02em] text-white/45"
+      className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] leading-none font-medium tracking-[0.02em] text-white/70"
       style={{ fontFamily: "var(--font-mono)" }}
     >
       <a

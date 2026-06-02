@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Inline Tailwind's atomic CSS into <head> instead of a render-blocking
+  // <link> — removes the CSS round trip for first-time visitors (FCP/LCP win).
+  experimental: {
+    inlineCss: true,
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 2592000, // 30 days — avoid re-validating optimized images

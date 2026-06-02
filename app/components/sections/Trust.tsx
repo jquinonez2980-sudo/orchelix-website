@@ -55,7 +55,7 @@ export default function Trust() {
               lineHeight: 1,
               letterSpacing: "0.18em",
               textTransform: "uppercase",
-              color: "var(--ink-3)",
+              color: "var(--ink-2)",
             }}
           >
             Built for
@@ -69,8 +69,7 @@ export default function Trust() {
                 fontSize: 14,
                 lineHeight: 1,
                 letterSpacing: "-0.005em",
-                color: "var(--ink-3)",
-                opacity: 0.75,
+                color: "var(--ink-2)",
               }}
             >
               {industry}
@@ -92,7 +91,7 @@ export default function Trust() {
                 }}
               >
                 {num}
-                <span style={{ color: "var(--teal-500)", fontWeight: 500 }}>{unit}</span>
+                <span style={{ color: "var(--teal-700)", fontWeight: 500 }}>{unit}</span>
               </div>
               <div
                 style={{
