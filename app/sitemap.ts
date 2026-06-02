@@ -28,6 +28,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/terms`,         lastModified: now, changeFrequency: "yearly",  priority: 0.3 },
     { url: `${BASE}/es`,            lastModified: now, changeFrequency: "weekly",  priority: 0.9 },
     { url: `${BASE}/es/recepcionista-ia`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE}/ai-receptionist/hvac`,               lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE}/ai-receptionist/dental`,             lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE}/ai-receptionist/law-firm`,           lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE}/ai-receptionist/real-estate`,        lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE}/ai-receptionist/residential-design`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE}/ai-receptionist/stone-distribution`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE}/ai-receptionist/stone-fabrication`,  lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     ...blogPosts,
   ];
 }
