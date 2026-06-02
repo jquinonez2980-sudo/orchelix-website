@@ -23,6 +23,92 @@ export type Post = {
 
 export const POSTS: Post[] = [
   {
+    slug: "what-is-an-ai-receptionist",
+    title: "What Is an AI Receptionist? (And How It Works)",
+    description:
+      "An AI receptionist is a virtual phone agent that answers calls, qualifies leads, and books appointments automatically. Here's how it works and whether it's right for your business.",
+    datePublished: "2026-06-02",
+    author: "Orchelix",
+    readingMinutes: 6,
+    keywords: [
+      "what is an ai receptionist",
+      "ai receptionist",
+      "how does an ai receptionist work",
+      "ai virtual receptionist",
+    ],
+    body: [
+      {
+        type: "p",
+        text: "**An AI receptionist is a virtual phone agent that answers your incoming calls automatically — greeting callers, answering questions, qualifying leads, and booking appointments — without a person picking up the phone.** It works 24/7 and hands off to your team when a call needs a human. Think of it as a front-desk employee that never sleeps, never takes a lunch break, and never misses a ring.",
+      },
+      { type: "h2", text: "How does an AI receptionist work?" },
+      {
+        type: "p",
+        text: "A modern AI receptionist combines natural-sounding voice, an understanding of your business, and connections to your calendar and CRM. A typical call goes like this:",
+      },
+      {
+        type: "ul",
+        items: [
+          "**It answers instantly** — on the first ring, any hour of the day.",
+          "**It understands the caller** — using natural conversation, not a rigid phone tree.",
+          "**It takes action** — answers FAQs, qualifies the lead, and books an appointment on your live calendar.",
+          "**It confirms** — sends a text confirmation and logs a summary to your CRM.",
+          "**It escalates when needed** — routes complex or sensitive calls to a human with full context.",
+        ],
+      },
+      {
+        type: "p",
+        text: "The setup happens up front: the agent is trained on your services, hours, scripts, and FAQs so it sounds like your front desk — see [how Esmi works](/ai-receptionist) for a concrete example.",
+      },
+      { type: "h2", text: "What can an AI receptionist do?" },
+      {
+        type: "ul",
+        items: [
+          "Answer calls 24/7, including nights, weekends, and overflow when your team is busy.",
+          "Qualify leads by asking the questions your sales team would, then scoring and logging them.",
+          "Book, reschedule, and confirm appointments directly on your calendar.",
+          "Answer common questions about hours, location, services, and pricing.",
+          "Operate bilingually — for example, switching between English and Spanish mid-call.",
+          "Capture every call as a summary and transcript so nothing falls through the cracks.",
+        ],
+      },
+      { type: "h2", text: "How is it different from other options?" },
+      {
+        type: "p",
+        text: "Unlike a traditional answering service that mostly takes messages, an AI receptionist resolves the call — see our full breakdown in [AI receptionist vs. answering service](/blog/ai-receptionist-vs-answering-service). And unlike hiring a full-time front-desk employee, it covers every hour without salary, benefits, or sick days. Curious about price? We cover it in [How much does an AI receptionist cost?](/blog/how-much-does-an-ai-receptionist-cost).",
+      },
+      { type: "h2", text: "Is an AI receptionist right for your business?" },
+      {
+        type: "p",
+        text: "It's an especially strong fit if any of these sound familiar:",
+      },
+      {
+        type: "ul",
+        items: [
+          "You're losing calls — and revenue — after hours or when staff are busy.",
+          "A booked appointment is worth far more than the cost of answering the call.",
+          "Your call volume swings unpredictably and is hard to staff for.",
+          "You serve customers in more than one language.",
+          "You want faster speed-to-answer without growing headcount.",
+        ],
+      },
+      {
+        type: "callout",
+        text: "If a missed call can cost you a customer, an AI receptionist is usually the highest-leverage automation a service business can add.",
+      },
+      { type: "h2", text: "Meet Esmi" },
+      {
+        type: "p",
+        text: "Esmi is the AI receptionist from Orchelix — bilingual, available 24/7, and built to book appointments end-to-end with a human handoff when it matters. [See how Esmi works](/ai-receptionist), [try it live](/try-esmi), or [book a demo](/book) to see it on your own call flow.",
+      },
+    ],
+    related: [
+      { label: "AI receptionist vs. answering service", href: "/blog/ai-receptionist-vs-answering-service" },
+      { label: "How much does an AI receptionist cost?", href: "/blog/how-much-does-an-ai-receptionist-cost" },
+      { label: "AI Receptionist — how Esmi works", href: "/ai-receptionist" },
+    ],
+  },
+  {
     slug: "ai-receptionist-vs-answering-service",
     title: "AI Receptionist vs. Answering Service: Which Is Right for Your Business?",
     description:
@@ -110,9 +196,9 @@ export const POSTS: Post[] = [
       },
     ],
     related: [
+      { label: "What is an AI receptionist?", href: "/blog/what-is-an-ai-receptionist" },
       { label: "How much does an AI receptionist cost?", href: "/blog/how-much-does-an-ai-receptionist-cost" },
       { label: "AI Receptionist — how Esmi works", href: "/ai-receptionist" },
-      { label: "Book a demo", href: "/book" },
     ],
   },
   {
@@ -204,9 +290,9 @@ export const POSTS: Post[] = [
       },
     ],
     related: [
+      { label: "What is an AI receptionist?", href: "/blog/what-is-an-ai-receptionist" },
       { label: "AI receptionist vs. answering service", href: "/blog/ai-receptionist-vs-answering-service" },
       { label: "AI Receptionist — how Esmi works", href: "/ai-receptionist" },
-      { label: "Pricing", href: "/pricing" },
     ],
   },
 ];
