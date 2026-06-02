@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import JsonLd from "@/app/components/JsonLd";
 import Nav from "@/app/components/sections/Nav";
 import Footer from "@/app/components/sections/Footer";
 import { bold } from "@/app/lib/bold";
@@ -581,11 +582,22 @@ const FAQS = [
 function FAQ() {
   const [openIdx, setOpenIdx] = useState<number | null>(0);
 
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQS.map((faq) => ({
+      "@type": "Question",
+      name: faq.q,
+      acceptedAnswer: { "@type": "Answer", text: faq.a },
+    })),
+  };
+
   return (
     <section
       className="px-6 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-24"
       style={{ borderTop: "1px solid var(--line)" }}
     >
+      <JsonLd data={faqJsonLd} />
       <div className="mx-auto max-w-[1200px]">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[360px_1fr] lg:gap-20">
           <div>

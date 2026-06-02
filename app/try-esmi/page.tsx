@@ -1,7 +1,32 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Nav from "../components/sections/Nav";
 import Footer from "../components/sections/Footer";
 import EsmiChat from "./EsmiChat";
+import JsonLd from "../components/JsonLd";
+
+const SITE_URL = "https://www.orchelix.com";
+
+export const metadata: Metadata = {
+  title: "Try Esmi — Live AI Receptionist Demo",
+  description:
+    "Talk to Esmi, Orchelix's bilingual (EN/ES) AI receptionist. See how it answers calls, qualifies leads, and books appointments 24/7 for South Florida businesses.",
+  alternates: { canonical: "/try-esmi" },
+};
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Try Esmi — AI Receptionist Demo",
+      item: `${SITE_URL}/try-esmi`,
+    },
+  ],
+};
 
 const STATS = [
   { k: "Pickup",    v: "1st",  u: " ring",      meta: "Answered instantly — no hold queue, no voicemail" },
@@ -57,6 +82,7 @@ const CYAN = "#00F0FF";
 export default function TryEsmiPage() {
   return (
     <div className="esmi-dark" style={{ background: "var(--esmi-bg)", color: "var(--esmi-text)" }}>
+      <JsonLd data={breadcrumbJsonLd} />
       <Nav theme="dark" />
       <main id="top">
         <EsmiHero />

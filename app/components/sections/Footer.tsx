@@ -4,7 +4,7 @@ const columns = [
   {
     h: "Agents",
     links: [
-      { label: "Virtual Receptionist", href: "/solutions" },
+      { label: "Virtual Receptionist", href: "/ai-receptionist" },
       { label: "Sales & Marketing",    href: "/solutions" },
       { label: "Accounting OS",        href: "/solutions" },
       { label: "Industries",            href: "/industries" },

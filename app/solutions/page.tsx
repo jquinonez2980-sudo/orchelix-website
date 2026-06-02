@@ -1,16 +1,59 @@
 import type { Metadata } from "next";
 import Nav from "@/app/components/sections/Nav";
 import Footer from "@/app/components/sections/Footer";
+import JsonLd from "@/app/components/JsonLd";
+
+const SITE_URL = "https://www.orchelix.com";
 
 export const metadata: Metadata = {
   title: "Solutions — Orchelix AI Consulting",
   description:
     "Three intelligent agents, one operator console. Esmi Virtual Receptionist, Revenue-Ops, and Accounting & Finance OS — built to run alongside your team.",
+  alternates: { canonical: "/solutions" },
+};
+
+const SERVICES = [
+  {
+    name: "Esmi — AI Virtual Receptionist",
+    description:
+      "24/7 bilingual (EN/ES) AI receptionist that answers calls, qualifies callers, and books appointments via voice, SMS, and email.",
+    serviceType: "AI Virtual Receptionist",
+  },
+  {
+    name: "Revenue-Ops Agents",
+    description:
+      "AI agents that qualify pipeline, follow up across HubSpot, Salesforce, Pipedrive, and Zoho, and close the loop on every lead.",
+    serviceType: "AI Sales Automation",
+  },
+  {
+    name: "Firm OS — Accounting & Finance",
+    description:
+      "Multi-agent operations with financial automation built in — bookkeeping, financial close, and reporting with human oversight.",
+    serviceType: "AI Financial Operations",
+  },
+];
+
+const servicesJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  itemListElement: SERVICES.map((s, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    item: {
+      "@type": "Service",
+      name: s.name,
+      description: s.description,
+      serviceType: s.serviceType,
+      provider: { "@id": `${SITE_URL}/#org` },
+      areaServed: { "@type": "AdministrativeArea", name: "South Florida" },
+    },
+  })),
 };
 
 export default function SolutionsPage() {
   return (
     <>
+      <JsonLd data={servicesJsonLd} />
       <Nav />
       <main id="top">
         <SolHero />
