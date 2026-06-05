@@ -1,5 +1,6 @@
 "use client";
 
+import { SignInButton, UserButton } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import {
   acumenApi,
@@ -74,16 +75,19 @@ export default function AcumenDashboard() {
             Books for {period}
           </h1>
         </div>
-        <label className="flex items-center gap-2 text-[13px]" style={{ fontFamily: "var(--font-mono)", color: "var(--ink-3)" }}>
-          Period
-          <input
-            value={period}
-            onChange={(e) => setPeriod(e.target.value)}
-            placeholder="YYYY-MM"
-            className="w-[110px] rounded-lg border px-3 py-2 text-[14px]"
-            style={{ borderColor: "var(--line-strong)", color: "var(--ink)", fontFamily: "var(--font-mono)" }}
-          />
-        </label>
+        <div className="flex items-center gap-4">
+          <label className="flex items-center gap-2 text-[13px]" style={{ fontFamily: "var(--font-mono)", color: "var(--ink-3)" }}>
+            Period
+            <input
+              value={period}
+              onChange={(e) => setPeriod(e.target.value)}
+              placeholder="YYYY-MM"
+              className="w-[110px] rounded-lg border px-3 py-2 text-[14px]"
+              style={{ borderColor: "var(--line-strong)", color: "var(--ink)", fontFamily: "var(--font-mono)" }}
+            />
+          </label>
+          <UserButton />
+        </div>
       </header>
 
       {error && (
@@ -202,9 +206,16 @@ function Gated() {
         The operator console shows live BigQuery data and is restricted to your team.
         Connect an identity provider (Clerk) to enable sign-in — see app/app/README.md.
       </p>
-      <a href="/acumen" className="mt-6 inline-flex h-11 items-center rounded-xl px-5 text-[14px] font-semibold" style={{ fontFamily: "var(--font-display)", background: "var(--gold-500)", color: "#1A1206" }}>
-        See the showcase →
-      </a>
+      <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <SignInButton mode="modal">
+          <button className="inline-flex h-11 items-center rounded-xl px-5 text-[14px] font-semibold" style={{ fontFamily: "var(--font-display)", background: "var(--gold-500)", color: "#1A1206" }}>
+            Sign in →
+          </button>
+        </SignInButton>
+        <a href="/acumen" className="inline-flex h-11 items-center rounded-xl border px-5 text-[14px] font-medium" style={{ fontFamily: "var(--font-display)", borderColor: "var(--line-strong)", color: "var(--ink-2)" }}>
+          See the showcase
+        </a>
+      </div>
     </div>
   );
 }

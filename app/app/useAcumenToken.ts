@@ -1,29 +1,28 @@
 "use client";
 
-/* ───────────────────────────────────────────────────────────────────────────
-   useAcumenToken — supplies the bearer token for AcumenAI dashboard API calls.
+import { useAuth } from "@clerk/nextjs";
+import { useEffect, useState } from "react";
 
-   STUB until Clerk (or another provider) is installed. It returns no token, so the
-   dashboard renders its "sign-in required" state and never calls /api/live/* with a
-   bad token. This keeps the site building WITHOUT @clerk/nextjs installed.
-
-   To wire Clerk (one change — see app/app/README.md):
-     1. npm i @clerk/nextjs
-     2. Add <ClerkProvider> in app/layout.tsx and middleware.ts (see README)
-     3. Replace the body of this hook with:
-
-          import { useAuth } from "@clerk/nextjs";
-          export function useAcumenToken() {
-            const { getToken, isSignedIn, isLoaded } = useAuth();
-            const [token, setToken] = useState<string | null>(null);
-            useEffect(() => {
-              if (isSignedIn) getToken().then(setToken);
-            }, [isSignedIn, getToken]);
-            return { token, ready: isLoaded, signedIn: !!isSignedIn };
-          }
-   ─────────────────────────────────────────────────────────────────────────── */
+/* Supplies the bearer token for AcumenAI dashboard API calls, from the Clerk
+   session. getToken() returns a short-lived JWT that the Cloud Run API validates
+   against Clerk's JWKS. All setState happens in async callbacks / a microtask to
+   satisfy react-hooks/set-state-in-effect. */
 
 export function useAcumenToken(): { token: string | null; ready: boolean; signedIn: boolean } {
-  // No provider wired yet → no token, ready=true, signedIn=false.
-  return { token: null, ready: true, signedIn: false };
+  const { getToken, isSignedIn, isLoaded } = useAuth();
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    if (!isSignedIn) {
+      queueMicrotask(() => { if (active) setToken(null); });
+      return () => { active = false; };
+    }
+    getToken()
+      .then((t) => { if (active) setToken(t); })
+      .catch(() => { if (active) setToken(null); });
+    return () => { active = false; };
+  }, [isSignedIn, getToken]);
+
+  return { token, ready: isLoaded, signedIn: !!isSignedIn };
 }
