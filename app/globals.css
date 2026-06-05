@@ -29,6 +29,20 @@
   --color-teal-800: #095C53;
   --color-teal-900: #053D37;
 
+  /* Gold — AcumenAI signature accent (the accounting & finance product).
+     Teal is the shared Orchelix house accent; gold differentiates AcumenAI
+     (navy + gold = premium-finance / ledger / audit). */
+  --color-gold-50:  #FBF3DD;
+  --color-gold-100: #F6E4B8;
+  --color-gold-200: #EDD083;
+  --color-gold-300: #E3BC54;
+  --color-gold-400: #DBAF34;
+  --color-gold-500: #D9A21B;
+  --color-gold-600: #B7791F;
+  --color-gold-700: #8F5E16;
+  --color-gold-800: #6B450F;
+  --color-gold-900: #4A2F0A;
+
   /* Neutrals + surfaces */
   --color-paper:        #FBFBFC;
   --color-surface:      #FFFFFF;
@@ -75,6 +89,17 @@
   --teal-700: var(--color-teal-700);
   --teal-800: var(--color-teal-800);
   --teal-900: var(--color-teal-900);
+
+  --gold-50:  var(--color-gold-50);
+  --gold-100: var(--color-gold-100);
+  --gold-200: var(--color-gold-200);
+  --gold-300: var(--color-gold-300);
+  --gold-400: var(--color-gold-400);
+  --gold-500: var(--color-gold-500);
+  --gold-600: var(--color-gold-600);
+  --gold-700: var(--color-gold-700);
+  --gold-800: var(--color-gold-800);
+  --gold-900: var(--color-gold-900);
 
   --paper:       var(--color-paper);
   --surface:     var(--color-surface);
