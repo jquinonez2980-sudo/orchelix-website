@@ -53,6 +53,13 @@ export default function AcumenDashboard() {
     return base.includes(period) ? base : [period, ...base];
   }, [period]);
 
+  // High-confidence items (>= 80%) — the only ones "Approve all" sweeps; the
+  // judgment calls below the threshold stay for a human to review.
+  const highConf = useMemo(
+    () => approvals.filter((a) => (a.confidence ?? 0) >= 0.8),
+    [approvals],
+  );
+
   // Fetch when token/period change. All setState happens in async callbacks (never
   // synchronously in the effect body) to satisfy react-hooks/set-state-in-effect.
   useEffect(() => {
@@ -81,23 +88,25 @@ export default function AcumenDashboard() {
     }
   }
 
-  // Approve every pending item to its suggested GL. Items that fail stay in the
-  // queue. Guarded by a confirm — this books real entries in bulk.
+  // Sweep only the high-confidence items (>= 80%) to their suggested GL. Low-
+  // confidence items are left for human review. Guarded by a confirm; items that
+  // fail stay in the queue.
   async function approveAll() {
-    if (!token || approvals.length === 0) return;
-    if (!window.confirm(`Approve all ${approvals.length} item(s)? Each books to its suggested GL.`)) return;
+    if (!token || highConf.length === 0) return;
+    if (!window.confirm(`Approve ${highConf.length} high-confidence item(s) (≥ 80%)? Each books to its suggested GL.`)) return;
     setBulkBusy(true);
     setError(null);
-    const failures: ApprovalItem[] = [];
-    for (const a of approvals) {
+    const failed: string[] = [];
+    for (const a of highConf) {
       try {
         await acumenApi.approve(token, a.queue_id, a.suggested_gl_no ?? "9999");
       } catch {
-        failures.push(a);
+        failed.push(a.queue_id);
       }
     }
-    setApprovals(failures);
-    if (failures.length) setError(`${failures.length} item(s) could not be approved.`);
+    const approvedIds = new Set(highConf.filter((a) => !failed.includes(a.queue_id)).map((a) => a.queue_id));
+    setApprovals((prev) => prev.filter((p) => !approvedIds.has(p.queue_id)));
+    if (failed.length) setError(`${failed.length} item(s) could not be approved.`);
     setBulkBusy(false);
   }
 
@@ -150,14 +159,15 @@ export default function AcumenDashboard() {
       <Section
         title="Approval queue"
         count={approvals.length}
-        action={approvals.length > 0 ? (
+        action={highConf.length > 0 ? (
           <button
             onClick={approveAll}
             disabled={bulkBusy}
+            title="Approves only items with ≥ 80% confidence"
             className="rounded-lg px-3 py-1.5 text-[13px] font-semibold"
             style={{ background: "var(--gold-500)", color: "#1A1206", fontFamily: "var(--font-display)", opacity: bulkBusy ? 0.6 : 1, cursor: bulkBusy ? "default" : "pointer" }}
           >
-            {bulkBusy ? "Approving…" : `Approve all (${approvals.length})`}
+            {bulkBusy ? "Approving…" : `Approve high-confidence (${highConf.length})`}
           </button>
         ) : null}
       >
