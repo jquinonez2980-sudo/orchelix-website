@@ -71,7 +71,7 @@ export default function ShowcaseDemo() {
   useEffect(() => () => { if (timer.current) clearInterval(timer.current); }, []);
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex w-full min-w-0 flex-col gap-5">
       {/* Console */}
       <div
         className="relative overflow-hidden rounded-[22px] border border-white/[0.08] p-5 text-white sm:p-6"

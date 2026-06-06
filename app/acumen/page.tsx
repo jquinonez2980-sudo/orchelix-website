@@ -45,7 +45,7 @@ function Hero() {
 
       <div className="relative z-10 mx-auto grid max-w-[1200px] items-center gap-12 lg:grid-cols-2 lg:gap-16">
         {/* Left — copy */}
-        <div className="max-w-[560px]">
+        <div className="min-w-0 max-w-[560px]">
           <span
             className="inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.18em]"
             style={{ fontFamily: "var(--font-mono)", color: "var(--gold-700)" }}
