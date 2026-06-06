@@ -106,6 +106,7 @@ export default function PrivacyPage() {
               </ul>
               <p>Our current sub-processors include:</p>
               <ul>
+                <li><strong>Google LLC (Google Cloud Platform)</strong> — cloud infrastructure, BigQuery data warehouse, and Workspace API access (United States)</li>
                 <li><strong>Vercel Inc.</strong> — website hosting and edge functions (United States)</li>
                 <li><strong>OpenAI, LLC</strong> — AI language model inference (United States)</li>
                 <li><strong>Railway Corp.</strong> — backend API hosting (United States)</li>
@@ -140,22 +141,49 @@ export default function PrivacyPage() {
                 To exercise any of these rights, contact our Privacy Officer at <a href="mailto:privacy@orchelix.com">privacy@orchelix.com</a>.
               </p>
 
-              <h2>10. Cookies and Tracking</h2>
+              <h2>10. Google Workspace API Data</h2>
+              <p>
+                AcumenAI, our accounting automation service, integrates with Google Workspace APIs to help clients automate their bookkeeping workflow. Specifically:
+              </p>
+              <ul>
+                <li><strong>Gmail (read &amp; modify)</strong> — AcumenAI reads emails in the client&apos;s inbox to detect bank statement PDF attachments, downloads those attachments for processing, and applies labels (e.g., <code>vtx-processed</code>) to processed messages. We do not read unrelated emails.</li>
+                <li><strong>Gmail (send)</strong> — Used to deliver bookkeeping summaries, approval-queue notifications, and client reports on the client&apos;s behalf.</li>
+                <li><strong>Google Drive (read)</strong> — Used to access statement files shared by clients when applicable.</li>
+              </ul>
+              <p>
+                <strong>Data use:</strong> Google user data accessed through these APIs is used exclusively to provide the accounting automation service. We do not use this data for advertising, profiling, or any purpose unrelated to the service the client has requested.
+              </p>
+              <p>
+                <strong>Data sharing:</strong> Google user data is never sold, transferred, or disclosed to third parties except as necessary to operate the service (e.g., cloud infrastructure listed in Section 5), or as required by law.
+              </p>
+              <p>
+                <strong>Retention:</strong> Extracted transaction data is retained in the client&apos;s BigQuery dataset for the duration of their engagement, plus the 7-year statutory minimum under Canadian accounting regulations. Raw email content is not stored — only the structured financial data extracted from attachments.
+              </p>
+              <p>
+                <strong>Revoking access:</strong> Clients may revoke Google Workspace access at any time via their Google Account at{" "}
+                <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener noreferrer">myaccount.google.com/permissions</a>. Revocation does not delete previously extracted data; contact us to request data deletion.
+              </p>
+              <p>
+                Our use and transfer of information received from Google APIs to any other app adheres to the{" "}
+                <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer">Google API Services User Data Policy</a>, including the Limited Use requirements.
+              </p>
+
+              <h2>11. Cookies and Tracking</h2>
               <p>
                 We use essential cookies required for site functionality and, with your consent, analytics cookies to understand how visitors use our site. You may control cookie preferences through your browser settings.
               </p>
 
-              <h2>11. Third-Party Links</h2>
+              <h2>12. Third-Party Links</h2>
               <p>
                 Our website may contain links to third-party sites. We are not responsible for the privacy practices of those sites and encourage you to review their privacy policies.
               </p>
 
-              <h2>12. Changes to This Policy</h2>
+              <h2>13. Changes to This Policy</h2>
               <p>
                 We may update this Privacy Policy periodically. Material changes will be communicated via email (for clients) or prominent notice on this page. Continued use of our services constitutes acceptance of the revised policy.
               </p>
 
-              <h2>13. Contact Us</h2>
+              <h2>14. Contact Us</h2>
               <p>
                 For privacy-related questions or to exercise your rights:<br />
                 <strong>Orchelix AI Consulting Inc.</strong><br />
