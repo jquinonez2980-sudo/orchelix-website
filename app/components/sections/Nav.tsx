@@ -158,6 +158,7 @@ export default function Nav({ theme = "light" }: { theme?: "light" | "dark" }) {
               letterSpacing: "0.04em",
               color: c.phone,
               textDecoration: "none",
+              whiteSpace: "nowrap",
               transition: "color 180ms",
             }}
           >
