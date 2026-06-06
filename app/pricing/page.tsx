@@ -262,7 +262,7 @@ const TIERS: TierDef[] = [
       { text: "Shared memory across agents" },
       { text: "Central custom Streamlit oversight dashboard" },
       { text: "Deep integrations with your existing tools" },
-      { text: "Bookkeeping automation module (categorization, invoice extraction, reconciliation)" },
+      { text: "**AcumenAI** accounting & finance module (categorization, invoice extraction, reconciliation)" },
       { text: "Advanced guardrails and audit logs" },
       { text: "Monthly strategy calls + continuous optimization" },
       { text: "Full team training and documentation" },
@@ -567,7 +567,7 @@ const FAQS = [
   },
   {
     q: "Do you offer bookkeeping automation?",
-    a: "Yes. It's available as a module inside the Firm OS and can be added to other packages.",
+    a: "Yes — AcumenAI, our accounting & finance module, is included in the Firm OS and can be added to other packages.",
   },
   {
     q: "What happens after launch?",
