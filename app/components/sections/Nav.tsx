@@ -10,7 +10,6 @@ const NAV_LINKS = [
   { label: "Platform",   href: "/how-it-works" },
   { label: "Industries", href: "/industries" },
   { label: "Pricing",    href: "/pricing" },
-  { label: "Blog",       href: "/blog" },
   { label: "Try Esmi",   href: "/try-esmi" },
   { label: "About",      href: "/about" },
 ];
@@ -119,6 +118,7 @@ export default function Nav({ theme = "light" }: { theme?: "light" | "dark" }) {
                 color: c.link,
                 textDecoration: "none",
                 padding: "8px 0",
+                whiteSpace: "nowrap",
                 transition: "color 180ms",
               }}
             >
