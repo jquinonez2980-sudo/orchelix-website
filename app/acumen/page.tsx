@@ -61,7 +61,12 @@ function Hero() {
             Books that{" "}
             <span
               className="bg-gradient-to-br from-navy-600 via-gold-500 to-gold-400 bg-clip-text font-normal italic"
-              style={{ WebkitTextFillColor: "transparent", paddingRight: "0.1em" }}
+              style={{
+                WebkitTextFillColor: "transparent",
+                paddingRight: "0.12em",
+                WebkitBoxDecorationBreak: "clone",
+                boxDecorationBreak: "clone",
+              }}
             >
               reconcile themselves
             </span>

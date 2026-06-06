@@ -110,17 +110,17 @@ export default function ShowcaseDemo() {
         <div className="relative">
           {/* title bar */}
           <div
-            className="mb-4 flex items-center gap-2.5 border-b border-white/[0.06] pb-[14px] text-[11px] font-medium tracking-[0.02em] text-white/50"
+            className="mb-4 flex min-w-0 items-center gap-2.5 border-b border-white/[0.06] pb-[14px] text-[11px] font-medium tracking-[0.02em] text-white/50"
             style={{ fontFamily: "var(--font-mono)" }}
           >
-            <div className="flex gap-1.5">
+            <div className="flex shrink-0 gap-1.5">
               <span className="inline-block h-2 w-2 rounded-full" style={{ background: GOLD_SOFT, boxShadow: `0 0 0 3px rgba(217,162,27,0.20)` }} />
               <span className="inline-block h-2 w-2 rounded-full bg-white/[0.12]" />
               <span className="inline-block h-2 w-2 rounded-full bg-white/[0.12]" />
             </div>
-            <span>acumenai · pipeline · {demoRun.client.toLowerCase()}</span>
+            <span className="min-w-0 truncate">acumenai · pipeline · {demoRun.client.toLowerCase()}</span>
             <span
-              className="ml-auto inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] tracking-[0.04em]"
+              className="ml-auto inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] tracking-[0.04em]"
               style={{ background: "rgba(217,162,27,0.10)", border: "1px solid rgba(217,162,27,0.20)", color: GOLD_SOFT }}
             >
               <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ background: GOLD_SOFT }} />
