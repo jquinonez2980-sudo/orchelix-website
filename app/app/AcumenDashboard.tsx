@@ -1,7 +1,7 @@
 "use client";
 
 import { SignInButton, UserButton } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   acumenApi,
   ApiError,
@@ -25,6 +25,18 @@ function money(s: string | null): string {
     : s;
 }
 
+/** The current month and the previous `count-1` months as YYYY-MM, newest first. */
+function monthOptions(count = 24): string[] {
+  const out: string[] = [];
+  const d = new Date();
+  d.setDate(1);
+  for (let i = 0; i < count; i++) {
+    out.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`);
+    d.setMonth(d.getMonth() - 1);
+  }
+  return out;
+}
+
 export default function AcumenDashboard() {
   const { token, ready, signedIn } = useAcumenToken();
   const [period, setPeriod] = useState("2026-04");
@@ -33,6 +45,13 @@ export default function AcumenDashboard() {
   const [txns, setTxns] = useState<Txn[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [bulkBusy, setBulkBusy] = useState(false);
+
+  // Period dropdown options — always includes the current selection.
+  const periods = useMemo(() => {
+    const base = monthOptions();
+    return base.includes(period) ? base : [period, ...base];
+  }, [period]);
 
   // Fetch when token/period change. All setState happens in async callbacks (never
   // synchronously in the effect body) to satisfy react-hooks/set-state-in-effect.
@@ -62,6 +81,26 @@ export default function AcumenDashboard() {
     }
   }
 
+  // Approve every pending item to its suggested GL. Items that fail stay in the
+  // queue. Guarded by a confirm — this books real entries in bulk.
+  async function approveAll() {
+    if (!token || approvals.length === 0) return;
+    if (!window.confirm(`Approve all ${approvals.length} item(s)? Each books to its suggested GL.`)) return;
+    setBulkBusy(true);
+    setError(null);
+    const failures: ApprovalItem[] = [];
+    for (const a of approvals) {
+      try {
+        await acumenApi.approve(token, a.queue_id, a.suggested_gl_no ?? "9999");
+      } catch {
+        failures.push(a);
+      }
+    }
+    setApprovals(failures);
+    if (failures.length) setError(`${failures.length} item(s) could not be approved.`);
+    setBulkBusy(false);
+  }
+
   if (ready && !signedIn) return <Gated />;
 
   return (
@@ -78,13 +117,16 @@ export default function AcumenDashboard() {
         <div className="flex items-center gap-4">
           <label className="flex items-center gap-2 text-[13px]" style={{ fontFamily: "var(--font-mono)", color: "var(--ink-3)" }}>
             Period
-            <input
+            <select
               value={period}
               onChange={(e) => setPeriod(e.target.value)}
-              placeholder="YYYY-MM"
-              className="w-[110px] rounded-lg border px-3 py-2 text-[14px]"
-              style={{ borderColor: "var(--line-strong)", color: "var(--ink)", fontFamily: "var(--font-mono)" }}
-            />
+              className="rounded-lg border px-3 py-2 text-[14px]"
+              style={{ borderColor: "var(--line-strong)", color: "var(--ink)", fontFamily: "var(--font-mono)", background: "#fff" }}
+            >
+              {periods.map((p) => (
+                <option key={p} value={p}>{p}</option>
+              ))}
+            </select>
           </label>
           <UserButton />
         </div>
@@ -105,7 +147,20 @@ export default function AcumenDashboard() {
       </div>
 
       {/* Approval queue */}
-      <Section title="Approval queue" count={approvals.length}>
+      <Section
+        title="Approval queue"
+        count={approvals.length}
+        action={approvals.length > 0 ? (
+          <button
+            onClick={approveAll}
+            disabled={bulkBusy}
+            className="rounded-lg px-3 py-1.5 text-[13px] font-semibold"
+            style={{ background: "var(--gold-500)", color: "#1A1206", fontFamily: "var(--font-display)", opacity: bulkBusy ? 0.6 : 1, cursor: bulkBusy ? "default" : "pointer" }}
+          >
+            {bulkBusy ? "Approving…" : `Approve all (${approvals.length})`}
+          </button>
+        ) : null}
+      >
         {approvals.length === 0 ? (
           <Empty text={loading ? "Loading…" : "Nothing awaiting review."} />
         ) : (
@@ -181,13 +236,16 @@ function Kpi({ label, value, gold }: { label: string; value: string; gold?: bool
   );
 }
 
-function Section({ title, count, children }: { title: string; count: number; children: React.ReactNode }) {
+function Section({ title, count, action, children }: { title: string; count: number; action?: React.ReactNode; children: React.ReactNode }) {
   return (
     <section className="mt-10">
-      <h2 className="mb-3 flex items-baseline gap-2 text-[18px] font-semibold" style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}>
-        {title}
-        <span className="text-[13px] font-medium" style={{ fontFamily: "var(--font-mono)", color: "var(--ink-3)" }}>{count}</span>
-      </h2>
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <h2 className="flex items-baseline gap-2 text-[18px] font-semibold" style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}>
+          {title}
+          <span className="text-[13px] font-medium" style={{ fontFamily: "var(--font-mono)", color: "var(--ink-3)" }}>{count}</span>
+        </h2>
+        {action}
+      </div>
       <div className="rounded-[16px] border bg-white p-5" style={{ borderColor: "var(--line)" }}>{children}</div>
     </section>
   );
