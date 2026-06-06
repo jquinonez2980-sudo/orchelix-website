@@ -178,6 +178,8 @@ export default function Nav({ theme = "light" }: { theme?: "light" | "dark" }) {
               textDecoration: "none",
               display: "inline-flex",
               alignItems: "center",
+              justifyContent: "center",
+              whiteSpace: "nowrap",
               boxShadow: c.ctaShadow,
               transition: "background 220ms var(--ease-standard)",
             }}
