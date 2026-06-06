@@ -26,7 +26,7 @@ const SERVICES = [
     serviceType: "AI Sales Automation",
   },
   {
-    name: "Firm OS — Accounting & Finance",
+    name: "AcumenAI — Accounting & Finance",
     description:
       "Multi-agent operations with financial automation built in — bookkeeping, financial close, and reporting with human oversight.",
     serviceType: "AI Financial Operations",
@@ -179,7 +179,7 @@ function IndexCard() {
     },
     {
       num: "03",
-      name: "Firm OS — Accounting & Finance",
+      name: "AcumenAI — Accounting & Finance",
       sub: "Multi-agent operations with financial automation built in",
       href: "#agent-finance",
     },
@@ -966,13 +966,13 @@ function AgentFinance() {
       <div className="mx-auto max-w-[1200px] px-6 sm:px-8 lg:px-10">
         <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="flex flex-col gap-7">
-            <AgentMeta num="03 / Firm OS" category="Accounting & Finance Module" />
+            <AgentMeta num="03 / AcumenAI" category="Accounting & Finance OS" />
             <div>
               <h2
                 className="mb-3 text-[34px] font-semibold leading-[1.06] tracking-[-0.024em] sm:text-[42px] lg:text-[48px]"
                 style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
               >
-                Firm OS — Accounting & Finance
+                Acumen<span style={{ color: "var(--gold-600)" }}>AI</span>
               </h2>
               <p
                 className="text-[17px] font-medium leading-snug"
@@ -985,11 +985,10 @@ function AgentFinance() {
               className="text-[16px] leading-[1.65]"
               style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
             >
-              Accounting & Finance is a core module inside Firm OS — our full
-              multi-agent revenue operating system. It delivers automated bookkeeping,
-              reconciliations, and a month-end close you can defend to an auditor. The
-              agent categorizes, matches, and flags — your bookkeeper opens to a triaged
-              inbox of decisions worth a human&apos;s time.
+              AcumenAI is our accounting &amp; finance OS. It delivers automated
+              bookkeeping, reconciliations, and a month-end close you can defend to an
+              auditor. The agent categorizes, matches, and flags — your bookkeeper opens
+              to a triaged inbox of decisions worth a human&apos;s time.
             </p>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {features.map((f) => (
@@ -1006,12 +1005,12 @@ function AgentFinance() {
             <AgentButtons
               primaryHref="#book"
               primaryLabel="Book a demo"
-              secondaryHref="/pricing"
-              secondaryLabel="See Firm OS pricing"
+              secondaryHref="/pricing#tier-firmos"
+              secondaryLabel="See AcumenAI pricing"
             />
           </div>
 
-          <FigurePanel title="orchelix · firm os · accounting" tag="closing · may 2026">
+          <FigurePanel title="orchelix · acumenai · accounting" tag="closing · may 2026">
             <FinanceFigure />
           </FigurePanel>
         </div>
