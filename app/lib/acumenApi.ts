@@ -84,6 +84,57 @@ async function post<T>(path: string, token: string | null): Promise<T> {
   return res.json() as Promise<T>;
 }
 
+// ── Demo types ──────────────────────────────────────────────────────────────
+
+export type DemoRun = {
+  brand: string;
+  client: string;
+  period: string;
+  mode: string;
+  generated_at: string;
+  ok: boolean;
+  beats: {
+    ingest: {
+      transactions: number;
+      bank_code: string;
+      money_in: string;
+      money_out: string;
+      deposits: number;
+      payments: number;
+    };
+    verify: {
+      reconciled: number;
+      total: number;
+      all_reconciled: boolean;
+    };
+    categorize: {
+      total: number;
+      auto_categorized: number;
+      needs_review: number;
+      queued: number;
+      auto_pct: number;
+      chat_notified: boolean;
+    };
+    audit: {
+      event_count: number;
+      event_types: string[];
+    };
+    approve: {
+      pending_before: number;
+      pending_after: number;
+      approved: {
+        txn_date: string;
+        description: string;
+        final_gl_no: string;
+      };
+    };
+  };
+  recap: {
+    duration_ms: number;
+    headline: string;
+  };
+};
+
 export const acumenApi = {
   summary: (token: string | null, period: string, client?: string) =>
     get<Summary>(`/api/live/summary?period=${encodeURIComponent(period)}${client ? `&client=${encodeURIComponent(client)}` : ""}`, token),
@@ -100,4 +151,6 @@ export const acumenApi = {
 
   reject: (token: string | null, queueId: string) =>
     post<{ ok: boolean }>(`/api/live/approvals/${encodeURIComponent(queueId)}/reject`, token),
+
+  demoRun: () => get<DemoRun>("/api/demo/run", null),
 };

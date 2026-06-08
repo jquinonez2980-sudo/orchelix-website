@@ -85,11 +85,18 @@ function Hero() {
 
           <div className="flex flex-wrap gap-3">
             <a
+              href="/app"
+              className="inline-flex h-12 items-center rounded-xl px-6 text-[15px] font-semibold transition-opacity hover:opacity-90"
+              style={{ fontFamily: "var(--font-display)", background: "var(--gold-500)", color: "#1A1206", boxShadow: "0 1px 0 rgba(255,255,255,0.25) inset, 0 2px 8px rgba(217,162,27,0.25)" }}
+            >
+              Go to Dashboard <span className="ml-1.5 opacity-70">→</span>
+            </a>
+            <a
               href="/book"
               className="inline-flex h-12 items-center rounded-xl px-6 text-[15px] font-medium text-white shadow-[0_1px_0_rgba(255,255,255,0.08)_inset,0_1px_2px_rgba(10,37,64,0.10)] transition-opacity hover:opacity-90"
               style={{ fontFamily: "var(--font-display)", background: "var(--navy-600)" }}
             >
-              Book a demo <span className="ml-1.5 opacity-85">→</span>
+              Book a demo
             </a>
             <a
               href="#why"
@@ -218,10 +225,10 @@ function CTA() {
                 style={{ fontFamily: "var(--font-display)" }}>
                 Talk to a consultant
               </a>
-              <a href="/book"
+              <a href="/app"
                 className="inline-flex h-12 items-center rounded-xl px-6 text-[15px] font-semibold transition-opacity hover:opacity-90"
                 style={{ fontFamily: "var(--font-display)", background: "var(--gold-500)", color: "#1A1206" }}>
-                Book a demo <span className="ml-1.5 opacity-70">→</span>
+                Go to Dashboard <span className="ml-1.5 opacity-70">→</span>
               </a>
             </div>
           </div>
