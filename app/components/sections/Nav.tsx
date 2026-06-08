@@ -14,8 +14,6 @@ const NAV_LINKS = [
   { label: "About",      href: "/about" },
 ];
 
-// Dashboard link — secondary CTA, points to the AcumenAI Cloud Run SPA
-const DASHBOARD_HREF = "https://acumenai-api-lscziarcxa-pd.a.run.app";
 
 export default function Nav({ theme = "light" }: { theme?: "light" | "dark" }) {
   const [open, setOpen] = useState(false);
@@ -168,31 +166,6 @@ export default function Nav({ theme = "light" }: { theme?: "light" | "dark" }) {
             (561) 566-1066
           </a>
           <a
-            href={DASHBOARD_HREF}
-            style={{
-              fontFamily: "var(--font-display)",
-              fontWeight: 500,
-              fontSize: 14,
-              lineHeight: 1,
-              padding: "13px 18px",
-              borderRadius: 10,
-              background: dark ? "rgba(255,255,255,0.06)" : "#fff",
-              color: dark ? "rgba(234,242,255,0.80)" : "var(--ink-2)",
-              textDecoration: "none",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 5,
-              whiteSpace: "nowrap",
-              border: dark ? "1px solid rgba(255,255,255,0.10)" : "1px solid var(--line-strong)",
-              transition: "background 200ms",
-            }}
-          >
-            Dashboard
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.6 }}>
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </a>
-          <a
             href="/book"
             style={{
               fontFamily: "var(--font-display)",
@@ -316,28 +289,6 @@ export default function Nav({ theme = "light" }: { theme?: "light" | "dark" }) {
               }}
             >
               (561) 566-1066
-            </a>
-            <a
-              href={DASHBOARD_HREF}
-              onClick={close}
-              style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 500,
-                fontSize: 15,
-                lineHeight: 1,
-                padding: "15px 20px",
-                borderRadius: 10,
-                background: dark ? "rgba(255,255,255,0.06)" : "#fff",
-                color: dark ? "rgba(234,242,255,0.80)" : "var(--ink-2)",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 6,
-                border: dark ? "1px solid rgba(255,255,255,0.10)" : "1px solid var(--line-strong)",
-              }}
-            >
-              Dashboard →
             </a>
             <a
               href="/book"
