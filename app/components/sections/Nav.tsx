@@ -14,8 +14,8 @@ const NAV_LINKS = [
   { label: "About",      href: "/about" },
 ];
 
-// Dashboard link — secondary CTA, shows in desktop CTA area + mobile drawer
-const DASHBOARD_HREF = "/app";
+// Dashboard link — secondary CTA, points to the AcumenAI Cloud Run SPA
+const DASHBOARD_HREF = "https://acumenai-api-lscziarcxa-pd.a.run.app";
 
 export default function Nav({ theme = "light" }: { theme?: "light" | "dark" }) {
   const [open, setOpen] = useState(false);

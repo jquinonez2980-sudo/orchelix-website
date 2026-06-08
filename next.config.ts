@@ -1,10 +1,26 @@
 import type { NextConfig } from "next";
 
+const DASHBOARD_URL = "https://acumenai-api-lscziarcxa-pd.a.run.app";
+
 const nextConfig: NextConfig = {
   // Inline Tailwind's atomic CSS into <head> instead of a render-blocking
   // <link> — removes the CSS round trip for first-time visitors (FCP/LCP win).
   experimental: {
     inlineCss: true,
+  },
+  async redirects() {
+    return [
+      {
+        source: "/app",
+        destination: DASHBOARD_URL,
+        permanent: false,
+      },
+      {
+        source: "/app/:path*",
+        destination: DASHBOARD_URL,
+        permanent: false,
+      },
+    ];
   },
   images: {
     formats: ["image/avif", "image/webp"],
