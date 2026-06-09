@@ -1,37 +1,48 @@
-import Image from "next/image";
+"use client";
 
-const columns = [
-  {
-    h: "Agents",
-    links: [
-      { label: "Virtual Receptionist", href: "/ai-receptionist" },
-      { label: "Sales & Marketing",    href: "/solutions" },
-      { label: "Accounting OS",        href: "/solutions" },
-      { label: "Industries",            href: "/industries" },
-    ],
-  },
-  {
-    h: "Company",
-    links: [
-      { label: "Contact",    href: "/#contact" },
-      { label: "Pricing",    href: "/pricing" },
-      { label: "Blog",       href: "/blog" },
-      { label: "Try Esmi",   href: "/try-esmi" },
-      { label: "Book a demo", href: "/book" },
-    ],
-  },
-  {
-    h: "Trust",
-    links: [
-      { label: "Privacy Policy",   href: "/privacy" },
-      { label: "Terms of Service", href: "/terms" },
-      { label: "PIPEDA",           href: "/privacy" },
-      { label: "Security",         href: "/privacy" },
-    ],
-  },
-];
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+
+// Built per-locale so Spanish pages link to the Spanish blog. Without this the
+// /es/* tree only reached /es/blog via the sitemap, leaving it orphaned and
+// "Crawled — currently not indexed" in Search Console.
+function getColumns(isEs: boolean) {
+  return [
+    {
+      h: "Agents",
+      links: [
+        { label: "Virtual Receptionist", href: "/ai-receptionist" },
+        { label: "Sales & Marketing",    href: "/solutions" },
+        { label: "Accounting OS",        href: "/solutions" },
+        { label: "Industries",            href: "/industries" },
+      ],
+    },
+    {
+      h: "Company",
+      links: [
+        { label: "Contact",    href: "/#contact" },
+        { label: "Pricing",    href: "/pricing" },
+        { label: "Blog",       href: isEs ? "/es/blog" : "/blog" },
+        { label: "Try Esmi",   href: "/try-esmi" },
+        { label: "Book a demo", href: "/book" },
+      ],
+    },
+    {
+      h: "Trust",
+      links: [
+        { label: "Privacy Policy",   href: "/privacy" },
+        { label: "Terms of Service", href: "/terms" },
+        { label: "PIPEDA",           href: "/privacy" },
+        { label: "Security",         href: "/privacy" },
+      ],
+    },
+  ];
+}
 
 export default function Footer({ theme = "light" }: { theme?: "light" | "dark" }) {
+  const pathname = usePathname();
+  const isEs = pathname?.startsWith("/es") ?? false;
+  const columns = getColumns(isEs);
   const dark = theme === "dark";
   const c = dark
     ? {
