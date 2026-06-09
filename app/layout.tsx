@@ -28,7 +28,11 @@ export const metadata: Metadata = {
   },
   description:
     "Multi-agent AI systems that qualify leads, handle calls, close deals, and run financial operations — with human oversight and senior consultants.",
-  alternates: { canonical: "/" },
+  // NOTE: Do not set `alternates.canonical` here. Metadata is shallowly merged
+  // and inherited, so a canonical on the root layout would propagate to every
+  // page that doesn't override it — pointing them all at "/" and causing Google
+  // to drop them as "Alternative page with proper canonical tag". Each page
+  // (including app/page.tsx for "/") declares its own self-referencing canonical.
   openGraph: {
     type: "website",
     locale: "en_CA",

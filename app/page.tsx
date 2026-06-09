@@ -8,6 +8,11 @@ import Why from "./components/sections/Why";
 import ContactForm from "./components/sections/ContactForm";
 import FinalCTA from "./components/sections/FinalCTA";
 import Footer from "./components/sections/Footer";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default function Home() {
   return (

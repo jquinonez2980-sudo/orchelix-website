@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "About",
   description:
     "Orchelix builds reliable AI systems that run revenue operations for SMEs — lead qualification, call handling, deal closing, and financial close with human oversight.",
+  alternates: { canonical: "/about" },
 };
 
 export default function AboutPage() {

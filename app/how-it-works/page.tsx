@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "How It Works — Orchelix AI Consulting",
   description:
     "From first call to your first agent in 14 days. Map the workflow, deploy in two weeks, audit every action, and scale on your timeline — with a senior consultant on the line.",
+  alternates: { canonical: "/how-it-works" },
 };
 
 export default function HowItWorksPage() {

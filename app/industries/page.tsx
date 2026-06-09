@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Industries — Orchelix AI Consulting",
   description:
     "AI agents tuned to how your industry actually runs. Architecture, stone, kitchen & bath, field service, manufacturing, professional services — all served by one operator console.",
+  alternates: { canonical: "/industries" },
 };
 
 export default function IndustriesPage() {

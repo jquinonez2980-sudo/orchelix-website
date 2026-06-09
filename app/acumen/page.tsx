@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "AcumenAI — Books that reconcile themselves",
   description:
     "AcumenAI by Orchelix is the accounting & finance OS: it reads bank statements, verifies every transaction against the bank's own balance, categorizes to the GL, and queues exceptions for one-click human approval — with a full audit trail.",
+  alternates: { canonical: "/acumen" },
 };
 
 export default function AcumenPage() {
