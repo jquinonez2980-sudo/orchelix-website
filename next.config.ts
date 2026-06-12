@@ -8,6 +8,26 @@ const nextConfig: NextConfig = {
   // The redirect is desirable for SEO (consolidates to the canonical form declared in metadata).
   trailingSlash: false,
 
+  // Force apex domain (orchelix.com) to permanently redirect to www (www.orchelix.com) with 301.
+  // This is more reliable than Vercel's default platform redirect (which uses 307).
+  // The `has` condition targets only requests where the Host header is the apex domain.
+  // Using statusCode: 301 gives a classic permanent redirect (preferred for SEO over 308 in many cases).
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'orchelix.com',
+          },
+        ],
+        destination: 'https://www.orchelix.com/:path*',
+        statusCode: 301,
+      },
+    ];
+  },
+
   // Inline Tailwind's atomic CSS into <head> instead of a render-blocking
   // <link> — removes the CSS round trip for first-time visitors (FCP/LCP win).
   experimental: {
