@@ -47,6 +47,8 @@ function Hero() {
       <div className="relative z-10 mx-auto grid max-w-[1200px] items-center gap-12 lg:grid-cols-2 lg:gap-16">
         {/* Left — copy */}
         <div className="min-w-0 max-w-[560px]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/acumenai-logo.png" alt="AcumenAI" className="mb-6 h-16 w-auto" />
           <span
             className="inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.18em]"
             style={{ fontFamily: "var(--font-mono)", color: "var(--gold-700)" }}
