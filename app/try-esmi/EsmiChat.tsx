@@ -36,11 +36,11 @@ function stripSlotLines(text: string): string {
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
-const WELCOME_TEXT =
-  "Hi there! I'm Esmi, your AI receptionist at Orchelix. I can book appointments, check availability, and answer any questions about our services or pricing. How can I help you today?";
+const welcomeEn = (company: string) =>
+  `Hi there! I'm Esmi, your AI receptionist at ${company}. I can book appointments, check availability, and answer any questions about our services or pricing. How can I help you today?`;
 
-const WELCOME_TEXT_ES =
-  "¡Hola! Soy Esmi, la recepcionista virtual de Orchelix. Puedo agendar citas, revisar disponibilidad y responder preguntas sobre nuestros servicios y precios. ¿En qué le puedo ayudar?";
+const welcomeEs = (company: string) =>
+  `¡Hola! Soy Esmi, la recepcionista virtual de ${company}. Puedo agendar citas, revisar disponibilidad y responder preguntas sobre nuestros servicios y precios. ¿En qué le puedo ayudar?`;
 
 const calIcon = (
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -99,12 +99,13 @@ function uid(): string {
     : Math.random().toString(36).slice(2);
 }
 
-function getOrCreateThreadId(): string {
+function getOrCreateThreadId(tenantKey: string): string {
+  const storeKey = `esmi-thread-id:${tenantKey}`;
   try {
-    const stored = localStorage.getItem("esmi-thread-id");
+    const stored = localStorage.getItem(storeKey);
     if (stored) return stored;
     const id = uid();
-    localStorage.setItem("esmi-thread-id", id);
+    localStorage.setItem(storeKey, id);
     return id;
   } catch {
     return uid();
@@ -118,13 +119,26 @@ function parseSlot(slot: string): { start: string; end: string } {
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export default function EsmiChat({ defaultLocale = "en" }: { defaultLocale?: "en" | "es" }) {
+export default function EsmiChat({
+  defaultLocale = "en",
+  tenantId,
+  companyName = "Orchelix",
+}: {
+  defaultLocale?: "en" | "es";
+  /** Tenant slug from ?tenant= — routes the backend to this customer's KB/pricing/persona. */
+  tenantId?: string;
+  /** Display name for the welcome bubble (from ?company= or derived from the slug). */
+  companyName?: string;
+}) {
+  const tenantKey = tenantId || "default";
+  const welcome = (loc: "en" | "es") => (loc === "es" ? welcomeEs(companyName) : welcomeEn(companyName));
+
   const [locale, setLocale] = useState<"en" | "es">(defaultLocale);
   const isEs = locale === "es";
   const quickReplies = isEs ? QUICK_REPLIES_ES : QUICK_REPLIES;
   const toolLabels = isEs ? TOOL_LABELS_ES : TOOL_LABELS;
 
-  const [messages, setMessages] = useState<Message[]>(() => [{ id: uid(), role: "assistant", content: defaultLocale === "es" ? WELCOME_TEXT_ES : WELCOME_TEXT }]);
+  const [messages, setMessages] = useState<Message[]>(() => [{ id: uid(), role: "assistant", content: welcome(defaultLocale) }]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [threadId, setThreadId] = useState("");
@@ -134,12 +148,12 @@ export default function EsmiChat({ defaultLocale = "en" }: { defaultLocale?: "en
   const switchLocale = useCallback((next: "en" | "es") => {
     if (next === locale) return;
     setLocale(next);
-    setMessages([{ id: uid(), role: "assistant", content: next === "es" ? WELCOME_TEXT_ES : WELCOME_TEXT }]);
+    setMessages([{ id: uid(), role: "assistant", content: next === "es" ? welcomeEs(companyName) : welcomeEn(companyName) }]);
     setInput("");
-  }, [locale]);
+  }, [locale, companyName]);
 
   useEffect(() => {
-    const id = getOrCreateThreadId();
+    const id = getOrCreateThreadId(tenantKey);
     setThreadId(id);
     try {
       const saved = localStorage.getItem(`esmi-messages-${id}`);
@@ -148,7 +162,7 @@ export default function EsmiChat({ defaultLocale = "en" }: { defaultLocale?: "en
         if (parsed.length > 0) setMessages(parsed);
       }
     } catch { /* ok */ }
-  }, []);
+  }, [tenantKey]);
 
   useEffect(() => {
     if (!threadId || messages.some((m) => m.streaming)) return;
@@ -191,7 +205,12 @@ export default function EsmiChat({ defaultLocale = "en" }: { defaultLocale?: "en
         const res = await fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text.trim(), thread_id: threadId }),
+          body: JSON.stringify({
+            message: text.trim(),
+            thread_id: threadId,
+            // Routes the backend to this tenant's KB/pricing/persona (omitted → "default").
+            ...(tenantId ? { tenant_id: tenantId } : {}),
+          }),
         });
 
         if (!res.body) throw new Error("No response body");
@@ -275,18 +294,18 @@ export default function EsmiChat({ defaultLocale = "en" }: { defaultLocale?: "en
         setLoading(false);
       }
     },
-    [loading, threadId]
+    [loading, threadId, tenantId]
   );
 
   const resetConversation = useCallback(() => {
     try { localStorage.removeItem(`esmi-messages-${threadId}`); } catch { /* ok */ }
     const newThread = uid();
-    try { localStorage.setItem("esmi-thread-id", newThread); } catch { /* ok */ }
+    try { localStorage.setItem(`esmi-thread-id:${tenantKey}`, newThread); } catch { /* ok */ }
     setThreadId(newThread);
     setMessages([{ id: uid(), role: "assistant", content: isEs ? "¡Empecemos de nuevo! Soy Esmi — ¿en qué te puedo ayudar hoy?" : "Fresh start! I'm Esmi — how can I help you today?" }]);
     setInput("");
     setLoading(false);
-  }, [threadId, isEs]);
+  }, [threadId, isEs, tenantKey]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

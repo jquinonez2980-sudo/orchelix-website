@@ -78,15 +78,38 @@ const COMPLIANCE = ["PIPEDA-aligned", "SOC 2 in-progress", "EN · ES · FR", "Ca
 
 const CYAN = "#00F0FF";
 
+/** "acme-hvac" → "Acme Hvac" — a readable default when ?company= isn't supplied. */
+function prettifyTenant(slug: string): string {
+  return slug
+    .split(/[-_]/)
+    .filter(Boolean)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
 /* ─────────────────────────────────────────────────────────── PAGE */
-export default function TryEsmiPage() {
+export default async function TryEsmiPage({
+  searchParams,
+}: {
+  // Next 16: searchParams is a Promise. ?tenant=acme-hvac&company=Acme+HVAC
+  searchParams: Promise<{ tenant?: string; company?: string }>;
+}) {
+  const sp = await searchParams;
+  const tenantId = typeof sp.tenant === "string" && sp.tenant.trim() ? sp.tenant.trim() : undefined;
+  const companyName =
+    typeof sp.company === "string" && sp.company.trim()
+      ? sp.company.trim()
+      : tenantId
+        ? prettifyTenant(tenantId)
+        : undefined;
+
   return (
     <div className="esmi-dark" style={{ background: "var(--esmi-bg)", color: "var(--esmi-text)" }}>
       <JsonLd data={breadcrumbJsonLd} />
       <Nav theme="dark" />
       <main id="top">
         <EsmiHero />
-        <DemoStage />
+        <DemoStage tenantId={tenantId} companyName={companyName} />
         <Capabilities />
         <TrustStrip />
         <EsmiCTA />
@@ -378,7 +401,8 @@ function EsmiHero() {
 }
 
 /* ─────────────────────────────────────────────────────── DEMO STAGE */
-function DemoStage() {
+function DemoStage({ tenantId, companyName }: { tenantId?: string; companyName?: string }) {
+  const branded = Boolean(tenantId && companyName);
   return (
     <section
       id="demo"
@@ -395,7 +419,7 @@ function DemoStage() {
       <div className="mx-auto max-w-[1200px] px-6 sm:px-8 lg:px-10" style={{ position: "relative" }}>
         {/* Section head */}
         <div style={{ textAlign: "center", marginBottom: 48 }}>
-          <Eyebrow>Live demo</Eyebrow>
+          <Eyebrow>{branded ? `Personalized demo · ${companyName}` : "Live demo"}</Eyebrow>
           <h2
             style={{
               fontFamily: "var(--font-display)",
@@ -407,7 +431,7 @@ function DemoStage() {
               margin: "14px 0 0",
             }}
           >
-            Talk to Esmi — right now.
+            {branded ? `Talk to ${companyName}'s receptionist — right now.` : "Talk to Esmi — right now."}
           </h2>
         </div>
 
@@ -476,7 +500,7 @@ function DemoStage() {
 
             {/* Chat UI */}
             <div style={{ height: "clamp(480px, 64vh, 660px)" }}>
-              <EsmiChat />
+              <EsmiChat tenantId={tenantId} companyName={companyName} />
             </div>
           </div>
 
