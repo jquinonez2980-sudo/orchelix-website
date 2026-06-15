@@ -13,7 +13,10 @@ export async function POST(req: NextRequest) {
   try {
     upstream = await fetch(`${RAILWAY_URL}/chat`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "X-Chat-Secret": process.env.CHAT_PROXY_SECRET ?? "",
+      },
       body: JSON.stringify(body),
       // @ts-expect-error — Node 18 fetch supports duplex but types lag
       duplex: "half",
