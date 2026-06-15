@@ -132,6 +132,7 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  overflow-y: auto !important;          /* prevent Clerk modal scroll-lock on <html> */
 }
 
 body {
