@@ -6,6 +6,7 @@ import {
   acumenApi,
   ApiError,
   type ApprovalItem,
+  type ClientConfig,
   type DemoRun,
   type Summary,
   type Txn,
