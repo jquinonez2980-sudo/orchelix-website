@@ -704,7 +704,9 @@ function DemoConsole({
 // ── Live console (signed-in users) ────────────────────────────────────────────
 
 function LiveConsole({ token }: { token: string | null }) {
-  const [period, setPeriod] = useState("2026-04");
+  const [period, setPeriod] = useState(() => monthOptions()[0]);
+  const [selectedClient, setSelectedClient] = useState<string | null>(null);
+  const [clients, setClients] = useState<ClientConfig[]>([]);
   const [summary, setSummary] = useState<Summary | null>(null);
   const [approvals, setApprovals] = useState<ApprovalItem[]>([]);
   const [txns, setTxns] = useState<Txn[]>([]);
@@ -717,10 +719,25 @@ function LiveConsole({ token }: { token: string | null }) {
     return base.includes(period) ? base : [period, ...base];
   }, [period]);
 
-  const highConf = useMemo(
-    () => approvals.filter((a) => (a.confidence ?? 0) >= 0.8),
+  // Pending items only (for approve/reject actions)
+  const pending = useMemo(
+    () => approvals.filter((a) => a.status === "PENDING"),
     [approvals],
   );
+  const approved = useMemo(
+    () => approvals.filter((a) => a.status === "APPROVED"),
+    [approvals],
+  );
+  const highConf = useMemo(
+    () => pending.filter((a) => (a.confidence ?? 0) >= 0.8),
+    [pending],
+  );
+
+  // Load client list once on mount
+  useEffect(() => {
+    if (!token) return;
+    acumenApi.clients(token).then(setClients).catch(() => {});
+  }, [token]);
 
   useEffect(() => {
     if (!token) return;
@@ -731,10 +748,11 @@ function LiveConsole({ token }: { token: string | null }) {
         setError(null);
       }
     });
+    const acct = selectedClient ?? undefined;
     Promise.all([
-      acumenApi.summary(token, period),
-      acumenApi.approvals(token),
-      acumenApi.transactions(token, period, undefined, 100),
+      acumenApi.summary(token, period, acct),
+      acumenApi.approvals(token, acct, true),
+      acumenApi.transactions(token, period, acct, 200),
     ])
       .then(([s, a, t]) => {
         if (active) {
@@ -755,7 +773,7 @@ function LiveConsole({ token }: { token: string | null }) {
     return () => {
       active = false;
     };
-  }, [token, period]);
+  }, [token, period, selectedClient]);
 
   async function act(
     queueId: string,
@@ -826,7 +844,33 @@ function LiveConsole({ token }: { token: string | null }) {
             Books for {period}
           </h1>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 flex-wrap">
+          {clients.length > 0 && (
+            <label
+              className="flex items-center gap-2 text-[13px]"
+              style={{ fontFamily: "var(--font-mono)", color: "var(--ink-3)" }}
+            >
+              Client
+              <select
+                value={selectedClient ?? ""}
+                onChange={(e) => setSelectedClient(e.target.value || null)}
+                className="rounded-lg border px-3 py-2 text-[14px]"
+                style={{
+                  borderColor: "var(--line-strong)",
+                  color: "var(--ink)",
+                  fontFamily: "var(--font-mono)",
+                  background: "#fff",
+                }}
+              >
+                <option value="">All</option>
+                {clients.map((c) => (
+                  <option key={c.account_masked} value={c.account_masked ?? ""}>
+                    {c.client_id || c.account_masked}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
           <label
             className="flex items-center gap-2 text-[13px]"
             style={{ fontFamily: "var(--font-mono)", color: "var(--ink-3)" }}
@@ -882,14 +926,8 @@ function LiveConsole({ token }: { token: string | null }) {
           gold
         />
         <Kpi
-          label="Pending approvals"
-          value={
-            summary
-              ? String(summary.pending_approvals)
-              : loading
-                ? "…"
-                : "—"
-          }
+          label="Needs review"
+          value={pending.length > 0 ? String(pending.length) : loading ? "…" : "—"}
           gold
         />
         <Kpi
@@ -900,8 +938,8 @@ function LiveConsole({ token }: { token: string | null }) {
 
       {/* Approval queue */}
       <Section
-        title="Approval queue"
-        count={approvals.length}
+        title="Needs review"
+        count={pending.length}
         action={
           highConf.length > 0 ? (
             <button
@@ -924,14 +962,14 @@ function LiveConsole({ token }: { token: string | null }) {
           ) : null
         }
       >
-        {approvals.length === 0 ? (
+        {pending.length === 0 ? (
           <Empty text={loading ? "Loading…" : "Nothing awaiting review."} />
         ) : (
           <ul
             className="flex flex-col divide-y"
             style={{ borderColor: "var(--line)" }}
           >
-            {approvals.map((a) => (
+            {pending.map((a) => (
               <li
                 key={a.queue_id}
                 className="flex flex-wrap items-center gap-3 py-3"
@@ -985,6 +1023,51 @@ function LiveConsole({ token }: { token: string | null }) {
           </ul>
         )}
       </Section>
+
+      {/* Auto-approved (read-only) */}
+      {approved.length > 0 && (
+        <Section title="Auto-approved" count={approved.length}>
+          <ul
+            className="flex flex-col divide-y"
+            style={{ borderColor: "var(--line)" }}
+          >
+            {approved.map((a) => (
+              <li
+                key={a.queue_id}
+                className="flex flex-wrap items-center gap-3 py-3"
+                style={{ opacity: 0.7 }}
+              >
+                <div className="min-w-0 flex-1">
+                  <div
+                    className="truncate text-[14px] font-medium"
+                    style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
+                  >
+                    {a.description}
+                  </div>
+                  <div
+                    className="text-[12px]"
+                    style={{ fontFamily: "var(--font-mono)", color: "var(--ink-3)" }}
+                  >
+                    {a.txn_date} · {money(a.amount)} · GL {a.suggested_gl_no ?? "—"}{" "}
+                    {a.suggested_gl_name ? `(${a.suggested_gl_name})` : ""}
+                  </div>
+                </div>
+                <span
+                  className="rounded-full px-2 py-0.5 text-[11px] font-semibold"
+                  style={{
+                    background: "#ECFDF5",
+                    color: "#16A34A",
+                    fontFamily: "var(--font-mono)",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  ✓ auto-approved
+                </span>
+              </li>
+            ))}
+          </ul>
+        </Section>
+      )}
 
       {/* Transactions */}
       <Section title="Transactions" count={txns.length}>

@@ -139,6 +139,8 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  overflow-y: auto !important;          /* prevent scroll-lock from Clerk modal */
+  -webkit-overflow-scrolling: touch;    /* smooth momentum scroll on iOS */
 }
 
 ::selection {
