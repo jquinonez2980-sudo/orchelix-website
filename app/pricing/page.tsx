@@ -15,6 +15,7 @@ export default function PricingPage() {
       <main id="top">
         <PricingHero />
         <HowItWorks />
+        <LocalTiers />
         <Tiers />
         <FAQ />
         <PricingFinalCTA />
@@ -180,6 +181,193 @@ function HowItWorks() {
   );
 }
 
+/* ─── Local Business ─────────────────────────────────────────────────────── */
+
+interface LocalTierDef {
+  id: string;
+  name: string;
+  monthlyPrice: string;
+  setupPrice: string;
+  desc: string;
+  badge?: string;
+  ctaLabel: string;
+  ctaHref: string;
+  features: string[];
+}
+
+const LOCAL_TIERS: LocalTierDef[] = [
+  {
+    id: "esmi-local-voice",
+    name: "Esmi Local — Chat + Voice",
+    monthlyPrice: "$299",
+    setupPrice: "$499 one-time setup",
+    desc: "Esmi answers your phone and your website chat, every hour you're closed.",
+    badge: "Most Popular",
+    ctaLabel: "Get Esmi Local",
+    ctaHref: "/book",
+    features: [
+      "Answers calls & chats 24/7",
+      "Books directly into your Google Calendar",
+      "Bilingual (English & Spanish)",
+      "Pre-configured for your business type in 48 hours",
+      "Month-to-month, cancel anytime",
+    ],
+  },
+  {
+    id: "esmi-local-chat",
+    name: "Esmi Local — Chat Only",
+    monthlyPrice: "$199",
+    setupPrice: "$299 one-time setup",
+    desc: "All the same coverage on your website chat — no phone line required.",
+    ctaLabel: "Get Esmi Local",
+    ctaHref: "/book",
+    features: [
+      "Answers website chats 24/7 (no phone line)",
+      "Books directly into your Google Calendar",
+      "Bilingual (English & Spanish)",
+      "Pre-configured for your business type in 48 hours",
+      "Month-to-month, cancel anytime",
+    ],
+  },
+];
+
+function LocalTiers() {
+  return (
+    <section
+      className="px-6 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-24"
+      style={{ background: "var(--surface-2)", borderTop: "1px solid var(--line)" }}
+    >
+      <div className="mx-auto max-w-[1200px]">
+        <div className="mb-10 text-center">
+          <span
+            className="inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.18em]"
+            style={{ fontFamily: "var(--font-mono)", color: "var(--teal-700)" }}
+          >
+            <span className="inline-block h-px w-[18px] bg-current opacity-70" />
+            Local Business
+            <span className="inline-block h-px w-[18px] bg-current opacity-70" />
+          </span>
+          <h2
+            className="mx-auto mt-3 max-w-[640px] text-[28px] font-semibold leading-[1.15] tracking-[-0.022em] sm:text-[34px]"
+            style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
+          >
+            A 24/7 AI receptionist for single-location businesses.
+          </h2>
+          <p
+            className="mx-auto mt-3 max-w-[560px] text-[15px] leading-[1.6]"
+            style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
+          >
+            Self-serve pricing, live in 48 hours. No contracts.
+          </p>
+        </div>
+
+        <div className="mx-auto grid max-w-[820px] grid-cols-1 gap-5 sm:grid-cols-2">
+          {LOCAL_TIERS.map((tier) => (
+            <LocalTierCard key={tier.id} tier={tier} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function LocalTierCard({ tier }: { tier: LocalTierDef }) {
+  return (
+    <article
+      className="flex flex-col rounded-[22px] border p-6 sm:p-7"
+      aria-labelledby={`tier-${tier.id}`}
+      style={{
+        borderColor: tier.badge ? "var(--teal-500)" : "var(--line)",
+        background: "#fff",
+        boxShadow: tier.badge
+          ? "0 2px 8px rgba(10,37,64,0.06), 0 0 0 1px rgba(20,184,166,0.18)"
+          : "0 2px 8px rgba(10,37,64,0.06), 0 1px 2px rgba(10,37,64,0.04)",
+      }}
+    >
+      {tier.badge && (
+        <span
+          className="mb-4 inline-flex w-fit rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em]"
+          style={{ background: "var(--teal-50)", color: "var(--teal-700)" }}
+        >
+          {tier.badge}
+        </span>
+      )}
+
+      <div
+        className="text-[17px] font-semibold tracking-[-0.018em] leading-snug"
+        id={`tier-${tier.id}`}
+        style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
+      >
+        {tier.name}
+      </div>
+
+      <p
+        className="mb-6 mt-3 text-[13.5px] leading-[1.55]"
+        style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
+      >
+        {tier.desc}
+      </p>
+
+      <div className="mb-6 border-t pt-5" style={{ borderColor: "var(--line)" }}>
+        <div className="flex items-baseline gap-1.5">
+          <span
+            className="text-[36px] font-semibold leading-none tracking-[-0.030em]"
+            style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
+          >
+            {tier.monthlyPrice}
+          </span>
+          <span
+            className="text-[13px]"
+            style={{ fontFamily: "var(--font-display)", color: "var(--ink-3)" }}
+          >
+            / mo
+          </span>
+        </div>
+        <div
+          className="mt-1.5 text-[11.5px]"
+          style={{ fontFamily: "var(--font-mono)", color: "var(--ink-3)" }}
+        >
+          + {tier.setupPrice}
+        </div>
+      </div>
+
+      <a
+        href={tier.ctaHref}
+        className="mb-6 flex h-11 items-center justify-center rounded-xl border text-[14px] font-medium transition-colors hover:bg-surface-2"
+        style={{
+          fontFamily: "var(--font-display)",
+          borderColor: "var(--line-strong)",
+          background: "#fff",
+          color: "var(--navy-600)",
+        }}
+      >
+        {tier.ctaLabel}
+      </a>
+
+      <ul className="flex flex-col gap-3">
+        {tier.features.map((f, i) => (
+          <li key={i} className="flex items-start gap-2.5">
+            <span
+              className="mt-0.5 shrink-0 inline-flex h-[18px] w-[18px] items-center justify-center rounded-full"
+              style={{ background: "var(--teal-50)", color: "var(--teal-700)" }}
+            >
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12.5l5 5 9-11" />
+              </svg>
+            </span>
+            <span
+              className="text-[13px] leading-[1.5]"
+              style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
+            >
+              {f}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </article>
+  );
+}
+
 /* ─── Tiers ───────────────────────────────────────────────────────────────── */
 
 type TierFeature = { head: string } | { text: string };
@@ -275,8 +463,26 @@ function Tiers() {
     <section
       id="pricing"
       className="scroll-mt-20 px-6 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-24"
+      style={{ borderTop: "1px solid var(--line)" }}
     >
       <div className="mx-auto max-w-[1200px]">
+        <div className="mb-10 text-center">
+          <span
+            className="inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.18em]"
+            style={{ fontFamily: "var(--font-mono)", color: "var(--navy-500)" }}
+          >
+            <span className="inline-block h-px w-[18px] bg-current opacity-70" />
+            Custom / Enterprise
+            <span className="inline-block h-px w-[18px] bg-current opacity-70" />
+          </span>
+          <p
+            className="mx-auto mt-3 max-w-[560px] text-[15px] leading-[1.6]"
+            style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
+          >
+            For multi-location businesses, law firms, and medical groups.
+          </p>
+        </div>
+
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
           {TIERS.map((tier) => (
             <TierCard key={tier.id} tier={tier} />
