@@ -16,13 +16,7 @@
     "react-dom": "19.2.4",
     "resend": "^6.12.3"
   },
-  "browserslist": [
-    "chrome >= 80",
-    "safari >= 14.1",
-    "firefox >= 78",
-    "edge >= 80",
-    "not dead"
-  ],
+  "browserslist": [">1%, last 2 versions, not dead"],
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",

@@ -42,12 +42,28 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        // Security headers applied to all routes.
         source: "/(.*)",
         headers: [
           { key: "X-Frame-Options", value: "SAMEORIGIN" },
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+        ],
+      },
+      {
+        // Public image assets served directly (not through /_next/image).
+        // 1-day browser cache, 1-year CDN cache (Vercel strips s-maxage on revalidation).
+        source: "/images/(.*)",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=86400, s-maxage=31536000, stale-while-revalidate=604800" },
+        ],
+      },
+      {
+        // Favicons, icons, manifests — long-lived in CDN, short browser cache.
+        source: "/:file(favicon\\.ico|robots\\.txt|sitemap\\.xml|.*\\.webmanifest)",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=86400, s-maxage=2592000" },
         ],
       },
     ];

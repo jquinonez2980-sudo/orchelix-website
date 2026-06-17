@@ -702,9 +702,12 @@ function MessageBubble({
           boxShadow: "0 0 10px rgba(0,240,255,0.20)",
         }}
       >
-        <img
+        <Image
           src="/esmi-logo.png"
           alt="Esmi"
+          width={566}
+          height={273}
+          sizes="26px"
           style={{ width: "100%", height: "auto", objectFit: "contain", display: "block" }}
         />
       </div>
