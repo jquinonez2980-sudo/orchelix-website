@@ -95,7 +95,6 @@ export default function Nav({ theme = "light" }: { theme?: "light" | "dark" }) {
             alt="Orchelix AI Consulting"
             width={160}
             height={40}
-            priority
             style={{ height: 40, width: "auto", filter: dark ? "brightness(0) invert(1)" : undefined }}
           />
         </a>

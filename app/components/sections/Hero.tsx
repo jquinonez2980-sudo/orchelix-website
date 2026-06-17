@@ -1,7 +1,34 @@
 import Image from "next/image";
 
+// Encoded hero image path (used in both the preload srcset and the Image component).
+// Matches the deviceSizes array in next.config.ts: [390, 750, 1080, 1200, 1920].
+const HERO_SRC = "/images/hero/hero-main.png";
+const HERO_ENCODED = encodeURIComponent(HERO_SRC);
+const HERO_Q = 75;
+const HERO_SRCSET = [390, 750, 1080, 1200, 1920]
+  .map((w) => `/_next/image?url=${HERO_ENCODED}&w=${w}&q=${HERO_Q} ${w}w`)
+  .join(", ");
+const HERO_SIZES = "(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px";
+
 export default function Hero() {
   return (
+    <>
+      {/*
+        Explicit preload with fetchpriority="high" so the browser queues the
+        hero image at the highest network priority the moment it parses the
+        document head — Next.js's auto-generated preload (from priority=true on
+        the <Image>) lacks this attribute in the current Next.js version.
+        The imageSrcSet mirrors what next/image serves so the browser
+        de-duplicates the fetch and pulls from its preload cache.
+      */}
+      <link
+        rel="preload"
+        as="image"
+        href={`/_next/image?url=${HERO_ENCODED}&w=750&q=${HERO_Q}`}
+        imageSrcSet={HERO_SRCSET}
+        imageSizes={HERO_SIZES}
+        fetchPriority="high"
+      />
     <section
       id="top"
       className="relative overflow-hidden"
@@ -104,6 +131,7 @@ export default function Hero() {
         </div>
       </div>
     </section>
+    </>
   );
 }
 
