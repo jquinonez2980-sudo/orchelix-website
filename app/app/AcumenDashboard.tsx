@@ -752,7 +752,7 @@ function LiveConsole({ token }: { token: string | null }) {
     const acct = selectedClient ?? undefined;
     Promise.all([
       acumenApi.summary(token, period, acct),
-      acumenApi.approvals(token, acct, true),
+      acumenApi.approvals(token, acct, true, period),
       acumenApi.transactions(token, period, acct, 200),
     ])
       .then(([s, a, t]) => {

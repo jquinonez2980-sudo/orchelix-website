@@ -142,9 +142,9 @@ export const acumenApi = {
   transactions: (token: string | null, period: string, client?: string, limit = 200) =>
     get<Txn[]>(`/api/live/transactions?period=${encodeURIComponent(period)}${client ? `&client=${encodeURIComponent(client)}` : ""}&limit=${limit}`, token),
 
-  approvals: (token: string | null, accountNo?: string, includeApproved = true) =>
+  approvals: (token: string | null, accountNo?: string, includeApproved = true, period?: string) =>
     get<ApprovalItem[]>(
-      `/api/live/approvals?include_approved=${includeApproved}${accountNo ? `&account_no=${encodeURIComponent(accountNo)}` : ""}`,
+      `/api/live/approvals?include_approved=${includeApproved}${accountNo ? `&account_no=${encodeURIComponent(accountNo)}` : ""}${period ? `&period=${encodeURIComponent(period)}` : ""}`,
       token,
     ),
 
