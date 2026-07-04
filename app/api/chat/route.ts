@@ -9,6 +9,14 @@ const RAILWAY_URL =
 export async function POST(req: NextRequest) {
   const body = await req.json();
 
+  // Vercel's edge sets x-forwarded-for to the real visitor IP on the incoming
+  // request; this server-to-server fetch to Railway would otherwise show every
+  // visitor as this same serverless function's egress IP, collapsing Esmi's
+  // per-visitor rate limit into one shared bucket. Forwarded only when the
+  // request also carries CHAT_PROXY_SECRET (see api.py's _rate_limit_key).
+  const clientIp =
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+
   let upstream: Response;
   try {
     upstream = await fetch(`${RAILWAY_URL}/chat`, {
@@ -16,6 +24,7 @@ export async function POST(req: NextRequest) {
       headers: {
         "Content-Type": "application/json",
         "X-Chat-Secret": process.env.CHAT_PROXY_SECRET ?? "",
+        "X-Client-IP": clientIp,
       },
       body: JSON.stringify(body),
       // @ts-expect-error — Node 18 fetch supports duplex but types lag
