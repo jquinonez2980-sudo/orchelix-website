@@ -229,6 +229,24 @@ const LOCAL_TIERS: LocalTierDef[] = [
       "Month-to-month, cancel anytime",
     ],
   },
+  {
+    id: "esmi-pro",
+    name: "Esmi Pro",
+    monthlyPrice: "$699",
+    setupPrice: "$2,500 one-time setup",
+    desc: "For established businesses where one missed call is worth hundreds — dental, med spa, HVAC, contractors, showrooms.",
+    badge: "Best for Growing Teams",
+    ctaLabel: "Get Esmi Pro",
+    ctaHref: "/book",
+    features: [
+      "Everything in Esmi Local — voice + chat, 24/7",
+      "Custom knowledge base written for your business",
+      "Custom persona — name it, tune the tone",
+      "Multi-agent lead qualification & scoring",
+      "Hot-lead escalation straight to your phone",
+      "Priority setup (5 business days) + 1 month of tweaks",
+    ],
+  },
 ];
 
 function LocalTiers() {
@@ -251,17 +269,17 @@ function LocalTiers() {
             className="mx-auto mt-3 max-w-[640px] text-[28px] font-semibold leading-[1.15] tracking-[-0.022em] sm:text-[34px]"
             style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
           >
-            A 24/7 AI receptionist for single-location businesses.
+            A 24/7 AI receptionist for local and growing businesses.
           </h2>
           <p
             className="mx-auto mt-3 max-w-[560px] text-[15px] leading-[1.6]"
             style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
           >
-            Self-serve pricing, live in 48 hours. No contracts.
+            Simple pricing, live in days. No contracts — cancel anytime.
           </p>
         </div>
 
-        <div className="mx-auto grid max-w-[820px] grid-cols-1 gap-5 sm:grid-cols-2">
+        <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {LOCAL_TIERS.map((tier) => (
             <LocalTierCard key={tier.id} tier={tier} />
           ))}
@@ -390,7 +408,7 @@ interface TierDef {
 const TIERS: TierDef[] = [
   {
     id: "esmi",
-    name: "Esmi AI Virtual Receptionist & Lead Qualification System",
+    name: "Esmi Enterprise — AI Virtual Receptionist & Lead Qualification System",
     sub: "01",
     desc: "24/7 AI agent that qualifies inbound leads, answers FAQs, books appointments, and escalates when needed — via voice, SMS, and email. EN/ES bilingual.",
     setupPrice: "$8,500",
@@ -399,7 +417,7 @@ const TIERS: TierDef[] = [
     badge: "Most Popular",
     ctaLabel: "Get Started with Esmi",
     ctaHref: "/book",
-    idealFor: "Any business that receives inbound leads or inquiries.",
+    idealFor: "Multi-location businesses, law firms, medical groups, and franchises.",
     features: [
       { text: "**Custom LangGraph AI agent** (voice + SMS + email)" },
       { text: "Advanced lead qualification with scoring and routing" },
@@ -764,8 +782,12 @@ function TierCard({ tier }: { tier: TierDef }) {
 
 const FAQS = [
   {
+    q: "What's the difference between Esmi Local, Pro, and Enterprise?",
+    a: "Esmi Local is a pre-configured receptionist for single-location shops — live in 48 hours from $199/mo. Esmi Pro adds a custom knowledge base, custom persona, and multi-agent lead qualification for established businesses ($699/mo). Esmi Enterprise is a fully custom build for multi-location businesses and firms, from $1,099/mo.",
+  },
+  {
     q: "How long does it take to launch?",
-    a: "Esmi and the Sales Assistant typically launch in 2–3 weeks. The Firm OS uses phased delivery, with the first phase live in 4–6 weeks.",
+    a: "Esmi Local goes live in 48 hours and Esmi Pro in about 5 business days. Enterprise systems and the Sales Assistant typically launch in 2–3 weeks. The Firm OS uses phased delivery, with the first phase live in 4–6 weeks.",
   },
   {
     q: "Can I start with one system and add more later?",
