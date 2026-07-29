@@ -74,6 +74,63 @@ export type OverviewResponse = {
   previous: OverviewBucket;
 };
 
+export type AppointmentStatus = "upcoming" | "past";
+
+export type Appointment = {
+  id: string;
+  starts_at: string;
+  ends_at: string | null;
+  customer_name: string;
+  contact_phone: string | null;
+  contact_email: string | null;
+  service: string | null;
+  location: string;
+  source: string | null; // voice | chat | website | null (added manually)
+  status: AppointmentStatus;
+  esmi_booked: boolean;
+};
+
+export type AppointmentsResponse = {
+  tenant_id: string;
+  total: number;
+  upcoming_count: number;
+  limit: number;
+  offset: number;
+  appointments: Appointment[];
+};
+
+export type AppointmentsQuery = {
+  status?: "upcoming" | "past" | "all";
+  search?: string;
+  limit?: number;
+  offset?: number;
+};
+
+export async function fetchAppointments(
+  q: AppointmentsQuery,
+): Promise<AppointmentsResponse> {
+  const params = new URLSearchParams();
+  if (q.status) params.set("status", q.status);
+  if (q.search) params.set("search", q.search);
+  if (q.limit) params.set("limit", String(q.limit));
+  if (q.offset) params.set("offset", String(q.offset));
+  const res = await fetch(`/api/platform/appointments?${params}`, {
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Request failed (${res.status})`;
+    try {
+      const body = await res.json();
+      if (typeof body?.error === "string") detail = body.error;
+      if (typeof body?.detail === "string") detail = body.detail;
+    } catch {
+      /* keep default */
+    }
+    throw new Error(detail);
+  }
+  return res.json();
+}
+
 export async function fetchOverview(): Promise<OverviewResponse> {
   const res = await fetch("/api/platform/overview", { cache: "no-store" });
   if (!res.ok) {
