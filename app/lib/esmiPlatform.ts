@@ -239,6 +239,91 @@ export async function updateLeadStatus(
   return data.lead as Lead;
 }
 
+/* ── Settings (Business Profile + Hours + Services + Greeting) ────────────── */
+
+export type LocationSettings = {
+  name: string;
+  address: string;
+  phone: string;
+  business_hours: [number, number];
+  business_days: number[];
+  booking_days: number[] | null;
+  day_hours: Record<string, [number, number]>;
+};
+
+export type ServiceSettings = {
+  name: string;
+  duration_min: number;
+  price: string;
+  price_by_location: Record<string, string>;
+};
+
+export type PlatformConfig = {
+  company_name: string;
+  greeting: string;
+  transfer_phone: string;
+  business_hours: [number, number];
+  business_days: number[];
+  has_locations: boolean;
+  locations: Record<string, LocationSettings>;
+  services: Record<string, ServiceSettings>;
+  emails: {
+    booking_to: string;
+    escalation_to: string;
+  };
+};
+
+export type ConfigResponse = {
+  tenant_id: string;
+  version: number | null;
+  config: PlatformConfig;
+};
+
+// Partial update sent to PUT /api/platform/config — every field optional,
+// only the ones the form touched need to be present. expected_version enables
+// optimistic-concurrency: omit it to always overwrite.
+export type ConfigUpdate = Partial<{
+  company_name: string;
+  greeting: string;
+  transfer_phone: string;
+  business_hours: [number, number];
+  business_days: number[];
+  locations: Record<string, Partial<Omit<LocationSettings, "day_hours">> & {
+    day_hours?: Record<string, [number, number]>;
+  }>;
+  services: Record<string, ServiceSettings>;
+  emails: Partial<PlatformConfig["emails"]>;
+  expected_version: number;
+}>;
+
+async function readErrorDetail(res: Response): Promise<string> {
+  let detail = `Request failed (${res.status})`;
+  try {
+    const body = await res.json();
+    if (typeof body?.error === "string") detail = body.error;
+    if (typeof body?.detail === "string") detail = body.detail;
+  } catch {
+    /* keep default */
+  }
+  return detail;
+}
+
+export async function fetchConfig(): Promise<ConfigResponse> {
+  const res = await fetch("/api/platform/config", { cache: "no-store" });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
+
+export async function updateConfig(update: ConfigUpdate): Promise<ConfigResponse> {
+  const res = await fetch("/api/platform/config", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(update),
+  });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
+
 export async function fetchCalls(q: CallsQuery): Promise<CallsResponse> {
   const params = new URLSearchParams();
   if (q.limit) params.set("limit", String(q.limit));

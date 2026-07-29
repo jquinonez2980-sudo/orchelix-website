@@ -68,6 +68,21 @@ export async function proxyPlatformPATCH(
   req: NextRequest,
   upstreamPath: string,
 ): Promise<Response> {
+  return proxyPlatformWrite(req, upstreamPath, "PATCH");
+}
+
+export async function proxyPlatformPUT(
+  req: NextRequest,
+  upstreamPath: string,
+): Promise<Response> {
+  return proxyPlatformWrite(req, upstreamPath, "PUT");
+}
+
+async function proxyPlatformWrite(
+  req: NextRequest,
+  upstreamPath: string,
+  method: "PATCH" | "PUT",
+): Promise<Response> {
   const { userId, orgSlug } = await auth();
   if (!userId) {
     return Response.json({ error: "Not signed in." }, { status: 401 });
@@ -92,10 +107,13 @@ export async function proxyPlatformPATCH(
   let upstream: Response;
   try {
     upstream = await fetch(`${RAILWAY_URL}${upstreamPath}`, {
-      method: "PATCH",
+      method,
       headers: {
         "X-Platform-Secret": secret,
         "X-Tenant-Id": orgSlug,
+        // Best-effort audit trail — who published this config version.
+        // The backend defaults to "dashboard" if this is absent.
+        "X-Platform-User": userId,
         "Content-Type": "application/json",
       },
       body: payload,
