@@ -147,6 +147,98 @@ export async function fetchOverview(): Promise<OverviewResponse> {
   return res.json();
 }
 
+export const LEAD_STATUSES = ["new", "contacted", "won", "lost"] as const;
+
+export type LeadStatus = (typeof LEAD_STATUSES)[number];
+
+export type LeadCall = {
+  id: string;
+  vapi_call_id: string | null;
+  started_at: string | null;
+  outcome: CallOutcome | null;
+  summary: string | null;
+};
+
+export type Lead = {
+  // Real leads: the LangGraph thread_id. Derived (voice, not yet promoted):
+  // "voice:<call id>" — see platform_api/leads.py.
+  id: string;
+  contact: string | null;
+  summary: string | null;
+  lead_score: number | null;
+  qualified: boolean;
+  status: LeadStatus;
+  last_updated: string | null;
+  source_call_id: string | null;
+  // True when this row has no persisted `leads` record yet — it's computed
+  // from an escalated call (voice bypasses the graph, so it's never recorded
+  // the way a qualified web chat is). The first status change promotes it.
+  derived: boolean;
+  call: LeadCall | null;
+};
+
+export type LeadsResponse = {
+  tenant_id: string;
+  total: number;
+  limit: number;
+  offset: number;
+  leads: Lead[];
+};
+
+export type LeadsQuery = {
+  status?: LeadStatus | "";
+  search?: string;
+  limit?: number;
+  offset?: number;
+};
+
+export async function fetchLeads(q: LeadsQuery): Promise<LeadsResponse> {
+  const params = new URLSearchParams();
+  if (q.status) params.set("status", q.status);
+  if (q.search) params.set("search", q.search);
+  if (q.limit) params.set("limit", String(q.limit));
+  if (q.offset) params.set("offset", String(q.offset));
+  const res = await fetch(`/api/platform/leads?${params}`, {
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Request failed (${res.status})`;
+    try {
+      const body = await res.json();
+      if (typeof body?.error === "string") detail = body.error;
+      if (typeof body?.detail === "string") detail = body.detail;
+    } catch {
+      /* keep default */
+    }
+    throw new Error(detail);
+  }
+  return res.json();
+}
+
+export async function updateLeadStatus(
+  leadId: string,
+  status: LeadStatus,
+): Promise<Lead> {
+  const res = await fetch(`/api/platform/leads/${encodeURIComponent(leadId)}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status }),
+  });
+  if (!res.ok) {
+    let detail = `Request failed (${res.status})`;
+    try {
+      const body = await res.json();
+      if (typeof body?.error === "string") detail = body.error;
+      if (typeof body?.detail === "string") detail = body.detail;
+    } catch {
+      /* keep default */
+    }
+    throw new Error(detail);
+  }
+  const data = await res.json();
+  return data.lead as Lead;
+}
+
 export async function fetchCalls(q: CallsQuery): Promise<CallsResponse> {
   const params = new URLSearchParams();
   if (q.limit) params.set("limit", String(q.limit));

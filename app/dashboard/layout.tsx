@@ -87,6 +87,12 @@ export default async function EsmiDashboardLayout({
               >
                 Appointments
               </Link>
+              <Link
+                href="/dashboard/leads"
+                className="rounded-md px-3 py-1.5 font-medium text-ink hover:bg-surface-2"
+              >
+                Leads
+              </Link>
             </nav>
             <div className="ml-auto flex items-center gap-3">
               <OrganizationSwitcher

@@ -63,3 +63,54 @@ export async function proxyPlatformGET(
     headers: { "Content-Type": "application/json", "Cache-Control": "no-store" },
   });
 }
+
+export async function proxyPlatformPATCH(
+  req: NextRequest,
+  upstreamPath: string,
+): Promise<Response> {
+  const { userId, orgSlug } = await auth();
+  if (!userId) {
+    return Response.json({ error: "Not signed in." }, { status: 401 });
+  }
+  if (!orgSlug) {
+    return Response.json(
+      { error: "No active organization — pick one in the switcher." },
+      { status: 403 },
+    );
+  }
+
+  const secret = process.env.PLATFORM_API_SECRET;
+  if (!secret) {
+    return Response.json(
+      { error: "Dashboard is not configured (missing PLATFORM_API_SECRET)." },
+      { status: 503 },
+    );
+  }
+
+  const payload = await req.text();
+
+  let upstream: Response;
+  try {
+    upstream = await fetch(`${RAILWAY_URL}${upstreamPath}`, {
+      method: "PATCH",
+      headers: {
+        "X-Platform-Secret": secret,
+        "X-Tenant-Id": orgSlug,
+        "Content-Type": "application/json",
+      },
+      body: payload,
+      cache: "no-store",
+    });
+  } catch {
+    return Response.json(
+      { error: "Could not reach the Esmi backend — try again shortly." },
+      { status: 502 },
+    );
+  }
+
+  const body = await upstream.text();
+  return new Response(body, {
+    status: upstream.status,
+    headers: { "Content-Type": "application/json", "Cache-Control": "no-store" },
+  });
+}
