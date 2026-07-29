@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import SettingsForm from "./SettingsForm";
+import VersionHistory from "./VersionHistory";
 
 export const dynamic = "force-dynamic";
 
@@ -19,6 +20,7 @@ export default function SettingsPage() {
         </p>
       </div>
       <SettingsForm />
+      <VersionHistory />
     </main>
   );
 }

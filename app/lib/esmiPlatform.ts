@@ -324,6 +324,38 @@ export async function updateConfig(update: ConfigUpdate): Promise<ConfigResponse
   return res.json();
 }
 
+export type ConfigVersionSummary = {
+  version: number;
+  created_at: string | null;
+  created_by: string | null;
+  summary: string;
+};
+
+export type ConfigVersionsResponse = {
+  tenant_id: string;
+  versions: ConfigVersionSummary[];
+};
+
+export type ConfigVersionDetail = {
+  tenant_id: string;
+  version: number;
+  created_at: string | null;
+  created_by: string | null;
+  config: PlatformConfig;
+};
+
+export async function fetchConfigVersions(): Promise<ConfigVersionsResponse> {
+  const res = await fetch("/api/platform/config/versions", { cache: "no-store" });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
+
+export async function fetchConfigVersion(version: number): Promise<ConfigVersionDetail> {
+  const res = await fetch(`/api/platform/config/versions/${version}`, { cache: "no-store" });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
+
 export async function fetchCalls(q: CallsQuery): Promise<CallsResponse> {
   const params = new URLSearchParams();
   if (q.limit) params.set("limit", String(q.limit));
