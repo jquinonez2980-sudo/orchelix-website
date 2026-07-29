@@ -1,5 +1,6 @@
 "use client";
 
+import { useUser } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import {
   fetchConfigVersion,
@@ -21,6 +22,20 @@ function fmtWhen(iso: string | null): string {
   if (!iso) return "—";
   const d = new Date(iso);
   return Number.isNaN(d.getTime()) ? "—" : dateTimeFmt.format(d);
+}
+
+// created_by is an internal value (a Clerk user id, or the one-off import
+// script's name) — never show that raw to a tenant.
+function friendlyCreatedBy(
+  createdBy: string | null,
+  currentUserId: string | null | undefined,
+): string | null {
+  if (!createdBy) return null;
+  if (createdBy === "import_tenant_configs") return "Initial setup";
+  if (createdBy.startsWith("user_")) {
+    return createdBy === currentUserId ? "You" : "Team member";
+  }
+  return "Dashboard";
 }
 
 /* ── read-only snapshot of a past version ──────────────────────────────── */
@@ -99,7 +114,13 @@ function ConfigSnapshot({ config }: { config: PlatformConfig }) {
 
 /* ── version row (expandable) ──────────────────────────────────────────── */
 
-function VersionRow({ v }: { v: ConfigVersionSummary }) {
+function VersionRow({
+  v,
+  currentUserId,
+}: {
+  v: ConfigVersionSummary;
+  currentUserId: string | null | undefined;
+}) {
   const [expanded, setExpanded] = useState(false);
   const [detail, setDetail] = useState<ConfigVersionDetail | null>(null);
   const [loading, setLoading] = useState(false);
@@ -134,7 +155,11 @@ function VersionRow({ v }: { v: ConfigVersionSummary }) {
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium text-ink">v{v.version}</span>
             <span className="text-xs text-ink-4">{fmtWhen(v.created_at)}</span>
-            {v.created_by && <span className="text-xs text-ink-4">· {v.created_by}</span>}
+            {friendlyCreatedBy(v.created_by, currentUserId) && (
+              <span className="text-xs text-ink-4">
+                · {friendlyCreatedBy(v.created_by, currentUserId)}
+              </span>
+            )}
           </div>
           <p className="mt-0.5 truncate text-sm text-ink-2">{v.summary}</p>
         </div>
@@ -153,9 +178,28 @@ function VersionRow({ v }: { v: ConfigVersionSummary }) {
   );
 }
 
+/* ── loading skeleton ───────────────────────────────────────────────────── */
+
+function SkeletonRows() {
+  return (
+    <div>
+      {Array.from({ length: 3 }).map((_, i) => (
+        <div key={i} className="border-t border-line px-4 py-3 first:border-t-0 sm:px-6">
+          <div className="flex animate-pulse items-center gap-3">
+            <div className="h-4 w-8 rounded bg-surface-2" />
+            <div className="h-3 w-28 rounded bg-surface-2" />
+            <div className="h-3 flex-1 rounded bg-surface-2" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 /* ── main section ───────────────────────────────────────────────────────── */
 
-export default function VersionHistory() {
+export default function VersionHistory({ reloadSignal }: { reloadSignal?: number } = {}) {
+  const { user } = useUser();
   const [versions, setVersions] = useState<ConfigVersionSummary[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -173,7 +217,7 @@ export default function VersionHistory() {
         setError(e.message);
         setLoading(false);
       });
-  }, [reloadKey]);
+  }, [reloadKey, reloadSignal]);
 
   return (
     <div className="mt-6 overflow-hidden rounded-lg border border-line bg-surface shadow-sm">
@@ -193,15 +237,26 @@ export default function VersionHistory() {
           Refresh
         </button>
       </div>
-      {loading && <p className="px-4 py-6 text-sm text-ink-4 sm:px-6">Loading…</p>}
-      {error && <p className="px-4 py-6 text-sm text-red-600 sm:px-6">{error}</p>}
-      {versions && versions.length === 0 && (
+      {loading && <SkeletonRows />}
+      {error && (
+        <div className="px-4 py-6 text-center sm:px-6">
+          <p className="text-sm text-red-600">{error}</p>
+          <button
+            type="button"
+            onClick={() => setReloadKey((k) => k + 1)}
+            className="mt-3 rounded-md bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-500"
+          >
+            Try again
+          </button>
+        </div>
+      )}
+      {versions && versions.length === 0 && !loading && !error && (
         <p className="px-4 py-6 text-sm text-ink-4 sm:px-6">No versions yet.</p>
       )}
-      {versions && versions.length > 0 && (
+      {versions && versions.length > 0 && !loading && (
         <div>
           {versions.map((v) => (
-            <VersionRow key={v.version} v={v} />
+            <VersionRow key={v.version} v={v} currentUserId={user?.id} />
           ))}
         </div>
       )}

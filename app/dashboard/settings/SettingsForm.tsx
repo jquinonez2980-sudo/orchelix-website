@@ -263,7 +263,7 @@ function ServiceRow({
 
 /* ── main form ──────────────────────────────────────────────────────────── */
 
-export default function SettingsForm() {
+export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {}) {
   const [data, setData] = useState<ConfigResponse | null>(null);
   const [form, setForm] = useState<PlatformConfig | null>(null);
   const [loading, setLoading] = useState(true);
@@ -382,6 +382,7 @@ export default function SettingsForm() {
       setData(result);
       setForm(structuredClone(result.config));
       setSavedAt(Date.now());
+      onSaved?.();
     } catch (e) {
       setSaveError(e instanceof Error ? e.message : "Save failed");
     } finally {
@@ -404,7 +405,7 @@ export default function SettingsForm() {
 
       <Section
         title="Greeting"
-        description="A custom opening line for Esmi. Not live in conversations yet — this is stored now so it's ready when the prompt template picks it up."
+        description="Esmi opens with this line on the first reply of a new conversation. Leave it blank to use the default opening."
       >
         <textarea
           rows={3}

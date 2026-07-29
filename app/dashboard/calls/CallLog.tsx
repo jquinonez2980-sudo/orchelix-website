@@ -38,7 +38,7 @@ function fmtDuration(sec: number | null): string {
 }
 
 function fmtCaller(e164: string | null): string {
-  if (!e164) return "Unknown";
+  if (!e164) return "No caller ID";
   const m = e164.match(/^\+1(\d{3})(\d{3})(\d{4})$/);
   return m ? `(${m[1]}) ${m[2]}-${m[3]}` : e164;
 }

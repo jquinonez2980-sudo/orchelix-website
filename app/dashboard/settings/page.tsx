@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import SettingsForm from "./SettingsForm";
-import VersionHistory from "./VersionHistory";
+import SettingsPanels from "./SettingsPanels";
 
 export const dynamic = "force-dynamic";
 
@@ -19,8 +18,7 @@ export default function SettingsPage() {
           Esmi within about a minute of saving.
         </p>
       </div>
-      <SettingsForm />
-      <VersionHistory />
+      <SettingsPanels />
     </main>
   );
 }

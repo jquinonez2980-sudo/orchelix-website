@@ -170,9 +170,9 @@ export default function Overview() {
         />
         <Tile
           label="Minutes used"
-          value={cur.minutes_used.toLocaleString(undefined, {
+          value={`${cur.minutes_used.toLocaleString(undefined, {
             maximumFractionDigits: 1,
-          })}
+          })} min`}
           delta={computeDelta(cur.minutes_used, prev.minutes_used)}
         />
         {cur.est_revenue_booked != null && (
@@ -190,7 +190,7 @@ export default function Overview() {
 
       <p className="text-xs text-ink-4">
         Last 7 days vs the 7 days before, in your business timezone ({data.business_tz}).
-        Voice calls only for now.{" "}
+        Phone calls only — other channels aren&apos;t counted yet.{" "}
         <Link href="/dashboard/calls" className="text-teal-700 hover:underline">
           See every call →
         </Link>

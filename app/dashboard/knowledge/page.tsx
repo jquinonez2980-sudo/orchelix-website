@@ -15,7 +15,7 @@ export default function KnowledgePage() {
         <h1 className="font-display text-2xl font-semibold text-ink">Knowledge Base</h1>
         <p className="mt-1 text-sm text-ink-2">
           FAQs and short notes Esmi can pull from when answering questions. Changes are
-          searchable within a minute — no code deploy needed.
+          searchable within about a minute of saving.
         </p>
       </div>
       <KnowledgeManager />

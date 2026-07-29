@@ -424,7 +424,7 @@ export default function LeadsInbox() {
               <th className="px-4 py-3">Source</th>
               <th className="px-4 py-3">Contact</th>
               <th className="px-4 py-3">Summary</th>
-              <th className="px-4 py-3">Score</th>
+              <th className="px-4 py-3">Lead score (0–100)</th>
               <th className="px-4 py-3">Call</th>
               <th className="px-4 py-3">Status</th>
             </tr>
