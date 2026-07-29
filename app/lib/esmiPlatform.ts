@@ -356,6 +356,57 @@ export async function fetchConfigVersion(version: number): Promise<ConfigVersion
   return res.json();
 }
 
+/* ── Knowledge base (FAQ / text entries) ───────────────────────────────────── */
+
+export type KnowledgeEntry = {
+  id: string;
+  question: string | null;
+  answer: string;
+  created_at: string;
+};
+
+export type KnowledgeListResponse = {
+  tenant_id: string;
+  entries: KnowledgeEntry[];
+  other_docs_count: number;
+};
+
+export async function fetchKnowledge(): Promise<KnowledgeListResponse> {
+  const res = await fetch("/api/platform/knowledge", { cache: "no-store" });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
+
+export async function addKnowledgeEntry(
+  entry: { question?: string; answer: string },
+): Promise<KnowledgeEntry> {
+  const res = await fetch("/api/platform/knowledge", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(entry),
+  });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  const data = await res.json();
+  return data.entry as KnowledgeEntry;
+}
+
+export async function deleteKnowledgeEntry(id: string): Promise<void> {
+  const res = await fetch(`/api/platform/knowledge/${encodeURIComponent(id)}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+}
+
+export async function testKnowledge(query: string): Promise<{ query: string; result: string }> {
+  const res = await fetch("/api/platform/knowledge/test", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ query }),
+  });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
+
 export async function fetchCalls(q: CallsQuery): Promise<CallsResponse> {
   const params = new URLSearchParams();
   if (q.limit) params.set("limit", String(q.limit));

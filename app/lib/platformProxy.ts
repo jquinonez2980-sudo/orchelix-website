@@ -78,10 +78,24 @@ export async function proxyPlatformPUT(
   return proxyPlatformWrite(req, upstreamPath, "PUT");
 }
 
+export async function proxyPlatformPOST(
+  req: NextRequest,
+  upstreamPath: string,
+): Promise<Response> {
+  return proxyPlatformWrite(req, upstreamPath, "POST");
+}
+
+export async function proxyPlatformDELETE(
+  req: NextRequest,
+  upstreamPath: string,
+): Promise<Response> {
+  return proxyPlatformWrite(req, upstreamPath, "DELETE");
+}
+
 async function proxyPlatformWrite(
   req: NextRequest,
   upstreamPath: string,
-  method: "PATCH" | "PUT",
+  method: "PATCH" | "PUT" | "POST" | "DELETE",
 ): Promise<Response> {
   const { userId, orgSlug } = await auth();
   if (!userId) {
