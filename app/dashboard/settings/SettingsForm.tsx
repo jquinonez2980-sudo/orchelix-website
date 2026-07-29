@@ -392,25 +392,14 @@ export default function SettingsForm() {
   return (
     <div className="overflow-hidden rounded-lg border border-line bg-surface shadow-sm">
       <Section title="Business profile">
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <label className={labelCls}>
-            Business name
-            <input
-              className={inputCls}
-              value={form.company_name}
-              onChange={(e) => setForm({ ...form, company_name: e.target.value })}
-            />
-          </label>
-          <label className={labelCls}>
-            Transfer number (escalations)
-            <input
-              className={inputCls}
-              value={form.transfer_phone}
-              onChange={(e) => setForm({ ...form, transfer_phone: e.target.value })}
-              placeholder="647-555-0100"
-            />
-          </label>
-        </div>
+        <label className={labelCls}>
+          Business name
+          <input
+            className={inputCls}
+            value={form.company_name}
+            onChange={(e) => setForm({ ...form, company_name: e.target.value })}
+          />
+        </label>
       </Section>
 
       <Section
@@ -427,21 +416,22 @@ export default function SettingsForm() {
         />
       </Section>
 
-      <Section title="Notification emails">
+      <Section
+        title="Escalation"
+        description="What happens when Esmi hands a caller off to your team instead of handling it alone."
+      >
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <label className={labelCls}>
-            Booking confirmations to
+            Transfer phone number
             <input
-              type="email"
               className={inputCls}
-              value={form.emails.booking_to}
-              onChange={(e) =>
-                setForm({ ...form, emails: { ...form.emails, booking_to: e.target.value } })
-              }
+              value={form.transfer_phone}
+              onChange={(e) => setForm({ ...form, transfer_phone: e.target.value })}
+              placeholder="647-555-0100"
             />
           </label>
           <label className={labelCls}>
-            Escalations to
+            Escalation email
             <input
               type="email"
               className={inputCls}
@@ -452,6 +442,41 @@ export default function SettingsForm() {
             />
           </label>
         </div>
+        <div className="rounded-md bg-surface-2/50 p-3 text-sm">
+          <p className="font-medium text-ink-2">When does this happen?</p>
+          <ul className="mt-1.5 list-disc space-y-1 pl-4 text-ink-3">
+            <li>
+              A caller asks to speak with a person, or sounds frustrated — Esmi offers to
+              transfer the live call to the phone number above.
+            </li>
+            <li>
+              A caller mentions budget, timeline, or urgency (&quot;ready to start&quot;,
+              &quot;ASAP&quot;) — Esmi emails the address above so your team can follow up.
+            </li>
+            <li>
+              A question comes up that Esmi&apos;s knowledge base can&apos;t answer — same
+              email follow-up.
+            </li>
+          </ul>
+          <p className="mt-2 text-xs text-ink-4">
+            These triggers live in Esmi&apos;s conversation instructions, not in this form —
+            this section only controls where the transfer and the email go.
+          </p>
+        </div>
+      </Section>
+
+      <Section title="Booking notifications">
+        <label className={labelCls}>
+          Booking confirmations to
+          <input
+            type="email"
+            className={inputCls}
+            value={form.emails.booking_to}
+            onChange={(e) =>
+              setForm({ ...form, emails: { ...form.emails, booking_to: e.target.value } })
+            }
+          />
+        </label>
       </Section>
 
       {form.has_locations ? (
