@@ -441,6 +441,25 @@ export async function testKnowledge(query: string): Promise<{ query: string; res
   return res.json();
 }
 
+/* ── Usage (Phase 3 ticket 3.1 — read-only, no Stripe/limits yet) ─────────── */
+
+export type UsageResponse = {
+  tenant_id: string;
+  business_tz: string;
+  period_start: string; // YYYY-MM-DD, first of the current month
+  period_end: string; // ISO timestamp, now
+  calls: number;
+  minutes: number;
+  cost_vapi: number | null;
+  cost_llm: number | null;
+};
+
+export async function fetchUsage(): Promise<UsageResponse> {
+  const res = await fetch("/api/platform/usage", { cache: "no-store" });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
+
 export async function fetchCalls(q: CallsQuery): Promise<CallsResponse> {
   const params = new URLSearchParams();
   if (q.limit) params.set("limit", String(q.limit));

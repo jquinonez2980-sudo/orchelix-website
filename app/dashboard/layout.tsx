@@ -100,6 +100,12 @@ export default async function EsmiDashboardLayout({
                 Knowledge
               </Link>
               <Link
+                href="/dashboard/usage"
+                className="rounded-md px-3 py-1.5 font-medium text-ink hover:bg-surface-2"
+              >
+                Usage
+              </Link>
+              <Link
                 href="/dashboard/settings"
                 className="rounded-md px-3 py-1.5 font-medium text-ink hover:bg-surface-2"
               >
