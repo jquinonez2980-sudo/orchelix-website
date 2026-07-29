@@ -369,11 +369,27 @@ export type KnowledgeEntry = {
   created_at: string;
 };
 
+export type KnowledgePdfEntry = {
+  id: string;
+  filename: string;
+  size_bytes: number | null;
+  pages: number | null;
+  truncated: boolean;
+  has_original: boolean;
+  created_at: string;
+};
+
 export type KnowledgeListResponse = {
   tenant_id: string;
   entries: KnowledgeEntry[];
+  pdfs: KnowledgePdfEntry[];
   other_docs_count: number;
 };
+
+// PDFs are capped well under Vercel's ~4.5MB serverless request body limit
+// (see platform_api/knowledge.py) — going bigger needs a presigned
+// direct-to-R2 upload, not a bump to this constant.
+export const MAX_PDF_MB = 4;
 
 export async function fetchKnowledge(): Promise<KnowledgeListResponse> {
   const res = await fetch("/api/platform/knowledge", { cache: "no-store" });
@@ -399,6 +415,20 @@ export async function deleteKnowledgeEntry(id: string): Promise<void> {
     method: "DELETE",
   });
   if (!res.ok) throw new Error(await readErrorDetail(res));
+}
+
+export async function uploadKnowledgePdf(file: File): Promise<KnowledgePdfEntry> {
+  const form = new FormData();
+  form.append("file", file);
+  // No Content-Type header here — the browser sets multipart/form-data with
+  // the correct boundary itself; setting it manually would break the parse.
+  const res = await fetch("/api/platform/knowledge/pdf", {
+    method: "POST",
+    body: form,
+  });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  const data = await res.json();
+  return data.entry as KnowledgePdfEntry;
 }
 
 export async function testKnowledge(query: string): Promise<{ query: string; result: string }> {

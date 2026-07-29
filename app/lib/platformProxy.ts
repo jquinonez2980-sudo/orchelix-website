@@ -92,6 +92,64 @@ export async function proxyPlatformDELETE(
   return proxyPlatformWrite(req, upstreamPath, "DELETE");
 }
 
+/* Multipart file uploads (e.g. PDF knowledge upload) can't reuse
+   proxyPlatformWrite: that reads the body as text (would corrupt binary
+   content) and hardcodes Content-Type: application/json (would drop the
+   multipart boundary, making the upstream unable to parse the form data).
+   This forwards the raw bytes and the original Content-Type verbatim. */
+export async function proxyPlatformUpload(
+  req: NextRequest,
+  upstreamPath: string,
+): Promise<Response> {
+  const { userId, orgSlug } = await auth();
+  if (!userId) {
+    return Response.json({ error: "Not signed in." }, { status: 401 });
+  }
+  if (!orgSlug) {
+    return Response.json(
+      { error: "No active organization — pick one in the switcher." },
+      { status: 403 },
+    );
+  }
+
+  const secret = process.env.PLATFORM_API_SECRET;
+  if (!secret) {
+    return Response.json(
+      { error: "Dashboard is not configured (missing PLATFORM_API_SECRET)." },
+      { status: 503 },
+    );
+  }
+
+  const contentType = req.headers.get("content-type") ?? "";
+  const body = await req.arrayBuffer();
+
+  let upstream: Response;
+  try {
+    upstream = await fetch(`${RAILWAY_URL}${upstreamPath}`, {
+      method: "POST",
+      headers: {
+        "X-Platform-Secret": secret,
+        "X-Tenant-Id": orgSlug,
+        "X-Platform-User": userId,
+        "Content-Type": contentType,
+      },
+      body,
+      cache: "no-store",
+    });
+  } catch {
+    return Response.json(
+      { error: "Could not reach the Esmi backend — try again shortly." },
+      { status: 502 },
+    );
+  }
+
+  const respBody = await upstream.text();
+  return new Response(respBody, {
+    status: upstream.status,
+    headers: { "Content-Type": "application/json", "Cache-Control": "no-store" },
+  });
+}
+
 async function proxyPlatformWrite(
   req: NextRequest,
   upstreamPath: string,

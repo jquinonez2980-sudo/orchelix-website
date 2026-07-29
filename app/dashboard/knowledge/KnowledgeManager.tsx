@@ -1,12 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   addKnowledgeEntry,
   deleteKnowledgeEntry,
   fetchKnowledge,
   testKnowledge,
+  uploadKnowledgePdf,
+  MAX_PDF_MB,
   type KnowledgeEntry,
+  type KnowledgePdfEntry,
 } from "../../lib/esmiPlatform";
 
 const inputCls =
@@ -23,6 +26,12 @@ const dateFmt = new Intl.DateTimeFormat(undefined, {
 function fmtDate(iso: string): string {
   const d = new Date(iso);
   return Number.isNaN(d.getTime()) ? "—" : dateFmt.format(d);
+}
+
+function fmtBytes(n: number | null): string {
+  if (n == null) return "";
+  if (n < 1024 * 1024) return `${Math.round(n / 1024)} KB`;
+  return `${(n / (1024 * 1024)).toFixed(1)} MB`;
 }
 
 // The backend intentionally returns the exact production tool output — some
@@ -248,6 +257,164 @@ function EntriesList({
   );
 }
 
+/* ── PDF upload ─────────────────────────────────────────────────────────── */
+
+function PdfUploadForm({ onUploaded }: { onUploaded: (entry: KnowledgePdfEntry) => void }) {
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [uploadedName, setUploadedName] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleFile = async (file: File) => {
+    setError(null);
+    setUploadedName(null);
+    if (!file.name.toLowerCase().endsWith(".pdf") && file.type !== "application/pdf") {
+      setError("Only PDF files are accepted");
+      return;
+    }
+    if (file.size > MAX_PDF_MB * 1024 * 1024) {
+      setError(`PDF must be at most ${MAX_PDF_MB} MB`);
+      return;
+    }
+    setUploading(true);
+    try {
+      const entry = await uploadKnowledgePdf(file);
+      onUploaded(entry);
+      setUploadedName(entry.filename);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to upload PDF");
+    } finally {
+      setUploading(false);
+      if (inputRef.current) inputRef.current.value = "";
+    }
+  };
+
+  return (
+    <div className="mt-6 rounded-lg border border-line bg-surface p-4 shadow-sm sm:p-6">
+      <h2 className="font-display text-base font-semibold text-ink">Upload a PDF</h2>
+      <p className="mt-1 text-sm text-ink-3">
+        Menus, price sheets, policies — Esmi reads the text and can use it right away.
+        Up to {MAX_PDF_MB} MB per file.
+      </p>
+      <div className="mt-3 flex items-center gap-3">
+        <input
+          ref={inputRef}
+          type="file"
+          accept="application/pdf,.pdf"
+          disabled={uploading}
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) handleFile(file);
+          }}
+          className="block w-full text-sm text-ink-2 file:mr-3 file:rounded-md file:border-0 file:bg-navy-600 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-navy-500 disabled:opacity-50"
+        />
+        {uploading && <span className="shrink-0 text-sm text-ink-4">Uploading…</span>}
+      </div>
+      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+      {!error && uploadedName && !uploading && (
+        <p className="mt-2 text-sm text-teal-700">
+          &quot;{uploadedName}&quot; added — Esmi can use it right away.
+        </p>
+      )}
+    </div>
+  );
+}
+
+function PdfRow({
+  pdf,
+  onDeleted,
+}: {
+  pdf: KnowledgePdfEntry;
+  onDeleted: (id: string) => void;
+}) {
+  const [deleting, setDeleting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const remove = async () => {
+    setDeleting(true);
+    setError(null);
+    try {
+      await deleteKnowledgeEntry(pdf.id);
+      onDeleted(pdf.id);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to delete");
+      setDeleting(false);
+    }
+  };
+
+  return (
+    <div className="border-t border-line px-4 py-3 first:border-t-0 sm:px-6">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="truncate text-sm font-medium text-ink">{pdf.filename}</p>
+          <p className="mt-0.5 text-xs text-ink-4">
+            {fmtBytes(pdf.size_bytes)}
+            {pdf.pages != null && ` · ${pdf.pages} page${pdf.pages === 1 ? "" : "s"}`}
+            {" · "}Added {fmtDate(pdf.created_at)}
+            {pdf.truncated && " · trimmed to fit"}
+          </p>
+        </div>
+        <button
+          type="button"
+          disabled={deleting}
+          onClick={remove}
+          className="shrink-0 text-xs font-medium text-red-600 hover:underline disabled:opacity-50"
+        >
+          {deleting ? "Deleting…" : "Delete"}
+        </button>
+      </div>
+      {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
+    </div>
+  );
+}
+
+function PdfsList({
+  pdfs,
+  loading,
+  error,
+  onDeleted,
+  onRetry,
+}: {
+  pdfs: KnowledgePdfEntry[] | null;
+  loading: boolean;
+  error: string | null;
+  onDeleted: (id: string) => void;
+  onRetry: () => void;
+}) {
+  return (
+    <div className="mt-6 overflow-hidden rounded-lg border border-line bg-surface shadow-sm">
+      <div className="border-b border-line px-4 py-4 sm:px-6">
+        <h2 className="font-display text-base font-semibold text-ink">Uploaded PDFs</h2>
+      </div>
+      {loading && <SkeletonRows />}
+      {error && (
+        <div className="px-4 py-6 text-center sm:px-6">
+          <p className="text-sm text-red-600">{error}</p>
+          <button
+            type="button"
+            onClick={onRetry}
+            className="mt-3 rounded-md bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-500"
+          >
+            Try again
+          </button>
+        </div>
+      )}
+      {pdfs && pdfs.length === 0 && !loading && !error && (
+        <p className="px-4 py-6 text-sm text-ink-4 sm:px-6">
+          No PDFs uploaded yet — add one above and Esmi can start using it right away.
+        </p>
+      )}
+      {pdfs && pdfs.length > 0 && !loading && (
+        <div>
+          {pdfs.map((p) => (
+            <PdfRow key={p.id} pdf={p} onDeleted={onDeleted} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ── test box ───────────────────────────────────────────────────────────── */
 
 function TestBox() {
@@ -311,6 +478,7 @@ function TestBox() {
 
 export default function KnowledgeManager() {
   const [entries, setEntries] = useState<KnowledgeEntry[] | null>(null);
+  const [pdfs, setPdfs] = useState<KnowledgePdfEntry[] | null>(null);
   const [otherDocsCount, setOtherDocsCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -321,6 +489,7 @@ export default function KnowledgeManager() {
     fetchKnowledge()
       .then((d) => {
         setEntries(d.entries);
+        setPdfs(d.pdfs);
         setOtherDocsCount(d.other_docs_count);
         setLoading(false);
       })
@@ -341,6 +510,14 @@ export default function KnowledgeManager() {
         loading={loading}
         error={error}
         onDeleted={(id) => setEntries((prev) => (prev ?? []).filter((e) => e.id !== id))}
+        onRetry={load}
+      />
+      <PdfUploadForm onUploaded={(entry) => setPdfs((prev) => [entry, ...(prev ?? [])])} />
+      <PdfsList
+        pdfs={pdfs}
+        loading={loading}
+        error={error}
+        onDeleted={(id) => setPdfs((prev) => (prev ?? []).filter((p) => p.id !== id))}
         onRetry={load}
       />
       <TestBox />
