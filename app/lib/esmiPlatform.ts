@@ -441,7 +441,17 @@ export async function testKnowledge(query: string): Promise<{ query: string; res
   return res.json();
 }
 
-/* ── Usage (Phase 3 ticket 3.1 — read-only, no Stripe/limits yet) ─────────── */
+/* ── Usage (Phase 3 tickets 3.1 + 3.2 — read-only, no Stripe/hard limits) ──── */
+
+// null included_minutes/percent_used/status = managed/unlimited plan — no
+// soft limit configured, nothing to warn about.
+export type PlanUsage = {
+  key: string;
+  label: string;
+  included_minutes: number | null;
+  percent_used: number | null;
+  status: "ok" | "approaching" | "over" | null;
+};
 
 export type UsageResponse = {
   tenant_id: string;
@@ -452,6 +462,7 @@ export type UsageResponse = {
   minutes: number;
   cost_vapi: number | null;
   cost_llm: number | null;
+  plan: PlanUsage;
 };
 
 export async function fetchUsage(): Promise<UsageResponse> {
