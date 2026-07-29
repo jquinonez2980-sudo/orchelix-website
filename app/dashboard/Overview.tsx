@@ -85,6 +85,19 @@ function SkeletonTiles() {
   );
 }
 
+// True when the error means "this organization isn't a real Esmi client" —
+// e.g. an admin's own org, or an org whose Clerk slug doesn't match a
+// tenant — rather than a transient backend/network problem. Retrying can't
+// fix this; switching organizations can.
+function isUnknownOrgError(message: string): boolean {
+  const m = message.toLowerCase();
+  return (
+    m.includes("unknown tenant") ||
+    m.includes("no active organization") ||
+    m.includes("x-tenant-id header is required")
+  );
+}
+
 export default function Overview() {
   const [data, setData] = useState<OverviewResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -103,19 +116,26 @@ export default function Overview() {
   }, [reloadKey]);
 
   if (error) {
+    const orgIssue = isUnknownOrgError(error);
     return (
       <div className="flex flex-col items-center gap-3 rounded-lg border border-line bg-surface px-6 py-16 text-center shadow-sm">
         <p className="font-display text-base font-semibold text-ink">
-          Couldn&apos;t load your overview
+          {orgIssue ? "No client selected" : "Couldn't load your overview"}
         </p>
-        <p className="max-w-sm text-sm text-ink-3">{error}</p>
-        <button
-          type="button"
-          onClick={() => setReloadKey((k) => k + 1)}
-          className="rounded-md bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-500"
-        >
-          Try again
-        </button>
+        <p className="max-w-sm text-sm text-ink-3">
+          {orgIssue
+            ? "This organization isn't set up as an Esmi client yet. Switch to a client organization using the switcher above."
+            : error}
+        </p>
+        {!orgIssue && (
+          <button
+            type="button"
+            onClick={() => setReloadKey((k) => k + 1)}
+            className="rounded-md bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-500"
+          >
+            Try again
+          </button>
+        )}
       </div>
     );
   }
