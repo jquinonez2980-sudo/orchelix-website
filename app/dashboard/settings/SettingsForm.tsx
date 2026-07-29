@@ -342,7 +342,13 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
         ...f,
         services: {
           ...f.services,
-          [id]: { name: "New service", duration_min: 30, price: "", price_by_location: {} },
+          [id]: {
+            name: "New service",
+            duration_min: 30,
+            price: "",
+            price_by_location: {},
+            name_es: "",
+          },
         },
       };
     });

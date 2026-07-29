@@ -256,6 +256,10 @@ export type ServiceSettings = {
   duration_min: number;
   price: string;
   price_by_location: Record<string, string>;
+  // Spanish display name for get_pricing(lang="es"). No dedicated input in
+  // the Settings form yet — carried through fetch/save so it survives an
+  // unrelated save instead of being silently wiped back to empty.
+  name_es: string;
 };
 
 export type PlatformConfig = {
