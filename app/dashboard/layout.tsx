@@ -44,7 +44,7 @@ function OrgGate() {
       </div>
       <OrganizationSwitcher
         hidePersonal
-        afterSelectOrganizationUrl="/dashboard/calls"
+        afterSelectOrganizationUrl="/dashboard"
         appearance={clerkWidgetAppearance}
       />
     </main>
@@ -62,7 +62,7 @@ export default async function EsmiDashboardLayout({
         <header className="sticky top-0 z-40 border-b border-line bg-surface/95 backdrop-blur">
           <div className="mx-auto flex h-14 max-w-6xl items-center gap-4 px-4 sm:px-6">
             <Link
-              href="/dashboard/calls"
+              href="/dashboard"
               className="flex items-baseline gap-2 font-display font-semibold text-ink"
             >
               Orchelix
@@ -70,22 +70,22 @@ export default async function EsmiDashboardLayout({
             </Link>
             <nav className="ml-2 flex items-center gap-1 text-sm">
               <Link
+                href="/dashboard"
+                className="rounded-md px-3 py-1.5 font-medium text-ink hover:bg-surface-2"
+              >
+                Overview
+              </Link>
+              <Link
                 href="/dashboard/calls"
                 className="rounded-md px-3 py-1.5 font-medium text-ink hover:bg-surface-2"
               >
                 Calls
               </Link>
-              <span
-                className="cursor-default rounded-md px-3 py-1.5 text-ink-4"
-                title="Coming soon"
-              >
-                Overview
-              </span>
             </nav>
             <div className="ml-auto flex items-center gap-3">
               <OrganizationSwitcher
                 hidePersonal
-                afterSelectOrganizationUrl="/dashboard/calls"
+                afterSelectOrganizationUrl="/dashboard"
                 appearance={clerkWidgetAppearance}
               />
               <UserButton />

@@ -55,6 +55,41 @@ export type CallsQuery = {
   to_date?: string; // YYYY-MM-DD
 };
 
+export type OverviewBucket = {
+  from: string;
+  to: string;
+  calls_answered: number;
+  appointments_booked: number;
+  leads_escalated: number;
+  after_hours_calls: number;
+  minutes_used: number;
+  est_revenue_booked: number | null;
+};
+
+export type OverviewResponse = {
+  tenant_id: string;
+  business_tz: string;
+  window_days: number;
+  current: OverviewBucket;
+  previous: OverviewBucket;
+};
+
+export async function fetchOverview(): Promise<OverviewResponse> {
+  const res = await fetch("/api/platform/overview", { cache: "no-store" });
+  if (!res.ok) {
+    let detail = `Request failed (${res.status})`;
+    try {
+      const body = await res.json();
+      if (typeof body?.error === "string") detail = body.error;
+      if (typeof body?.detail === "string") detail = body.detail;
+    } catch {
+      /* keep default */
+    }
+    throw new Error(detail);
+  }
+  return res.json();
+}
+
 export async function fetchCalls(q: CallsQuery): Promise<CallsResponse> {
   const params = new URLSearchParams();
   if (q.limit) params.set("limit", String(q.limit));

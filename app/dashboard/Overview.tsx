@@ -1,0 +1,200 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { fetchOverview, type OverviewResponse } from "../lib/esmiPlatform";
+
+/* KPI tiles per the stat-tile contract: sentence-case label, semibold value in
+   proportional figures (no tabular-nums at display size), signed delta vs a
+   named period with an arrow glyph so direction is never color-alone.
+   Exactly ONE hero figure per view: the after-hours number. */
+
+type Delta =
+  | { kind: "pct"; value: number }
+  | { kind: "new" }
+  | { kind: "flat" };
+
+function computeDelta(cur: number, prev: number): Delta {
+  if (prev === 0 && cur === 0) return { kind: "flat" };
+  if (prev === 0) return { kind: "new" };
+  const pct = Math.round(((cur - prev) / prev) * 100);
+  if (pct === 0) return { kind: "flat" };
+  return { kind: "pct", value: pct };
+}
+
+function DeltaLine({ delta, invert = false }: { delta: Delta; invert?: boolean }) {
+  const period = "vs prior 7 days";
+  if (delta.kind === "flat") {
+    return <p className={`text-xs ${invert ? "text-navy-200" : "text-ink-4"}`}>— {period}</p>;
+  }
+  if (delta.kind === "new") {
+    return (
+      <p className={`text-xs font-medium ${invert ? "text-teal-300" : "text-teal-700"}`}>
+        New {period}
+      </p>
+    );
+  }
+  const up = delta.value > 0;
+  const cls = invert
+    ? up
+      ? "text-teal-300"
+      : "text-navy-200"
+    : up
+      ? "text-teal-700"
+      : "text-rose-600";
+  return (
+    <p className={`text-xs font-medium ${cls}`}>
+      {up ? "↑" : "↓"} {Math.abs(delta.value)}% {period}
+    </p>
+  );
+}
+
+function Tile({
+  label,
+  value,
+  delta,
+  note,
+}: {
+  label: string;
+  value: string;
+  delta: Delta;
+  note?: string;
+}) {
+  return (
+    <div className="rounded-lg border border-line bg-surface p-5 shadow-sm">
+      <p className="text-sm text-ink-3">{label}</p>
+      <p className="mt-1.5 text-3xl font-semibold text-ink">{value}</p>
+      <div className="mt-1.5">
+        <DeltaLine delta={delta} />
+      </div>
+      {note && <p className="mt-1 text-xs text-ink-4">{note}</p>}
+    </div>
+  );
+}
+
+function SkeletonTiles() {
+  return (
+    <div className="space-y-4">
+      <div className="h-44 animate-pulse rounded-lg bg-surface-2" />
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="h-32 animate-pulse rounded-lg bg-surface-2" />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default function Overview() {
+  const [data, setData] = useState<OverviewResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
+
+  useEffect(() => {
+    let active = true;
+    setError(null);
+    setData(null);
+    fetchOverview()
+      .then((d) => active && setData(d))
+      .catch((e: Error) => active && setError(e.message));
+    return () => {
+      active = false;
+    };
+  }, [reloadKey]);
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center gap-3 rounded-lg border border-line bg-surface px-6 py-16 text-center shadow-sm">
+        <p className="font-display text-base font-semibold text-ink">
+          Couldn&apos;t load your overview
+        </p>
+        <p className="max-w-sm text-sm text-ink-3">{error}</p>
+        <button
+          type="button"
+          onClick={() => setReloadKey((k) => k + 1)}
+          className="rounded-md bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-500"
+        >
+          Try again
+        </button>
+      </div>
+    );
+  }
+
+  if (!data) return <SkeletonTiles />;
+
+  const { current: cur, previous: prev } = data;
+  const quiet = cur.calls_answered === 0 && prev.calls_answered === 0;
+
+  return (
+    <div className="space-y-4">
+      {/* Hero: after-hours calls — the money-you-didn't-lose number */}
+      <section className="rounded-lg bg-navy-600 p-6 shadow-sm sm:p-8">
+        <p className="text-sm font-medium text-teal-300">After-hours calls answered</p>
+        <div className="mt-2 flex flex-wrap items-end gap-x-6 gap-y-2">
+          <p className="text-5xl font-semibold leading-none text-white">
+            {cur.after_hours_calls}
+          </p>
+          <div className="pb-1">
+            <DeltaLine
+              delta={computeDelta(cur.after_hours_calls, prev.after_hours_calls)}
+              invert
+            />
+          </div>
+        </div>
+        <p className="mt-3 max-w-xl text-sm leading-6 text-navy-100">
+          {quiet
+            ? "Esmi is on duty around the clock. The moment someone calls while you're closed, it's answered — and counted here."
+            : cur.after_hours_calls > 0
+              ? "Calls Esmi picked up while your doors were closed — customers who would otherwise have reached voicemail or a competitor."
+              : "No after-hours calls this week — and if one comes in at 2am, Esmi has it covered."}
+        </p>
+      </section>
+
+      {/* KPI tiles */}
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <Tile
+          label="Calls answered"
+          value={String(cur.calls_answered)}
+          delta={computeDelta(cur.calls_answered, prev.calls_answered)}
+        />
+        <Tile
+          label="Appointments booked"
+          value={String(cur.appointments_booked)}
+          delta={computeDelta(cur.appointments_booked, prev.appointments_booked)}
+        />
+        <Tile
+          label="Leads escalated to you"
+          value={String(cur.leads_escalated)}
+          delta={computeDelta(cur.leads_escalated, prev.leads_escalated)}
+          note="Callers Esmi flagged for a human follow-up"
+        />
+        <Tile
+          label="Minutes used"
+          value={cur.minutes_used.toLocaleString(undefined, {
+            maximumFractionDigits: 1,
+          })}
+          delta={computeDelta(cur.minutes_used, prev.minutes_used)}
+        />
+        {cur.est_revenue_booked != null && (
+          <Tile
+            label="Estimated revenue booked"
+            value={`$${cur.est_revenue_booked.toLocaleString()}`}
+            delta={computeDelta(
+              cur.est_revenue_booked,
+              prev.est_revenue_booked ?? 0,
+            )}
+            note="Bookings × your average service price"
+          />
+        )}
+      </div>
+
+      <p className="text-xs text-ink-4">
+        Last 7 days vs the 7 days before, in your business timezone ({data.business_tz}).
+        Voice calls only for now.{" "}
+        <Link href="/dashboard/calls" className="text-teal-700 hover:underline">
+          See every call →
+        </Link>
+      </p>
+    </div>
+  );
+}
