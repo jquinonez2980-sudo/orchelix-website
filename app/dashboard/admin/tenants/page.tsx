@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { auth } from "@clerk/nextjs/server";
+import { ADMIN_ORG_SLUG } from "../../../lib/platformProxy";
 import AdminTenants from "./AdminTenants";
 
 export const dynamic = "force-dynamic";
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
 
 export default async function AdminTenantsPage() {
   const { orgSlug } = await auth();
-  if (orgSlug !== "default") {
+  if (orgSlug !== ADMIN_ORG_SLUG) {
     return (
       <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
         <div className="flex flex-col items-center gap-3 rounded-lg border border-line bg-surface px-6 py-16 text-center shadow-sm">

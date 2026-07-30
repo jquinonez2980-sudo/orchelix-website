@@ -6,6 +6,7 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
+import { ADMIN_ORG_SLUG } from "../lib/platformProxy";
 
 /* Esmi tenant dashboard shell (/dashboard).
    ClerkProvider is scoped here — same pattern as the AcumenAI console at
@@ -57,11 +58,11 @@ export default async function EsmiDashboardLayout({
   children: React.ReactNode;
 }) {
   // Admin nav link is internal-only (Phase 3 ticket 3.5) — only Orchelix
-  // staff, signed in under the "default" org, ever see it. The page and its
-  // API calls are independently gated too (belt-and-suspenders, not the
+  // staff, signed in under the ADMIN_ORG_SLUG org, ever see it. The page and
+  // its API calls are independently gated too (belt-and-suspenders, not the
   // only check).
   const { orgSlug } = await auth();
-  const isOrchelixStaff = orgSlug === "default";
+  const isOrchelixStaff = orgSlug === ADMIN_ORG_SLUG;
 
   return (
     <ClerkProvider afterSignOutUrl="/">

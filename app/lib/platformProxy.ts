@@ -151,13 +151,19 @@ export async function proxyPlatformUpload(
 }
 
 /* Admin-only proxy helpers (Phase 3 ticket 3.5 — tenant plan assignment).
-   Two independent layers, both required: (1) orgSlug must be "default"
-   (Orchelix's own Clerk org — client orgs can never pass this), and (2) a
-   secret DISTINCT from PLATFORM_API_SECRET, so a leaked client-dashboard
-   secret alone can never reach admin actions. */
+   Two independent layers, both required: (1) orgSlug must be
+   ADMIN_ORG_SLUG (Orchelix staff's own Clerk org — client orgs can never
+   match this), and (2) a secret DISTINCT from PLATFORM_API_SECRET, so a
+   leaked client-dashboard secret alone can never reach admin actions. */
+
+// Orchelix staff's Clerk organization slug — NOT the same "default" used
+// elsewhere as the Esmi tenant_id for Orchelix's own AI receptionist config;
+// those are two unrelated systems (Clerk orgs vs. Esmi tenants) that just
+// happened to both use the word "default" before this slug was corrected.
+export const ADMIN_ORG_SLUG = "orchelix-ai-consulting";
 
 function requireAdminOrg(orgSlug: string | null | undefined): Response | null {
-  if (orgSlug !== "default") {
+  if (orgSlug !== ADMIN_ORG_SLUG) {
     return Response.json(
       { error: "Admin access requires the Orchelix organization." },
       { status: 403 },
