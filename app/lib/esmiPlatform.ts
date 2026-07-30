@@ -471,6 +471,27 @@ export async function fetchUsage(): Promise<UsageResponse> {
   return res.json();
 }
 
+/* ── Billing (Phase 3 ticket 3.3 — read-only, no Stripe sync yet) ─────────── */
+
+export type AccountStatus = "trial" | "live" | "past_due" | "suspended" | "archived";
+
+export type BillingResponse = {
+  tenant_id: string;
+  account_status: AccountStatus;
+  billing_mode: "managed";
+  period_start: string; // YYYY-MM-DD, first of the current month
+  period_end: string; // ISO timestamp, now
+  calls: number;
+  minutes: number;
+  plan: PlanUsage;
+};
+
+export async function fetchBilling(): Promise<BillingResponse> {
+  const res = await fetch("/api/platform/billing", { cache: "no-store" });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
+
 export async function fetchCalls(q: CallsQuery): Promise<CallsResponse> {
   const params = new URLSearchParams();
   if (q.limit) params.set("limit", String(q.limit));
