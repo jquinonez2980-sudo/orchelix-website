@@ -492,6 +492,54 @@ export async function fetchBilling(): Promise<BillingResponse> {
   return res.json();
 }
 
+/* ── Admin: tenant plan assignment (Phase 3 ticket 3.5) ────────────────────
+   Orchelix-staff-only (active org "default") — see platformProxy.ts. */
+
+export const PLAN_KEYS = ["local", "pro", "enterprise", "managed"] as const;
+export type PlanKey = (typeof PLAN_KEYS)[number];
+
+export const ACCOUNT_STATUSES: AccountStatus[] = [
+  "trial",
+  "live",
+  "past_due",
+  "suspended",
+  "archived",
+];
+
+export type AdminTenantRow = {
+  tenant_id: string;
+  account_status: AccountStatus;
+  calls: number;
+  minutes: number;
+  period_start: string;
+  period_end: string;
+  plan: PlanUsage;
+};
+
+export type AdminTenantsResponse = { tenants: AdminTenantRow[] };
+
+export async function fetchAdminTenants(): Promise<AdminTenantsResponse> {
+  const res = await fetch("/api/platform/admin/tenants", { cache: "no-store" });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
+
+export async function updateTenantPlan(
+  tenantId: string,
+  update: { plan: PlanKey; status?: AccountStatus },
+): Promise<AdminTenantRow> {
+  const res = await fetch(
+    `/api/platform/admin/tenants/${encodeURIComponent(tenantId)}/plan`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(update),
+    },
+  );
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
+
 export async function fetchCalls(q: CallsQuery): Promise<CallsResponse> {
   const params = new URLSearchParams();
   if (q.limit) params.set("limit", String(q.limit));

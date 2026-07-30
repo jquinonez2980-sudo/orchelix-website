@@ -56,6 +56,13 @@ export default async function EsmiDashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // Admin nav link is internal-only (Phase 3 ticket 3.5) — only Orchelix
+  // staff, signed in under the "default" org, ever see it. The page and its
+  // API calls are independently gated too (belt-and-suspenders, not the
+  // only check).
+  const { orgSlug } = await auth();
+  const isOrchelixStaff = orgSlug === "default";
+
   return (
     <ClerkProvider afterSignOutUrl="/">
       <div className="min-h-screen bg-paper">
@@ -123,6 +130,14 @@ export default async function EsmiDashboardLayout({
               >
                 Team
               </Link>
+              {isOrchelixStaff && (
+                <Link
+                  href="/dashboard/admin/tenants"
+                  className="rounded-md px-3 py-1.5 font-medium text-ink hover:bg-surface-2"
+                >
+                  Admin
+                </Link>
+              )}
             </nav>
             <div className="ml-auto flex items-center gap-3">
               <OrganizationSwitcher
