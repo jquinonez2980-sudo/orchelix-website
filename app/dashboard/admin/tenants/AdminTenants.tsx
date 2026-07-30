@@ -6,6 +6,7 @@ import {
   PLAN_KEYS,
   fetchAdminTenants,
   updateTenantPlan,
+  updateTenantStripe,
   type AccountStatus,
   type AdminTenantRow,
   type PlanKey,
@@ -61,7 +62,40 @@ function TenantRow({
     }
   }
 
+  // Independent from plan/status on purpose — a separate save action, its
+  // own dirty flag, its own error. Empty input clears that field (sent as
+  // null); the backend distinguishes omitted-vs-null too, but this UI
+  // always sends both, so it never needs that distinction itself.
+  const [customerId, setCustomerId] = useState(row.stripe_customer_id ?? "");
+  const [subscriptionId, setSubscriptionId] = useState(row.stripe_subscription_id ?? "");
+  const [stripeSaving, setStripeSaving] = useState(false);
+  const [stripeError, setStripeError] = useState<string | null>(null);
+
+  const stripeDirty =
+    customerId !== (row.stripe_customer_id ?? "") ||
+    subscriptionId !== (row.stripe_subscription_id ?? "");
+
+  async function handleSaveStripe() {
+    setStripeSaving(true);
+    setStripeError(null);
+    try {
+      const updated = await updateTenantStripe(row.tenant_id, {
+        stripe_customer_id: customerId.trim() || null,
+        stripe_subscription_id: subscriptionId.trim() || null,
+      });
+      onSaved(updated);
+    } catch (e) {
+      setStripeError((e as Error).message);
+    } finally {
+      setStripeSaving(false);
+    }
+  }
+
   const planSelectCls = "h-9 rounded-md border border-line bg-surface px-2 text-sm text-ink";
+  const stripeInputCls =
+    "h-8 w-full rounded-md border border-line bg-surface px-2 font-mono text-xs text-ink";
+  const stripeSaveBtnCls =
+    "shrink-0 rounded-md border border-line px-3 text-xs font-medium text-ink-2 hover:bg-surface-2 disabled:cursor-not-allowed disabled:opacity-40";
 
   return (
     <>
@@ -111,6 +145,42 @@ function TenantRow({
               {saving ? "Saving…" : "Save"}
             </button>
             {error && <p className="mt-1 text-xs text-rose-600">{error}</p>}
+          </td>
+        </tr>
+        <tr className="border-b border-line bg-surface-2/30 last:border-0">
+          <td colSpan={6} className="px-4 py-2.5">
+            <div className="flex flex-wrap items-end gap-2">
+              <label className="flex flex-col gap-1 text-xs font-medium text-ink-4">
+                Stripe customer ID
+                <input
+                  value={customerId}
+                  onChange={(e) => setCustomerId(e.target.value)}
+                  placeholder="cus_…"
+                  className={`${stripeInputCls} w-40`}
+                />
+              </label>
+              <label className="flex flex-col gap-1 text-xs font-medium text-ink-4">
+                Stripe subscription ID
+                <input
+                  value={subscriptionId}
+                  onChange={(e) => setSubscriptionId(e.target.value)}
+                  placeholder="sub_…"
+                  className={`${stripeInputCls} w-40`}
+                />
+              </label>
+              <span className="pb-1.5 text-xs text-ink-4">
+                {row.billing_mode === "stripe" ? "Stripe-backed" : "Managed"}
+              </span>
+              <button
+                type="button"
+                onClick={handleSaveStripe}
+                disabled={!stripeDirty || stripeSaving}
+                className={`h-8 ${stripeSaveBtnCls}`}
+              >
+                {stripeSaving ? "Saving…" : "Save Stripe IDs"}
+              </button>
+              {stripeError && <span className="text-xs text-rose-600">{stripeError}</span>}
+            </div>
           </td>
         </tr>
       </tbody>
@@ -169,6 +239,41 @@ function TenantRow({
               {saving ? "Saving…" : "Save"}
             </button>
             {error && <p className="mt-1 text-xs text-rose-600">{error}</p>}
+
+            <div className="mt-3 border-t border-line pt-3">
+              <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-ink-4">
+                Stripe — {row.billing_mode === "stripe" ? "Stripe-backed" : "Managed"}
+              </p>
+              <div className="space-y-2">
+                <label className="flex flex-col gap-1 text-xs font-medium text-ink-4">
+                  Customer ID
+                  <input
+                    value={customerId}
+                    onChange={(e) => setCustomerId(e.target.value)}
+                    placeholder="cus_…"
+                    className={stripeInputCls}
+                  />
+                </label>
+                <label className="flex flex-col gap-1 text-xs font-medium text-ink-4">
+                  Subscription ID
+                  <input
+                    value={subscriptionId}
+                    onChange={(e) => setSubscriptionId(e.target.value)}
+                    placeholder="sub_…"
+                    className={stripeInputCls}
+                  />
+                </label>
+              </div>
+              <button
+                type="button"
+                onClick={handleSaveStripe}
+                disabled={!stripeDirty || stripeSaving}
+                className={`mt-2 w-full py-2 ${stripeSaveBtnCls}`}
+              >
+                {stripeSaving ? "Saving…" : "Save Stripe IDs"}
+              </button>
+              {stripeError && <p className="mt-1 text-xs text-rose-600">{stripeError}</p>}
+            </div>
           </td>
         </tr>
       </tbody>

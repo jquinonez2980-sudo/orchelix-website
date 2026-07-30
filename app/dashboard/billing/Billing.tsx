@@ -1,14 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchBilling, type AccountStatus, type BillingResponse } from "../../lib/esmiPlatform";
+import {
+  fetchBilling,
+  type AccountStatus,
+  type BillingMode,
+  type BillingResponse,
+} from "../../lib/esmiPlatform";
 import { Badge, type BadgeTone } from "../Badge";
 import { LimitBanner, MinutesProgress, Tile } from "../PlanUsageWidgets";
 
-/* Phase 3 ticket 3.3: read-only billing snapshot. No Stripe subscription
-   sync yet — every tenant is billed manually today, so this page's job is
-   to show plan + usage-vs-limit clearly and point to a human for changes,
-   not to manage billing itself. */
+/* Phase 3 tickets 3.3 + 3.6: read-only billing snapshot. billing_mode is
+   "stripe" once a real Stripe subscription is linked server-side, "managed"
+   otherwise — this page never sees or renders the raw Stripe IDs
+   (GET /platform/billing deliberately omits them; only the internal admin
+   endpoints return those). Either way there's no self-serve portal yet —
+   "Manage billing" always routes to a human, not a Stripe customer portal. */
 
 const ACCOUNT_STATUS_STYLE: Record<AccountStatus, { label: string; tone: BadgeTone }> = {
   live: { label: "Live", tone: "positive" },
@@ -20,6 +27,16 @@ const ACCOUNT_STATUS_STYLE: Record<AccountStatus, { label: string; tone: BadgeTo
 
 function AccountStatusBadge({ status }: { status: AccountStatus }) {
   const s = ACCOUNT_STATUS_STYLE[status] ?? ACCOUNT_STATUS_STYLE.live;
+  return <Badge tone={s.tone}>{s.label}</Badge>;
+}
+
+const BILLING_MODE_STYLE: Record<BillingMode, { label: string; tone: BadgeTone }> = {
+  stripe: { label: "Stripe-backed", tone: "positive" },
+  managed: { label: "Managed manually", tone: "neutral" },
+};
+
+function BillingModeBadge({ mode }: { mode: BillingMode }) {
+  const s = BILLING_MODE_STYLE[mode];
   return <Badge tone={s.tone}>{s.label}</Badge>;
 }
 
@@ -101,11 +118,19 @@ export default function Billing() {
     <div className="space-y-4">
       {data.plan.status && data.plan.status !== "ok" && <LimitBanner plan={data.plan} />}
 
-      <div className="flex flex-col gap-3 rounded-lg border border-line bg-surface p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="text-sm text-ink-3">Account status</p>
-          <div className="mt-1.5">
-            <AccountStatusBadge status={data.account_status} />
+      <div className="flex flex-col gap-4 rounded-lg border border-line bg-surface p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-wrap gap-6">
+          <div>
+            <p className="text-sm text-ink-3">Account status</p>
+            <div className="mt-1.5">
+              <AccountStatusBadge status={data.account_status} />
+            </div>
+          </div>
+          <div>
+            <p className="text-sm text-ink-3">Billing</p>
+            <div className="mt-1.5">
+              <BillingModeBadge mode={data.billing_mode} />
+            </div>
           </div>
         </div>
         <a
@@ -126,8 +151,9 @@ export default function Billing() {
       </div>
 
       <div className="rounded-lg border border-line bg-surface-2 px-4 py-3 text-sm text-ink-2">
-        Billing is currently managed manually — invoices and plan changes go through your
-        Orchelix contact, not self-serve here yet. Use the button above to reach us.
+        {data.billing_mode === "stripe"
+          ? "Your billing is tracked through Stripe. Self-serve invoice and payment-method management isn't available here yet — use the button above to reach us."
+          : "Billing is currently managed manually — invoices and plan changes go through your Orchelix contact, not self-serve here yet. Use the button above to reach us."}
       </div>
 
       <p className="text-xs text-ink-4">

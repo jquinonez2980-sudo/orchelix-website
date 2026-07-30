@@ -475,10 +475,12 @@ export async function fetchUsage(): Promise<UsageResponse> {
 
 export type AccountStatus = "trial" | "live" | "past_due" | "suspended" | "archived";
 
+export type BillingMode = "managed" | "stripe";
+
 export type BillingResponse = {
   tenant_id: string;
   account_status: AccountStatus;
-  billing_mode: "managed";
+  billing_mode: BillingMode;
   period_start: string; // YYYY-MM-DD, first of the current month
   period_end: string; // ISO timestamp, now
   calls: number;
@@ -514,6 +516,11 @@ export type AdminTenantRow = {
   period_start: string;
   period_end: string;
   plan: PlanUsage;
+  // Phase 3 ticket 3.6 — admin-only surface. The client-facing Billing page
+  // never receives these raw IDs, only billing_mode.
+  stripe_customer_id: string | null;
+  stripe_subscription_id: string | null;
+  billing_mode: BillingMode;
 };
 
 export type AdminTenantsResponse = { tenants: AdminTenantRow[] };
@@ -530,6 +537,26 @@ export async function updateTenantPlan(
 ): Promise<AdminTenantRow> {
   const res = await fetch(
     `/api/platform/admin/tenants/${encodeURIComponent(tenantId)}/plan`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(update),
+    },
+  );
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
+
+// Fields omitted from `update` are left unchanged server-side; pass `null`
+// explicitly to clear one. The admin UI always sends both (converting an
+// empty input back to null), so it never relies on that distinction itself
+// — kept on the wire for API completeness / future callers.
+export async function updateTenantStripe(
+  tenantId: string,
+  update: { stripe_customer_id?: string | null; stripe_subscription_id?: string | null },
+): Promise<AdminTenantRow> {
+  const res = await fetch(
+    `/api/platform/admin/tenants/${encodeURIComponent(tenantId)}/stripe`,
     {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
