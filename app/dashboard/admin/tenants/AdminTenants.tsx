@@ -10,6 +10,7 @@ import {
   type AdminTenantRow,
   type PlanKey,
 } from "../../../lib/esmiPlatform";
+import { Badge } from "../../Badge";
 
 /* Phase 3 ticket 3.5: internal-only plan assignment. Orchelix-staff-only
    (this page only renders for the "default" org — see page.tsx / layout.tsx)
@@ -24,14 +25,11 @@ function isUnknownOrgError(message: string): boolean {
 
 function StatusPill({ status }: { status: AdminTenantRow["plan"]["status"] }) {
   if (!status || status === "ok") return null;
-  const cls =
-    status === "over"
-      ? "bg-rose-50 text-rose-700 border-rose-200"
-      : "bg-amber-50 text-amber-800 border-amber-200";
-  const label = status === "over" ? "Over" : "Approaching";
   return (
-    <span className={`ml-2 inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium ${cls}`}>
-      {label}
+    <span className="ml-2">
+      <Badge tone={status === "over" ? "negative" : "warning"}>
+        {status === "over" ? "Over" : "Approaching"}
+      </Badge>
     </span>
   );
 }
@@ -63,53 +61,118 @@ function TenantRow({
     }
   }
 
+  const planSelectCls = "h-9 rounded-md border border-line bg-surface px-2 text-sm text-ink";
+
   return (
-    <tr className="border-b border-line last:border-0">
-      <td className="px-4 py-3 font-medium text-ink">{row.tenant_id}</td>
-      <td className="px-4 py-3">
-        <select
-          value={plan}
-          onChange={(e) => setPlan(e.target.value as PlanKey)}
-          className="rounded-md border border-line bg-surface px-2 py-1 text-sm text-ink"
-        >
-          {PLAN_KEYS.map((k) => (
-            <option key={k} value={k}>
-              {k}
-            </option>
-          ))}
-        </select>
-      </td>
-      <td className="px-4 py-3">
-        <select
-          value={status}
-          onChange={(e) => setStatus(e.target.value as AccountStatus)}
-          className="rounded-md border border-line bg-surface px-2 py-1 text-sm text-ink"
-        >
-          {ACCOUNT_STATUSES.map((s) => (
-            <option key={s} value={s}>
-              {s}
-            </option>
-          ))}
-        </select>
-      </td>
-      <td className="px-4 py-3 text-sm text-ink-2">
-        {row.minutes.toLocaleString(undefined, { maximumFractionDigits: 1 })}
-        {row.plan.included_minutes != null ? ` / ${row.plan.included_minutes}` : ""} min
-        <StatusPill status={row.plan.status} />
-      </td>
-      <td className="px-4 py-3 text-sm text-ink-2">{row.calls}</td>
-      <td className="px-4 py-3">
-        <button
-          type="button"
-          onClick={handleSave}
-          disabled={!dirty || saving}
-          className="rounded-md bg-navy-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-navy-500 disabled:cursor-not-allowed disabled:opacity-40"
-        >
-          {saving ? "Saving…" : "Save"}
-        </button>
-        {error && <p className="mt-1 text-xs text-rose-600">{error}</p>}
-      </td>
-    </tr>
+    <>
+      {/* Desktop row */}
+      <tbody className="hidden md:table-row-group">
+        <tr className="border-b border-line last:border-0">
+          <td className="px-4 py-3 font-medium text-ink">{row.tenant_id}</td>
+          <td className="px-4 py-3">
+            <select
+              value={plan}
+              onChange={(e) => setPlan(e.target.value as PlanKey)}
+              className={planSelectCls}
+            >
+              {PLAN_KEYS.map((k) => (
+                <option key={k} value={k}>
+                  {k}
+                </option>
+              ))}
+            </select>
+          </td>
+          <td className="px-4 py-3">
+            <select
+              value={status}
+              onChange={(e) => setStatus(e.target.value as AccountStatus)}
+              className={planSelectCls}
+            >
+              {ACCOUNT_STATUSES.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
+          </td>
+          <td className="px-4 py-3 text-sm text-ink-2">
+            {row.minutes.toLocaleString(undefined, { maximumFractionDigits: 1 })}
+            {row.plan.included_minutes != null ? ` / ${row.plan.included_minutes}` : ""} min
+            <StatusPill status={row.plan.status} />
+          </td>
+          <td className="px-4 py-3 text-sm text-ink-2">{row.calls}</td>
+          <td className="px-4 py-3">
+            <button
+              type="button"
+              onClick={handleSave}
+              disabled={!dirty || saving}
+              className="rounded-md bg-navy-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-navy-500 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              {saving ? "Saving…" : "Save"}
+            </button>
+            {error && <p className="mt-1 text-xs text-rose-600">{error}</p>}
+          </td>
+        </tr>
+      </tbody>
+
+      {/* Mobile card — quieter than the client-facing pages on purpose:
+          plain stacked controls, no accent bars or shadow treatment. */}
+      <tbody className="md:hidden">
+        <tr>
+          <td colSpan={6} className="border-b border-line px-4 py-4 last:border-0">
+            <div className="flex items-baseline justify-between gap-3">
+              <p className="font-medium text-ink">{row.tenant_id}</p>
+              <p className="text-xs text-ink-3">
+                {row.minutes.toLocaleString(undefined, { maximumFractionDigits: 1 })}
+                {row.plan.included_minutes != null ? ` / ${row.plan.included_minutes}` : ""} min
+                {" · "}
+                {row.calls} calls
+              </p>
+            </div>
+            <StatusPill status={row.plan.status} />
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              <label className="flex flex-col gap-1 text-xs font-medium text-ink-3">
+                Plan
+                <select
+                  value={plan}
+                  onChange={(e) => setPlan(e.target.value as PlanKey)}
+                  className={planSelectCls}
+                >
+                  {PLAN_KEYS.map((k) => (
+                    <option key={k} value={k}>
+                      {k}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="flex flex-col gap-1 text-xs font-medium text-ink-3">
+                Status
+                <select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value as AccountStatus)}
+                  className={planSelectCls}
+                >
+                  {ACCOUNT_STATUSES.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <button
+              type="button"
+              onClick={handleSave}
+              disabled={!dirty || saving}
+              className="mt-3 w-full rounded-md bg-navy-600 px-3 py-2 text-sm font-medium text-white hover:bg-navy-500 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              {saving ? "Saving…" : "Save"}
+            </button>
+            {error && <p className="mt-1 text-xs text-rose-600">{error}</p>}
+          </td>
+        </tr>
+      </tbody>
+    </>
   );
 }
 
@@ -162,8 +225,8 @@ export default function AdminTenants() {
 
   return (
     <div className="overflow-x-auto rounded-lg border border-line bg-surface shadow-sm">
-      <table className="w-full min-w-[720px] text-left">
-        <thead>
+      <table className="w-full text-left md:min-w-[720px]">
+        <thead className="hidden md:table-header-group">
           <tr className="border-b border-line text-xs uppercase tracking-wide text-ink-3">
             <th className="px-4 py-3">Tenant</th>
             <th className="px-4 py-3">Plan</th>
@@ -173,11 +236,9 @@ export default function AdminTenants() {
             <th className="px-4 py-3"></th>
           </tr>
         </thead>
-        <tbody>
-          {rows.map((row) => (
-            <TenantRow key={row.tenant_id} row={row} onSaved={handleSaved} />
-          ))}
-        </tbody>
+        {rows.map((row) => (
+          <TenantRow key={row.tenant_id} row={row} onSaved={handleSaved} />
+        ))}
       </table>
     </div>
   );

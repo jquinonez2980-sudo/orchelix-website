@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { fetchBilling, type AccountStatus, type BillingResponse } from "../../lib/esmiPlatform";
+import { Badge, type BadgeTone } from "../Badge";
 import { LimitBanner, MinutesProgress, Tile } from "../PlanUsageWidgets";
 
 /* Phase 3 ticket 3.3: read-only billing snapshot. No Stripe subscription
@@ -9,23 +10,17 @@ import { LimitBanner, MinutesProgress, Tile } from "../PlanUsageWidgets";
    to show plan + usage-vs-limit clearly and point to a human for changes,
    not to manage billing itself. */
 
-const STATUS_STYLE: Record<AccountStatus, { label: string; className: string }> = {
-  live: { label: "Live", className: "bg-teal-50 text-teal-700 border-teal-200" },
-  trial: { label: "Trial", className: "bg-navy-50 text-navy-600 border-navy-200" },
-  past_due: { label: "Past due", className: "bg-amber-50 text-amber-800 border-amber-200" },
-  suspended: { label: "Suspended", className: "bg-rose-50 text-rose-700 border-rose-200" },
-  archived: { label: "Archived", className: "bg-surface-2 text-ink-3 border-line" },
+const ACCOUNT_STATUS_STYLE: Record<AccountStatus, { label: string; tone: BadgeTone }> = {
+  live: { label: "Live", tone: "positive" },
+  trial: { label: "Trial", tone: "info" },
+  past_due: { label: "Past due", tone: "warning" },
+  suspended: { label: "Suspended", tone: "negative" },
+  archived: { label: "Archived", tone: "neutral" },
 };
 
-function StatusBadge({ status }: { status: AccountStatus }) {
-  const s = STATUS_STYLE[status] ?? STATUS_STYLE.live;
-  return (
-    <span
-      className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${s.className}`}
-    >
-      {s.label}
-    </span>
-  );
+function AccountStatusBadge({ status }: { status: AccountStatus }) {
+  const s = ACCOUNT_STATUS_STYLE[status] ?? ACCOUNT_STATUS_STYLE.live;
+  return <Badge tone={s.tone}>{s.label}</Badge>;
 }
 
 function SkeletonTiles() {
@@ -106,16 +101,16 @@ export default function Billing() {
     <div className="space-y-4">
       {data.plan.status && data.plan.status !== "ok" && <LimitBanner plan={data.plan} />}
 
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-line bg-surface p-5 shadow-sm">
+      <div className="flex flex-col gap-3 rounded-lg border border-line bg-surface p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-sm text-ink-3">Account status</p>
           <div className="mt-1.5">
-            <StatusBadge status={data.account_status} />
+            <AccountStatusBadge status={data.account_status} />
           </div>
         </div>
         <a
           href="mailto:info@orchelix.com?subject=Billing%20question"
-          className="rounded-md bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-500"
+          className="w-full rounded-md bg-navy-600 px-4 py-2 text-center text-sm font-medium text-white hover:bg-navy-500 sm:w-auto"
         >
           Manage billing
         </a>

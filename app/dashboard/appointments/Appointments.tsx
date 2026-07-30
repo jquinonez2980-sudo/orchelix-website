@@ -6,6 +6,7 @@ import {
   type Appointment,
   type AppointmentsResponse,
 } from "../../lib/esmiPlatform";
+import { Badge, type BadgeTone } from "../Badge";
 
 const PAGE_SIZE = 25;
 
@@ -51,23 +52,22 @@ function fmtPhone(e164: string | null): string | null {
 
 /* ── source chip ─────────────────────────────────────────────────────────── */
 
-const SOURCE_STYLE: Record<string, { label: string; cls: string }> = {
-  voice: { label: "Phone", cls: "bg-teal-50 text-teal-800 ring-teal-200" },
-  chat: { label: "Web chat", cls: "bg-navy-50 text-navy-500 ring-navy-200" },
-  website: { label: "Website", cls: "bg-gold-50 text-gold-800 ring-gold-200" },
-  manual: { label: "Added manually", cls: "bg-surface-2 text-ink-3 ring-line" },
+// website was gold (AcumenAI's reserved accent, not Esmi/Orchelix) — same
+// branding leak fixed on Team/Calls/Leads' badges. voice/chat/website are
+// all Esmi-facilitated bookings (voice or chat conversation, or the
+// website's own booking widget hitting the same booking API); manual is
+// the one channel that's genuinely different — a human typed it in.
+const SOURCE_STYLE: Record<string, { label: string; tone: BadgeTone }> = {
+  voice: { label: "Phone", tone: "positive" },
+  chat: { label: "Web chat", tone: "info" },
+  website: { label: "Website", tone: "info" },
+  manual: { label: "Added manually", tone: "neutral" },
 };
 
 function SourceChip({ appt }: { appt: Appointment }) {
   const key = appt.source && SOURCE_STYLE[appt.source] ? appt.source : "manual";
   const s = SOURCE_STYLE[key];
-  return (
-    <span
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset ${s.cls}`}
-    >
-      {s.label}
-    </span>
-  );
+  return <Badge tone={s.tone}>{s.label}</Badge>;
 }
 
 /* ── appointment card ────────────────────────────────────────────────────── */
@@ -77,18 +77,27 @@ function AppointmentCard({ appt }: { appt: Appointment }) {
   const phone = fmtPhone(appt.contact_phone);
   return (
     <li
-      className={`flex flex-col gap-2 border-t border-line px-4 py-3.5 sm:flex-row sm:items-center sm:gap-4 sm:px-6 ${
-        upcoming ? "border-l-2 border-l-teal-500 bg-surface" : "bg-surface-2/40"
+      className={`flex flex-col gap-3 rounded-lg border p-3.5 sm:flex-row sm:items-center sm:gap-4 sm:p-4 ${
+        upcoming
+          ? "border-line border-l-4 border-l-teal-500 bg-surface shadow-sm"
+          : "border-line/70 bg-surface/60"
       }`}
     >
-      <div className="w-44 shrink-0">
-        <p className={`text-sm font-semibold ${upcoming ? "text-ink" : "text-ink-3"}`}>
-          {fmtDay(appt.starts_at)}
-        </p>
-        <p className={`text-sm tabular-nums ${upcoming ? "text-ink-2" : "text-ink-4"}`}>
-          {fmtTimeRange(appt.starts_at, appt.ends_at)}
-        </p>
+      {/* Date/time + (mobile-only) source badge */}
+      <div className="flex items-center justify-between gap-3 sm:block sm:w-40 sm:shrink-0">
+        <div>
+          <p className={`text-sm font-semibold ${upcoming ? "text-ink" : "text-ink-3"}`}>
+            {fmtDay(appt.starts_at)}
+          </p>
+          <p className={`text-sm tabular-nums ${upcoming ? "text-ink-2" : "text-ink-4"}`}>
+            {fmtTimeRange(appt.starts_at, appt.ends_at)}
+          </p>
+        </div>
+        <div className="sm:hidden">
+          <SourceChip appt={appt} />
+        </div>
       </div>
+
       <div className="min-w-0 flex-1">
         <p className={`truncate text-sm font-medium ${upcoming ? "text-ink" : "text-ink-3"}`}>
           {appt.customer_name}
@@ -97,7 +106,8 @@ function AppointmentCard({ appt }: { appt: Appointment }) {
           {[appt.service, appt.location].filter(Boolean).join(" · ")}
         </p>
       </div>
-      <div className="min-w-0 sm:w-52">
+
+      <div className="min-w-0 sm:w-52 sm:shrink-0">
         {phone && (
           <p className={`truncate font-mono text-sm ${upcoming ? "text-ink-2" : "text-ink-4"}`}>
             {phone}
@@ -112,7 +122,9 @@ function AppointmentCard({ appt }: { appt: Appointment }) {
           <p className="text-sm text-ink-4">No contact on file</p>
         )}
       </div>
-      <div className="shrink-0">
+
+      {/* Desktop-only source badge — mobile shows it up in the header row */}
+      <div className="hidden shrink-0 sm:block">
         <SourceChip appt={appt} />
       </div>
     </li>
@@ -123,16 +135,9 @@ function AppointmentCard({ appt }: { appt: Appointment }) {
 
 function Skeleton() {
   return (
-    <ul>
+    <ul className="space-y-2 bg-surface-2/40 p-3 sm:p-4">
       {Array.from({ length: 5 }).map((_, i) => (
-        <li key={i} className="border-t border-line px-4 py-4 sm:px-6">
-          <div className="flex animate-pulse items-center gap-4">
-            <div className="h-4 w-40 rounded bg-surface-2" />
-            <div className="h-4 w-48 rounded bg-surface-2" />
-            <div className="h-4 flex-1 rounded bg-surface-2" />
-            <div className="h-5 w-20 rounded-full bg-surface-2" />
-          </div>
-        </li>
+        <li key={i} className="h-20 animate-pulse rounded-lg bg-surface-2" />
       ))}
     </ul>
   );
@@ -254,16 +259,16 @@ export default function Appointments() {
           </p>
         </div>
       ) : (
-        <ul>
+        <ul className="space-y-2 bg-surface-2/40 p-3 sm:p-4">
           {data.appointments.map((a, i) => (
             <Fragment key={a.id}>
               {status === "all" && i === 0 && a.status === "upcoming" && (
-                <li className="bg-surface px-4 pb-1 pt-3 text-xs font-semibold uppercase tracking-wide text-teal-700 sm:px-6">
+                <li className="pb-0.5 text-xs font-semibold uppercase tracking-wide text-teal-700">
                   Upcoming
                 </li>
               )}
               {status === "all" && i === firstPastIdx && (
-                <li className="bg-surface px-4 pb-1 pt-4 text-xs font-semibold uppercase tracking-wide text-ink-4 sm:px-6">
+                <li className="pb-0.5 text-xs font-semibold uppercase tracking-wide text-ink-4">
                   Past
                 </li>
               )}

@@ -11,11 +11,14 @@ import {
   type KnowledgeEntry,
   type KnowledgePdfEntry,
 } from "../../lib/esmiPlatform";
+import { Badge } from "../Badge";
 
 const inputCls =
   "w-full rounded-md border border-line bg-surface px-2.5 py-2 text-sm text-ink " +
   "focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500";
 const labelCls = "flex flex-col gap-1 text-xs font-medium text-ink-3";
+const deleteBtnCls =
+  "shrink-0 rounded px-2 py-1 text-xs font-medium text-rose-600 hover:bg-rose-50 hover:underline disabled:opacity-50";
 
 const dateFmt = new Intl.DateTimeFormat(undefined, {
   month: "short",
@@ -46,6 +49,39 @@ function friendlyKbResult(raw: string): string {
     return "The knowledge base isn't available right now — try again in a moment.";
   }
   return raw;
+}
+
+/* ── shared section shell ───────────────────────────────────────────────────
+   One card per topic (FAQs & notes / PDF documents / Test) instead of five
+   flat boxes — a single header + description, with a form area and a list
+   area sharing the same card, divided by a border instead of a visual gap. */
+
+function Section({
+  title,
+  description,
+  children,
+}: {
+  title: string;
+  description?: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="overflow-hidden rounded-lg border border-line bg-surface shadow-sm">
+      <div className="border-b border-line px-4 py-4 sm:px-6">
+        <h2 className="font-display text-base font-semibold text-ink">{title}</h2>
+        {description && <p className="mt-1 text-sm text-ink-3">{description}</p>}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function SubLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="border-t border-b border-line bg-surface-2/40 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-ink-4 sm:px-6">
+      {children}
+    </p>
+  );
 }
 
 /* ── add-entry form ─────────────────────────────────────────────────────── */
@@ -82,13 +118,8 @@ function AddEntryForm({ onAdded }: { onAdded: (entry: KnowledgeEntry) => void })
   };
 
   return (
-    <div className="rounded-lg border border-line bg-surface p-4 shadow-sm sm:p-6">
-      <h2 className="font-display text-base font-semibold text-ink">Add an entry</h2>
-      <p className="mt-1 text-sm text-ink-3">
-        A question and answer works best (it matches how customers usually ask), but a
-        plain note is fine too — just leave the question blank.
-      </p>
-      <div className="mt-4 space-y-3">
+    <div className="p-4 sm:p-6">
+      <div className="space-y-3">
         <label className={labelCls}>
           Question (optional)
           <input
@@ -128,7 +159,7 @@ function AddEntryForm({ onAdded }: { onAdded: (entry: KnowledgeEntry) => void })
         >
           {saving ? "Adding…" : "Add entry"}
         </button>
-        {error && <span className="text-sm text-red-600">{error}</span>}
+        {error && <span className="text-sm text-rose-600">{error}</span>}
         {!error && justAdded && (
           <span className="text-sm text-teal-700">Added — Esmi can use this right away.</span>
         )}
@@ -171,16 +202,11 @@ function EntryRow({
           <p className="mt-0.5 whitespace-pre-wrap text-sm text-ink-2">{entry.answer}</p>
           <p className="mt-1 text-xs text-ink-4">Added {fmtDate(entry.created_at)}</p>
         </div>
-        <button
-          type="button"
-          disabled={deleting}
-          onClick={remove}
-          className="shrink-0 text-xs font-medium text-red-600 hover:underline disabled:opacity-50"
-        >
+        <button type="button" disabled={deleting} onClick={remove} className={deleteBtnCls}>
           {deleting ? "Deleting…" : "Delete"}
         </button>
       </div>
-      {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
+      {error && <p className="mt-1 text-xs text-rose-600">{error}</p>}
     </div>
   );
 }
@@ -217,21 +243,19 @@ function EntriesList({
   onRetry: () => void;
 }) {
   return (
-    <div className="mt-6 overflow-hidden rounded-lg border border-line bg-surface shadow-sm">
-      <div className="border-b border-line px-4 py-4 sm:px-6">
-        <h2 className="font-display text-base font-semibold text-ink">Current entries</h2>
-        {otherDocsCount > 0 && (
-          <p className="mt-1 text-sm text-ink-3">
-            Esmi also draws on {otherDocsCount} other document
-            {otherDocsCount === 1 ? "" : "s"} set up during onboarding — those aren&apos;t
-            editable here yet; ask your Orchelix contact to update those.
-          </p>
-        )}
-      </div>
+    <>
+      <SubLabel>Current entries</SubLabel>
+      {otherDocsCount > 0 && (
+        <p className="px-4 py-2 text-sm text-ink-3 sm:px-6">
+          Esmi also draws on {otherDocsCount} other document
+          {otherDocsCount === 1 ? "" : "s"} set up during onboarding — those aren&apos;t
+          editable here yet; ask your Orchelix contact to update those.
+        </p>
+      )}
       {loading && <SkeletonRows />}
       {error && (
         <div className="px-4 py-6 text-center sm:px-6">
-          <p className="text-sm text-red-600">{error}</p>
+          <p className="text-sm text-rose-600">{error}</p>
           <button
             type="button"
             onClick={onRetry}
@@ -253,7 +277,7 @@ function EntriesList({
           ))}
         </div>
       )}
-    </div>
+    </>
   );
 }
 
@@ -290,13 +314,8 @@ function PdfUploadForm({ onUploaded }: { onUploaded: (entry: KnowledgePdfEntry) 
   };
 
   return (
-    <div className="mt-6 rounded-lg border border-line bg-surface p-4 shadow-sm sm:p-6">
-      <h2 className="font-display text-base font-semibold text-ink">Upload a PDF</h2>
-      <p className="mt-1 text-sm text-ink-3">
-        Menus, price sheets, policies — Esmi reads the text and can use it right away.
-        Up to {MAX_PDF_MB} MB per file.
-      </p>
-      <div className="mt-3 flex items-center gap-3">
+    <div className="p-4 sm:p-6">
+      <div className="flex items-center gap-3">
         <input
           ref={inputRef}
           type="file"
@@ -310,7 +329,7 @@ function PdfUploadForm({ onUploaded }: { onUploaded: (entry: KnowledgePdfEntry) 
         />
         {uploading && <span className="shrink-0 text-sm text-ink-4">Uploading…</span>}
       </div>
-      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+      {error && <p className="mt-2 text-sm text-rose-600">{error}</p>}
       {!error && uploadedName && !uploading && (
         <p className="mt-2 text-sm text-teal-700">
           &quot;{uploadedName}&quot; added — Esmi can use it right away.
@@ -346,24 +365,21 @@ function PdfRow({
     <div className="border-t border-line px-4 py-3 first:border-t-0 sm:px-6">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="truncate text-sm font-medium text-ink">{pdf.filename}</p>
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="truncate text-sm font-medium text-ink">{pdf.filename}</p>
+            {pdf.truncated && <Badge tone="warning">Trimmed</Badge>}
+          </div>
           <p className="mt-0.5 text-xs text-ink-4">
             {fmtBytes(pdf.size_bytes)}
             {pdf.pages != null && ` · ${pdf.pages} page${pdf.pages === 1 ? "" : "s"}`}
             {" · "}Added {fmtDate(pdf.created_at)}
-            {pdf.truncated && " · trimmed to fit"}
           </p>
         </div>
-        <button
-          type="button"
-          disabled={deleting}
-          onClick={remove}
-          className="shrink-0 text-xs font-medium text-red-600 hover:underline disabled:opacity-50"
-        >
+        <button type="button" disabled={deleting} onClick={remove} className={deleteBtnCls}>
           {deleting ? "Deleting…" : "Delete"}
         </button>
       </div>
-      {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
+      {error && <p className="mt-1 text-xs text-rose-600">{error}</p>}
     </div>
   );
 }
@@ -382,14 +398,12 @@ function PdfsList({
   onRetry: () => void;
 }) {
   return (
-    <div className="mt-6 overflow-hidden rounded-lg border border-line bg-surface shadow-sm">
-      <div className="border-b border-line px-4 py-4 sm:px-6">
-        <h2 className="font-display text-base font-semibold text-ink">Uploaded PDFs</h2>
-      </div>
+    <>
+      <SubLabel>Uploaded PDFs</SubLabel>
       {loading && <SkeletonRows />}
       {error && (
         <div className="px-4 py-6 text-center sm:px-6">
-          <p className="text-sm text-red-600">{error}</p>
+          <p className="text-sm text-rose-600">{error}</p>
           <button
             type="button"
             onClick={onRetry}
@@ -411,7 +425,7 @@ function PdfsList({
           ))}
         </div>
       )}
-    </div>
+    </>
   );
 }
 
@@ -439,13 +453,8 @@ function TestBox() {
   };
 
   return (
-    <div className="mt-6 rounded-lg border border-line bg-surface p-4 shadow-sm sm:p-6">
-      <h2 className="font-display text-base font-semibold text-ink">Ask a test question</h2>
-      <p className="mt-1 text-sm text-ink-3">
-        Shows exactly what Esmi would retrieve from the knowledge base for this question —
-        not a generated answer, the same raw lookup Esmi uses before replying.
-      </p>
-      <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+    <div className="p-4 sm:p-6">
+      <div className="flex flex-col gap-2 sm:flex-row">
         <input
           className={`${inputCls} sm:flex-1`}
           value={query}
@@ -464,7 +473,7 @@ function TestBox() {
           {loading ? "Searching…" : "Test"}
         </button>
       </div>
-      {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
+      {error && <p className="mt-3 text-sm text-rose-600">{error}</p>}
       {result && (
         <div className="mt-3 whitespace-pre-wrap rounded-md bg-surface-2/50 p-3 text-sm text-ink-2">
           {friendlyKbResult(result)}
@@ -502,25 +511,42 @@ export default function KnowledgeManager() {
   useEffect(load, []);
 
   return (
-    <div>
-      <AddEntryForm onAdded={(entry) => setEntries((prev) => [entry, ...(prev ?? [])])} />
-      <EntriesList
-        entries={entries}
-        otherDocsCount={otherDocsCount}
-        loading={loading}
-        error={error}
-        onDeleted={(id) => setEntries((prev) => (prev ?? []).filter((e) => e.id !== id))}
-        onRetry={load}
-      />
-      <PdfUploadForm onUploaded={(entry) => setPdfs((prev) => [entry, ...(prev ?? [])])} />
-      <PdfsList
-        pdfs={pdfs}
-        loading={loading}
-        error={error}
-        onDeleted={(id) => setPdfs((prev) => (prev ?? []).filter((p) => p.id !== id))}
-        onRetry={load}
-      />
-      <TestBox />
+    <div className="space-y-6">
+      <Section
+        title="FAQs & notes"
+        description="A question and answer works best (it matches how customers usually ask), but a plain note is fine too — just leave the question blank. Changes are searchable within about a minute."
+      >
+        <AddEntryForm onAdded={(entry) => setEntries((prev) => [entry, ...(prev ?? [])])} />
+        <EntriesList
+          entries={entries}
+          otherDocsCount={otherDocsCount}
+          loading={loading}
+          error={error}
+          onDeleted={(id) => setEntries((prev) => (prev ?? []).filter((e) => e.id !== id))}
+          onRetry={load}
+        />
+      </Section>
+
+      <Section
+        title="PDF documents"
+        description={`Menus, price sheets, policies — Esmi reads the text and can use it right away. Up to ${MAX_PDF_MB} MB per file.`}
+      >
+        <PdfUploadForm onUploaded={(entry) => setPdfs((prev) => [entry, ...(prev ?? [])])} />
+        <PdfsList
+          pdfs={pdfs}
+          loading={loading}
+          error={error}
+          onDeleted={(id) => setPdfs((prev) => (prev ?? []).filter((p) => p.id !== id))}
+          onRetry={load}
+        />
+      </Section>
+
+      <Section
+        title="Ask a test question"
+        description="Shows exactly what Esmi would retrieve from the knowledge base for this question — not a generated answer, the same raw lookup Esmi uses before replying."
+      >
+        <TestBox />
+      </Section>
     </div>
   );
 }

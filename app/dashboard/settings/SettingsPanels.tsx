@@ -11,9 +11,9 @@ export default function SettingsPanels() {
   const [versionBump, setVersionBump] = useState(0);
 
   return (
-    <>
+    <div className="space-y-6">
       <SettingsForm onSaved={() => setVersionBump((n) => n + 1)} />
       <VersionHistory reloadSignal={versionBump} />
-    </>
+    </div>
   );
 }

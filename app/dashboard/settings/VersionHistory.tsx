@@ -170,7 +170,7 @@ function VersionRow({
       {expanded && (
         <div className="px-4 pb-4 sm:px-6">
           {loading && <p className="text-sm text-ink-4">Loading…</p>}
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {error && <p className="text-sm text-rose-600">{error}</p>}
           {detail && <ConfigSnapshot config={detail.config} />}
         </div>
       )}
@@ -220,7 +220,7 @@ export default function VersionHistory({ reloadSignal }: { reloadSignal?: number
   }, [reloadKey, reloadSignal]);
 
   return (
-    <div className="mt-6 overflow-hidden rounded-lg border border-line bg-surface shadow-sm">
+    <div className="overflow-hidden rounded-lg border border-line bg-surface shadow-sm">
       <div className="flex items-start justify-between gap-3 border-b border-line px-4 py-4 sm:px-6">
         <div>
           <h2 className="font-display text-base font-semibold text-ink">Version history</h2>
@@ -240,7 +240,7 @@ export default function VersionHistory({ reloadSignal }: { reloadSignal?: number
       {loading && <SkeletonRows />}
       {error && (
         <div className="px-4 py-6 text-center sm:px-6">
-          <p className="text-sm text-red-600">{error}</p>
+          <p className="text-sm text-rose-600">{error}</p>
           <button
             type="button"
             onClick={() => setReloadKey((k) => k + 1)}

@@ -2,6 +2,7 @@
 
 import { useAuth, useOrganization } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
+import { Badge } from "../Badge";
 
 /* Team Members — thin UI over Clerk's own Organization membership model.
    No backend involved: useOrganization()/useAuth() talk directly to Clerk,
@@ -117,7 +118,7 @@ function InviteForm({
           {sending ? "Sending…" : "Send invite"}
         </button>
       </div>
-      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+      {error && <p className="mt-2 text-sm text-rose-600">{error}</p>}
       {!error && sent && <p className="mt-2 text-sm text-teal-700">Invite sent.</p>}
     </div>
   );
@@ -182,22 +183,20 @@ function MemberRow({
           <p className="truncate text-sm text-ink-3">{membership.publicUserData?.identifier}</p>
         </div>
         <div className="flex shrink-0 items-center gap-3">
-          <span className="inline-flex items-center rounded-full bg-navy-50 px-2.5 py-0.5 text-xs font-medium text-navy-500 ring-1 ring-inset ring-navy-200">
-            {membership.roleName}
-          </span>
+          <Badge tone="info">{membership.roleName}</Badge>
           {canManage && !isSelf && (
             <button
               type="button"
               disabled={removing}
               onClick={remove}
-              className="text-xs font-medium text-red-600 hover:underline disabled:opacity-50"
+              className="text-xs font-medium text-rose-600 hover:underline disabled:opacity-50"
             >
               {removing ? "Removing…" : "Remove"}
             </button>
           )}
         </div>
       </div>
-      {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
+      {error && <p className="mt-1 text-xs text-rose-600">{error}</p>}
     </div>
   );
 }
@@ -244,22 +243,20 @@ function InvitationRow({
           <p className="text-xs text-ink-4">Invited {fmtDate(invitation.createdAt)}</p>
         </div>
         <div className="flex shrink-0 items-center gap-3">
-          <span className="inline-flex items-center rounded-full bg-gold-50 px-2.5 py-0.5 text-xs font-medium text-gold-800 ring-1 ring-inset ring-gold-200">
-            Pending · {invitation.roleName}
-          </span>
+          <Badge tone="warning">Pending · {invitation.roleName}</Badge>
           {canManage && (
             <button
               type="button"
               disabled={revoking}
               onClick={revoke}
-              className="text-xs font-medium text-red-600 hover:underline disabled:opacity-50"
+              className="text-xs font-medium text-rose-600 hover:underline disabled:opacity-50"
             >
               {revoking ? "Revoking…" : "Revoke"}
             </button>
           )}
         </div>
       </div>
-      {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
+      {error && <p className="mt-1 text-xs text-rose-600">{error}</p>}
     </div>
   );
 }

@@ -9,6 +9,7 @@ import {
   type LeadsResponse,
   type LeadStatus,
 } from "../../lib/esmiPlatform";
+import { Badge, type BadgeTone } from "../Badge";
 
 const PAGE_SIZE = 25;
 
@@ -33,22 +34,18 @@ function fmtWhen(iso: string | null): { date: string; time: string } {
 
 /* ── status badge / picker ───────────────────────────────────────────────── */
 
-const STATUS_STYLE: Record<LeadStatus, { label: string; cls: string }> = {
-  new: { label: "New", cls: "bg-navy-50 text-navy-500 ring-navy-200" },
-  contacted: { label: "Contacted", cls: "bg-gold-50 text-gold-800 ring-gold-200" },
-  won: { label: "Won", cls: "bg-teal-50 text-teal-800 ring-teal-200" },
-  lost: { label: "Lost", cls: "bg-surface-2 text-ink-3 ring-line" },
+// contacted was gold (AcumenAI's reserved accent, not Esmi/Orchelix) — same
+// branding leak fixed on Team's "Pending" and Calls' "Escalated" badges.
+const STATUS_STYLE: Record<LeadStatus, { label: string; tone: BadgeTone }> = {
+  new: { label: "New", tone: "info" },
+  contacted: { label: "Contacted", tone: "warning" },
+  won: { label: "Won", tone: "positive" },
+  lost: { label: "Lost", tone: "neutral" },
 };
 
 function StatusBadge({ status }: { status: LeadStatus }) {
   const s = STATUS_STYLE[status];
-  return (
-    <span
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset ${s.cls}`}
-    >
-      {s.label}
-    </span>
-  );
+  return <Badge tone={s.tone}>{s.label}</Badge>;
 }
 
 const OUTCOME_LABEL: Record<string, string> = {
@@ -62,17 +59,7 @@ const OUTCOME_LABEL: Record<string, string> = {
 
 function SourceChip({ lead }: { lead: Lead }) {
   const voice = Boolean(lead.call);
-  return (
-    <span
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset ${
-        voice
-          ? "bg-teal-50 text-teal-800 ring-teal-200"
-          : "bg-navy-50 text-navy-500 ring-navy-200"
-      }`}
-    >
-      {voice ? "Phone" : "Web chat"}
-    </span>
-  );
+  return <Badge tone={voice ? "positive" : "info"}>{voice ? "Phone" : "Web chat"}</Badge>;
 }
 
 function LeadScore({ score }: { score: number | null }) {
@@ -128,7 +115,7 @@ function StatusPicker({
             setSaving(false);
           }
         }}
-        className="h-8 rounded-md border border-line bg-surface px-2 text-xs font-medium text-ink focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 disabled:opacity-50"
+        className="h-9 rounded-md border border-line bg-surface px-2.5 text-sm font-medium text-ink focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500 disabled:opacity-50"
       >
         {LEAD_STATUSES.map((s) => (
           <option key={s} value={s}>
@@ -137,7 +124,7 @@ function StatusPicker({
         ))}
       </select>
       {saving && <span className="text-xs text-ink-4">Saving…</span>}
-      {failed && <span className="text-xs text-red-600">Failed — try again</span>}
+      {failed && <span className="text-xs text-rose-600">Failed — try again</span>}
     </div>
   );
 }

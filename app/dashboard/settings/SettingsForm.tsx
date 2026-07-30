@@ -88,7 +88,7 @@ function WeekdayPicker({
               else next.add(i);
               onChange([...next].sort());
             }}
-            className={`rounded-full px-2.5 py-1 text-xs font-medium ring-1 ring-inset transition ${
+            className={`rounded-full px-3 py-1.5 text-xs font-medium ring-1 ring-inset transition ${
               on
                 ? "bg-teal-50 text-teal-800 ring-teal-200"
                 : "bg-surface text-ink-3 ring-line hover:bg-surface-2"
@@ -253,7 +253,7 @@ function ServiceRow({
       <button
         type="button"
         onClick={onRemove}
-        className="mt-3 text-xs font-medium text-red-600 hover:underline"
+        className="mt-3 text-xs font-medium text-rose-600 hover:underline"
       >
         Remove service
       </button>
@@ -548,7 +548,7 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
         >
           {saving ? "Saving…" : "Save changes"}
         </button>
-        {saveError && <span className="text-sm text-red-600">{saveError}</span>}
+        {saveError && <span className="text-sm text-rose-600">{saveError}</span>}
         {!saveError && savedAt && !dirty && (
           <span className="text-sm text-teal-700">Saved — live within a minute.</span>
         )}

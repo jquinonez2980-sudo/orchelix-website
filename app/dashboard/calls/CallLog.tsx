@@ -8,6 +8,7 @@ import {
   type CallsResponse,
   type PlatformCall,
 } from "../../lib/esmiPlatform";
+import { Badge, type BadgeTone } from "../Badge";
 
 const PAGE_SIZE = 25;
 
@@ -45,24 +46,22 @@ function fmtCaller(e164: string | null): string {
 
 /* ── outcome badge ───────────────────────────────────────────────────────── */
 
-const OUTCOME_STYLE: Record<string, { label: string; cls: string }> = {
-  booked: { label: "Booked", cls: "bg-teal-50 text-teal-800 ring-teal-200" },
-  escalated: { label: "Escalated", cls: "bg-gold-50 text-gold-800 ring-gold-200" },
-  info: { label: "Info", cls: "bg-navy-50 text-navy-500 ring-navy-200" },
-  voicemail: { label: "Voicemail", cls: "bg-violet-50 text-violet-700 ring-violet-200" },
-  abandoned: { label: "Abandoned", cls: "bg-surface-2 text-ink-3 ring-line" },
-  other: { label: "Other", cls: "bg-surface-2 text-ink-3 ring-line" },
+// escalated was gold — that color is AcumenAI's reserved signature accent
+// (see globals.css), not an Esmi/Orchelix color; using it here was a
+// branding leak, same issue fixed on Team's "Pending" badge. warning (amber)
+// reads correctly as "needs attention" without the collision.
+const OUTCOME_STYLE: Record<string, { label: string; tone: BadgeTone }> = {
+  booked: { label: "Booked", tone: "positive" },
+  escalated: { label: "Escalated", tone: "warning" },
+  info: { label: "Info", tone: "info" },
+  voicemail: { label: "Voicemail", tone: "neutral" },
+  abandoned: { label: "Abandoned", tone: "neutral" },
+  other: { label: "Other", tone: "neutral" },
 };
 
 function OutcomeBadge({ outcome }: { outcome: CallOutcome | null }) {
   const s = OUTCOME_STYLE[outcome ?? "other"] ?? OUTCOME_STYLE.other;
-  return (
-    <span
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset ${s.cls}`}
-    >
-      {s.label}
-    </span>
-  );
+  return <Badge tone={s.tone}>{s.label}</Badge>;
 }
 
 /* ── transcript ──────────────────────────────────────────────────────────── */
@@ -208,7 +207,7 @@ function CallRow({ call }: { call: PlatformCall }) {
                 e.stopPropagation();
                 setOpen((v) => !v);
               }}
-              className="rounded-md p-1.5 hover:bg-surface-2"
+              className="flex h-9 w-9 items-center justify-center rounded-md hover:bg-surface-2"
             >
               <Chevron open={open} />
             </button>

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { fetchOverview, type OverviewResponse } from "../lib/esmiPlatform";
+import { Tile } from "./PlanUsageWidgets";
 
 /* KPI tiles per the stat-tile contract: sentence-case label, semibold value in
    proportional figures (no tabular-nums at display size), signed delta vs a
@@ -49,7 +50,7 @@ function DeltaLine({ delta, invert = false }: { delta: Delta; invert?: boolean }
   );
 }
 
-function Tile({
+function DeltaTile({
   label,
   value,
   delta,
@@ -61,14 +62,11 @@ function Tile({
   note?: string;
 }) {
   return (
-    <div className="rounded-lg border border-line bg-surface p-5 shadow-sm">
-      <p className="text-sm text-ink-3">{label}</p>
-      <p className="mt-1.5 text-3xl font-semibold text-ink">{value}</p>
+    <Tile label={label} value={value} note={note}>
       <div className="mt-1.5">
         <DeltaLine delta={delta} />
       </div>
-      {note && <p className="mt-1 text-xs text-ink-4">{note}</p>}
-    </div>
+    </Tile>
   );
 }
 
@@ -151,7 +149,7 @@ export default function Overview() {
       <section className="rounded-lg bg-navy-600 p-6 shadow-sm sm:p-8">
         <p className="text-sm font-medium text-teal-300">After-hours calls answered</p>
         <div className="mt-2 flex flex-wrap items-end gap-x-6 gap-y-2">
-          <p className="text-5xl font-semibold leading-none text-white">
+          <p className="text-4xl font-semibold leading-none text-white sm:text-5xl">
             {cur.after_hours_calls}
           </p>
           <div className="pb-1">
@@ -172,23 +170,23 @@ export default function Overview() {
 
       {/* KPI tiles */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Tile
+        <DeltaTile
           label="Calls answered"
           value={String(cur.calls_answered)}
           delta={computeDelta(cur.calls_answered, prev.calls_answered)}
         />
-        <Tile
+        <DeltaTile
           label="Appointments booked"
           value={String(cur.appointments_booked)}
           delta={computeDelta(cur.appointments_booked, prev.appointments_booked)}
         />
-        <Tile
+        <DeltaTile
           label="Leads escalated to you"
           value={String(cur.leads_escalated)}
           delta={computeDelta(cur.leads_escalated, prev.leads_escalated)}
           note="Callers Esmi flagged for a human follow-up"
         />
-        <Tile
+        <DeltaTile
           label="Minutes used"
           value={`${cur.minutes_used.toLocaleString(undefined, {
             maximumFractionDigits: 1,
@@ -196,7 +194,7 @@ export default function Overview() {
           delta={computeDelta(cur.minutes_used, prev.minutes_used)}
         />
         {cur.est_revenue_booked != null && (
-          <Tile
+          <DeltaTile
             label="Estimated revenue booked"
             value={`$${cur.est_revenue_booked.toLocaleString()}`}
             delta={computeDelta(
