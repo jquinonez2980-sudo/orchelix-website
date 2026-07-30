@@ -11,12 +11,15 @@
   "dependencies": {
     "@clerk/nextjs": "^7.4.3",
     "@vercel/analytics": "^2.0.1",
+    "lucide-react": "^1.27.0",
     "next": "16.2.6",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "resend": "^6.12.3"
   },
-  "browserslist": [">1%, last 2 versions, not dead"],
+  "browserslist": [
+    ">1%, last 2 versions, not dead"
+  ],
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",

@@ -1,12 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import {
-  ClerkProvider,
-  OrganizationSwitcher,
-  UserButton,
-} from "@clerk/nextjs";
+import { ClerkProvider, OrganizationSwitcher } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { ADMIN_ORG_SLUG } from "../lib/platformProxy";
+import DashboardShell from "./DashboardShell";
 
 /* Esmi tenant dashboard shell (/dashboard).
    ClerkProvider is scoped here — same pattern as the AcumenAI console at
@@ -15,7 +11,9 @@ import { ADMIN_ORG_SLUG } from "../lib/platformProxy";
 
    Tenancy: Clerk Organizations. The active org's SLUG is the Esmi tenant_id
    (enforced server-side in /api/platform/*). Users with no active org see the
-   org gate below instead of data. */
+   org gate below instead of data. Chrome (sidebar/topbar/drawer) lives in
+   DashboardShell — this file only resolves auth state and picks what goes
+   inside it. */
 
 export const dynamic = "force-dynamic";
 
@@ -57,109 +55,14 @@ export default async function EsmiDashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Admin nav link is internal-only (Phase 3 ticket 3.5) — only Orchelix
-  // staff, signed in under the ADMIN_ORG_SLUG org, ever see it. The page and
-  // its API calls are independently gated too (belt-and-suspenders, not the
-  // only check).
   const { orgSlug } = await auth();
   const isOrchelixStaff = orgSlug === ADMIN_ORG_SLUG;
 
   return (
     <ClerkProvider afterSignOutUrl="/">
-      <div className="min-h-screen bg-paper">
-        <header className="sticky top-0 z-40 border-b border-line bg-surface/95 backdrop-blur">
-          <div className="mx-auto flex h-14 max-w-6xl items-center gap-4 px-4 sm:px-6">
-            <Link
-              href="/dashboard"
-              className="flex items-baseline gap-2 font-display font-semibold text-ink"
-            >
-              Orchelix
-              <span className="text-teal-600">· Esmi</span>
-            </Link>
-            <nav className="ml-2 flex items-center gap-1 text-sm">
-              <Link
-                href="/dashboard"
-                className="rounded-md px-3 py-1.5 font-medium text-ink hover:bg-surface-2"
-              >
-                Overview
-              </Link>
-              <Link
-                href="/dashboard/calls"
-                className="rounded-md px-3 py-1.5 font-medium text-ink hover:bg-surface-2"
-              >
-                Calls
-              </Link>
-              <Link
-                href="/dashboard/appointments"
-                className="rounded-md px-3 py-1.5 font-medium text-ink hover:bg-surface-2"
-              >
-                Appointments
-              </Link>
-              <Link
-                href="/dashboard/leads"
-                className="rounded-md px-3 py-1.5 font-medium text-ink hover:bg-surface-2"
-              >
-                Leads
-              </Link>
-              <Link
-                href="/dashboard/knowledge"
-                className="rounded-md px-3 py-1.5 font-medium text-ink hover:bg-surface-2"
-              >
-                Knowledge
-              </Link>
-              <Link
-                href="/dashboard/usage"
-                className="rounded-md px-3 py-1.5 font-medium text-ink hover:bg-surface-2"
-              >
-                Usage
-              </Link>
-              <Link
-                href="/dashboard/billing"
-                className="rounded-md px-3 py-1.5 font-medium text-ink hover:bg-surface-2"
-              >
-                Billing
-              </Link>
-              <Link
-                href="/dashboard/settings"
-                className="rounded-md px-3 py-1.5 font-medium text-ink hover:bg-surface-2"
-              >
-                Settings
-              </Link>
-              <Link
-                href="/dashboard/team"
-                className="rounded-md px-3 py-1.5 font-medium text-ink hover:bg-surface-2"
-              >
-                Team
-              </Link>
-              {isOrchelixStaff && (
-                <Link
-                  href="/dashboard/admin/tenants"
-                  className="rounded-md px-3 py-1.5 font-medium text-ink hover:bg-surface-2"
-                >
-                  Admin
-                </Link>
-              )}
-            </nav>
-            <div className="ml-auto flex items-center gap-3">
-              <OrganizationSwitcher
-                hidePersonal
-                afterSelectOrganizationUrl="/dashboard"
-                appearance={clerkWidgetAppearance}
-              />
-              <UserButton />
-            </div>
-          </div>
-        </header>
-        <Gate>{children}</Gate>
-      </div>
+      <DashboardShell isOrchelixStaff={isOrchelixStaff}>
+        {orgSlug ? children : <OrgGate />}
+      </DashboardShell>
     </ClerkProvider>
   );
-}
-
-async function Gate({ children }: { children: React.ReactNode }) {
-  // proxy.ts already guarantees a signed-in user on /dashboard(.*); this only
-  // decides between "has an active org" and the org-selection gate.
-  const { orgSlug } = await auth();
-  if (!orgSlug) return <OrgGate />;
-  return <>{children}</>;
 }
