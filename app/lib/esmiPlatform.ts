@@ -591,3 +591,136 @@ export async function fetchCalls(q: CallsQuery): Promise<CallsResponse> {
   }
   return res.json();
 }
+
+/* ── Phase 4 ticket 4.1: self-serve onboarding queue (admin-only) ──────────
+   Mirrors platform_api/onboarding.py. Only ever called from the Orchelix
+   staff Admin → Onboarding page; the proxy enforces both the staff org and
+   the separate admin secret. */
+
+export const ONBOARDING_STATUSES = [
+  "draft",
+  "submitted",
+  "provisioning",
+  "review",
+  "active",
+  "rejected",
+] as const;
+export type OnboardingStatus = (typeof ONBOARDING_STATUSES)[number];
+
+export const STEP_STATUSES = [
+  "pending",
+  "running",
+  "done",
+  "skipped",
+  "failed",
+  "manual",
+] as const;
+export type StepStatus = (typeof STEP_STATUSES)[number];
+
+export type ProvisioningStep = {
+  step: string;
+  label: string;
+  automated: boolean;
+  status: StepStatus;
+  detail: Record<string, unknown>;
+  error: string | null;
+  started_at: string | null;
+  finished_at: string | null;
+  updated_by: string | null;
+};
+
+export type ProvisioningJob = {
+  job_id: string;
+  status: "pending" | "running" | "needs_review" | "complete" | "failed";
+  created_by: string | null;
+  error: string | null;
+  created_at: string | null;
+  updated_at: string | null;
+  completed_at: string | null;
+  steps: ProvisioningStep[];
+};
+
+export type OnboardingTenant = {
+  tenant_id: string;
+  company_name: string | null;
+  business_tz: string | null;
+  onboarding_status: OnboardingStatus;
+  account_status: AccountStatus;
+  plan: string;
+  requested_plan: string | null;
+  clerk_org_id: string | null;
+  contact_name: string | null;
+  contact_email: string | null;
+  contact_phone: string | null;
+  submitted_at: string | null;
+  approved_at: string | null;
+  approved_by: string | null;
+  activated_at: string | null;
+  rejected_reason: string | null;
+  created_at: string | null;
+  job: ProvisioningJob | null;
+  steps_total: number;
+  steps_resolved: number;
+  unresolved_steps: string[];
+  /* Computed server-side so the Approve button and the server-side guard can
+     never disagree about whether the checklist is complete. */
+  can_approve: boolean;
+};
+
+export async function fetchOnboarding(
+  include: "pending" | "all" = "pending",
+): Promise<{ tenants: OnboardingTenant[]; include: string }> {
+  const qs = include === "all" ? "?include=all" : "";
+  const res = await fetch(`/api/platform/admin/onboarding${qs}`, { cache: "no-store" });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
+
+export async function updateProvisioningStep(
+  tenantId: string,
+  step: string,
+  update: { status: StepStatus; detail?: Record<string, string>; error?: string },
+): Promise<OnboardingTenant> {
+  const res = await fetch(
+    `/api/platform/admin/onboarding/${encodeURIComponent(tenantId)}/steps/${encodeURIComponent(step)}`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(update),
+    },
+  );
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
+
+export async function approveTenant(
+  tenantId: string,
+  body: { plan: PlanKey; status?: AccountStatus },
+): Promise<OnboardingTenant> {
+  const res = await fetch(
+    `/api/platform/admin/onboarding/${encodeURIComponent(tenantId)}/approve`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    },
+  );
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
+
+export async function rejectTenant(
+  tenantId: string,
+  reason: string,
+): Promise<OnboardingTenant> {
+  const res = await fetch(
+    `/api/platform/admin/onboarding/${encodeURIComponent(tenantId)}/reject`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reason }),
+    },
+  );
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}

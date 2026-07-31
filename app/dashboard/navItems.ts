@@ -8,6 +8,7 @@ import {
   Phone,
   Settings,
   ShieldCheck,
+  UserPlus,
   Users,
   type LucideIcon,
 } from "lucide-react";
@@ -30,6 +31,12 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "Settings", href: "/dashboard/settings", icon: Settings },
   { label: "Team", href: "/dashboard/team", icon: Users },
   { label: "Admin", href: "/dashboard/admin/tenants", icon: ShieldCheck, staffOnly: true },
+  {
+    label: "Onboarding",
+    href: "/dashboard/admin/onboarding",
+    icon: UserPlus,
+    staffOnly: true,
+  },
 ];
 
 export function isNavItemActive(pathname: string, href: string): boolean {

@@ -215,6 +215,24 @@ export async function proxyPlatformAdminPATCH(
   req: NextRequest,
   upstreamPath: string,
 ): Promise<Response> {
+  return proxyPlatformAdminWrite(req, upstreamPath, "PATCH");
+}
+
+/* Phase 4 ticket 4.1 — approve / reject are POSTs (they're actions, not field
+   edits), so the admin proxy needs a POST verb alongside PATCH. Same two
+   layers: Orchelix staff org + PLATFORM_ADMIN_SECRET. */
+export async function proxyPlatformAdminPOST(
+  req: NextRequest,
+  upstreamPath: string,
+): Promise<Response> {
+  return proxyPlatformAdminWrite(req, upstreamPath, "POST");
+}
+
+async function proxyPlatformAdminWrite(
+  req: NextRequest,
+  upstreamPath: string,
+  method: "PATCH" | "POST",
+): Promise<Response> {
   const { userId, orgSlug } = await auth();
   if (!userId) {
     return Response.json({ error: "Not signed in." }, { status: 401 });
@@ -234,7 +252,7 @@ export async function proxyPlatformAdminPATCH(
   let upstream: Response;
   try {
     upstream = await fetch(`${RAILWAY_URL}${upstreamPath}`, {
-      method: "PATCH",
+      method,
       headers: {
         "X-Platform-Admin-Secret": secret,
         // Best-effort audit trail — who made this admin change. The backend
