@@ -45,7 +45,13 @@ const STEP_TONES: Record<StepStatus, BadgeTone> = {
 };
 
 /* Which extra identifier a manual step wants recorded when it's marked done.
-   Keyed to the backend's step names (platform_api/provisioning.py STEPS). */
+   Keyed to the backend's step names (platform_api/provisioning.py STEPS).
+
+   `key` must never be "note": create_job() seeds every manual step's detail
+   with {note: "<operator instructions>"}, and set_step MERGES detail rather
+   than replacing it. A field keyed "note" therefore reads that instruction
+   text back as if staff had typed it — prefilling the input and printing it
+   as the recorded value. kb_seed used to do exactly that. */
 const STEP_DETAIL_FIELDS: Record<string, { key: string; label: string; placeholder: string }> = {
   vapi_assistant: {
     key: "assistant_id",
@@ -54,7 +60,7 @@ const STEP_DETAIL_FIELDS: Record<string, { key: string; label: string; placehold
   },
   phone_number: { key: "e164", label: "Phone number", placeholder: "+1 416 555 0110" },
   calendar: { key: "calendar_id", label: "Calendar id", placeholder: "…@group.calendar.google.com" },
-  kb_seed: { key: "note", label: "What was added", placeholder: "e.g. 6 FAQ entries + services PDF" },
+  kb_seed: { key: "summary", label: "What was added", placeholder: "e.g. 6 FAQ entries + services PDF" },
 };
 
 function fmtDate(iso: string | null): string {
