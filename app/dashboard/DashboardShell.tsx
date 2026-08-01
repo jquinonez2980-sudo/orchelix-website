@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import { Menu, X } from "lucide-react";
+import DraftModeBanner from "./DraftModeBanner";
 import { NAV_ITEMS, isNavItemActive, type NavItem } from "./navItems";
 
 /* Dashboard chrome: fixed left sidebar on desktop (lg+), slide-in drawer on
@@ -162,8 +163,23 @@ export default function DashboardShell({
             <Logo compact />
           </Link>
           <div className="ml-auto flex items-center gap-3">
+            {/* Point "Create organization" at our own signup wizard instead
+                of Clerk's generic dialog. An org created through that dialog
+                picks its own slug, which would match no Esmi tenant, so every
+                /platform/* call would 400 with a confusing "Unknown tenant"
+                (require_tenant in platform_api/security.py resolves the
+                tenant from orgSlug). /get-started reserves the tenant slug
+                first, then creates the Clerk org to match.
+
+                Clerk has no "hide this entirely" prop — createOrganizationMode
+                is only 'navigation' | 'modal'. Whether the entry appears at
+                all is governed by the "users can create organizations"
+                setting in the Clerk Dashboard; this redirect is what makes it
+                safe either way. */}
             <OrganizationSwitcher
               hidePersonal
+              createOrganizationMode="navigation"
+              createOrganizationUrl="/get-started"
               afterSelectOrganizationUrl="/dashboard"
               appearance={clerkWidgetAppearance}
             />
@@ -201,7 +217,13 @@ export default function DashboardShell({
         {/* Not <main> — every page inside already renders its own <main>
             landmark (see e.g. dashboard/usage/page.tsx); this is just the
             layout slot, avoiding a duplicate/nested landmark. */}
-        <div className="min-w-0 flex-1">{children}</div>
+        <div className="min-w-0 flex-1">
+          {/* Above the page content, below the top bar: a tenant still in
+              onboarding sees this on every page, not just Overview. Renders
+              nothing once the tenant can actually serve traffic. */}
+          <DraftModeBanner />
+          {children}
+        </div>
       </div>
     </div>
   );

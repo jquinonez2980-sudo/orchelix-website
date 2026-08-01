@@ -150,6 +150,111 @@ export async function proxyPlatformUpload(
   });
 }
 
+/* Signup proxy (Phase 4 ticket 4.1 — self-serve onboarding).
+
+   The one /platform surface where the caller has NO organization: the whole
+   point is that their tenant doesn't exist yet, so unlike every helper above
+   this does not require (or send) an orgSlug / X-Tenant-Id. It still runs
+   behind the same PLATFORM_API_SECRET, injected server-side — the browser
+   never sees it and can't reach the backend directly.
+
+   X-Platform-User is REQUIRED here rather than best-effort: the backend keys
+   the signup throttle and the one-application-per-user rule on it, so a
+   missing Clerk session must fail rather than create an unattributable
+   tenant. */
+
+export async function proxyPlatformSignupGET(
+  req: NextRequest,
+  upstreamPath: string,
+  allowedParams: string[] = [],
+): Promise<Response> {
+  const { userId } = await auth();
+  if (!userId) {
+    return Response.json({ error: "Not signed in." }, { status: 401 });
+  }
+
+  const secret = process.env.PLATFORM_API_SECRET;
+  if (!secret) {
+    return Response.json(
+      { error: "Signup is not configured (missing PLATFORM_API_SECRET)." },
+      { status: 503 },
+    );
+  }
+
+  const qs = new URLSearchParams();
+  for (const key of allowedParams) {
+    const v = req.nextUrl.searchParams.get(key);
+    if (v) qs.set(key, v);
+  }
+  const query = qs.size > 0 ? `?${qs}` : "";
+
+  let upstream: Response;
+  try {
+    upstream = await fetch(`${RAILWAY_URL}${upstreamPath}${query}`, {
+      headers: {
+        "X-Platform-Secret": secret,
+        "X-Platform-User": userId,
+      },
+      cache: "no-store",
+    });
+  } catch {
+    return Response.json(
+      { error: "Could not reach the Esmi backend — try again shortly." },
+      { status: 502 },
+    );
+  }
+
+  const body = await upstream.text();
+  return new Response(body, {
+    status: upstream.status,
+    headers: { "Content-Type": "application/json", "Cache-Control": "no-store" },
+  });
+}
+
+export async function proxyPlatformSignupPOST(
+  req: NextRequest,
+  upstreamPath: string,
+): Promise<Response> {
+  const { userId } = await auth();
+  if (!userId) {
+    return Response.json({ error: "Not signed in." }, { status: 401 });
+  }
+
+  const secret = process.env.PLATFORM_API_SECRET;
+  if (!secret) {
+    return Response.json(
+      { error: "Signup is not configured (missing PLATFORM_API_SECRET)." },
+      { status: 503 },
+    );
+  }
+
+  const payload = await req.text();
+  let upstream: Response;
+  try {
+    upstream = await fetch(`${RAILWAY_URL}${upstreamPath}`, {
+      method: "POST",
+      headers: {
+        "X-Platform-Secret": secret,
+        "X-Platform-User": userId,
+        "Content-Type": "application/json",
+      },
+      body: payload,
+      cache: "no-store",
+    });
+  } catch {
+    return Response.json(
+      { error: "Could not reach the Esmi backend — try again shortly." },
+      { status: 502 },
+    );
+  }
+
+  const body = await upstream.text();
+  return new Response(body, {
+    status: upstream.status,
+    headers: { "Content-Type": "application/json", "Cache-Control": "no-store" },
+  });
+}
+
 /* Admin-only proxy helpers (Phase 3 ticket 3.5 — tenant plan assignment).
    Two independent layers, both required: (1) orgSlug must be
    ADMIN_ORG_SLUG (Orchelix staff's own Clerk org — client orgs can never

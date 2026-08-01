@@ -615,7 +615,6 @@ export async function fetchCallRecordingExport(
   return res.json();
 }
 
-
 /* ── Phase 4 ticket 4.1: self-serve onboarding queue (admin-only) ──────────
    Mirrors platform_api/onboarding.py. Only ever called from the Orchelix
    staff Admin → Onboarding page; the proxy enforces both the staff org and
@@ -745,6 +744,141 @@ export async function rejectTenant(
       body: JSON.stringify({ reason }),
     },
   );
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
+
+/* ── Phase 4 ticket 4.1: self-serve signup wizard (/get-started) ───────────
+   Mirrors platform_api/signup.py. Unlike every other helper in this file
+   these run BEFORE the caller has an organization, so the proxy sends no
+   X-Tenant-Id — see proxyPlatformSignup* in platformProxy.ts. */
+
+export type SlugCheck = {
+  slug: string | null;
+  valid: boolean;
+  available: boolean | null;
+  suggestion: string | null;
+};
+
+export type SignupRequestBody = {
+  company_name: string;
+  contact_email: string;
+  contact_name?: string;
+  contact_phone?: string;
+  business_tz: string;
+  requested_plan: PlanKey | null;
+  tenant_id?: string;
+};
+
+export type SignupResponse = {
+  tenant_id: string;
+  job_id: string;
+  onboarding_status: OnboardingStatus;
+  job_status: string;
+  plan: string;
+  requested_plan: string | null;
+  next: { action: string; slug: string; url: string };
+};
+
+export type MySignup = {
+  tenant: {
+    tenant_id: string;
+    company_name: string | null;
+    business_tz: string | null;
+    onboarding_status: OnboardingStatus;
+    requested_plan: string | null;
+    clerk_org_id: string | null;
+    contact_name: string | null;
+    contact_email: string | null;
+    contact_phone: string | null;
+    submitted_at: string | null;
+    rejected_reason: string | null;
+  } | null;
+  job_status?: string | null;
+  steps_total?: number;
+  steps_resolved?: number;
+  can_start_new: boolean;
+  needs_clerk_org: boolean;
+};
+
+export async function checkSlug(params: {
+  company_name?: string;
+  slug?: string;
+}): Promise<SlugCheck> {
+  const qs = new URLSearchParams();
+  if (params.company_name) qs.set("company_name", params.company_name);
+  if (params.slug) qs.set("slug", params.slug);
+  const res = await fetch(`/api/platform/signup/slug-check?${qs}`, {
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
+
+export async function fetchMySignup(): Promise<MySignup> {
+  const res = await fetch("/api/platform/signup/mine", { cache: "no-store" });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
+
+export async function submitSignup(body: SignupRequestBody): Promise<SignupResponse> {
+  const res = await fetch("/api/platform/signup", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
+
+export async function createClerkOrg(
+  tenantId: string,
+  name: string,
+): Promise<{ clerk_org_id: string; slug: string }> {
+  const res = await fetch("/api/platform/signup/clerk-org-create", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ tenant_id: tenantId, name }),
+  });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
+
+/* Records the org id — or, when `error` is set instead, reports that org
+   creation failed so the provisioning step lands `failed` in the admin queue
+   rather than sitting at `pending` forever. */
+export async function recordClerkOrg(
+  tenantId: string,
+  body: { clerk_org_id?: string; error?: string },
+): Promise<{ tenant_id: string; clerk_org_id: string | null }> {
+  const res = await fetch(
+    `/api/platform/signup/${encodeURIComponent(tenantId)}/clerk-org`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    },
+  );
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
+
+/* ── Phase 4 ticket 4.1: draft-mode awareness for the dashboard shell ──────
+   Mirrors platform_api/tenant_status.py. `can_serve_traffic` is computed
+   server-side by tenants.tenant_is_active() — the same function that gates
+   real voice/chat/booking traffic — so the banner can't disagree with what
+   the phone actually does. */
+
+export type TenantStatus = {
+  tenant_id: string;
+  onboarding_status: OnboardingStatus | null;
+  can_serve_traffic: boolean;
+  account_status: AccountStatus | null;
+  plan: string | null;
+};
+
+export async function fetchTenantStatus(): Promise<TenantStatus> {
+  const res = await fetch("/api/platform/tenant-status", { cache: "no-store" });
   if (!res.ok) throw new Error(await readErrorDetail(res));
   return res.json();
 }

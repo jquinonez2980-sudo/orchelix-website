@@ -41,11 +41,26 @@ function OrgGate() {
           invitation.
         </p>
       </div>
+      {/* "Create organization" routes to our wizard, not Clerk's dialog —
+          see the fuller note at the switcher in DashboardShell. Short version:
+          a self-named org slug matches no Esmi tenant and 400s every
+          /platform call, whereas /get-started reserves the slug first. */}
       <OrganizationSwitcher
         hidePersonal
+        createOrganizationMode="navigation"
+        createOrganizationUrl="/get-started"
         afterSelectOrganizationUrl="/dashboard"
         appearance={clerkWidgetAppearance}
       />
+      <p className="text-sm text-ink-2">
+        New to Esmi?{" "}
+        <a
+          href="/get-started"
+          className="font-medium text-navy-600 underline hover:text-navy-700"
+        >
+          Apply to get set up
+        </a>
+      </p>
     </main>
   );
 }
