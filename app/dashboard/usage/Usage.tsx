@@ -1,12 +1,142 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchUsage, type UsageResponse } from "../../lib/esmiPlatform";
+import {
+  fetchUsage,
+  type UsageResponse,
+  type WeeklyCallOutcome,
+  type WeeklyUsageBucket,
+} from "../../lib/esmiPlatform";
 import { LimitBanner, MinutesProgress, Tile } from "../PlanUsageWidgets";
 
 /* Phase 3 ticket 3.1 (usage rollup) + ticket 3.2 (plan tiers + SOFT limits).
    Read-only, no Stripe, no hard blocking — a plan's included minutes are a
    warning threshold shown here, never something that stops a call. */
+
+/* This-week-vs-last-week delta + outcome-mix sections (feat/usage). Kept
+   local to this file rather than importing from Overview.tsx, which has its
+   own KPI set (bookings/escalations/after-hours/revenue) this page doesn't
+   need — duplicating the small delta helper avoids coupling the two pages. */
+
+type Delta = { kind: "pct"; value: number } | { kind: "new" } | { kind: "flat" };
+
+function computeDelta(cur: number, prev: number): Delta {
+  if (prev === 0 && cur === 0) return { kind: "flat" };
+  if (prev === 0) return { kind: "new" };
+  const pct = Math.round(((cur - prev) / prev) * 100);
+  if (pct === 0) return { kind: "flat" };
+  return { kind: "pct", value: pct };
+}
+
+function DeltaLine({ delta }: { delta: Delta }) {
+  const period = "vs prior 7 days";
+  if (delta.kind === "flat") {
+    return <p className="text-xs text-ink-4">— {period}</p>;
+  }
+  if (delta.kind === "new") {
+    return <p className="text-xs font-medium text-teal-700">New {period}</p>;
+  }
+  const up = delta.value > 0;
+  return (
+    <p className={`text-xs font-medium ${up ? "text-teal-700" : "text-rose-600"}`}>
+      {up ? "↑" : "↓"} {Math.abs(delta.value)}% {period}
+    </p>
+  );
+}
+
+const OUTCOME_LABELS: Record<WeeklyCallOutcome, string> = {
+  booked: "Booked",
+  info: "Info only",
+  escalated: "Escalated",
+  voicemail: "Voicemail",
+  abandoned: "Abandoned",
+  other: "Other",
+  unclassified: "Unclassified",
+};
+
+const OUTCOME_ORDER: WeeklyCallOutcome[] = [
+  "booked",
+  "escalated",
+  "info",
+  "voicemail",
+  "abandoned",
+  "other",
+  "unclassified",
+];
+
+function WeeklyDeltaSection({
+  current,
+  previous,
+}: {
+  current: WeeklyUsageBucket;
+  previous: WeeklyUsageBucket;
+}) {
+  return (
+    <section>
+      <h2 className="font-display text-base font-semibold text-ink">
+        This week vs last week
+      </h2>
+      <div className="mt-3 grid grid-cols-2 gap-4">
+        <Tile label="Calls answered" value={String(current.calls_answered)}>
+          <div className="mt-1.5">
+            <DeltaLine delta={computeDelta(current.calls_answered, previous.calls_answered)} />
+          </div>
+        </Tile>
+        <Tile
+          label="Minutes used"
+          value={`${current.minutes_used.toLocaleString(undefined, {
+            maximumFractionDigits: 1,
+          })} min`}
+        >
+          <div className="mt-1.5">
+            <DeltaLine delta={computeDelta(current.minutes_used, previous.minutes_used)} />
+          </div>
+        </Tile>
+      </div>
+    </section>
+  );
+}
+
+function OutcomeBreakdownSection({ bucket }: { bucket: WeeklyUsageBucket }) {
+  const total = bucket.calls_answered;
+  const rows = OUTCOME_ORDER.filter((o) => bucket.by_outcome[o] > 0);
+
+  return (
+    <section>
+      <h2 className="font-display text-base font-semibold text-ink">
+        Calls by outcome (last 7 days)
+      </h2>
+      <div className="mt-3 rounded-lg border border-line bg-surface p-5 shadow-sm">
+        {total === 0 ? (
+          <p className="text-sm text-ink-3">No calls in the last 7 days.</p>
+        ) : (
+          <ul className="space-y-2.5">
+            {rows.map((outcome) => {
+              const count = bucket.by_outcome[outcome];
+              const pct = Math.round((count / total) * 100);
+              return (
+                <li key={outcome}>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-ink-2">{OUTCOME_LABELS[outcome]}</span>
+                    <span className="text-ink-3">
+                      {count} <span className="text-ink-4">({pct}%)</span>
+                    </span>
+                  </div>
+                  <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-surface-2">
+                    <div
+                      className="h-full rounded-full bg-navy-600"
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </div>
+    </section>
+  );
+}
 
 function SkeletonTiles() {
   return (
@@ -108,6 +238,9 @@ export default function Usage() {
           ? "Your plan has no monthly minute limit."
           : "Included minutes are a soft limit — a heads-up only, calls are never blocked."}
       </p>
+
+      <WeeklyDeltaSection current={data.weekly.current} previous={data.weekly.previous} />
+      <OutcomeBreakdownSection bucket={data.weekly.current} />
     </div>
   );
 }

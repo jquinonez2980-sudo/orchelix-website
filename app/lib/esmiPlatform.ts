@@ -458,6 +458,22 @@ export type PlanUsage = {
   status: "ok" | "approaching" | "over" | null;
 };
 
+export type WeeklyCallOutcome = CallOutcome | "unclassified";
+
+export type WeeklyUsageBucket = {
+  from: string;
+  to: string;
+  calls_answered: number;
+  minutes_used: number;
+  by_outcome: Record<WeeklyCallOutcome, number>;
+};
+
+export type WeeklyUsage = {
+  window_days: number;
+  current: WeeklyUsageBucket;
+  previous: WeeklyUsageBucket;
+};
+
 export type UsageResponse = {
   tenant_id: string;
   business_tz: string;
@@ -468,6 +484,7 @@ export type UsageResponse = {
   cost_vapi: number | null;
   cost_llm: number | null;
   plan: PlanUsage;
+  weekly: WeeklyUsage;
 };
 
 export async function fetchUsage(): Promise<UsageResponse> {
