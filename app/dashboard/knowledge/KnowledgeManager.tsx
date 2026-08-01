@@ -6,6 +6,7 @@ import {
   deleteKnowledgeEntry,
   fetchKnowledge,
   testKnowledge,
+  updateKnowledgeEntry,
   uploadKnowledgePdf,
   MAX_PDF_MB,
   type KnowledgeEntry,
@@ -19,6 +20,12 @@ const inputCls =
 const labelCls = "flex flex-col gap-1 text-xs font-medium text-ink-3";
 const deleteBtnCls =
   "shrink-0 rounded px-2 py-1 text-xs font-medium text-rose-600 hover:bg-rose-50 hover:underline disabled:opacity-50";
+// Same navy/ghost pair the Add form uses, pulled out so the inline editor
+// matches it exactly rather than re-deriving the classes.
+const primaryBtnCls =
+  "rounded-md bg-navy-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-navy-500 disabled:opacity-50";
+const secondaryBtnCls =
+  "shrink-0 rounded px-2 py-1 text-xs font-medium text-ink-2 hover:bg-surface-2 disabled:opacity-50";
 
 const dateFmt = new Intl.DateTimeFormat(undefined, {
   month: "short",
@@ -173,12 +180,47 @@ function AddEntryForm({ onAdded }: { onAdded: (entry: KnowledgeEntry) => void })
 function EntryRow({
   entry,
   onDeleted,
+  onUpdated,
 }: {
   entry: KnowledgeEntry;
   onDeleted: (id: string) => void;
+  onUpdated: (entry: KnowledgeEntry) => void;
 }) {
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  /* Inline edit rather than a modal: entries are short, the list is the
+     context you need while rewriting one, and it keeps the page a single
+     scrollable surface on mobile. Draft state is local and discarded on
+     cancel, so nothing is written until Save succeeds. */
+  const [editing, setEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [q, setQ] = useState(entry.question ?? "");
+  const [a, setA] = useState(entry.answer);
+
+  const startEdit = () => {
+    setQ(entry.question ?? "");
+    setA(entry.answer);
+    setError(null);
+    setEditing(true);
+  };
+
+  const save = async () => {
+    setSaving(true);
+    setError(null);
+    try {
+      const updated = await updateKnowledgeEntry(entry.id, {
+        question: q.trim() || undefined,
+        answer: a,
+      });
+      onUpdated(updated);
+      setEditing(false);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to save");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const remove = async () => {
     setDeleting(true);
@@ -192,20 +234,70 @@ function EntryRow({
     }
   };
 
+  const dirty = q !== (entry.question ?? "") || a !== entry.answer;
+
   return (
     <div className="border-t border-line px-4 py-3 first:border-t-0 sm:px-6">
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          {entry.question && (
-            <p className="text-sm font-medium text-ink">{entry.question}</p>
-          )}
-          <p className="mt-0.5 whitespace-pre-wrap text-sm text-ink-2">{entry.answer}</p>
-          <p className="mt-1 text-xs text-ink-4">Added {fmtDate(entry.created_at)}</p>
+      {editing ? (
+        <div className="space-y-2">
+          <input
+            className={inputCls}
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Question (optional)"
+            maxLength={300}
+          />
+          <textarea
+            className={`${inputCls} h-auto`}
+            rows={4}
+            value={a}
+            onChange={(e) => setA(e.target.value)}
+            placeholder="Answer"
+            maxLength={4000}
+          />
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={save}
+              disabled={saving || !a.trim() || !dirty}
+              className={primaryBtnCls}
+            >
+              {saving ? "Saving…" : "Save"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setEditing(false)}
+              disabled={saving}
+              className={secondaryBtnCls}
+            >
+              Cancel
+            </button>
+          </div>
         </div>
-        <button type="button" disabled={deleting} onClick={remove} className={deleteBtnCls}>
-          {deleting ? "Deleting…" : "Delete"}
-        </button>
-      </div>
+      ) : (
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            {entry.question && (
+              <p className="text-sm font-medium text-ink">{entry.question}</p>
+            )}
+            <p className="mt-0.5 whitespace-pre-wrap text-sm text-ink-2">{entry.answer}</p>
+            <p className="mt-1 text-xs text-ink-4">Added {fmtDate(entry.created_at)}</p>
+          </div>
+          <div className="flex shrink-0 items-center gap-1">
+            <button
+              type="button"
+              onClick={startEdit}
+              disabled={deleting}
+              className={secondaryBtnCls}
+            >
+              Edit
+            </button>
+            <button type="button" disabled={deleting} onClick={remove} className={deleteBtnCls}>
+              {deleting ? "Deleting…" : "Delete"}
+            </button>
+          </div>
+        </div>
+      )}
       {error && <p className="mt-1 text-xs text-rose-600">{error}</p>}
     </div>
   );
@@ -233,6 +325,7 @@ function EntriesList({
   loading,
   error,
   onDeleted,
+  onUpdated,
   onRetry,
 }: {
   entries: KnowledgeEntry[] | null;
@@ -240,6 +333,7 @@ function EntriesList({
   loading: boolean;
   error: string | null;
   onDeleted: (id: string) => void;
+  onUpdated: (entry: KnowledgeEntry) => void;
   onRetry: () => void;
 }) {
   return (
@@ -273,7 +367,12 @@ function EntriesList({
       {entries && entries.length > 0 && !loading && (
         <div>
           {entries.map((e) => (
-            <EntryRow key={e.id} entry={e} onDeleted={onDeleted} />
+            <EntryRow
+              key={e.id}
+              entry={e}
+              onDeleted={onDeleted}
+              onUpdated={onUpdated}
+            />
           ))}
         </div>
       )}
@@ -523,6 +622,11 @@ export default function KnowledgeManager() {
           loading={loading}
           error={error}
           onDeleted={(id) => setEntries((prev) => (prev ?? []).filter((e) => e.id !== id))}
+          onUpdated={(updated) =>
+            setEntries((prev) =>
+              (prev ?? []).map((e) => (e.id === updated.id ? updated : e)),
+            )
+          }
           onRetry={load}
         />
       </Section>

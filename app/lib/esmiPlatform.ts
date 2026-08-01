@@ -415,6 +415,23 @@ export async function addKnowledgeEntry(
   return data.entry as KnowledgeEntry;
 }
 
+/* FAQ/text entries only. PDF-derived entries aren't editable — their text
+   comes from the uploaded file, and changing it here would make the entry
+   disagree with the original archived in R2. */
+export async function updateKnowledgeEntry(
+  id: string,
+  entry: { question?: string; answer: string },
+): Promise<KnowledgeEntry> {
+  const res = await fetch(`/api/platform/knowledge/${encodeURIComponent(id)}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(entry),
+  });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  const data = await res.json();
+  return data.entry as KnowledgeEntry;
+}
+
 export async function deleteKnowledgeEntry(id: string): Promise<void> {
   const res = await fetch(`/api/platform/knowledge/${encodeURIComponent(id)}`, {
     method: "DELETE",
