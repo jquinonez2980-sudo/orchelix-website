@@ -592,6 +592,30 @@ export async function fetchCalls(q: CallsQuery): Promise<CallsResponse> {
   return res.json();
 }
 
+/* WhatsApp-friendly MP3 export — backend lazy-converts the archived WAV to a
+   permanent R2 sidecar and returns a short-lived presigned download URL.
+   In-dashboard <audio> playback continues to use recording_url (WAV). */
+export type RecordingExportResponse = {
+  url: string;
+  filename: string;
+  content_type: string;
+  expires_in: number;
+};
+
+export async function fetchCallRecordingExport(
+  callId: string,
+  format: "mp3" = "mp3",
+): Promise<RecordingExportResponse> {
+  const params = new URLSearchParams({ format });
+  const res = await fetch(
+    `/api/platform/calls/${encodeURIComponent(callId)}/recording/export?${params}`,
+    { cache: "no-store" },
+  );
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
+
+
 /* ── Phase 4 ticket 4.1: self-serve onboarding queue (admin-only) ──────────
    Mirrors platform_api/onboarding.py. Only ever called from the Orchelix
    staff Admin → Onboarding page; the proxy enforces both the staff org and

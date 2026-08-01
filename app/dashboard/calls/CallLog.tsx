@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   CALL_OUTCOMES,
+  fetchCallRecordingExport,
   fetchCalls,
   type CallOutcome,
   type CallsResponse,
@@ -124,6 +125,60 @@ function TranscriptView({ call }: { call: PlatformCall }) {
   );
 }
 
+function triggerMp3Download(url: string, filename: string) {
+  /* Presigned R2 URLs are cross-origin; the download attribute is often
+     ignored, so open in a new tab as a reliable mobile fallback. */
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.rel = "noopener noreferrer";
+  a.target = "_blank";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+function WhatsAppDownloadButton({ callId }: { callId: string }) {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const onClick = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      const exp = await fetchCallRecordingExport(callId, "mp3");
+      triggerMp3Download(exp.url, exp.filename);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not prepare the MP3.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="mt-2 max-w-md">
+      <button
+        type="button"
+        onClick={onClick}
+        disabled={busy}
+        className={
+          "inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md " +
+          "border border-line bg-surface px-3 py-2 text-sm font-medium text-ink " +
+          "hover:bg-surface-2 enabled:active:bg-surface-2 " +
+          "disabled:cursor-wait disabled:opacity-60 sm:w-auto"
+        }
+      >
+        {busy ? "Preparing MP3…" : "Download for WhatsApp"}
+      </button>
+      {error && (
+        <p className="mt-1.5 text-xs text-red-700" role="alert">
+          {error}
+        </p>
+      )}
+    </div>
+  );
+}
+
 function CallDetail({ call }: { call: PlatformCall }) {
   return (
     <div className="space-y-4 border-t border-line bg-surface-2/60 px-4 py-4 sm:px-6">
@@ -132,14 +187,15 @@ function CallDetail({ call }: { call: PlatformCall }) {
           <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-ink-3">
             Recording
           </p>
-          {/* Recording links are served by the voice provider and can expire —
-              the transcript below is the permanent record. */}
+          {/* In-dashboard playback uses the short-lived WAV/presigned URL.
+              WhatsApp export is a separate MP3 path (lazy R2 sidecar). */}
           <audio controls preload="none" src={call.recording_url} className="h-10 w-full max-w-md">
             Your browser can&apos;t play this recording.{" "}
             <a href={call.recording_url} className="text-teal-700 underline">
               Download it instead.
             </a>
           </audio>
+          <WhatsAppDownloadButton callId={call.id} />
         </div>
       )}
       <div>
