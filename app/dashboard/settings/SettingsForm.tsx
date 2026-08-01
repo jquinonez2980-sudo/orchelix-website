@@ -18,6 +18,75 @@ const inputCls =
   "focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500";
 const labelCls = "flex flex-col gap-1 text-xs font-medium text-ink-3";
 
+/* Full IANA list where the browser exposes it, with a short fallback for
+   engines that don't implement supportedValuesOf. Computed once at module
+   load — the list is static for the life of the page. */
+const TIMEZONES: string[] = (() => {
+  try {
+    const all = Intl.supportedValuesOf("timeZone");
+    if (all.length) return all;
+  } catch {
+    /* older engine — fall through */
+  }
+  return [
+    "America/Toronto",
+    "America/New_York",
+    "America/Chicago",
+    "America/Denver",
+    "America/Phoenix",
+    "America/Los_Angeles",
+    "America/Vancouver",
+    "America/Mexico_City",
+    "Europe/London",
+    "Europe/Madrid",
+  ];
+})();
+
+/* Shown only when the timezone actually changed. business_hours are stored as
+   clock times, so re-reading them in another zone silently moves every future
+   appointment Esmi offers — while events already on the calendar keep their
+   absolute times and don't move. That divergence is the thing a tenant has to
+   understand before saving, so Save stays disabled until they tick the box. */
+function TimezoneConfirm({
+  from,
+  to,
+  checked,
+  onChange,
+}: {
+  from: string;
+  to: string;
+  checked: boolean;
+  onChange: (v: boolean) => void;
+}) {
+  return (
+    <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4">
+      <p className="text-sm font-semibold text-amber-900">
+        Changing your timezone changes when Esmi books
+      </p>
+      <p className="mt-1.5 text-xs leading-5 text-amber-800">
+        Your opening hours are stored as clock times, not fixed moments. Saving
+        this reads them in <strong className="font-semibold">{to}</strong> instead
+        of <strong className="font-semibold">{from}</strong> — so a 9:00 AM open
+        still says 9:00 AM, but it&apos;s a different moment in the day than it is
+        now.
+      </p>
+      <p className="mt-1.5 text-xs leading-5 text-amber-800">
+        Appointments already booked keep their original times and won&apos;t move.
+        Only the availability Esmi offers from here on follows the new timezone.
+      </p>
+      <label className="mt-3 flex cursor-pointer items-start gap-2 text-xs font-medium text-amber-900">
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={(e) => onChange(e.target.checked)}
+          className="mt-0.5 h-4 w-4 shrink-0 rounded border-amber-300 text-amber-600 focus:ring-amber-500"
+        />
+        <span>I understand — change the timezone to {to}</span>
+      </label>
+    </div>
+  );
+}
+
 function slugify(name: string, taken: Set<string>): string {
   const base = name.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "service";
   let id = base;
@@ -271,6 +340,9 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [savedAt, setSavedAt] = useState<number | null>(null);
+  // Reset whenever the timezone returns to its saved value or a save lands, so
+  // an acknowledgement can never carry over to a later, different change.
+  const [tzConfirmed, setTzConfirmed] = useState(false);
 
   const load = () => {
     setLoading(true);
@@ -320,6 +392,12 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
   const locationIds = Object.keys(form.locations);
   const dirty = JSON.stringify(form) !== JSON.stringify(data.config);
 
+  const tzChanged = form.business_tz.trim() !== data.config.business_tz;
+  // Gate the whole save, not just the timezone field: a single PUT publishes
+  // one config version, so letting the other edits through would carry the
+  // unacknowledged timezone with them.
+  const tzBlocked = tzChanged && !tzConfirmed;
+
   const setLocation = (id: string, next: LocationSettings) =>
     setForm((f) => (f ? { ...f, locations: { ...f.locations, [id]: next } } : f));
 
@@ -359,6 +437,7 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
     setSaveError(null);
     const update: ConfigUpdate = {
       company_name: form.company_name,
+      business_tz: form.business_tz.trim(),
       greeting: form.greeting,
       transfer_phone: form.transfer_phone,
       emails: form.emails,
@@ -388,6 +467,7 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
       setData(result);
       setForm(structuredClone(result.config));
       setSavedAt(Date.now());
+      setTzConfirmed(false);
       onSaved?.();
     } catch (e) {
       setSaveError(e instanceof Error ? e.message : "Save failed");
@@ -407,6 +487,38 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
             onChange={(e) => setForm({ ...form, company_name: e.target.value })}
           />
         </label>
+
+        {/* datalist rather than a <select>: ~400 zones is unusable as a plain
+            dropdown, and this gives native type-to-filter with no dependency
+            and no custom combobox to keep accessible. */}
+        <label className={`${labelCls} mt-4`}>
+          Timezone
+          <input
+            className={inputCls}
+            list="tz-options"
+            value={form.business_tz}
+            onChange={(e) => setForm({ ...form, business_tz: e.target.value })}
+            spellCheck={false}
+            autoComplete="off"
+          />
+          <datalist id="tz-options">
+            {TIMEZONES.map((tz) => (
+              <option key={tz} value={tz} />
+            ))}
+          </datalist>
+        </label>
+        <p className="mt-1 text-xs text-ink-3">
+          Used to interpret your opening hours and to schedule appointments.
+        </p>
+
+        {tzChanged && (
+          <TimezoneConfirm
+            from={data.config.business_tz}
+            to={form.business_tz}
+            checked={tzConfirmed}
+            onChange={setTzConfirmed}
+          />
+        )}
       </Section>
 
       <Section
@@ -542,12 +654,17 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
       <div className="flex items-center gap-3 border-t border-line bg-surface-2/40 px-4 py-4 sm:px-6">
         <button
           type="button"
-          disabled={!dirty || saving}
+          disabled={!dirty || saving || tzBlocked}
           onClick={handleSave}
           className="rounded-md bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-500 disabled:opacity-50"
         >
           {saving ? "Saving…" : "Save changes"}
         </button>
+        {tzBlocked && (
+          <span className="text-sm text-amber-800">
+            Confirm the timezone change above to save.
+          </span>
+        )}
         {saveError && <span className="text-sm text-rose-600">{saveError}</span>}
         {!saveError && savedAt && !dirty && (
           <span className="text-sm text-teal-700">Saved — live within a minute.</span>

@@ -264,6 +264,10 @@ export type ServiceSettings = {
 
 export type PlatformConfig = {
   company_name: string;
+  /* IANA zone. Not a display string — it decides how business_hours are read
+     and what timeZone lands on every calendar event, so the Settings form
+     gates changes behind an explicit confirmation. */
+  business_tz: string;
   greeting: string;
   transfer_phone: string;
   business_hours: [number, number];
@@ -288,6 +292,7 @@ export type ConfigResponse = {
 // optimistic-concurrency: omit it to always overwrite.
 export type ConfigUpdate = Partial<{
   company_name: string;
+  business_tz: string;
   greeting: string;
   transfer_phone: string;
   business_hours: [number, number];
