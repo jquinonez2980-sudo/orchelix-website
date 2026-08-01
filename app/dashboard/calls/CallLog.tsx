@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, type MouseEvent } from "react";
 import {
   CALL_OUTCOMES,
   fetchCallRecordingExport,
@@ -142,36 +142,52 @@ function WhatsAppDownloadButton({ callId }: { callId: string }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const onClick = async () => {
+  const onClick = async (e: MouseEvent<HTMLButtonElement>) => {
+    // Don't toggle the parent row open/closed.
+    e.stopPropagation();
     setBusy(true);
     setError(null);
     try {
       const exp = await fetchCallRecordingExport(callId, "mp3");
       triggerMp3Download(exp.url, exp.filename);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not prepare the MP3.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not prepare the MP3.");
     } finally {
       setBusy(false);
     }
   };
 
   return (
-    <div className="mt-2 max-w-md">
+    <div className="mt-3 max-w-md rounded-lg border border-teal-200 bg-teal-50 p-3">
+      <p className="mb-2 text-xs leading-5 text-ink-2">
+        Need to send this to the owner on WhatsApp? Use this — it downloads a small{" "}
+        <span className="font-semibold text-ink">MP3</span>. The player above is for
+        listening only (browser download there is a large WAV).
+      </p>
       <button
         type="button"
         onClick={onClick}
         disabled={busy}
         className={
           "inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md " +
-          "border border-line bg-surface px-3 py-2 text-sm font-medium text-ink " +
-          "hover:bg-surface-2 enabled:active:bg-surface-2 " +
-          "disabled:cursor-wait disabled:opacity-60 sm:w-auto"
+          "bg-teal-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm " +
+          "hover:bg-teal-500 enabled:active:bg-teal-700 " +
+          "disabled:cursor-wait disabled:opacity-60"
         }
       >
-        {busy ? "Preparing MP3…" : "Download for WhatsApp"}
+        <svg
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden
+          className="h-4 w-4 shrink-0"
+        >
+          <path d="M10.75 2.75a.75.75 0 00-1.5 0v8.614L6.295 8.235a.75.75 0 10-1.09 1.03l4.25 4.5a.75.75 0 001.09 0l4.25-4.5a.75.75 0 00-1.09-1.03l-2.955 3.129V2.75z" />
+          <path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z" />
+        </svg>
+        {busy ? "Preparing MP3…" : "Download MP3 for WhatsApp"}
       </button>
       {error && (
-        <p className="mt-1.5 text-xs text-red-700" role="alert">
+        <p className="mt-2 text-xs text-red-700" role="alert">
           {error}
         </p>
       )}
@@ -189,11 +205,14 @@ function CallDetail({ call }: { call: PlatformCall }) {
           </p>
           {/* In-dashboard playback uses the short-lived WAV/presigned URL.
               WhatsApp export is a separate MP3 path (lazy R2 sidecar). */}
-          <audio controls preload="none" src={call.recording_url} className="h-10 w-full max-w-md">
-            Your browser can&apos;t play this recording.{" "}
-            <a href={call.recording_url} className="text-teal-700 underline">
-              Download it instead.
-            </a>
+          <audio
+            controls
+            preload="none"
+            controlsList="nodownload"
+            src={call.recording_url}
+            className="h-10 w-full max-w-md"
+          >
+            Your browser can&apos;t play this recording.
           </audio>
           <WhatsAppDownloadButton callId={call.id} />
         </div>
