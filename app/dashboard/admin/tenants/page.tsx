@@ -36,6 +36,13 @@ export default async function AdminTenantsPage() {
           Assign each tenant&apos;s plan and account status. Internal only — not visible
           to client organizations.
         </p>
+        <p className="mt-1.5 text-sm text-ink-3">
+          Setting a tenant to{" "}
+          <strong className="font-medium text-ink-2">suspended</strong> or{" "}
+          <strong className="font-medium text-ink-2">archived</strong> stops Esmi
+          answering their calls and chats right away. They keep dashboard access and
+          see a banner explaining why.
+        </p>
       </div>
       <AdminTenants />
     </main>

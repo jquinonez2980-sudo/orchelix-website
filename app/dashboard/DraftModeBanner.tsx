@@ -19,6 +19,22 @@ import { fetchTenantStatus, type TenantStatus } from "../lib/esmiPlatform";
    require_tenant) renders nothing. A banner that can't confirm its own premise
    should not be guessing. */
 
+/* Billing-state copy, checked only once onboarding is 'active'. A tenant can
+   be fully onboarded and still off the air: suspended/archived block traffic
+   too (tenants.BLOCKING_ACCOUNT_STATUSES). Without these, an admin could
+   suspend an account and its owner would see a normal, healthy-looking
+   dashboard while Esmi silently stopped answering. */
+const ACCOUNT_COPY: Record<string, { title: string; body: string }> = {
+  suspended: {
+    title: "Your account is suspended",
+    body: "Esmi isn't answering calls or chats for your business right now. Get in touch with Orchelix to get back online — your settings and history are all still here.",
+  },
+  archived: {
+    title: "This account is closed",
+    body: "Esmi isn't answering calls or chats for your business. Your settings and history are still here — contact Orchelix if you'd like to reopen it.",
+  },
+};
+
 const COPY: Record<string, { title: string; body: string }> = {
   draft: {
     title: "Your application isn't finished",
@@ -66,7 +82,13 @@ export default function DraftModeBanner() {
 
   if (!status || status.can_serve_traffic) return null;
 
-  const copy = COPY[status.onboarding_status ?? ""] ?? FALLBACK;
+  /* Precedence: an unfinished onboarding is the more specific and more
+     actionable explanation, so it wins. Billing copy only applies to a tenant
+     that got all the way through approval and was later switched off. */
+  const copy =
+    status.onboarding_status && status.onboarding_status !== "active"
+      ? (COPY[status.onboarding_status] ?? FALLBACK)
+      : (ACCOUNT_COPY[status.account_status ?? ""] ?? FALLBACK);
 
   return (
     <div
