@@ -5,6 +5,7 @@ import {
   CreditCard,
   Home,
   Inbox,
+  MessageSquare,
   Phone,
   Settings,
   ShieldCheck,
@@ -23,6 +24,7 @@ export type NavItem = {
 export const NAV_ITEMS: NavItem[] = [
   { label: "Overview", href: "/dashboard", icon: Home },
   { label: "Calls", href: "/dashboard/calls", icon: Phone },
+  { label: "Chats", href: "/dashboard/chats", icon: MessageSquare },
   { label: "Appointments", href: "/dashboard/appointments", icon: CalendarDays },
   { label: "Leads", href: "/dashboard/leads", icon: Inbox },
   { label: "Knowledge", href: "/dashboard/knowledge", icon: BookOpen },

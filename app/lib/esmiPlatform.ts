@@ -55,6 +55,40 @@ export type CallsQuery = {
   to_date?: string; // YYYY-MM-DD
 };
 
+/* Web chat sessions (chat_sessions table) — metadata only, no transcript.
+   The LangGraph Postgres checkpointer stays the transcript source of truth;
+   see platform_api/chat_log.py. */
+export const CHAT_OUTCOMES = ["booked", "escalated"] as const;
+
+export type ChatOutcome = (typeof CHAT_OUTCOMES)[number];
+
+export type PlatformChat = {
+  id: string;
+  thread_id: string;
+  channel: string;
+  started_at: string | null;
+  last_at: string | null;
+  message_count: number;
+  outcome: ChatOutcome | null;
+  summary: string | null;
+};
+
+export type ChatsResponse = {
+  tenant_id: string;
+  total: number;
+  limit: number;
+  offset: number;
+  chats: PlatformChat[];
+};
+
+export type ChatsQuery = {
+  limit?: number;
+  offset?: number;
+  outcome?: ChatOutcome | "";
+  from_date?: string; // YYYY-MM-DD
+  to_date?: string; // YYYY-MM-DD
+};
+
 export type OverviewBucket = {
   from: string;
   to: string;
@@ -615,6 +649,31 @@ export async function fetchCalls(q: CallsQuery): Promise<CallsResponse> {
   if (q.to_date) params.set("to_date", q.to_date);
 
   const res = await fetch(`/api/platform/calls?${params}`, {
+    cache: "no-store",
+  });
+  if (!res.ok) {
+    let detail = `Request failed (${res.status})`;
+    try {
+      const body = await res.json();
+      if (typeof body?.error === "string") detail = body.error;
+      if (typeof body?.detail === "string") detail = body.detail;
+    } catch {
+      /* keep default */
+    }
+    throw new Error(detail);
+  }
+  return res.json();
+}
+
+export async function fetchChats(q: ChatsQuery): Promise<ChatsResponse> {
+  const params = new URLSearchParams();
+  if (q.limit) params.set("limit", String(q.limit));
+  if (q.offset) params.set("offset", String(q.offset));
+  if (q.outcome) params.set("outcome", q.outcome);
+  if (q.from_date) params.set("from_date", q.from_date);
+  if (q.to_date) params.set("to_date", q.to_date);
+
+  const res = await fetch(`/api/platform/chats?${params}`, {
     cache: "no-store",
   });
   if (!res.ok) {
