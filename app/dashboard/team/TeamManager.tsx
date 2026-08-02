@@ -137,6 +137,7 @@ type MembershipLike = {
     identifier?: string;
   } | null;
   destroy: () => Promise<unknown>;
+  update: (params: { role: string }) => Promise<unknown>;
 };
 
 function memberName(m: MembershipLike): string {
@@ -148,16 +149,19 @@ function memberName(m: MembershipLike): string {
 
 function MemberRow({
   membership,
+  roles,
   canManage,
   isSelf,
   onChanged,
 }: {
   membership: MembershipLike;
+  roles: RoleOption[];
   canManage: boolean;
   isSelf: boolean;
   onChanged: () => void;
 }) {
   const [removing, setRemoving] = useState(false);
+  const [changingRole, setChangingRole] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const remove = async () => {
@@ -172,6 +176,22 @@ function MemberRow({
     }
   };
 
+  const changeRole = async (role: string) => {
+    if (role === membership.role) return;
+    setChangingRole(true);
+    setError(null);
+    try {
+      await membership.update({ role });
+      onChanged();
+    } catch (e) {
+      setError(friendlyClerkError(e, "Failed to update role"));
+    } finally {
+      setChangingRole(false);
+    }
+  };
+
+  const canChangeRole = canManage && !isSelf && roles.length > 0;
+
   return (
     <div className="border-t border-line px-4 py-3 first:border-t-0 sm:px-6">
       <div className="flex items-center justify-between gap-3">
@@ -183,7 +203,22 @@ function MemberRow({
           <p className="truncate text-sm text-ink-3">{membership.publicUserData?.identifier}</p>
         </div>
         <div className="flex shrink-0 items-center gap-3">
-          <Badge tone="info">{membership.roleName}</Badge>
+          {canChangeRole ? (
+            <select
+              value={membership.role}
+              disabled={changingRole}
+              onChange={(e) => changeRole(e.target.value)}
+              className="rounded-md border border-line bg-surface px-2 py-1 text-xs font-medium text-ink disabled:opacity-50"
+            >
+              {roles.map((r) => (
+                <option key={r.key} value={r.key}>
+                  {r.name}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <Badge tone="info">{membership.roleName}</Badge>
+          )}
           {canManage && !isSelf && (
             <button
               type="button"
@@ -331,6 +366,7 @@ export default function TeamManager() {
             <MemberRow
               key={m.id}
               membership={m}
+              roles={roles}
               canManage={canManage}
               isSelf={m.id === membership?.id}
               onChanged={refresh}
