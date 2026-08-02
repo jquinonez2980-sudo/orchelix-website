@@ -98,6 +98,7 @@ export type OverviewBucket = {
   after_hours_calls: number;
   minutes_used: number;
   est_revenue_booked: number | null;
+  web_chats: number;
 };
 
 export type OverviewResponse = {

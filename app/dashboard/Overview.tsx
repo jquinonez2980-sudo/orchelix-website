@@ -193,6 +193,16 @@ export default function Overview() {
           })} min`}
           delta={computeDelta(cur.minutes_used, prev.minutes_used)}
         />
+        <DeltaTile
+          label="Web chats"
+          value={String(cur.web_chats)}
+          delta={computeDelta(cur.web_chats, prev.web_chats)}
+          note={
+            cur.web_chats === 0 && prev.web_chats === 0
+              ? "Conversations from your website chat will show up here"
+              : undefined
+          }
+        />
         {cur.est_revenue_booked != null && (
           <DeltaTile
             label="Estimated revenue booked"
@@ -208,9 +218,12 @@ export default function Overview() {
 
       <p className="text-xs text-ink-4">
         Last 7 days vs the 7 days before, in your business timezone ({data.business_tz}).
-        Phone calls only — other channels aren&apos;t counted yet.{" "}
+        Phone calls and web chats — other channels aren&apos;t counted yet.{" "}
         <Link href="/dashboard/calls" className="text-teal-700 hover:underline">
           See every call →
+        </Link>{" "}
+        <Link href="/dashboard/chats" className="text-teal-700 hover:underline">
+          See every chat →
         </Link>
       </p>
     </div>
