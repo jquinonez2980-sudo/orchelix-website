@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import Nav from "../components/sections/Nav";
 import Footer from "../components/sections/Footer";
 import JsonLd from "../components/JsonLd";
+import LeadCaptureForm from "./LeadCaptureForm";
 
 const SITE_URL = "https://www.orchelix.com";
 const CYAN = "#00F0FF";
@@ -222,50 +224,28 @@ export default function MissedCallsPage() {
               ))}
             </ul>
 
-            <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-              <Link
-                href="/try-esmi"
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontWeight: 600,
-                  fontSize: 15,
-                  padding: "15px 28px",
-                  borderRadius: 12,
-                  background:
-                    "linear-gradient(135deg, #00F0FF 0%, #38BDF8 100%)",
-                  color: "#04121A",
-                  textDecoration: "none",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 8,
-                  boxShadow: "0 0 28px rgba(0,240,255,0.45)",
-                }}
-              >
-                Try Esmi live (2 minutes) →
-              </Link>
+            <Suspense fallback={<div style={{ height: 296 }} aria-hidden />}>
+              <LeadCaptureForm />
+            </Suspense>
+
+            <div className="mt-4">
               <Link
                 href="/get-started"
                 style={{
                   fontFamily: "var(--font-display)",
                   fontWeight: 500,
-                  fontSize: 15,
-                  padding: "15px 28px",
-                  borderRadius: 12,
-                  background: "rgba(255,255,255,0.05)",
-                  border: "1px solid rgba(255,255,255,0.16)",
-                  color: "rgba(234,242,255,0.88)",
-                  textDecoration: "none",
-                  display: "inline-flex",
-                  alignItems: "center",
+                  fontSize: 14,
+                  color: "rgba(234,242,255,0.62)",
+                  textDecoration: "underline",
                 }}
               >
-                Book a 15-min setup
+                Or book a 15-min setup call →
               </Link>
             </div>
 
             <p
               style={{
-                marginTop: 28,
+                marginTop: 24,
                 fontFamily: "var(--font-display)",
                 fontSize: 13,
                 color: "rgba(234,242,255,0.42)",
