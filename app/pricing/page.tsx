@@ -163,6 +163,11 @@ interface PlanDef {
   id: string;
   name: string;
   price: string;
+  /* One-time setup fee, shown as a secondary line under the monthly price
+     on every plan card (Option B — explicit, not buried only in fine
+     print). Scale's is genuinely "Custom" — never invent a dollar amount
+     for work that hasn't been scoped. */
+  setup: string;
   featured: boolean;
   features: PlanFeature[];
   ctaLabel: string;
@@ -174,6 +179,7 @@ const PLANS: PlanDef[] = [
     id: "starter",
     name: "Starter",
     price: "$299",
+    setup: "$499 setup (one-time)",
     featured: false,
     features: [
       "300 minutes included, $0.25/min overage",
@@ -191,6 +197,7 @@ const PLANS: PlanDef[] = [
     id: "growth",
     name: "Growth",
     price: "$599",
+    setup: "$799 setup (one-time)",
     featured: true,
     features: [
       "800 minutes included, $0.20/min overage",
@@ -207,6 +214,7 @@ const PLANS: PlanDef[] = [
     id: "scale",
     name: "Scale",
     price: "$999",
+    setup: "Custom setup",
     featured: false,
     features: [
       "1,500 minutes included, $0.15/min overage",
@@ -245,7 +253,11 @@ function Plans() {
         </div>
 
         <p className="mx-auto mt-8 max-w-[720px] text-center text-[12.5px] leading-[1.7]" style={{ fontFamily: "var(--font-display)", color: "var(--ink-3)" }}>
-          Month-to-month. Annual: 2 months free. Voice minutes; no rollover. Taxes extra where applicable.
+          Month-to-month available. Annual billing: 2 months free and setup waived.
+          One-time setup covers number, calendar, knowledge base, and go-live onboarding.
+          Pilot: $149 for 7 days includes setup; credited to your first invoice if you
+          continue. Minutes are voice minutes; unused minutes do not roll over. Taxes
+          extra where applicable.
         </p>
       </div>
     </section>
@@ -303,13 +315,18 @@ function PlanCard({ plan }: { plan: PlanDef }) {
             {plan.name}
           </div>
 
-          <div className="mb-6 mt-4 flex items-baseline gap-1.5 border-t border-white/[0.08] pt-5">
-            <span className="text-[36px] font-semibold leading-none tracking-[-0.030em] text-white" style={{ fontFamily: "var(--font-display)" }}>
-              {plan.price}
-            </span>
-            <span className="text-[13px] text-white/50" style={{ fontFamily: "var(--font-display)" }}>
-              / mo
-            </span>
+          <div className="mb-6 mt-4 border-t border-white/[0.08] pt-5">
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-[36px] font-semibold leading-none tracking-[-0.030em] text-white" style={{ fontFamily: "var(--font-display)" }}>
+                {plan.price}
+              </span>
+              <span className="text-[13px] text-white/50" style={{ fontFamily: "var(--font-display)" }}>
+                / mo
+              </span>
+            </div>
+            <div className="mt-1.5 text-[12px]" style={{ fontFamily: "var(--font-display)", color: "rgba(255,255,255,0.45)" }}>
+              + {plan.setup}
+            </div>
           </div>
 
           <a
@@ -345,13 +362,18 @@ function PlanCard({ plan }: { plan: PlanDef }) {
         {plan.name}
       </div>
 
-      <div className="mb-6 mt-4 flex items-baseline gap-1.5 border-t pt-5" style={{ borderColor: "var(--line)" }}>
-        <span className="text-[36px] font-semibold leading-none tracking-[-0.030em]" style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}>
-          {plan.price}
-        </span>
-        <span className="text-[13px]" style={{ fontFamily: "var(--font-display)", color: "var(--ink-3)" }}>
-          / mo
-        </span>
+      <div className="mb-6 mt-4 border-t pt-5" style={{ borderColor: "var(--line)" }}>
+        <div className="flex items-baseline gap-1.5">
+          <span className="text-[36px] font-semibold leading-none tracking-[-0.030em]" style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}>
+            {plan.price}
+          </span>
+          <span className="text-[13px]" style={{ fontFamily: "var(--font-display)", color: "var(--ink-3)" }}>
+            / mo
+          </span>
+        </div>
+        <div className="mt-1.5 text-[12px]" style={{ fontFamily: "var(--font-display)", color: "var(--ink-3)" }}>
+          + {plan.setup}
+        </div>
       </div>
 
       <a
@@ -388,9 +410,9 @@ function PilotStrip() {
             Try Esmi on your real line for 7 days.
           </h2>
           <p className="mx-auto mt-3 max-w-[600px] text-[15px] leading-[1.6] lg:mx-0" style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}>
-            $149 for the pilot, credited to your first month if you continue. Includes
-            setup, 1 number, up to 75 minutes, 1 calendar, full dashboard access, and
-            an end-of-pilot review.
+            $149 for 7 days — includes white-glove setup. Credited to your first
+            month if you continue. Includes one number, up to 75 minutes, one
+            calendar, full dashboard, and an end-of-pilot review.
           </p>
         </div>
         <a href={PILOT_HREF} className={`${PRIMARY_BTN} shrink-0`} style={{ fontFamily: "var(--font-display)", background: "var(--navy-600)" }}>
@@ -524,7 +546,7 @@ const FAQS = [
   },
   {
     q: "Is there a contract?",
-    a: "No. Every plan is month-to-month, cancel anytime. Pay annually instead and get 2 months free.",
+    a: "No. Every plan is month-to-month, cancel anytime — plus a one-time setup fee (covers your number, calendar, knowledge base, and go-live onboarding; Scale's is custom-scoped). Pay annually instead and get 2 months free, and that setup fee is waived entirely.",
   },
   {
     q: "What happens if I go over my included minutes?",
