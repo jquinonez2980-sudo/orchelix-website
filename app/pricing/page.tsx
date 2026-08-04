@@ -140,7 +140,7 @@ function PricingHero() {
 
         <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
           <a href={PILOT_HREF} className={PRIMARY_BTN} style={{ fontFamily: "var(--font-display)", background: "var(--navy-600)" }}>
-            Start a 7-day pilot
+            Start a 14-day pilot
           </a>
           <a
             href={WALKTHROUGH_HREF}
@@ -190,7 +190,7 @@ const PLANS: PlanDef[] = [
       "White-glove setup",
       "Email support",
     ],
-    ctaLabel: "Start 7-day pilot",
+    ctaLabel: "Start 14-day pilot",
     ctaHref: PILOT_HREF,
   },
   {
@@ -207,7 +207,7 @@ const PLANS: PlanDef[] = [
       "White-glove setup",
       "Priority support",
     ],
-    ctaLabel: "Start 7-day pilot",
+    ctaLabel: "Start 14-day pilot",
     ctaHref: PILOT_HREF,
   },
   {
@@ -255,7 +255,7 @@ function Plans() {
         <p className="mx-auto mt-8 max-w-[720px] text-center text-[12.5px] leading-[1.7]" style={{ fontFamily: "var(--font-display)", color: "var(--ink-3)" }}>
           Month-to-month available. Annual billing: 2 months free and setup waived.
           One-time setup covers number, calendar, knowledge base, and go-live onboarding.
-          Pilot: $149 for 7 days includes setup; credited to your first invoice if you
+          Pilot: $149 for 14 days includes setup; credited to your first invoice if you
           continue. Minutes are voice minutes; unused minutes do not roll over. Taxes
           extra where applicable.
         </p>
@@ -405,18 +405,18 @@ function PilotStrip() {
     <section className="px-6 py-14 sm:px-8 sm:py-16 lg:px-10" style={{ background: "var(--surface-2)", borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)" }}>
       <div className="mx-auto flex max-w-[1000px] flex-col items-center gap-6 text-center lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:text-left">
         <div>
-          <Eyebrow>7-day pilot</Eyebrow>
+          <Eyebrow>14-day pilot</Eyebrow>
           <h2 className="mt-3 text-[24px] font-semibold leading-[1.2] tracking-[-0.02em] sm:text-[28px]" style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}>
-            Try Esmi on your real line for 7 days.
+            Try Esmi on your real line for 14 days.
           </h2>
           <p className="mx-auto mt-3 max-w-[600px] text-[15px] leading-[1.6] lg:mx-0" style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}>
-            $149 for 7 days — includes white-glove setup. Credited to your first
+            $149 for 14 days — includes white-glove setup. Credited to your first
             month if you continue. Includes one number, up to 75 minutes, one
             calendar, full dashboard, and an end-of-pilot review.
           </p>
         </div>
         <a href={PILOT_HREF} className={`${PRIMARY_BTN} shrink-0`} style={{ fontFamily: "var(--font-display)", background: "var(--navy-600)" }}>
-          Start 7-day pilot
+          Start 14-day pilot
         </a>
       </div>
     </section>
@@ -630,7 +630,7 @@ function PricingFinalCTA() {
                 Stop losing after-hours revenue.
               </h2>
               <p className="max-w-[540px] text-[16px] leading-[1.6] text-white/60 sm:text-[17px]" style={{ fontFamily: "var(--font-display)" }}>
-                Start a 7-day pilot on your real line, or talk it through with us first — either way, nothing goes live until you say so.
+                Start a 14-day pilot on your real line, or talk it through with us first — either way, nothing goes live until you say so.
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row lg:shrink-0">
