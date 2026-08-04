@@ -525,9 +525,9 @@ function AgentRevOps() {
               ]}
             />
             <AgentButtons
-              primaryHref="#book"
+              primaryHref="/book"
               primaryLabel="Book a demo"
-              secondaryHref="#book"
+              secondaryHref="/book"
               secondaryLabel="Learn more"
             />
           </div>
@@ -749,9 +749,9 @@ function AgentEsmi() {
               ]}
             />
             <AgentButtons
-              primaryHref="#book"
+              primaryHref="/book"
               primaryLabel="Book a demo"
-              secondaryHref="#book"
+              secondaryHref="/ai-receptionist"
               secondaryLabel="Meet Esmi"
             />
           </div>
@@ -1003,9 +1003,9 @@ function AgentFinance() {
               ]}
             />
             <AgentButtons
-              primaryHref="#book"
+              primaryHref="/book"
               primaryLabel="Book a demo"
-              secondaryHref="/pricing#tier-firmos"
+              secondaryHref="/pricing"
               secondaryLabel="See AcumenAI pricing"
             />
           </div>

@@ -25,6 +25,13 @@ const nextConfig: NextConfig = {
         destination: 'https://www.orchelix.com/:path*',
         statusCode: 301,
       },
+      // /agents has no dedicated page — /solutions is already the three-agent
+      // hub (Esmi, Revenue-Ops, AcumenAI). Redirect rather than duplicate it.
+      {
+        source: '/agents',
+        destination: '/solutions',
+        statusCode: 301,
+      },
     ];
   },
 

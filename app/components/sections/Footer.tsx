@@ -12,8 +12,8 @@ function getColumns(isEs: boolean) {
       h: "Agents",
       links: [
         { label: "Virtual Receptionist", href: "/ai-receptionist" },
-        { label: "Sales & Marketing",    href: "/solutions" },
-        { label: "Accounting OS",        href: "/solutions" },
+        { label: "Sales & Marketing",    href: "/solutions#agent-revops" },
+        { label: "Accounting OS",        href: "/acumen" },
         { label: "Industries",            href: "/industries" },
       ],
     },
