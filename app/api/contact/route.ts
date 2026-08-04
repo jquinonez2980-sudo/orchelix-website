@@ -1,20 +1,13 @@
 /**
- * Contact form submission handler — sends email via Resend.
+ * Contact form submission handler — sends email via Resend (app/lib/email.ts).
  *
- * SETUP (one-time):
- *   1. Create a free account at https://resend.com
- *   2. Verify your sending domain (orchelix.com) in Resend → Domains
- *   3. Create an API key → Resend → API Keys → Create API Key
- *   4. In Vercel → Project → Settings → Environment Variables, add:
- *        RESEND_API_KEY = re_xxxxxxxxxxxxxxxxxxxx
- *      and redeploy.
+ * SETUP (one-time): see RESEND_DOMAIN_SETUP.md at the repo root. Short version:
+ * RESEND_API_KEY alone is not enough — the `orchelix.com` sending domain must
+ * also be added and VERIFIED in the Resend dashboard, or every send here 502s.
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
-
-const TO_ADDRESS = "info@orchelix.com";
-const FROM_ADDRESS = "Orchelix <noreply@orchelix.com>";
+import { MAIL_TO_INFO, sendTransactionalEmail } from "../../lib/email";
 
 function buildHtml(fields: {
   name: string;
@@ -294,47 +287,18 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid email address." }, { status: 400 });
   }
 
-  // 4. Check API key before touching Resend
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    console.error("[contact] RESEND_API_KEY is not set — add it in Vercel → Settings → Environment Variables and redeploy.");
-    return NextResponse.json({ error: "Email service is not configured." }, { status: 500 });
+  // 4. Send via the shared Resend helper (app/lib/email.ts)
+  const result = await sendTransactionalEmail({
+    to: MAIL_TO_INFO,
+    replyTo: email,
+    subject: `New lead: ${name}${company ? ` — ${company}` : ""}`,
+    html: buildHtml({ name, company, email, phone, useCase, message }),
+    text: buildText({ name, company, email, phone, useCase, message }),
+    logTag: "[contact]",
+  });
+
+  if (!result.ok) {
+    return NextResponse.json({ error: result.error }, { status: result.status });
   }
-
-  // 5. Send via Resend
-  try {
-    const resend = new Resend(apiKey);
-
-    const { data, error } = await resend.emails.send({
-      from: FROM_ADDRESS,
-      to: [TO_ADDRESS],
-      replyTo: email,
-      subject: `New lead: ${name}${company ? ` — ${company}` : ""}`,
-      html: buildHtml({ name, company, email, phone, useCase, message }),
-      text: buildText({ name, company, email, phone, useCase, message }),
-    });
-
-    if (error) {
-      // Log the full Resend error (name + message + statusCode) for Vercel function logs
-      console.error(
-        `[contact] Resend rejected the request — name: ${error.name}, message: ${error.message}`,
-      );
-      return NextResponse.json(
-        { error: "Failed to send your message. Please email us directly at info@orchelix.com." },
-        { status: 500 },
-      );
-    }
-
-    console.log(`[contact] Email sent — Resend ID: ${data?.id}, to: ${email}`);
-    return NextResponse.json({ ok: true });
-
-  } catch (err) {
-    // Network failure, timeout, or unexpected Resend SDK error
-    const message = err instanceof Error ? err.message : String(err);
-    console.error(`[contact] Unexpected error calling Resend: ${message}`);
-    return NextResponse.json(
-      { error: "An unexpected error occurred. Please try again or email us at info@orchelix.com." },
-      { status: 500 },
-    );
-  }
+  return NextResponse.json({ ok: true });
 }

@@ -47,7 +47,7 @@ Set in **Vercel → Project → Settings → Environment Variables**.
 
 | Variable | Where used | Notes |
 |---|---|---|
-| `RESEND_API_KEY` | `/api/contact/route.ts` | Starts with `re_…`. Domain `orchelix.com` must be verified in Resend. |
+| `RESEND_API_KEY` | `app/lib/email.ts` (used by `/api/contact` and `/api/leads/meta`) | Starts with `re_…`. Domain `orchelix.com` must ALSO be verified in Resend — see `RESEND_DOMAIN_SETUP.md`, currently NOT verified. |
 | `NEXT_PUBLIC_SITE_URL` | `app/sitemap.ts` | Optional. Falls back to `https://orchelix.com`. |
 
 > **Never commit API keys.** Rotate `RESEND_API_KEY` in Resend if exposed.
@@ -59,7 +59,7 @@ Set in **Vercel → Project → Settings → Environment Variables**.
 | Service | Purpose | Account / Notes |
 |---|---|---|
 | **Vercel** | Hosting + CI/CD | Auto-deploys on push to `main` |
-| **Resend** | Transactional email | Domain `orchelix.com` verified. Sends from `noreply@orchelix.com`, delivers to `info@orchelix.com` |
+| **Resend** | Transactional email | Sends from `noreply@orchelix.com`, delivers to `info@orchelix.com`. Domain `orchelix.com` is **NOT currently verified** — see `RESEND_DOMAIN_SETUP.md` for the fix; until then both `/api/contact` and `/api/leads/meta` return 503. |
 | **Railway** | FastAPI backend for Esmi chat | SSE streaming at `/api/chat` on the Next.js side proxies to Railway |
 | **Cal.com** | Demo booking at `/book` | Embedded calendar widget |
 | **Google Workspace** | Email hosting for `orchelix.com` | MX records configured for `info@`, `privacy@`, `legal@` |
@@ -79,8 +79,12 @@ app/
 ├── error.tsx                   # "use client" error boundary
 │
 ├── api/
-│   ├── contact/route.ts        # POST — Resend email delivery for lead form
+│   ├── contact/route.ts        # POST — contact form, via lib/email.ts
+│   ├── leads/meta/route.ts     # POST — /missed-calls lead capture, via lib/email.ts
 │   └── chat/                   # Esmi SSE proxy to Railway FastAPI
+│
+├── lib/
+│   └── email.ts                # Shared Resend sender for contact + leads/meta
 │
 ├── components/sections/
 │   ├── Nav.tsx                 # Sticky nav, mobile drawer, EN/ES toggle, phone link

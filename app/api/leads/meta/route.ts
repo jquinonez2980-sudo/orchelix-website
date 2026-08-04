@@ -1,24 +1,25 @@
 /**
  * Meta ad lead capture — /missed-calls landing page form handler.
  *
- * Same provider as app/api/contact/route.ts (Resend) rather than inventing a
- * second email pipeline: one RESEND_API_KEY, one place that knows how to send
- * a lead notification.
+ * Sends through the same shared helper as app/api/contact/route.ts
+ * (app/lib/email.ts) rather than a second email pipeline — one place that
+ * knows how to call Resend and classify its errors.
  *
- * SETUP: none beyond what app/api/contact/route.ts already needs —
- * RESEND_API_KEY must be set in Vercel (it already is, for the contact form).
+ * SETUP (one-time): see RESEND_DOMAIN_SETUP.md at the repo root. Short
+ * version: RESEND_API_KEY alone is not enough — the `orchelix.com` sending
+ * domain must also be added and VERIFIED in the Resend dashboard, or every
+ * send here 503s (the form still shows a skip-to-demo link either way).
  *
  * FUTURE (non-goal for this ticket, wired for later): to forward leads into a
  * HighLevel / Loops sequence instead of (or in addition to) email, set
  * LEAD_WEBHOOK_URL to that provider's inbound webhook URL — see
  * forwardToWebhook() below. Left unset today; nothing here depends on it.
+ * Forwarded regardless of whether the Resend send below succeeds, so a
+ * webhook backup can pick up leads even while email delivery is broken.
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
-
-const TO_ADDRESS = "info@orchelix.com";
-const FROM_ADDRESS = "Orchelix <noreply@orchelix.com>";
+import { MAIL_TO_INFO, sendTransactionalEmail } from "../../../lib/email";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -185,44 +186,30 @@ export async function POST(req: NextRequest) {
     utm_campaign: utmCampaign,
     submitted_at: new Date().toISOString(),
   };
+  // Forwarded regardless of what happens below — a webhook backup (once
+  // LEAD_WEBHOOK_URL is set) must still get the lead even if Resend is down.
   forwardToWebhook(payload);
 
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    console.error("[leads/meta] RESEND_API_KEY is not set — lead not emailed (webhook forward, if configured, still attempted).");
-    return NextResponse.json({ error: "Lead capture is not configured." }, { status: 500 });
+  const result = await sendTransactionalEmail({
+    to: MAIL_TO_INFO,
+    replyTo: email,
+    subject: `New Meta lead: ${firstName}${businessTypeLabel ? ` — ${businessTypeLabel}` : ""}`,
+    html: buildHtml({ firstName, email, businessTypeLabel, source, utmSource, utmCampaign }),
+    text: [
+      "NEW META AD LEAD",
+      "=".repeat(40),
+      `Name:          ${firstName}`,
+      `Email:         ${email}`,
+      businessTypeLabel ? `Business type: ${businessTypeLabel}` : null,
+      `Source:        ${source}`,
+      utmSource ? `UTM source:    ${utmSource}` : null,
+      utmCampaign ? `UTM campaign:  ${utmCampaign}` : null,
+    ].filter(Boolean).join("\n"),
+    logTag: "[leads/meta]",
+  });
+
+  if (!result.ok) {
+    return NextResponse.json({ error: result.error }, { status: result.status });
   }
-
-  try {
-    const resend = new Resend(apiKey);
-    const { data, error } = await resend.emails.send({
-      from: FROM_ADDRESS,
-      to: [TO_ADDRESS],
-      replyTo: email,
-      subject: `New Meta lead: ${firstName}${businessTypeLabel ? ` — ${businessTypeLabel}` : ""}`,
-      html: buildHtml({ firstName, email, businessTypeLabel, source, utmSource, utmCampaign }),
-      text: [
-        "NEW META AD LEAD",
-        "=".repeat(40),
-        `Name:          ${firstName}`,
-        `Email:         ${email}`,
-        businessTypeLabel ? `Business type: ${businessTypeLabel}` : null,
-        `Source:        ${source}`,
-        utmSource ? `UTM source:    ${utmSource}` : null,
-        utmCampaign ? `UTM campaign:  ${utmCampaign}` : null,
-      ].filter(Boolean).join("\n"),
-    });
-
-    if (error) {
-      console.error(`[leads/meta] Resend rejected the request — name: ${error.name}, message: ${error.message}`);
-      return NextResponse.json({ error: "Could not save your info right now." }, { status: 502 });
-    }
-
-    console.log(`[leads/meta] Lead captured — Resend ID: ${data?.id}, email: ${email}, source: ${source}`);
-    return NextResponse.json({ ok: true });
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    console.error(`[leads/meta] Unexpected error calling Resend: ${message}`);
-    return NextResponse.json({ error: "Could not save your info right now." }, { status: 502 });
-  }
+  return NextResponse.json({ ok: true });
 }
