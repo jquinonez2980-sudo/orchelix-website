@@ -4,19 +4,44 @@ import { useState } from "react";
 import JsonLd from "@/app/components/JsonLd";
 import Nav from "@/app/components/sections/Nav";
 import Footer from "@/app/components/sections/Footer";
-import { bold } from "@/app/lib/bold";
+
+const SITE_URL = "https://www.orchelix.com";
+
+/* CTA hrefs — no real Stripe Checkout yet, so these route to the site's
+   existing lead-capture surfaces with an `intent` query param the copy can
+   key off later (analytics today, prefill/Payment Link swap tomorrow):
+     - "Start a pilot" needs actual business details, not a scheduling call,
+       so it goes to the homepage contact form (already wired to Resend).
+     - "Book a walkthrough" / "Talk to us" are conversations, so they go to
+       the existing Cal.com booking page (/book), same as every other CTA
+       on the site. */
+const PILOT_HREF = "/?intent=pilot#contact";
+const WALKTHROUGH_HREF = "/book?intent=demo";
+const SCALE_HREF = "/book?intent=scale";
 
 /* ─── Page ────────────────────────────────────────────────────────────────── */
 
 export default function PricingPage() {
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "Pricing", item: `${SITE_URL}/pricing` },
+    ],
+  };
+
   return (
     <>
+      <JsonLd data={breadcrumbJsonLd} />
       <Nav />
       <main id="top">
         <PricingHero />
+        <Plans />
+        <PilotStrip />
         <HowItWorks />
-        <LocalTiers />
-        <Tiers />
+        <Included />
+        <AddOns />
         <FAQ />
         <PricingFinalCTA />
       </main>
@@ -24,6 +49,43 @@ export default function PricingPage() {
     </>
   );
 }
+
+/* ─── shared bits ─────────────────────────────────────────────────────────── */
+
+function Eyebrow({ children, color = "var(--teal-700)" }: { children: React.ReactNode; color?: string }) {
+  return (
+    <span
+      className="inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.18em]"
+      style={{ fontFamily: "var(--font-mono)", color }}
+    >
+      <span className="inline-block h-px w-[18px] bg-current opacity-70" />
+      {children}
+      <span className="inline-block h-px w-[18px] bg-current opacity-70" />
+    </span>
+  );
+}
+
+function CheckIcon({ tone = "light" }: { tone?: "light" | "dark" }) {
+  return (
+    <span
+      className="mt-0.5 shrink-0 inline-flex h-[18px] w-[18px] items-center justify-center rounded-full"
+      style={
+        tone === "dark"
+          ? { background: "rgba(20,184,166,0.22)", color: "#5EEAD4" }
+          : { background: "var(--teal-50)", color: "var(--teal-700)" }
+      }
+    >
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M5 12.5l5 5 9-11" />
+      </svg>
+    </span>
+  );
+}
+
+const PRIMARY_BTN =
+  "inline-flex h-12 items-center justify-center rounded-xl px-7 text-[15px] font-medium text-white transition-opacity hover:opacity-90";
+const GHOST_BTN =
+  "inline-flex h-12 items-center justify-center rounded-xl border px-7 text-[15px] font-medium transition-colors hover:bg-surface-2";
 
 /* ─── Hero ────────────────────────────────────────────────────────────────── */
 
@@ -47,496 +109,155 @@ function PricingHero() {
       <div
         aria-hidden="true"
         className="absolute inset-x-0 bottom-0 h-px"
-        style={{
-          background: "linear-gradient(90deg, transparent 0%, var(--color-line) 30%, var(--color-line) 70%, transparent 100%)",
-        }}
+        style={{ background: "linear-gradient(90deg, transparent 0%, var(--color-line) 30%, var(--color-line) 70%, transparent 100%)" }}
       />
 
       <div className="relative z-10 mx-auto max-w-[760px]">
-        <span
-          className="inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.18em]"
-          style={{ fontFamily: "var(--font-mono)", color: "var(--teal-700)" }}
-        >
-          <span className="inline-block h-px w-[18px] bg-current opacity-70" />
-          Pricing
-          <span className="inline-block h-px w-[18px] bg-current opacity-70" />
-        </span>
+        <Eyebrow>Pricing</Eyebrow>
 
         <h1
-          className="mt-6 mb-6 text-balance text-[42px] leading-[1.05] font-medium tracking-[-0.032em] sm:text-[60px] sm:leading-[1.03] lg:text-[72px] lg:tracking-[-0.036em]"
+          className="mt-6 mb-6 text-balance text-[38px] leading-[1.08] font-medium tracking-[-0.032em] sm:text-[54px] sm:leading-[1.05] lg:text-[64px] lg:tracking-[-0.036em]"
           style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
         >
-          Custom AI Agents That Capture Leads, Scale Sales &{" "}
+          AI receptionist that answers, books, and{" "}
           <span
             className="bg-gradient-to-br from-navy-600 via-teal-500 to-teal-400 bg-clip-text font-normal italic"
             style={{ WebkitTextFillColor: "transparent", paddingRight: "0.1em" }}
           >
-            Automate Operations
+            proves it
           </span>
           .
         </h1>
 
         <p
-          className="mb-10 text-[17px] leading-[1.6] sm:text-[18px] lg:text-[19px]"
+          className="mx-auto mb-10 max-w-[600px] text-[17px] leading-[1.6] sm:text-[18px] lg:text-[19px]"
           style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
         >
-          Production-grade AI agent systems built with LangGraph. Setup + monthly managed service.
-          Works across North America.
+          Esmi handles the phone and web chat, books into your real calendars,
+          and shows every call, appointment, and lead in one dashboard.
+          White-glove setup included — you don&apos;t build anything.
         </p>
 
-        <a
-          href="/book"
-          className="inline-flex h-12 items-center rounded-xl px-7 text-[15px] font-medium text-white transition-opacity hover:opacity-90"
-          style={{ fontFamily: "var(--font-display)", background: "var(--navy-600)" }}
-        >
-          Book a Free Strategy Call
-        </a>
-      </div>
-    </section>
-  );
-}
-
-/* ─── How It Works ───────────────────────────────────────────────────────── */
-
-function HowItWorks() {
-  return (
-    <section
-      className="px-6 py-12 sm:px-8 sm:py-14 lg:px-10 lg:py-16"
-      style={{ background: "var(--surface-2)", borderTop: "1px solid var(--line)" }}
-    >
-      <div className="mx-auto max-w-[1200px]">
-        <div className="mb-8 text-center">
-          <span
-            className="inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.18em]"
-            style={{ fontFamily: "var(--font-mono)", color: "var(--navy-500)" }}
+        <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <a href={PILOT_HREF} className={PRIMARY_BTN} style={{ fontFamily: "var(--font-display)", background: "var(--navy-600)" }}>
+            Start a 7-day pilot
+          </a>
+          <a
+            href={WALKTHROUGH_HREF}
+            className={GHOST_BTN}
+            style={{ fontFamily: "var(--font-display)", borderColor: "var(--line-strong)", background: "#fff", color: "var(--navy-600)" }}
           >
-            <span className="inline-block h-px w-[18px] bg-current opacity-70" />
-            Our process
-            <span className="inline-block h-px w-[18px] bg-current opacity-70" />
-          </span>
-          <p
-            className="mx-auto mt-3 max-w-[560px] text-[16px] leading-[1.6]"
-            style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
-          >
-            From your first call to ongoing optimization — a clear, managed process every step of the way.
-          </p>
-        </div>
-
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-          {[
-            {
-              num: "01",
-              title: "Discovery Call",
-              desc: "Free 30-minute call to understand your workflows and goals.",
-            },
-            {
-              num: "02",
-              title: "Custom Build",
-              desc: "We design and train agents specifically for your business.",
-            },
-            {
-              num: "03",
-              title: "Launch & Train",
-              desc: "We deploy the system and train your team.",
-            },
-            {
-              num: "04",
-              title: "Monthly Optimization",
-              desc: "Ongoing monitoring, improvements, and support.",
-            },
-          ].map((item) => (
-            <div
-              key={item.num}
-              className="flex gap-5 rounded-[18px] border bg-white p-6 sm:p-7"
-              style={{
-                borderColor: "var(--line)",
-                boxShadow: "0 2px 8px rgba(10,37,64,0.05)",
-              }}
-            >
-              <span
-                className="shrink-0 text-[13px] font-bold tabular-nums"
-                style={{ fontFamily: "var(--font-mono)", color: "var(--teal-500)" }}
-              >
-                {item.num}
-              </span>
-              <div>
-                <div
-                  className="mb-1.5 text-[15px] font-semibold leading-snug"
-                  style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
-                >
-                  {item.title}
-                </div>
-                <p
-                  className="text-[14px] leading-[1.6]"
-                  style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
-                >
-                  {item.desc}
-                </p>
-              </div>
-            </div>
-          ))}
+            Book a 15-min walkthrough
+          </a>
         </div>
       </div>
     </section>
   );
 }
 
-/* ─── Local Business ─────────────────────────────────────────────────────── */
+/* ─── Plans ───────────────────────────────────────────────────────────────── */
 
-interface LocalTierDef {
+type PlanFeature = string;
+
+interface PlanDef {
   id: string;
   name: string;
-  monthlyPrice: string;
-  setupPrice: string;
-  desc: string;
-  badge?: string;
+  price: string;
+  featured: boolean;
+  features: PlanFeature[];
   ctaLabel: string;
   ctaHref: string;
-  features: string[];
 }
 
-const LOCAL_TIERS: LocalTierDef[] = [
+const PLANS: PlanDef[] = [
   {
-    id: "esmi-local-voice",
-    name: "Esmi Local — Chat + Voice",
-    monthlyPrice: "$299",
-    setupPrice: "$499 one-time setup",
-    desc: "Esmi answers your phone and your website chat, every hour you're closed.",
-    badge: "Most Popular",
-    ctaLabel: "Get Esmi Local",
-    ctaHref: "/book",
+    id: "starter",
+    name: "Starter",
+    price: "$299",
+    featured: false,
     features: [
-      "Answers calls & chats 24/7",
-      "Books directly into your Google Calendar",
-      "Bilingual (English & Spanish)",
-      "Pre-configured for your business type in 48 hours",
-      "Month-to-month, cancel anytime",
+      "300 minutes included, $0.25/min overage",
+      "1 local number, Voice only",
+      "Booking on 1 calendar",
+      "Full dashboard — calls, recordings, appointments, leads, overview",
+      "Standard knowledge base",
+      "White-glove setup",
+      "Email support",
     ],
+    ctaLabel: "Start 7-day pilot",
+    ctaHref: PILOT_HREF,
   },
   {
-    id: "esmi-local-chat",
-    name: "Esmi Local — Chat Only",
-    monthlyPrice: "$199",
-    setupPrice: "$299 one-time setup",
-    desc: "All the same coverage on your website chat — no phone line required.",
-    ctaLabel: "Get Esmi Local",
-    ctaHref: "/book",
+    id: "growth",
+    name: "Growth",
+    price: "$599",
+    featured: true,
     features: [
-      "Answers website chats 24/7 (no phone line)",
-      "Books directly into your Google Calendar",
-      "Bilingual (English & Spanish)",
-      "Pre-configured for your business type in 48 hours",
-      "Month-to-month, cancel anytime",
+      "800 minutes included, $0.20/min overage",
+      "Up to 2 numbers, Voice + web chat",
+      "Multi-location calendar booking & rescheduling",
+      "Full dashboard, expanded knowledge base",
+      "White-glove setup",
+      "Priority support",
     ],
+    ctaLabel: "Start 7-day pilot",
+    ctaHref: PILOT_HREF,
   },
   {
-    id: "esmi-pro",
-    name: "Esmi Pro",
-    monthlyPrice: "$699",
-    setupPrice: "$2,500 one-time setup",
-    desc: "For established businesses where one missed call is worth hundreds — dental, med spa, HVAC, contractors, showrooms.",
-    badge: "Best for Growing Teams",
-    ctaLabel: "Get Esmi Pro",
-    ctaHref: "/book",
+    id: "scale",
+    name: "Scale",
+    price: "$999",
+    featured: false,
     features: [
-      "Everything in Esmi Local — voice + chat, 24/7",
-      "Custom knowledge base written for your business",
-      "Custom persona — name it, tune the tone",
-      "Multi-agent lead qualification & scoring",
-      "Hot-lead escalation straight to your phone",
-      "Priority setup (5 business days) + 1 month of tweaks",
+      "1,500 minutes included, $0.15/min overage",
+      "3+ numbers, Voice + chat + priority routing",
+      "Multi-location + booking rules, multi-org dashboard",
+      "Custom knowledge base + quarterly tuning",
+      "White-glove setup + playbook",
+      "Shared support channel",
     ],
+    ctaLabel: "Talk to us",
+    ctaHref: SCALE_HREF,
   },
 ];
 
-function LocalTiers() {
+function Plans() {
   return (
-    <section
-      className="px-6 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-24"
-      style={{ background: "var(--surface-2)", borderTop: "1px solid var(--line)" }}
-    >
+    <section id="plans" className="scroll-mt-20 px-6 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-24" style={{ borderTop: "1px solid var(--line)" }}>
       <div className="mx-auto max-w-[1200px]">
         <div className="mb-10 text-center">
-          <span
-            className="inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.18em]"
-            style={{ fontFamily: "var(--font-mono)", color: "var(--teal-700)" }}
-          >
-            <span className="inline-block h-px w-[18px] bg-current opacity-70" />
-            Local Business
-            <span className="inline-block h-px w-[18px] bg-current opacity-70" />
-          </span>
+          <Eyebrow color="var(--navy-500)">Plans</Eyebrow>
           <h2
             className="mx-auto mt-3 max-w-[640px] text-[28px] font-semibold leading-[1.15] tracking-[-0.022em] sm:text-[34px]"
             style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
           >
-            A 24/7 AI receptionist for local and growing businesses.
+            Every plan gets the full dashboard.
           </h2>
-          <p
-            className="mx-auto mt-3 max-w-[560px] text-[15px] leading-[1.6]"
-            style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
-          >
-            Simple pricing, live in days. No contracts — cancel anytime.
+          <p className="mx-auto mt-3 max-w-[560px] text-[15px] leading-[1.6]" style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}>
+            Pick a starting point by call volume — every tier scales up when you do.
           </p>
         </div>
 
-        <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {LOCAL_TIERS.map((tier) => (
-            <LocalTierCard key={tier.id} tier={tier} />
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+          {PLANS.map((plan) => (
+            <PlanCard key={plan.id} plan={plan} />
           ))}
         </div>
+
+        <p className="mx-auto mt-8 max-w-[720px] text-center text-[12.5px] leading-[1.7]" style={{ fontFamily: "var(--font-display)", color: "var(--ink-3)" }}>
+          Month-to-month. Annual: 2 months free. Voice minutes; no rollover. Taxes extra where applicable.
+        </p>
       </div>
     </section>
   );
 }
 
-function LocalTierCard({ tier }: { tier: LocalTierDef }) {
-  return (
-    <article
-      className="flex flex-col rounded-[22px] border p-6 sm:p-7"
-      aria-labelledby={`tier-${tier.id}`}
-      style={{
-        borderColor: tier.badge ? "var(--teal-500)" : "var(--line)",
-        background: "#fff",
-        boxShadow: tier.badge
-          ? "0 2px 8px rgba(10,37,64,0.06), 0 0 0 1px rgba(20,184,166,0.18)"
-          : "0 2px 8px rgba(10,37,64,0.06), 0 1px 2px rgba(10,37,64,0.04)",
-      }}
-    >
-      {tier.badge && (
-        <span
-          className="mb-4 inline-flex w-fit rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em]"
-          style={{ background: "var(--teal-50)", color: "var(--teal-700)" }}
-        >
-          {tier.badge}
-        </span>
-      )}
-
-      <div
-        className="text-[17px] font-semibold tracking-[-0.018em] leading-snug"
-        id={`tier-${tier.id}`}
-        style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
-      >
-        {tier.name}
-      </div>
-
-      <p
-        className="mb-6 mt-3 text-[13.5px] leading-[1.55]"
-        style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
-      >
-        {tier.desc}
-      </p>
-
-      <div className="mb-6 border-t pt-5" style={{ borderColor: "var(--line)" }}>
-        <div className="flex items-baseline gap-1.5">
-          <span
-            className="text-[36px] font-semibold leading-none tracking-[-0.030em]"
-            style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
-          >
-            {tier.monthlyPrice}
-          </span>
-          <span
-            className="text-[13px]"
-            style={{ fontFamily: "var(--font-display)", color: "var(--ink-3)" }}
-          >
-            / mo
-          </span>
-        </div>
-        <div
-          className="mt-1.5 text-[11.5px]"
-          style={{ fontFamily: "var(--font-mono)", color: "var(--ink-3)" }}
-        >
-          + {tier.setupPrice}
-        </div>
-      </div>
-
-      <a
-        href={tier.ctaHref}
-        className="mb-6 flex h-11 items-center justify-center rounded-xl border text-[14px] font-medium transition-colors hover:bg-surface-2"
-        style={{
-          fontFamily: "var(--font-display)",
-          borderColor: "var(--line-strong)",
-          background: "#fff",
-          color: "var(--navy-600)",
-        }}
-      >
-        {tier.ctaLabel}
-      </a>
-
-      <ul className="flex flex-col gap-3">
-        {tier.features.map((f, i) => (
-          <li key={i} className="flex items-start gap-2.5">
-            <span
-              className="mt-0.5 shrink-0 inline-flex h-[18px] w-[18px] items-center justify-center rounded-full"
-              style={{ background: "var(--teal-50)", color: "var(--teal-700)" }}
-            >
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12.5l5 5 9-11" />
-              </svg>
-            </span>
-            <span
-              className="text-[13px] leading-[1.5]"
-              style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
-            >
-              {f}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </article>
-  );
-}
-
-/* ─── Tiers ───────────────────────────────────────────────────────────────── */
-
-type TierFeature = { head: string } | { text: string };
-
-interface TierDef {
-  id: string;
-  name: string;
-  sub: string;
-  desc: string;
-  setupPrice: string;
-  monthlyNote: string;
-  featured: boolean;
-  badge?: string;
-  ctaLabel: string;
-  ctaHref: string;
-  idealFor: string;
-  features: TierFeature[];
-}
-
-const TIERS: TierDef[] = [
-  {
-    id: "esmi",
-    name: "Esmi Enterprise — AI Virtual Receptionist & Lead Qualification System",
-    sub: "01",
-    desc: "24/7 AI agent that qualifies inbound leads, answers FAQs, books appointments, and escalates when needed — via voice, SMS, and email. EN/ES bilingual.",
-    setupPrice: "$8,500",
-    monthlyNote: "From $1,099 / mo · managed service",
-    featured: true,
-    badge: "Most Popular",
-    ctaLabel: "Get Started with Esmi",
-    ctaHref: "/book",
-    idealFor: "Multi-location businesses, law firms, medical groups, and franchises.",
-    features: [
-      { text: "**Custom LangGraph AI agent** (voice + SMS + email)" },
-      { text: "Advanced lead qualification with scoring and routing" },
-      { text: "FAQ answering trained on your business" },
-      { text: "Appointment booking + calendar sync" },
-      { text: "CRM or Google Workspace integration" },
-      { text: "Custom Streamlit dashboard with analytics" },
-      { text: "Monthly monitoring, optimization & updates" },
-      { text: "Human-in-the-loop design with escalation paths" },
-    ],
-  },
-  {
-    id: "sales",
-    name: "Revenue Operations Agents",
-    sub: "02",
-    desc: "AI sales co-pilot that enriches leads, scores them against your ICP, runs personalized follow-ups, preps meetings, and keeps your pipeline clean — with human approvals.",
-    setupPrice: "$9,500",
-    monthlyNote: "From $1,299 / mo · managed service",
-    featured: false,
-    ctaLabel: "Get the Sales Assistant",
-    ctaHref: "/book",
-    idealFor: "Sales teams and businesses with active lead flow.",
-    features: [
-      { text: "Lead enrichment & research agent" },
-      { text: "Qualification scoring based on your ICP" },
-      { text: "Personalized follow-up sequence agent" },
-      { text: "Meeting preparation summaries" },
-      { text: "Pipeline hygiene & deal stage automation" },
-      { text: "CRM integration & automated logging" },
-      { text: "Custom sales dashboard" },
-      { text: "Monthly optimization and performance reporting" },
-      { text: "Human-in-the-loop approvals" },
-    ],
-  },
-  {
-    id: "firmos",
-    name: 'Custom Multi-Agent Operations System ("Firm OS")',
-    sub: "03 / Firm OS",
-    desc: "A coordinated team of 2–4 AI agents handling lead qualification, sales, document processing, and financial operations — all sharing memory under one dashboard.",
-    setupPrice: "$24,000",
-    monthlyNote: "From $2,499 / mo · managed service · phased delivery",
-    featured: false,
-    ctaLabel: "Book a Free Strategy Call",
-    ctaHref: "/book",
-    idealFor: "Growing businesses ready for coordinated AI operations.",
-    features: [
-      { text: "**2–4 orchestrated AI agents** (lead qualification + sales + document processing + financial ops)" },
-      { text: "Shared memory across agents" },
-      { text: "Central custom Streamlit oversight dashboard" },
-      { text: "Deep integrations with your existing tools" },
-      { text: "**AcumenAI** accounting & finance module (categorization, invoice extraction, reconciliation)" },
-      { text: "Advanced guardrails and audit logs" },
-      { text: "Monthly strategy calls + continuous optimization" },
-      { text: "Full team training and documentation" },
-    ],
-  },
-];
-
-function Tiers() {
-  return (
-    <section
-      id="pricing"
-      className="scroll-mt-20 px-6 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-24"
-      style={{ borderTop: "1px solid var(--line)" }}
-    >
-      <div className="mx-auto max-w-[1200px]">
-        <div className="mb-10 text-center">
-          <span
-            className="inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.18em]"
-            style={{ fontFamily: "var(--font-mono)", color: "var(--navy-500)" }}
-          >
-            <span className="inline-block h-px w-[18px] bg-current opacity-70" />
-            Custom / Enterprise
-            <span className="inline-block h-px w-[18px] bg-current opacity-70" />
-          </span>
-          <p
-            className="mx-auto mt-3 max-w-[560px] text-[15px] leading-[1.6]"
-            style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
-          >
-            For multi-location businesses, law firms, and medical groups.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {TIERS.map((tier) => (
-            <TierCard key={tier.id} tier={tier} />
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function IdealFor({ text, featured }: { text: string; featured: boolean }) {
-  return featured ? (
-    <div
-      className="mt-auto pt-5 border-t border-white/[0.08] text-[12px] leading-[1.5] text-white/40"
-      style={{ fontFamily: "var(--font-display)" }}
-    >
-      <span className="font-semibold text-white/55 uppercase tracking-[0.07em] text-[10px]" style={{ fontFamily: "var(--font-mono)" }}>Ideal for · </span>
-      {text}
-    </div>
-  ) : (
-    <div
-      className="mt-auto pt-5 border-t text-[12px] leading-[1.5]"
-      style={{ borderColor: "var(--line)", fontFamily: "var(--font-display)", color: "var(--ink-3)" }}
-    >
-      <span className="font-semibold uppercase tracking-[0.07em] text-[10px]" style={{ fontFamily: "var(--font-mono)" }}>Ideal for · </span>
-      {text}
-    </div>
-  );
-}
-
-function TierCard({ tier }: { tier: TierDef }) {
-  if (tier.featured) {
+function PlanCard({ plan }: { plan: PlanDef }) {
+  if (plan.featured) {
     return (
       <article
-        className="relative flex flex-col overflow-hidden rounded-[22px] p-6 text-white"
-        aria-labelledby={`tier-${tier.id}`}
+        className="relative flex flex-col overflow-hidden rounded-[22px] p-6 text-white sm:-mt-3 sm:mb-3 sm:p-7"
+        aria-labelledby={`plan-${plan.id}`}
         style={{
           background: `
             radial-gradient(ellipse 90% 60% at 100% 0%, rgba(20,184,166,0.18), transparent 60%),
@@ -563,111 +284,52 @@ function TierCard({ tier }: { tier: TierDef }) {
         <div
           aria-hidden
           className="pointer-events-none absolute inset-x-[20%] top-0 h-px"
-          style={{
-            background: "linear-gradient(90deg, transparent, rgba(20,184,166,0.50), transparent)",
-          }}
+          style={{ background: "linear-gradient(90deg, transparent, rgba(20,184,166,0.50), transparent)" }}
         />
 
         <div className="relative flex flex-1 flex-col">
-          {tier.badge && (
-            <span
-              className="mb-5 inline-flex rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em]"
-              style={{
-                background: "rgba(20,184,166,0.20)",
-                color: "#5EEAD4",
-                border: "1px solid rgba(20,184,166,0.25)",
-              }}
-            >
-              {tier.badge}
-            </span>
-          )}
+          <span
+            className="mb-5 inline-flex w-fit rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.08em]"
+            style={{ background: "rgba(20,184,166,0.20)", color: "#5EEAD4", border: "1px solid rgba(20,184,166,0.25)" }}
+          >
+            Most popular
+          </span>
 
-          <div className="mb-1">
-            <div
-              className="text-[11px] font-medium text-teal-300/70 mb-1"
-              style={{ fontFamily: "var(--font-mono)" }}
-            >
-              {tier.sub}
-            </div>
-            <div
-              className="text-[18px] font-semibold tracking-[-0.018em] text-white leading-snug"
-              id={`tier-${tier.id}`}
-              style={{ fontFamily: "var(--font-display)" }}
-            >
-              {tier.name}
-            </div>
-          </div>
-
-          <p
-            className="mb-6 mt-3 text-[13.5px] leading-[1.55] text-white/60"
+          <div
+            id={`plan-${plan.id}`}
+            className="text-[19px] font-semibold tracking-[-0.018em] leading-snug text-white"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            {tier.desc}
-          </p>
+            {plan.name}
+          </div>
 
-          <div className="mb-6 border-t border-white/[0.08] pt-5">
-            <div className="flex items-baseline gap-1.5">
-              <span
-                className="text-[36px] font-semibold leading-none tracking-[-0.030em] text-white"
-                style={{ fontFamily: "var(--font-display)" }}
-              >
-                {tier.setupPrice}
-              </span>
-              <span
-                className="text-[13px] text-white/50"
-                style={{ fontFamily: "var(--font-display)" }}
-              >
-                setup
-              </span>
-            </div>
-            <div
-              className="mt-1.5 text-[11.5px] text-white/45"
-              style={{ fontFamily: "var(--font-mono)" }}
-            >
-              {tier.monthlyNote}
-            </div>
+          <div className="mb-6 mt-4 flex items-baseline gap-1.5 border-t border-white/[0.08] pt-5">
+            <span className="text-[36px] font-semibold leading-none tracking-[-0.030em] text-white" style={{ fontFamily: "var(--font-display)" }}>
+              {plan.price}
+            </span>
+            <span className="text-[13px] text-white/50" style={{ fontFamily: "var(--font-display)" }}>
+              / mo
+            </span>
           </div>
 
           <a
-            href={tier.ctaHref}
+            href={plan.ctaHref}
             className="mb-6 flex h-11 items-center justify-center rounded-xl bg-white text-[14px] font-medium transition-opacity hover:opacity-90"
             style={{ fontFamily: "var(--font-display)", color: "var(--navy-700)" }}
           >
-            {tier.ctaLabel} <span className="ml-1.5 opacity-70">→</span>
+            {plan.ctaLabel} <span className="ml-1.5 opacity-70">→</span>
           </a>
 
           <ul className="flex flex-col gap-3">
-            {tier.features.map((f, i) =>
-              "head" in f ? (
-                <li
-                  key={i}
-                  className="mt-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-teal-300/70"
-                  style={{ fontFamily: "var(--font-mono)" }}
-                >
-                  {f.head}
-                </li>
-              ) : (
-                <li key={i} className="flex items-start gap-2.5">
-                  <span
-                    className="mt-0.5 shrink-0 inline-flex h-[18px] w-[18px] items-center justify-center rounded-full"
-                    style={{ background: "rgba(20,184,166,0.22)", color: "#5EEAD4" }}
-                  >
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M5 12.5l5 5 9-11" />
-                    </svg>
-                  </span>
-                  <span
-                    className="text-[13px] leading-[1.5] text-white/75"
-                    style={{ fontFamily: "var(--font-display)" }}
-                  >
-                    {bold(f.text)}
-                  </span>
-                </li>
-              )
-            )}
+            {plan.features.map((f, i) => (
+              <li key={i} className="flex items-start gap-2.5">
+                <CheckIcon tone="dark" />
+                <span className="text-[13px] leading-[1.5] text-white/75" style={{ fontFamily: "var(--font-display)" }}>
+                  {f}
+                </span>
+              </li>
+            ))}
           </ul>
-
-          <IdealFor text={tier.idealFor} featured />
         </div>
       </article>
     );
@@ -675,106 +337,169 @@ function TierCard({ tier }: { tier: TierDef }) {
 
   return (
     <article
-      className="flex flex-col rounded-[22px] border p-6"
-      aria-labelledby={`tier-${tier.id}`}
-      style={{
-        borderColor: "var(--line)",
-        background: "#fff",
-        boxShadow: "0 2px 8px rgba(10,37,64,0.06), 0 1px 2px rgba(10,37,64,0.04)",
-      }}
+      className="flex flex-col rounded-[22px] border p-6 sm:p-7"
+      aria-labelledby={`plan-${plan.id}`}
+      style={{ borderColor: "var(--line)", background: "#fff", boxShadow: "0 2px 8px rgba(10,37,64,0.06), 0 1px 2px rgba(10,37,64,0.04)" }}
     >
-      <div className="mb-1">
-        <div
-          className="text-[11px] font-medium mb-1"
-          style={{ fontFamily: "var(--font-mono)", color: "var(--ink-3)" }}
-        >
-          {tier.sub}
-        </div>
-        <div
-          className="text-[18px] font-semibold tracking-[-0.018em] leading-snug"
-          id={`tier-${tier.id}`}
-          style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
-        >
-          {tier.name}
-        </div>
+      <div id={`plan-${plan.id}`} className="text-[19px] font-semibold tracking-[-0.018em] leading-snug" style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}>
+        {plan.name}
       </div>
 
-      <p
-        className="mb-6 mt-3 text-[13.5px] leading-[1.55]"
-        style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
-      >
-        {tier.desc}
-      </p>
-
-      <div className="mb-6 border-t pt-5" style={{ borderColor: "var(--line)" }}>
-        <div className="flex items-baseline gap-1.5">
-          <span
-            className="text-[36px] font-semibold leading-none tracking-[-0.030em]"
-            style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
-          >
-            {tier.setupPrice}
-          </span>
-          <span
-            className="text-[13px]"
-            style={{ fontFamily: "var(--font-display)", color: "var(--ink-3)" }}
-          >
-            setup
-          </span>
-        </div>
-        <div
-          className="mt-1.5 text-[11.5px]"
-          style={{ fontFamily: "var(--font-mono)", color: "var(--ink-3)" }}
-        >
-          {tier.monthlyNote}
-        </div>
+      <div className="mb-6 mt-4 flex items-baseline gap-1.5 border-t pt-5" style={{ borderColor: "var(--line)" }}>
+        <span className="text-[36px] font-semibold leading-none tracking-[-0.030em]" style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}>
+          {plan.price}
+        </span>
+        <span className="text-[13px]" style={{ fontFamily: "var(--font-display)", color: "var(--ink-3)" }}>
+          / mo
+        </span>
       </div>
 
       <a
-        href={tier.ctaHref}
+        href={plan.ctaHref}
         className="mb-6 flex h-11 items-center justify-center rounded-xl border text-[14px] font-medium transition-colors hover:bg-surface-2"
-        style={{
-          fontFamily: "var(--font-display)",
-          borderColor: "var(--line-strong)",
-          background: "#fff",
-          color: "var(--navy-600)",
-        }}
+        style={{ fontFamily: "var(--font-display)", borderColor: "var(--line-strong)", background: "#fff", color: "var(--navy-600)" }}
       >
-        {tier.ctaLabel}
+        {plan.ctaLabel}
       </a>
 
       <ul className="flex flex-col gap-3">
-        {tier.features.map((f, i) =>
-          "head" in f ? (
-            <li
-              key={i}
-              className="mt-1 text-[11px] font-semibold uppercase tracking-[0.12em]"
-              style={{ fontFamily: "var(--font-mono)", color: "var(--ink-3)" }}
-            >
-              {f.head}
-            </li>
-          ) : (
-            <li key={i} className="flex items-start gap-2.5">
-              <span
-                className="mt-0.5 shrink-0 inline-flex h-[18px] w-[18px] items-center justify-center rounded-full"
-                style={{ background: "var(--teal-50)", color: "var(--teal-700)" }}
-              >
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 12.5l5 5 9-11" />
-                </svg>
-              </span>
-              <span
-                className="text-[13px] leading-[1.5]"
-                style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
-              >
-                {bold(f.text)}
-              </span>
-            </li>
-          )
-        )}
+        {plan.features.map((f, i) => (
+          <li key={i} className="flex items-start gap-2.5">
+            <CheckIcon />
+            <span className="text-[13px] leading-[1.5]" style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}>
+              {f}
+            </span>
+          </li>
+        ))}
       </ul>
-
-      <IdealFor text={tier.idealFor} featured={false} />
     </article>
+  );
+}
+
+/* ─── Pilot strip ─────────────────────────────────────────────────────────── */
+
+function PilotStrip() {
+  return (
+    <section className="px-6 py-14 sm:px-8 sm:py-16 lg:px-10" style={{ background: "var(--surface-2)", borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)" }}>
+      <div className="mx-auto flex max-w-[1000px] flex-col items-center gap-6 text-center lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:text-left">
+        <div>
+          <Eyebrow>7-day pilot</Eyebrow>
+          <h2 className="mt-3 text-[24px] font-semibold leading-[1.2] tracking-[-0.02em] sm:text-[28px]" style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}>
+            Try Esmi on your real line for 7 days.
+          </h2>
+          <p className="mx-auto mt-3 max-w-[600px] text-[15px] leading-[1.6] lg:mx-0" style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}>
+            $149 for the pilot, credited to your first month if you continue. Includes
+            setup, 1 number, up to 75 minutes, 1 calendar, full dashboard access, and
+            an end-of-pilot review.
+          </p>
+        </div>
+        <a href={PILOT_HREF} className={`${PRIMARY_BTN} shrink-0`} style={{ fontFamily: "var(--font-display)", background: "var(--navy-600)" }}>
+          Start 7-day pilot
+        </a>
+      </div>
+    </section>
+  );
+}
+
+/* ─── How It Works ───────────────────────────────────────────────────────── */
+
+const STEPS = [
+  { num: "01", title: "We learn your business", desc: "Hours, services, FAQs, and calendars." },
+  { num: "02", title: "We go live", desc: "Number, agent, booking, and dashboard login." },
+  { num: "03", title: "You see everything", desc: "After-hours calls, bookings, leads, and recordings." },
+];
+
+function HowItWorks() {
+  return (
+    <section className="px-6 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-24">
+      <div className="mx-auto max-w-[1200px]">
+        <div className="mb-8 text-center">
+          <Eyebrow color="var(--navy-500)">How it works</Eyebrow>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-3 lg:gap-6">
+          {STEPS.map((item) => (
+            <div
+              key={item.num}
+              className="flex gap-5 rounded-[18px] border bg-white p-6 sm:p-7"
+              style={{ borderColor: "var(--line)", boxShadow: "0 2px 8px rgba(10,37,64,0.05)" }}
+            >
+              <span className="shrink-0 text-[13px] font-bold tabular-nums" style={{ fontFamily: "var(--font-mono)", color: "var(--teal-500)" }}>
+                {item.num}
+              </span>
+              <div>
+                <div className="mb-1.5 text-[15px] font-semibold leading-snug" style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}>
+                  {item.title}
+                </div>
+                <p className="text-[14px] leading-[1.6]" style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}>
+                  {item.desc}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── Included on every plan ─────────────────────────────────────────────── */
+
+const INCLUDED = [
+  "Natural voice, 24/7",
+  "Live calendar book & reschedule",
+  "Human escalation",
+  "Recordings & transcripts",
+  "Appointments & leads inbox",
+  "After-hours on Overview",
+];
+
+function Included() {
+  return (
+    <section className="px-6 py-14 sm:px-8 sm:py-16 lg:px-10" style={{ background: "var(--surface-2)", borderTop: "1px solid var(--line)" }}>
+      <div className="mx-auto max-w-[1000px] text-center">
+        <Eyebrow>Included on every plan</Eyebrow>
+        <div className="mx-auto mt-6 flex max-w-[820px] flex-wrap items-center justify-center gap-x-6 gap-y-4">
+          {INCLUDED.map((item) => (
+            <span key={item} className="inline-flex items-center gap-2 text-[13.5px]" style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}>
+              <CheckIcon />
+              {item}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── Add-ons ─────────────────────────────────────────────────────────────── */
+
+const ADD_ONS = [
+  { label: "Extra number", price: "$49/mo" },
+  { label: "Extra 500 minutes", price: "$99" },
+  { label: "Bilingual EN/ES", price: "$99/mo" },
+  { label: "CRM / HighLevel wiring", price: "Custom" },
+];
+
+function AddOns() {
+  return (
+    <section className="px-6 py-14 sm:px-8 sm:py-16 lg:px-10" style={{ borderTop: "1px solid var(--line)" }}>
+      <div className="mx-auto max-w-[1000px] text-center">
+        <Eyebrow color="var(--navy-500)">Add-ons</Eyebrow>
+        <div className="mx-auto mt-6 grid max-w-[820px] grid-cols-2 gap-3 sm:grid-cols-4">
+          {ADD_ONS.map((a) => (
+            <div key={a.label} className="rounded-[14px] border px-4 py-4" style={{ borderColor: "var(--line)", background: "#fff" }}>
+              <div className="text-[13px] leading-[1.4]" style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}>
+                {a.label}
+              </div>
+              <div className="mt-1.5 text-[15px] font-semibold" style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}>
+                {a.price}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -782,28 +507,28 @@ function TierCard({ tier }: { tier: TierDef }) {
 
 const FAQS = [
   {
-    q: "What's the difference between Esmi Local, Pro, and Enterprise?",
-    a: "Esmi Local is a pre-configured receptionist for single-location shops — live in 48 hours from $199/mo. Esmi Pro adds a custom knowledge base, custom persona, and multi-agent lead qualification for established businesses ($699/mo). Esmi Enterprise is a fully custom build for multi-location businesses and firms, from $1,099/mo.",
+    q: "Do I need technical staff to set this up?",
+    a: "No. Setup is white-glove — Orchelix configures your number, agent, knowledge base, and calendar for you. You review it before it goes live; you don't build anything.",
   },
   {
-    q: "How long does it take to launch?",
-    a: "Esmi Local goes live in 48 hours and Esmi Pro in about 5 business days. Enterprise systems and the Sales Assistant typically launch in 2–3 weeks. The Firm OS uses phased delivery, with the first phase live in 4–6 weeks.",
+    q: "Does Esmi book real appointments, or just take messages?",
+    a: "Real appointments. Esmi reads your live Google Calendar availability and books, reschedules, or cancels directly on it — no message gets left for someone to call back and manually enter.",
   },
   {
-    q: "Can I start with one system and add more later?",
-    a: "Yes. Many clients begin with Esmi and later expand to the Sales Assistant or Firm OS.",
+    q: "What happens when Esmi can't handle something?",
+    a: "It escalates to a human — by call transfer or notification, depending on your setup — with the context of the conversation so far, so nobody has to repeat themselves.",
   },
   {
-    q: "Do you offer bookkeeping automation?",
-    a: "Yes — AcumenAI, our accounting & finance module, is included in the Firm OS and can be added to other packages.",
+    q: "Can I keep my existing phone number?",
+    a: "Each plan includes new local number(s) provisioned for Esmi. Forwarding your existing number to it (or porting it over) is usually possible — tell us your setup and we'll confirm during onboarding.",
   },
   {
-    q: "What happens after launch?",
-    a: "You receive monthly monitoring, optimization, updates, and support as part of the managed service.",
+    q: "Is there a contract?",
+    a: "No. Every plan is month-to-month, cancel anytime. Pay annually instead and get 2 months free.",
   },
   {
-    q: "Can I cancel the monthly service?",
-    a: "Yes. The monthly managed service is flexible — no long-term contracts required.",
+    q: "What happens if I go over my included minutes?",
+    a: "You're billed the plan's per-minute overage rate for the extra minutes. Esmi never stops answering calls because you've hit a limit — overage is a line on the invoice, not a service interruption.",
   },
 ];
 
@@ -821,91 +546,33 @@ function FAQ() {
   };
 
   return (
-    <section
-      className="px-6 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-24"
-      style={{ borderTop: "1px solid var(--line)" }}
-    >
+    <section className="px-6 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-24" style={{ borderTop: "1px solid var(--line)" }}>
       <JsonLd data={faqJsonLd} />
       <div className="mx-auto max-w-[1200px]">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[360px_1fr] lg:gap-20">
-          <div>
-            <span
-              className="mb-4 inline-flex items-center gap-2.5 text-[11px] font-medium uppercase tracking-[0.18em]"
-              style={{ fontFamily: "var(--font-mono)", color: "var(--teal-700)" }}
-            >
-              <span className="inline-block h-px w-[18px] bg-current opacity-70" />
-              Frequently asked
-            </span>
-            <h2
-              className="mb-4 text-[32px] font-semibold leading-[1.1] tracking-[-0.022em] sm:text-[38px]"
-              style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
-            >
-              Answers, before you ask.
-            </h2>
-            <p
-              className="mb-8 text-[16px] leading-[1.6]"
-              style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
-            >
-              If a question isn&apos;t here, talk to a senior consultant — not
-              a chatbot. We answer the same day.
-            </p>
+        <div className="mb-10 text-center">
+          <Eyebrow>Frequently asked</Eyebrow>
+          <h2 className="mx-auto mt-3 max-w-[560px] text-[28px] font-semibold leading-[1.15] tracking-[-0.022em] sm:text-[34px]" style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}>
+            Answers, before you ask.
+          </h2>
+        </div>
 
-            <div
-              className="rounded-[18px] border p-6"
-              style={{ borderColor: "var(--line)", background: "#fff" }}
-            >
-              <div
-                className="mb-1 text-[13px] font-semibold uppercase tracking-[0.08em]"
-                style={{ fontFamily: "var(--font-mono)", color: "var(--ink-3)" }}
-              >
-                Still deciding?
-              </div>
-              <p
-                className="mb-4 text-[14px] leading-[1.55]"
-                style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
-              >
-                Book a 30-minute strategy call with a senior Orchelix
-                consultant. No deck, no slides — just your workflow.
-              </p>
-              <a
-                href="/book"
-                className="inline-flex h-9 items-center rounded-[10px] px-4 text-[13px] font-medium text-white transition-opacity hover:opacity-90"
-                style={{ fontFamily: "var(--font-display)", background: "var(--navy-600)" }}
-              >
-                Book a strategy call →
-              </a>
-            </div>
-          </div>
-
+        <div className="mx-auto max-w-[820px]">
           <div className="flex flex-col divide-y" style={{ borderColor: "var(--line)" }}>
             {FAQS.map((faq, i) => (
               <div key={i} style={{ borderColor: "var(--line)" }}>
-                <button
-                  type="button"
-                  onClick={() => setOpenIdx(openIdx === i ? null : i)}
-                  className="flex w-full items-start justify-between gap-4 py-5 text-left"
-                >
-                  <span
-                    className="text-[15px] font-semibold leading-snug"
-                    style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
-                  >
+                <button type="button" onClick={() => setOpenIdx(openIdx === i ? null : i)} className="flex w-full items-start justify-between gap-4 py-5 text-left">
+                  <span className="text-[15px] font-semibold leading-snug" style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}>
                     {faq.q}
                   </span>
                   <span
                     className="mt-0.5 shrink-0 text-[18px] leading-none transition-transform"
-                    style={{
-                      color: "var(--ink-3)",
-                      transform: openIdx === i ? "rotate(45deg)" : "rotate(0deg)",
-                    }}
+                    style={{ color: "var(--ink-3)", transform: openIdx === i ? "rotate(45deg)" : "rotate(0deg)" }}
                   >
                     +
                   </span>
                 </button>
                 {openIdx === i && (
-                  <p
-                    className="pb-5 text-[14.5px] leading-[1.65]"
-                    style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}
-                  >
+                  <p className="pb-5 text-[14.5px] leading-[1.65]" style={{ fontFamily: "var(--font-display)", color: "var(--ink-2)" }}>
                     {faq.a}
                   </p>
                 )}
@@ -922,10 +589,7 @@ function FAQ() {
 
 function PricingFinalCTA() {
   return (
-    <section
-      className="px-6 pb-20 pt-16 sm:px-8 sm:pb-24 sm:pt-20 lg:px-10 lg:pb-32 lg:pt-[72px]"
-      style={{ borderTop: "1px solid var(--line)" }}
-    >
+    <section className="px-6 pb-20 pt-16 sm:px-8 sm:pb-24 sm:pt-20 lg:px-10 lg:pb-32 lg:pt-[72px]" style={{ borderTop: "1px solid var(--line)" }}>
       <div className="mx-auto max-w-[1200px]">
         <div
           className="overflow-hidden rounded-[24px] p-10 sm:p-12 lg:p-16"
@@ -935,32 +599,30 @@ function PricingFinalCTA() {
               radial-gradient(ellipse 60% 80% at 0% 100%, rgba(20,184,166,0.10), transparent 60%),
               linear-gradient(180deg, #0D2238 0%, #061B33 100%)
             `,
-            boxShadow:
-              "0 40px 100px -30px rgba(10,37,64,0.55), 0 1px 0 rgba(255,255,255,0.08) inset",
+            boxShadow: "0 40px 100px -30px rgba(10,37,64,0.55), 0 1px 0 rgba(255,255,255,0.08) inset",
           }}
         >
           <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:gap-16">
             <div className="flex-1">
-              <h2
-                className="mb-4 text-[28px] font-semibold leading-[1.1] tracking-[-0.022em] text-white sm:text-[34px] lg:text-[40px]"
-                style={{ fontFamily: "var(--font-display)" }}
-              >
-                Ready to Get Started?
+              <h2 className="mb-4 text-[28px] font-semibold leading-[1.1] tracking-[-0.022em] text-white sm:text-[34px] lg:text-[40px]" style={{ fontFamily: "var(--font-display)" }}>
+                Stop losing after-hours revenue.
               </h2>
-              <p
-                className="max-w-[540px] text-[16px] leading-[1.6] text-white/60 sm:text-[17px]"
-                style={{ fontFamily: "var(--font-display)" }}
-              >
-                Book a free 30-minute strategy call to find the best system for your business.
+              <p className="max-w-[540px] text-[16px] leading-[1.6] text-white/60 sm:text-[17px]" style={{ fontFamily: "var(--font-display)" }}>
+                Start a 7-day pilot on your real line, or talk it through with us first — either way, nothing goes live until you say so.
               </p>
             </div>
-            <a
-              href="/book"
-              className="inline-flex h-12 items-center rounded-xl bg-white px-6 text-[15px] font-medium transition-opacity hover:opacity-90 lg:shrink-0"
-              style={{ fontFamily: "var(--font-display)", color: "var(--navy-600)" }}
-            >
-              Book a Free Strategy Call <span className="ml-1.5 opacity-70">→</span>
-            </a>
+            <div className="flex flex-col gap-3 sm:flex-row lg:shrink-0">
+              <a href={PILOT_HREF} className={PRIMARY_BTN} style={{ fontFamily: "var(--font-display)", background: "#fff", color: "var(--navy-600)" }}>
+                Start pilot <span className="ml-1.5 opacity-70">→</span>
+              </a>
+              <a
+                href={WALKTHROUGH_HREF}
+                className="inline-flex h-12 items-center justify-center rounded-xl border px-7 text-[15px] font-medium text-white/88 transition-colors hover:bg-white/10"
+                style={{ fontFamily: "var(--font-display)", borderColor: "rgba(255,255,255,0.18)" }}
+              >
+                Book walkthrough
+              </a>
+            </div>
           </div>
         </div>
       </div>
