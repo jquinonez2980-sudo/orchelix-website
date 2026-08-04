@@ -4,18 +4,18 @@ import { useState } from "react";
 import JsonLd from "@/app/components/JsonLd";
 import Nav from "@/app/components/sections/Nav";
 import Footer from "@/app/components/sections/Footer";
+import { ESMI_PILOT_PAYMENT_LINK } from "@/app/lib/pilotPayment";
 
 const SITE_URL = "https://www.orchelix.com";
 
-/* CTA hrefs — no real Stripe Checkout yet, so these route to the site's
-   existing lead-capture surfaces with an `intent` query param the copy can
-   key off later (analytics today, prefill/Payment Link swap tomorrow):
-     - "Start a pilot" needs actual business details, not a scheduling call,
-       so it goes to the homepage contact form (already wired to Resend).
+/* CTA hrefs:
+     - "Start a pilot" is the real $149 one-time payment — the live Stripe
+       Payment Link (ESMI_PILOT_PAYMENT_LINK), which redirects to
+       /book?pilot=success on completion (configured in Stripe).
      - "Book a walkthrough" / "Talk to us" are conversations, so they go to
        the existing Cal.com booking page (/book), same as every other CTA
        on the site. */
-const PILOT_HREF = "/?intent=pilot#contact";
+const PILOT_HREF = ESMI_PILOT_PAYMENT_LINK;
 const WALKTHROUGH_HREF = "/book?intent=demo";
 const SCALE_HREF = "/book?intent=scale";
 
