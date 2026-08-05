@@ -10,6 +10,7 @@ import {
   type PlatformConfig,
   type ServiceSettings,
 } from "../../lib/esmiPlatform";
+import { useActiveOrgSlug } from "../useActiveOrgSlug";
 
 const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -343,6 +344,7 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
   // Reset whenever the timezone returns to its saved value or a save lands, so
   // an acknowledgement can never carry over to a later, different change.
   const [tzConfirmed, setTzConfirmed] = useState(false);
+  const orgSlug = useActiveOrgSlug();
 
   const load = () => {
     setLoading(true);
@@ -359,7 +361,7 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
       });
   };
 
-  useEffect(load, []);
+  useEffect(load, [orgSlug]);
 
   if (loading) {
     return (

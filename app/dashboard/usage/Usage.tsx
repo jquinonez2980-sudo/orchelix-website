@@ -8,6 +8,7 @@ import {
   type WeeklyUsageBucket,
 } from "../../lib/esmiPlatform";
 import { LimitBanner, MinutesProgress, Tile } from "../PlanUsageWidgets";
+import { useActiveOrgSlug } from "../useActiveOrgSlug";
 
 /* Phase 3 ticket 3.1 (usage rollup) + ticket 3.2 (plan tiers + SOFT limits).
    Read-only, no Stripe, no hard blocking — a plan's included minutes are a
@@ -170,6 +171,7 @@ export default function Usage() {
   const [data, setData] = useState<UsageResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
+  const orgSlug = useActiveOrgSlug();
 
   useEffect(() => {
     let active = true;
@@ -181,7 +183,7 @@ export default function Usage() {
     return () => {
       active = false;
     };
-  }, [reloadKey]);
+  }, [orgSlug, reloadKey]);
 
   if (error) {
     const orgIssue = isUnknownOrgError(error);

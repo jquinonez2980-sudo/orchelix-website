@@ -11,6 +11,7 @@ import {
   type PlatformChat,
 } from "../../lib/esmiPlatform";
 import { Badge, type BadgeTone } from "../Badge";
+import { useActiveOrgSlug } from "../useActiveOrgSlug";
 
 const PAGE_SIZE = 25;
 
@@ -324,6 +325,7 @@ export default function ChatLog() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
+  const orgSlug = useActiveOrgSlug();
 
   const filtered = Boolean(outcome || fromDate || toDate);
 
@@ -351,7 +353,7 @@ export default function ChatLog() {
     return () => {
       active = false;
     };
-  }, [outcome, fromDate, toDate, page, reloadKey]);
+  }, [orgSlug, outcome, fromDate, toDate, page, reloadKey]);
 
   const totalPages = useMemo(
     () => (data ? Math.max(1, Math.ceil(data.total / PAGE_SIZE)) : 1),

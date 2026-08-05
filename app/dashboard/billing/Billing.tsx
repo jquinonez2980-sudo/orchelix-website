@@ -9,6 +9,7 @@ import {
 } from "../../lib/esmiPlatform";
 import { Badge, type BadgeTone } from "../Badge";
 import { LimitBanner, MinutesProgress, Tile } from "../PlanUsageWidgets";
+import { useActiveOrgSlug } from "../useActiveOrgSlug";
 
 /* Phase 3 tickets 3.3 + 3.6: read-only billing snapshot. billing_mode is
    "stripe" once a real Stripe subscription is linked server-side, "managed"
@@ -74,6 +75,7 @@ export default function Billing() {
   const [data, setData] = useState<BillingResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
+  const orgSlug = useActiveOrgSlug();
 
   useEffect(() => {
     let active = true;
@@ -85,7 +87,7 @@ export default function Billing() {
     return () => {
       active = false;
     };
-  }, [reloadKey]);
+  }, [orgSlug, reloadKey]);
 
   if (error) {
     const orgIssue = isUnknownOrgError(error);

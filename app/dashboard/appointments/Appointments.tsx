@@ -7,6 +7,7 @@ import {
   type AppointmentsResponse,
 } from "../../lib/esmiPlatform";
 import { Badge, type BadgeTone } from "../Badge";
+import { useActiveOrgSlug } from "../useActiveOrgSlug";
 
 const PAGE_SIZE = 25;
 
@@ -157,6 +158,7 @@ export default function Appointments() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
+  const orgSlug = useActiveOrgSlug();
 
   // Debounce the search box → server-side search param.
   useEffect(() => {
@@ -185,7 +187,7 @@ export default function Appointments() {
     return () => {
       active = false;
     };
-  }, [status, search, page, reloadKey]);
+  }, [orgSlug, status, search, page, reloadKey]);
 
   const totalPages = useMemo(
     () => (data ? Math.max(1, Math.ceil(data.total / PAGE_SIZE)) : 1),

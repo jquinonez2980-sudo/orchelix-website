@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { fetchOverview, type OverviewResponse } from "../lib/esmiPlatform";
 import { Tile } from "./PlanUsageWidgets";
+import { useActiveOrgSlug } from "./useActiveOrgSlug";
 
 /* KPI tiles per the stat-tile contract: sentence-case label, semibold value in
    proportional figures (no tabular-nums at display size), signed delta vs a
@@ -100,6 +101,7 @@ export default function Overview() {
   const [data, setData] = useState<OverviewResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
+  const orgSlug = useActiveOrgSlug();
 
   useEffect(() => {
     let active = true;
@@ -111,7 +113,7 @@ export default function Overview() {
     return () => {
       active = false;
     };
-  }, [reloadKey]);
+  }, [orgSlug, reloadKey]);
 
   if (error) {
     const orgIssue = isUnknownOrgError(error);
