@@ -3,7 +3,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   CHAT_OUTCOMES,
+  fetchChatDetail,
   fetchChats,
+  type ChatDetail,
   type ChatOutcome,
   type ChatsResponse,
   type PlatformChat,
@@ -46,15 +48,129 @@ function OutcomeBadge({ outcome }: { outcome: ChatOutcome | null }) {
   return <Badge tone={s.tone}>{s.label}</Badge>;
 }
 
+/* ── transcript ──────────────────────────────────────────────────────────── */
+
+function Chevron({ open }: { open: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      aria-hidden
+      className={`h-4 w-4 text-ink-4 transition-transform ${open ? "rotate-180" : ""}`}
+    >
+      <path
+        fillRule="evenodd"
+        d="M5.22 7.22a.75.75 0 011.06 0L10 10.94l3.72-3.72a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.22 8.28a.75.75 0 010-1.06z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
+
+function TranscriptView({ detail }: { detail: ChatDetail }) {
+  if (detail.messages.length === 0) {
+    return <p className="text-sm text-ink-3">No transcript was captured for this chat.</p>;
+  }
+  return (
+    <div className="max-h-80 space-y-2 overflow-y-auto pr-2 text-sm leading-6">
+      {detail.messages.map((m, i) => {
+        const isAgent = m.role === "assistant";
+        const when = fmtWhen(m.timestamp);
+        return (
+          <p key={i} className="text-ink-2">
+            <span
+              className={`mr-1.5 font-semibold ${isAgent ? "text-teal-700" : "text-navy-500"}`}
+            >
+              {isAgent ? "Esmi" : "Visitor"}
+            </span>
+            {m.content}
+            {when.date && (
+              <span className="ml-1.5 text-xs text-ink-4">
+                {when.date} {when.time}
+              </span>
+            )}
+          </p>
+        );
+      })}
+    </div>
+  );
+}
+
+function ChatDetailPanel({ chatId }: { chatId: string }) {
+  const [detail, setDetail] = useState<ChatDetail | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
+
+  useEffect(() => {
+    let active = true;
+    setLoading(true);
+    setError(null);
+    fetchChatDetail(chatId)
+      .then((d) => {
+        if (!active) return;
+        setDetail(d);
+        setLoading(false);
+      })
+      .catch((e: Error) => {
+        if (!active) return;
+        setError(e.message);
+        setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [chatId, reloadKey]);
+
+  return (
+    <div className="space-y-4 border-t border-line bg-surface-2/60 px-4 py-4 sm:px-6">
+      <div>
+        <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-ink-3">
+          Transcript
+        </p>
+        {loading ? (
+          <div className="animate-pulse space-y-2">
+            <div className="h-4 w-2/3 rounded bg-surface-2" />
+            <div className="h-4 w-1/2 rounded bg-surface-2" />
+            <div className="h-4 w-3/5 rounded bg-surface-2" />
+          </div>
+        ) : error ? (
+          <div className="flex flex-col items-start gap-2">
+            <p className="text-sm text-red-700" role="alert">
+              {error}
+            </p>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setReloadKey((k) => k + 1);
+              }}
+              className="rounded-md border border-line px-3 py-1.5 text-sm font-medium text-ink hover:bg-surface-2"
+            >
+              Try again
+            </button>
+          </div>
+        ) : detail ? (
+          <TranscriptView detail={detail} />
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
 /* ── rows / cards ────────────────────────────────────────────────────────── */
 
 function ChatRow({ chat }: { chat: PlatformChat }) {
+  const [open, setOpen] = useState(false);
   const started = fmtWhen(chat.started_at);
   const last = fmtWhen(chat.last_at);
   return (
     <>
       {/* Desktop row */}
-      <tr className="hidden border-t border-line md:table-row">
+      <tr
+        className="hidden cursor-pointer border-t border-line transition-colors hover:bg-surface-2/60 md:table-row"
+        onClick={() => setOpen((v) => !v)}
+      >
         <td className="whitespace-nowrap px-4 py-3 text-sm sm:px-6">
           <span className="font-medium text-ink">{started.date}</span>
           <span className="ml-2 text-ink-3">{started.time}</span>
@@ -72,23 +188,57 @@ function ChatRow({ chat }: { chat: PlatformChat }) {
         <td className="max-w-md px-4 py-3 text-sm text-ink-2">
           <span className="line-clamp-2">{chat.summary || "—"}</span>
         </td>
+        <td className="px-4 py-3 text-right">
+          <button
+            type="button"
+            aria-expanded={open}
+            aria-label={open ? "Hide chat transcript" : "Show chat transcript"}
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpen((v) => !v);
+            }}
+            className="flex h-9 w-9 items-center justify-center rounded-md hover:bg-surface-2"
+          >
+            <Chevron open={open} />
+          </button>
+        </td>
       </tr>
+      {open && (
+        <tr className="hidden md:table-row">
+          <td colSpan={6} className="p-0">
+            <ChatDetailPanel chatId={chat.id} />
+          </td>
+        </tr>
+      )}
 
       {/* Mobile card */}
       <tr className="md:hidden">
-        <td colSpan={5} className="border-t border-line px-4 py-3">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-sm font-medium text-ink">{started.date}</span>
-            <span className="text-sm text-ink-3">{started.time}</span>
-            <OutcomeBadge outcome={chat.outcome} />
-          </div>
-          <div className="mt-1 text-sm text-ink-2">
-            {chat.message_count} message{chat.message_count === 1 ? "" : "s"} · last active{" "}
-            {last.date} {last.time}
-          </div>
-          {chat.summary && (
-            <p className="mt-1 line-clamp-2 text-sm text-ink-2">{chat.summary}</p>
-          )}
+        <td colSpan={6} className="border-t border-line p-0">
+          <button
+            type="button"
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+            className="flex w-full items-start justify-between gap-3 px-4 py-3 text-left"
+          >
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-sm font-medium text-ink">{started.date}</span>
+                <span className="text-sm text-ink-3">{started.time}</span>
+                <OutcomeBadge outcome={chat.outcome} />
+              </div>
+              <div className="mt-1 text-sm text-ink-2">
+                {chat.message_count} message{chat.message_count === 1 ? "" : "s"} · last active{" "}
+                {last.date} {last.time}
+              </div>
+              {chat.summary && (
+                <p className="mt-1 line-clamp-2 text-sm text-ink-2">{chat.summary}</p>
+              )}
+            </div>
+            <span className="mt-1 shrink-0">
+              <Chevron open={open} />
+            </span>
+          </button>
+          {open && <ChatDetailPanel chatId={chat.id} />}
         </td>
       </tr>
     </>
@@ -102,7 +252,7 @@ function SkeletonRows() {
     <tbody>
       {Array.from({ length: 6 }).map((_, i) => (
         <tr key={i} className="border-t border-line">
-          <td colSpan={5} className="px-4 py-3 sm:px-6">
+          <td colSpan={6} className="px-4 py-3 sm:px-6">
             <div className="flex animate-pulse items-center gap-4">
               <div className="h-4 w-32 rounded bg-surface-2" />
               <div className="h-4 w-28 rounded bg-surface-2" />
@@ -121,7 +271,7 @@ function EmptyState({ filtered }: { filtered: boolean }) {
   return (
     <tbody>
       <tr className="border-t border-line">
-        <td colSpan={5}>
+        <td colSpan={6}>
           <div className="flex flex-col items-center gap-2 px-6 py-16 text-center">
             <p className="font-display text-base font-semibold text-ink">
               {filtered ? "No chats match these filters" : "No chats yet"}
@@ -142,7 +292,7 @@ function ErrorState({ message, onRetry }: { message: string; onRetry: () => void
   return (
     <tbody>
       <tr className="border-t border-line">
-        <td colSpan={5}>
+        <td colSpan={6}>
           <div className="flex flex-col items-center gap-3 px-6 py-16 text-center">
             <p className="font-display text-base font-semibold text-ink">
               Couldn&apos;t load chats
@@ -288,6 +438,7 @@ export default function ChatLog() {
               <th className="px-4 py-3">Messages</th>
               <th className="px-4 py-3">Outcome</th>
               <th className="px-4 py-3">Summary</th>
+              <th className="px-4 py-3" />
             </tr>
           </thead>
           {loading ? (

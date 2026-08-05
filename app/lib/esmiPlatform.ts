@@ -89,6 +89,34 @@ export type ChatsQuery = {
   to_date?: string; // YYYY-MM-DD
 };
 
+/* Chat transcript detail (GET /platform/chats/{id}) — read straight off the
+   live LangGraph Postgres checkpointer server-side; see
+   platform_api/chats.py. Timestamp is per graph-step (the checkpoint a
+   message first appeared in), not per message — the checkpointer carries
+   nothing finer-grained than that. */
+export type ChatMessageRole = "user" | "assistant";
+
+export type ChatMessage = {
+  role: ChatMessageRole;
+  content: string;
+  timestamp: string | null;
+};
+
+export type ChatDetail = {
+  tenant_id: string;
+  id: string;
+  thread_id: string;
+  channel: string;
+  started_at: string | null;
+  // Note: the detail endpoint's field is last_active_at, not last_at like
+  // the list endpoint — the two were named independently on the backend.
+  last_active_at: string | null;
+  message_count: number;
+  outcome: ChatOutcome | null;
+  summary: string | null;
+  messages: ChatMessage[];
+};
+
 export type OverviewBucket = {
   from: string;
   to: string;
@@ -688,6 +716,14 @@ export async function fetchChats(q: ChatsQuery): Promise<ChatsResponse> {
     }
     throw new Error(detail);
   }
+  return res.json();
+}
+
+export async function fetchChatDetail(chatId: string): Promise<ChatDetail> {
+  const res = await fetch(`/api/platform/chats/${encodeURIComponent(chatId)}`, {
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
   return res.json();
 }
 
