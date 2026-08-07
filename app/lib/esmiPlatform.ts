@@ -478,34 +478,49 @@ export async function fetchVoicePreview(
 }
 
 /* ── Voice Studio "Apply to live Esmi" (POST /platform/voice/apply) ─────────
-   Pushes the tenant's already-SAVED voice_id/speed onto their live VAPI
-   assistant — reuses scripts/sync_vapi_voice.py's plan/apply logic
-   server-side (vapi_voice_sync.py), never called with client-supplied
-   voice data. Same hard allow-list as the CLI (vapi_voice_sync.
-   SYNC_ALLOWED_TENANTS); VOICE_SYNC_ALLOWED_TENANTS below is a UI-only
-   mirror of that Python constant so the button can be disabled/explained
-   BEFORE a 403 round-trip, not a second source of truth for what the
-   backend actually enforces — the backend check is authoritative and this
-   list existing out of sync with it fails safe (worst case: an enabled
-   button that still 403s, never a disabled one hiding a working tenant). */
+   Pushes the tenant's already-SAVED voice_id/speed, and (when set) greeting,
+   onto their live VAPI assistant — reuses vapi_voice_sync.py's plan/apply
+   logic server-side, never called with client-supplied voice/greeting data.
+   Same hard allow-list as the CLI (vapi_voice_sync.SYNC_ALLOWED_TENANTS);
+   VOICE_SYNC_ALLOWED_TENANTS below is a UI-only mirror of that Python
+   constant so the button can be disabled/explained BEFORE a 403 round-trip,
+   not a second source of truth for what the backend actually enforces —
+   the backend check is authoritative and this list existing out of sync
+   with it fails safe (worst case: an enabled button that still 403s, never
+   a disabled one hiding a working tenant).
+
+   voice and greeting are two independent PATCH targets on the same VAPI
+   assistant (assistant.voice vs. assistant.firstMessage) — a tenant can
+   have one saved without the other, so `greeting` is null on every
+   assistant whenever TenantConfig.greeting is empty (untouched, not
+   attempted), while `voice` is always present (voice_id is required to
+   call this endpoint at all). */
 export const VOICE_SYNC_ALLOWED_TENANTS = ["otro-nivel", "coastline-condos"] as const;
 
-export type VoiceSyncAssistantResult = {
-  assistant_id: string;
-  name: string;
-  before: Record<string, unknown> | null;
-  after: Record<string, unknown> | null;
+export type VoiceSyncFieldResult = {
+  before: unknown | null;
+  after: unknown | null;
   changed: boolean | null;
   applied: boolean;
   verified: boolean | null;
   error: string | null;
 };
 
+export type VoiceSyncAssistantResult = {
+  assistant_id: string;
+  name: string;
+  voice: VoiceSyncFieldResult;
+  greeting: VoiceSyncFieldResult | null;
+};
+
 export type VoiceSyncResponse = {
   tenant_id: string;
+  // Flattened from the first assistant for the common single-assistant
+  // case — `assistants` below is the source of truth for a tenant with
+  // more than one.
   assistant_id: string | null;
-  before: Record<string, unknown> | null;
-  after: Record<string, unknown> | null;
+  voice: VoiceSyncFieldResult | null;
+  greeting: VoiceSyncFieldResult | null;
   assistants: VoiceSyncAssistantResult[];
   applied: boolean;
   dry_run: boolean;
