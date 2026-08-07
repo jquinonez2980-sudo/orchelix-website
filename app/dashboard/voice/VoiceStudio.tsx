@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
 import {
+  applyVoiceSync,
   fetchConfig,
   updateConfig,
   VOICE_SPEED_MAX,
   VOICE_SPEED_MIN,
+  VOICE_SYNC_ALLOWED_TENANTS,
   type ConfigResponse,
   type ConfigUpdate,
   type LanguagePref,
@@ -113,6 +115,9 @@ export default function VoiceStudio() {
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [savedAt, setSavedAt] = useState<number | null>(null);
+  const [applying, setApplying] = useState(false);
+  const [applyError, setApplyError] = useState<string | null>(null);
+  const [applyMessage, setApplyMessage] = useState<string | null>(null);
   const orgSlug = useActiveOrgSlug();
 
   const load = () => {
@@ -169,6 +174,14 @@ export default function VoiceStudio() {
   const previewText = form.greeting.trim() || placeholderGreeting(form.company_name, form.language_pref);
   const wordCount = form.greeting.trim() ? form.greeting.trim().split(/\s+/).length : 0;
 
+  const tenantSyncAllowed =
+    !!orgSlug && (VOICE_SYNC_ALLOWED_TENANTS as readonly string[]).includes(orgSlug);
+  // Apply pushes whatever is currently SAVED (server reads voice_id/speed
+  // from the tenant's own config, never from this form) — so it must be
+  // impossible to click while there's an unsaved draft the button's own
+  // "live Esmi updated" promise wouldn't actually cover yet.
+  const applyDisabled = dirty || applying || !tenantSyncAllowed || !form.voice_id;
+
   const handleSave = async () => {
     setSaving(true);
     setSaveError(null);
@@ -184,10 +197,28 @@ export default function VoiceStudio() {
       setData(result);
       setForm(structuredClone(result.config));
       setSavedAt(Date.now());
+      // A fresh save invalidates whatever the last Apply reported — it was
+      // about a now-superseded saved state.
+      setApplyMessage(null);
+      setApplyError(null);
     } catch (e) {
       setSaveError(e instanceof Error ? e.message : "Save failed");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleApply = async () => {
+    setApplying(true);
+    setApplyError(null);
+    setApplyMessage(null);
+    try {
+      const result = await applyVoiceSync();
+      setApplyMessage(result.message);
+    } catch (e) {
+      setApplyError(e instanceof Error ? e.message : "Apply failed");
+    } finally {
+      setApplying(false);
     }
   };
 
@@ -317,14 +348,37 @@ export default function VoiceStudio() {
           >
             {saving ? "Saving…" : "Save voice settings"}
           </button>
+
+          <button
+            type="button"
+            disabled={applyDisabled}
+            onClick={handleApply}
+            title={
+              !tenantSyncAllowed
+                ? "Voice sync isn't enabled for this business yet — ask Orchelix."
+                : dirty
+                  ? "Save your changes first."
+                  : !form.voice_id
+                    ? "Choose a voice first."
+                    : undefined
+            }
+            className="rounded-md border border-teal-600 px-4 py-2 text-sm font-medium text-teal-700 hover:bg-teal-50 disabled:cursor-not-allowed disabled:border-line disabled:text-ink-4 disabled:hover:bg-transparent"
+          >
+            {applying ? "Applying…" : "Apply to live Esmi"}
+          </button>
+
           {saveError && <span className="text-sm text-rose-600">{saveError}</span>}
-          {!saveError && savedAt && !dirty && (
+          {!saveError && savedAt && !dirty && !applyMessage && !applyError && (
             <span className="text-sm text-teal-700">Saved.</span>
           )}
           {dirty && !saving && <span className="text-sm text-ink-4">Unsaved changes</span>}
+          {applyError && <span className="text-sm text-rose-600">{applyError}</span>}
+          {applyMessage && <span className="text-sm text-teal-700">{applyMessage}</span>}
+
           <span className="basis-full text-xs text-ink-4 sm:basis-auto sm:ml-auto sm:max-w-xs sm:text-right">
-            Saving here doesn&apos;t change what callers hear yet — an Orchelix team member pushes
-            voice changes to your live phone number separately.
+            {tenantSyncAllowed
+              ? "Save writes your settings. Apply to live Esmi is the separate step that pushes them to your phone number — it never happens automatically on Save."
+              : "Saving here doesn't change what callers hear yet — voice sync isn't enabled for this business yet, so an Orchelix team member pushes voice changes to your live phone number separately."}
           </span>
         </div>
       </div>
