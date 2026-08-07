@@ -15,5 +15,7 @@ export async function GET(req: NextRequest) {
     "outcome",
     "from_date",
     "to_date",
+    "language",
+    "has_recording",
   ]);
 }

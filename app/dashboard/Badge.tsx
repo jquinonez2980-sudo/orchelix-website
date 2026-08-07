@@ -3,7 +3,7 @@
    status, Usage/Billing plan soft-limit status, Admin) instead of every
    page hand-rolling its own badge markup and color choice. */
 
-export type BadgeTone = "neutral" | "positive" | "warning" | "negative" | "info";
+export type BadgeTone = "neutral" | "positive" | "warning" | "negative" | "info" | "violet";
 
 const TONE_CLASSES: Record<BadgeTone, string> = {
   neutral: "bg-surface-2 text-ink-3 border-line",
@@ -11,6 +11,10 @@ const TONE_CLASSES: Record<BadgeTone, string> = {
   warning: "bg-amber-50 text-amber-800 border-amber-200",
   negative: "bg-rose-50 text-rose-700 border-rose-200",
   info: "bg-navy-50 text-navy-600 border-navy-200",
+  // Voicemail's dedicated tone (docs/ESMI_DASHBOARD_UX.md Section 5.2's
+  // disposition color spec) — distinct from `info` (navy) and `neutral`
+  // (gray) so it reads as its own category, not a variant of either.
+  violet: "bg-violet-50 text-violet-700 border-violet-200",
 };
 
 export function Badge({

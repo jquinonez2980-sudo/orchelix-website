@@ -24,6 +24,11 @@ export type CallTranscript = {
   messages?: TranscriptMessage[];
 } | null;
 
+// "en" | "es" from platform_api.call_log._detect_language's heuristic, or
+// null for calls logged before the language column existed / with no
+// transcript to detect from ("Unknown" in the dashboard).
+export type CallLanguage = "en" | "es";
+
 export type PlatformCall = {
   id: string;
   vapi_call_id: string | null;
@@ -32,6 +37,7 @@ export type PlatformCall = {
   ended_at: string | null;
   duration_sec: number | null;
   outcome: CallOutcome | null;
+  language: CallLanguage | null;
   summary: string | null;
   transcript: CallTranscript;
   recording_url: string | null;
@@ -53,6 +59,13 @@ export type CallsQuery = {
   outcome?: CallOutcome | "";
   from_date?: string; // YYYY-MM-DD
   to_date?: string; // YYYY-MM-DD
+  language?: CallLanguage | "";
+  has_recording?: boolean;
+};
+
+export type CallDetailResponse = {
+  tenant_id: string;
+  call: PlatformCall;
 };
 
 /* Web chat sessions (chat_sessions table) — metadata only, no transcript.
@@ -848,6 +861,8 @@ export async function fetchCalls(q: CallsQuery): Promise<CallsResponse> {
   if (q.outcome) params.set("outcome", q.outcome);
   if (q.from_date) params.set("from_date", q.from_date);
   if (q.to_date) params.set("to_date", q.to_date);
+  if (q.language) params.set("language", q.language);
+  if (q.has_recording !== undefined) params.set("has_recording", String(q.has_recording));
 
   const res = await fetch(`/api/platform/calls?${params}`, {
     cache: "no-store",
@@ -863,6 +878,14 @@ export async function fetchCalls(q: CallsQuery): Promise<CallsResponse> {
     }
     throw new Error(detail);
   }
+  return res.json();
+}
+
+export async function fetchCallDetail(callId: string): Promise<CallDetailResponse> {
+  const res = await fetch(`/api/platform/calls/${encodeURIComponent(callId)}`, {
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
   return res.json();
 }
 

@@ -5,6 +5,7 @@ import {
   CALL_OUTCOMES,
   fetchCallRecordingExport,
   fetchCalls,
+  type CallLanguage,
   type CallOutcome,
   type CallsResponse,
   type PlatformCall,
@@ -52,18 +53,33 @@ function fmtCaller(e164: string | null): string {
 // (see globals.css), not an Esmi/Orchelix color; using it here was a
 // branding leak, same issue fixed on Team's "Pending" badge. warning (amber)
 // reads correctly as "needs attention" without the collision.
+//
+// Disposition colors per docs/ESMI_DASHBOARD_UX.md Section 5.2: Booked =
+// teal, Info = slate, Escalated = amber, Missed = red, Voicemail = violet.
+// "abandoned" (the outcome vocabulary's actual value — see
+// platform_api/call_log.py's OUTCOMES) is the spec's "Missed" concept, and
+// "other" isn't one of the spec's five — kept neutral as a reasonable
+// fallback for whatever it turns out to mean on a given call.
 const OUTCOME_STYLE: Record<string, { label: string; tone: BadgeTone }> = {
-  booked: { label: "Booked", tone: "positive" },
-  escalated: { label: "Escalated", tone: "warning" },
-  info: { label: "Info", tone: "info" },
-  voicemail: { label: "Voicemail", tone: "neutral" },
-  abandoned: { label: "Abandoned", tone: "neutral" },
+  booked: { label: "Booked", tone: "positive" }, // teal
+  escalated: { label: "Escalated", tone: "warning" }, // amber
+  info: { label: "Info", tone: "neutral" }, // slate
+  voicemail: { label: "Voicemail", tone: "violet" },
+  abandoned: { label: "Missed", tone: "negative" }, // red
   other: { label: "Other", tone: "neutral" },
 };
 
 function OutcomeBadge({ outcome }: { outcome: CallOutcome | null }) {
   const s = OUTCOME_STYLE[outcome ?? "other"] ?? OUTCOME_STYLE.other;
   return <Badge tone={s.tone}>{s.label}</Badge>;
+}
+
+/* ── language ────────────────────────────────────────────────────────────── */
+
+const LANGUAGE_LABEL: Record<string, string> = { en: "English", es: "Spanish" };
+
+function fmtLanguage(lang: CallLanguage | null): string {
+  return lang ? (LANGUAGE_LABEL[lang] ?? lang) : "Unknown";
 }
 
 /* ── transcript ──────────────────────────────────────────────────────────── */
@@ -268,6 +284,9 @@ function CallRow({ call }: { call: PlatformCall }) {
           <td className="whitespace-nowrap px-4 py-3 text-sm tabular-nums text-ink-2">
             {fmtDuration(call.duration_sec)}
           </td>
+          <td className="whitespace-nowrap px-4 py-3 text-sm text-ink-2">
+            {fmtLanguage(call.language)}
+          </td>
           <td className="whitespace-nowrap px-4 py-3">
             <OutcomeBadge outcome={call.outcome} />
           </td>
@@ -291,7 +310,7 @@ function CallRow({ call }: { call: PlatformCall }) {
         </tr>
         {open && (
           <tr className="hidden md:table-row">
-            <td colSpan={6} className="p-0">
+            <td colSpan={7} className="p-0">
               <CallDetail call={call} />
             </td>
           </tr>
@@ -301,7 +320,7 @@ function CallRow({ call }: { call: PlatformCall }) {
       {/* Mobile card */}
       <tbody className="md:hidden">
         <tr>
-          <td colSpan={6} className="border-t border-line p-0">
+          <td colSpan={7} className="border-t border-line p-0">
             <button
               type="button"
               aria-expanded={open}
@@ -317,6 +336,7 @@ function CallRow({ call }: { call: PlatformCall }) {
                 <div className="mt-1 flex items-center gap-3 text-sm text-ink-2">
                   <span className="font-mono">{fmtCaller(call.caller)}</span>
                   <span className="tabular-nums">{fmtDuration(call.duration_sec)}</span>
+                  <span>{fmtLanguage(call.language)}</span>
                 </div>
                 {call.summary && (
                   <p className="mt-1 line-clamp-2 text-sm text-ink-2">{call.summary}</p>
@@ -341,7 +361,7 @@ function SkeletonRows() {
     <tbody>
       {Array.from({ length: 6 }).map((_, i) => (
         <tr key={i} className="border-t border-line">
-          <td colSpan={6} className="px-4 py-3 sm:px-6">
+          <td colSpan={7} className="px-4 py-3 sm:px-6">
             <div className="flex animate-pulse items-center gap-4">
               <div className="h-4 w-32 rounded bg-surface-2" />
               <div className="h-4 w-28 rounded bg-surface-2" />
@@ -360,14 +380,14 @@ function EmptyState({ filtered }: { filtered: boolean }) {
   return (
     <tbody>
       <tr className="border-t border-line">
-        <td colSpan={6}>
+        <td colSpan={7}>
           <div className="flex flex-col items-center gap-2 px-6 py-16 text-center">
             <p className="font-display text-base font-semibold text-ink">
               {filtered ? "No calls match these filters" : "No calls yet"}
             </p>
             <p className="max-w-sm text-sm text-ink-3">
               {filtered
-                ? "Try widening the date range or clearing the outcome filter."
+                ? "Try widening the date range or clearing a filter."
                 : "When Esmi answers your phone line, every call will show up here with its outcome, summary, and recording."}
             </p>
           </div>
@@ -381,7 +401,7 @@ function ErrorState({ message, onRetry }: { message: string; onRetry: () => void
   return (
     <tbody>
       <tr className="border-t border-line">
-        <td colSpan={6}>
+        <td colSpan={7}>
           <div className="flex flex-col items-center gap-3 px-6 py-16 text-center">
             <p className="font-display text-base font-semibold text-ink">
               Couldn&apos;t load calls
@@ -407,6 +427,8 @@ export default function CallLog() {
   const [outcome, setOutcome] = useState<CallOutcome | "">("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [language, setLanguage] = useState<CallLanguage | "">("");
+  const [hasRecording, setHasRecording] = useState<"" | "true" | "false">("");
   const [page, setPage] = useState(0);
 
   const [data, setData] = useState<CallsResponse | null>(null);
@@ -415,7 +437,7 @@ export default function CallLog() {
   const [reloadKey, setReloadKey] = useState(0);
   const orgSlug = useActiveOrgSlug();
 
-  const filtered = Boolean(outcome || fromDate || toDate);
+  const filtered = Boolean(outcome || fromDate || toDate || language || hasRecording);
 
   useEffect(() => {
     let active = true;
@@ -427,6 +449,8 @@ export default function CallLog() {
       outcome,
       from_date: fromDate,
       to_date: toDate,
+      language,
+      has_recording: hasRecording === "" ? undefined : hasRecording === "true",
     })
       .then((d) => {
         if (!active) return;
@@ -441,7 +465,7 @@ export default function CallLog() {
     return () => {
       active = false;
     };
-  }, [orgSlug, outcome, fromDate, toDate, page, reloadKey]);
+  }, [orgSlug, outcome, fromDate, toDate, language, hasRecording, page, reloadKey]);
 
   const totalPages = useMemo(
     () => (data ? Math.max(1, Math.ceil(data.total / PAGE_SIZE)) : 1),
@@ -452,6 +476,8 @@ export default function CallLog() {
     setOutcome("");
     setFromDate("");
     setToDate("");
+    setLanguage("");
+    setHasRecording("");
     setPage(0);
   }, []);
 
@@ -507,6 +533,36 @@ export default function CallLog() {
             className={inputCls}
           />
         </label>
+        <label className="flex flex-col gap-1 text-xs font-medium text-ink-3">
+          Language
+          <select
+            value={language}
+            onChange={(e) => {
+              setLanguage(e.target.value as CallLanguage | "");
+              setPage(0);
+            }}
+            className={inputCls}
+          >
+            <option value="">All languages</option>
+            <option value="en">English</option>
+            <option value="es">Spanish</option>
+          </select>
+        </label>
+        <label className="flex flex-col gap-1 text-xs font-medium text-ink-3">
+          Recording
+          <select
+            value={hasRecording}
+            onChange={(e) => {
+              setHasRecording(e.target.value as "" | "true" | "false");
+              setPage(0);
+            }}
+            className={inputCls}
+          >
+            <option value="">Any</option>
+            <option value="true">Has recording</option>
+            <option value="false">No recording</option>
+          </select>
+        </label>
         {filtered && (
           <button
             type="button"
@@ -526,6 +582,7 @@ export default function CallLog() {
               <th className="px-4 py-3 sm:px-6">Time</th>
               <th className="px-4 py-3">Caller</th>
               <th className="px-4 py-3">Duration</th>
+              <th className="px-4 py-3">Language</th>
               <th className="px-4 py-3">Outcome</th>
               <th className="px-4 py-3">Summary</th>
               <th className="px-4 py-3" />
