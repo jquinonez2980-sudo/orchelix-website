@@ -10,15 +10,18 @@ import { useEffect, useRef, useState } from "react";
    text-ink, Tailwind design tokens); this page runs the dark esmi-dark
    glassmorphism theme (inline styles, cyan/purple, --esmi-* vars) that
    EsmiHero/EsmiChat below already use. "Same player DNA" means the same
-   interaction pattern (large play button, waveform, progress, meta line,
-   states, outdated-on-change, space-to-play) — not the literal React
-   component, which has nowhere compatible to render its own styling.
+   interaction pattern (play/pause, progress, meta line, states,
+   outdated-on-change, space-to-play) — not the literal React component,
+   which has nowhere compatible to render its own styling.
 
    Only a fixed sample_id + language ever get sent — no free-text input
    exists anywhere in this component, matching the public preview
    endpoint's own contract (it has no `text` field to send one to). */
 
 const CYAN = "#00F0FF";
+const TEXT = "#EAF2FF";
+const MUTED = "rgba(234,242,255,0.52)";
+const FAINT = "rgba(234,242,255,0.38)";
 
 type Lang = "en" | "es";
 type Status = "idle" | "loading" | "playing" | "paused" | "error";
@@ -47,7 +50,19 @@ type PreviewResponse = {
   watermark: string;
 };
 
-const BAR_COUNT = 16;
+/* The waveform doubles as the progress track: a fixed, non-animated
+   silhouette whose played portion fills teal. Heights are derived from a
+   deterministic formula (never Math.random) so server and client render
+   byte-identical markup and hydration stays quiet. */
+const WAVE = Array.from({ length: 56 }, (_, i) => {
+  const a = Math.abs(Math.sin(i * 1.31) * Math.cos(i * 0.47));
+  const b = Math.abs(Math.sin(i * 0.19 + 1.2));
+  // Taper the very edges so the silhouette reads as a clip, not a crop.
+  const edge = Math.min(1, Math.min(i, 55 - i) / 5 + 0.45);
+  return Math.round((0.24 + 0.76 * (a * 0.65 + b * 0.35)) * edge * 100);
+});
+
+const SEEK_STEP_SEC = 5;
 
 function fmtTime(sec: number): string {
   if (!Number.isFinite(sec) || sec < 0) sec = 0;
@@ -68,6 +83,7 @@ export default function PublicVoicePreview() {
   const [currentTime, setCurrentTime] = useState(0);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const scrubRef = useRef<HTMLDivElement | null>(null);
 
   const sample = SAMPLES.find((s) => s.id === sampleId) ?? SAMPLES[0];
   const paramsKey = `${sampleId}:${language}`;
@@ -134,23 +150,59 @@ export default function PublicVoicePreview() {
     load();
   };
 
+  const seekable = Boolean(audioUrl) && duration > 0 && !outdated;
+
+  const seekTo = (sec: number) => {
+    const el = audioRef.current;
+    if (!el || !seekable) return;
+    const next = Math.max(0, Math.min(duration, sec));
+    el.currentTime = next;
+    setCurrentTime(next);
+  };
+
+  const handleScrubClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rail = scrubRef.current;
+    if (!rail || !seekable) return;
+    const rect = rail.getBoundingClientRect();
+    if (rect.width <= 0) return;
+    seekTo(((e.clientX - rect.left) / rect.width) * duration);
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === " " || e.key === "Spacebar") {
       e.preventDefault();
       handleToggle();
+      return;
+    }
+    if (e.key === "ArrowRight") {
+      e.preventDefault();
+      seekTo(currentTime + SEEK_STEP_SEC);
+      return;
+    }
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      seekTo(currentTime - SEEK_STEP_SEC);
     }
   };
 
   const isEs = language === "es";
-  const progressPct = duration > 0 ? Math.min(100, (currentTime / duration) * 100) : 0;
-  const animated = status === "playing";
+  const ratio = duration > 0 ? Math.min(1, Math.max(0, currentTime / duration)) : 0;
+  const sampleLabel = isEs ? sample.labelEs : sample.label;
 
   let buttonLabel: string;
   if (status === "loading") buttonLabel = isEs ? "Preparando…" : "Preparing…";
-  else if (status === "playing") buttonLabel = isEs ? "Reproduciendo" : "Playing";
+  else if (status === "playing") buttonLabel = isEs ? "Pausar" : "Pause";
   else if (status === "error") buttonLabel = isEs ? "Reintentar" : "Retry";
   else if (outdated) buttonLabel = isEs ? "Volver a escuchar" : "Re-preview";
+  else if (status === "paused") buttonLabel = isEs ? "Reanudar" : "Resume";
   else buttonLabel = isEs ? "Escuchar" : "Preview";
+
+  let statusWord: string;
+  if (status === "loading") statusWord = isEs ? "Preparando" : "Preparing";
+  else if (status === "playing") statusWord = isEs ? "Reproduciendo" : "Playing";
+  else if (status === "paused") statusWord = isEs ? "En pausa" : "Paused";
+  else if (status === "error") statusWord = isEs ? "Error" : "Error";
+  else statusWord = isEs ? "Listo" : "Ready";
 
   return (
     <section
@@ -163,8 +215,9 @@ export default function PublicVoicePreview() {
         overflow: "hidden",
       }}
     >
-      <div className="mx-auto max-w-[880px] px-6 sm:px-8 lg:px-10" style={{ position: "relative" }}>
-        <div style={{ textAlign: "center", marginBottom: 40 }}>
+      <div className="mx-auto max-w-[820px] px-6 sm:px-8 lg:px-10" style={{ position: "relative" }}>
+        {/* ── Section head */}
+        <div style={{ textAlign: "center", marginBottom: 36 }}>
           <span
             style={{
               display: "inline-flex",
@@ -180,14 +233,14 @@ export default function PublicVoicePreview() {
             }}
           >
             <span style={{ width: 18, height: 1, background: "currentColor", opacity: 0.7, display: "inline-block" }} />
-            {isEs ? "Escucha antes de contratarla" : "Hear her before you hire her"}
+            {isEs ? "Vista previa de voz" : "Voice preview"}
           </span>
           <h2
             style={{
               fontFamily: "var(--font-display)",
               fontWeight: 600,
-              fontSize: "clamp(26px, 4vw, 38px)",
-              lineHeight: 1.15,
+              fontSize: "clamp(25px, 3.6vw, 34px)",
+              lineHeight: 1.18,
               letterSpacing: "-0.026em",
               color: "#fff",
               margin: "14px 0 0",
@@ -197,78 +250,83 @@ export default function PublicVoicePreview() {
           </h2>
         </div>
 
-        {/* Language toggle */}
-        <div style={{ display: "flex", justifyContent: "center", gap: 8, marginBottom: 24 }}>
-          {(["en", "es"] as Lang[]).map((l) => {
-            const active = language === l;
-            return (
-              <button
-                key={l}
-                type="button"
-                onClick={() => setLanguage(l)}
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: 12,
-                  fontWeight: 600,
-                  letterSpacing: "0.08em",
-                  padding: "8px 16px",
-                  borderRadius: 999,
-                  border: `1px solid ${active ? "rgba(0,240,255,0.5)" : "rgba(255,255,255,0.14)"}`,
-                  background: active ? "rgba(0,240,255,0.10)" : "rgba(255,255,255,0.03)",
-                  color: active ? CYAN : "rgba(234,242,255,0.55)",
-                  cursor: "pointer",
-                }}
-              >
-                {l.toUpperCase()}
-              </button>
-            );
-          })}
+        {/* ── Control row: industry pills · language segmented control */}
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+          <div className="flex flex-wrap gap-2" role="group" aria-label={isEs ? "Tipo de negocio" : "Business type"}>
+            {SAMPLES.map((s) => {
+              const active = s.id === sampleId;
+              return (
+                <button
+                  key={s.id}
+                  type="button"
+                  onClick={() => setSampleId(s.id)}
+                  aria-pressed={active}
+                  className="epv-pill rounded-full px-3.5 py-2.5 sm:py-2"
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: 13,
+                    fontWeight: 500,
+                    lineHeight: 1.1,
+                    border: `1px solid ${active ? "rgba(255,255,255,0.26)" : "rgba(255,255,255,0.10)"}`,
+                    background: active ? "rgba(255,255,255,0.09)" : "transparent",
+                    color: active ? TEXT : MUTED,
+                    cursor: "pointer",
+                  }}
+                >
+                  {isEs ? s.labelEs : s.label}
+                </button>
+              );
+            })}
+          </div>
+
+          <div
+            role="group"
+            aria-label={isEs ? "Idioma" : "Language"}
+            className="flex shrink-0 self-start rounded-lg p-0.5 sm:self-auto"
+            style={{ border: "1px solid rgba(255,255,255,0.10)", background: "rgba(255,255,255,0.03)" }}
+          >
+            {(["en", "es"] as Lang[]).map((l) => {
+              const active = language === l;
+              return (
+                <button
+                  key={l}
+                  type="button"
+                  onClick={() => setLanguage(l)}
+                  aria-pressed={active}
+                  className="epv-seg rounded-[6px] px-3 py-2 sm:py-1.5"
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: 11,
+                    fontWeight: 500,
+                    letterSpacing: "0.10em",
+                    lineHeight: 1.1,
+                    border: "none",
+                    background: active ? "rgba(255,255,255,0.10)" : "transparent",
+                    color: active ? TEXT : FAINT,
+                    cursor: "pointer",
+                  }}
+                >
+                  {l.toUpperCase()}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Industry chips */}
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", marginBottom: 28 }}>
-          {SAMPLES.map((s) => {
-            const active = s.id === sampleId;
-            return (
-              <button
-                key={s.id}
-                type="button"
-                onClick={() => setSampleId(s.id)}
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontSize: 13.5,
-                  fontWeight: 500,
-                  padding: "9px 16px",
-                  borderRadius: 999,
-                  border: `1px solid ${active ? "rgba(0,240,255,0.5)" : "rgba(255,255,255,0.12)"}`,
-                  background: active ? "rgba(0,240,255,0.10)" : "rgba(255,255,255,0.04)",
-                  color: active ? "#fff" : "rgba(234,242,255,0.7)",
-                  cursor: "pointer",
-                  backdropFilter: "blur(8px)",
-                }}
-              >
-                {isEs ? s.labelEs : s.label}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Player */}
+        {/* ── Player bar */}
         <div
           role="group"
-          aria-label="Esmi voice preview player"
+          aria-label={isEs ? "Reproductor de vista previa de voz" : "Esmi voice preview player"}
+          aria-keyshortcuts="Space ArrowLeft ArrowRight"
           tabIndex={0}
           onKeyDown={handleKeyDown}
+          className="rounded-2xl px-4 py-4 sm:px-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00F0FF]"
           style={{
-            borderRadius: 20,
-            border: "1px solid rgba(0,240,255,0.18)",
-            background: "rgba(255,255,255,0.03)",
-            boxShadow:
-              "0 0 0 1px rgba(255,255,255,0.04) inset, 0 30px 80px -24px rgba(0,0,0,0.7), 0 0 60px -20px rgba(0,240,255,0.30)",
+            border: "1px solid rgba(255,255,255,0.09)",
+            background: "rgba(255,255,255,0.035)",
+            boxShadow: "0 1px 0 rgba(255,255,255,0.05) inset, 0 24px 60px -34px rgba(0,0,0,0.9)",
             backdropFilter: "blur(20px)",
             WebkitBackdropFilter: "blur(20px)",
-            padding: "28px 28px 24px",
-            outline: "none",
           }}
         >
           {audioUrl && (
@@ -292,140 +350,157 @@ export default function PublicVoicePreview() {
             />
           )}
 
-          <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+          <div className="flex items-center gap-3.5 sm:gap-4">
+            {/* Play / pause — the only saturated element in the bar */}
             <button
               type="button"
               onClick={handleToggle}
               disabled={status === "loading"}
               aria-label={buttonLabel}
+              className="epv-play flex size-11 shrink-0 items-center justify-center rounded-full"
               style={{
-                width: 56,
-                height: 56,
-                borderRadius: "50%",
-                flexShrink: 0,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                border: "none",
+                border: status === "error" ? "1px solid rgba(248,113,113,0.45)" : "none",
                 cursor: status === "loading" ? "wait" : "pointer",
-                background:
-                  status === "error"
-                    ? "linear-gradient(135deg, #F87171 0%, #EF4444 100%)"
-                    : "linear-gradient(135deg, #00F0FF 0%, #38BDF8 100%)",
-                boxShadow:
-                  status === "error"
-                    ? "0 0 28px rgba(239,68,68,0.45)"
-                    : "0 0 28px rgba(0,240,255,0.45)",
-                transition: "transform 150ms ease",
+                background: status === "error" ? "rgba(248,113,113,0.12)" : CYAN,
+                color: status === "error" ? "#F87171" : "#04121A",
               }}
             >
               {status === "loading" ? (
                 <span
                   aria-hidden
+                  data-esmi-motion
                   style={{
-                    width: 20,
-                    height: 20,
+                    width: 16,
+                    height: 16,
                     borderRadius: "50%",
-                    border: "2px solid rgba(4,18,26,0.35)",
+                    border: "2px solid rgba(4,18,26,0.28)",
                     borderTopColor: "#04121A",
-                    animation: "esmi-sheen 800ms linear infinite",
+                    animation: "esmi-sheen 700ms linear infinite",
                   }}
                 />
               ) : status === "playing" ? (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="#04121A" aria-hidden="true">
-                  <rect x="6" y="5" width="4" height="14" rx="1" />
-                  <rect x="14" y="5" width="4" height="14" rx="1" />
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <rect x="6" y="5" width="4" height="14" rx="1.2" />
+                  <rect x="14" y="5" width="4" height="14" rx="1.2" />
                 </svg>
               ) : (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="#04121A" aria-hidden="true" style={{ marginLeft: 2 }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style={{ marginLeft: 2 }}>
                   <path d="M8 5v14l11-7z" />
                 </svg>
               )}
             </button>
 
             <div style={{ minWidth: 0, flex: 1 }}>
-              {/* Waveform */}
-              <div style={{ display: "flex", alignItems: "flex-end", gap: 3, height: 30 }} aria-hidden="true">
-                {Array.from({ length: BAR_COUNT }).map((_, i) => (
-                  <span
-                    key={i}
-                    data-esmi-motion
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      borderRadius: 2,
-                      background: i % 2 === 0 ? CYAN : "#A855F7",
-                      boxShadow: "0 0 6px rgba(0,240,255,0.35)",
-                      transformOrigin: "center",
-                      opacity: status === "error" ? 0.25 : 0.85,
-                      animation: animated
-                        ? `esmi-wave 900ms ease-in-out ${(i % 8) * 90}ms infinite`
-                        : status === "idle" || status === "paused"
-                          ? `esmi-wave-idle 2400ms ease-in-out ${(i % 8) * 120}ms infinite`
-                          : "none",
-                      transform: animated || status === "idle" || status === "paused" ? undefined : "scaleY(0.2)",
-                    }}
-                  />
-                ))}
+              {/* Waveform doubles as the progress track — static bars, teal fill, click to seek */}
+              <div
+                ref={scrubRef}
+                onClick={handleScrubClick}
+                role="progressbar"
+                aria-label={isEs ? "Progreso" : "Playback progress"}
+                aria-valuemin={0}
+                aria-valuemax={Math.max(1, Math.round(duration))}
+                aria-valuenow={Math.round(currentTime)}
+                aria-valuetext={`${fmtTime(currentTime)} / ${fmtTime(duration)}`}
+                className="epv-scrub flex items-center gap-px"
+                data-seekable={seekable}
+                style={{ height: 26, cursor: seekable ? "pointer" : "default" }}
+              >
+                {WAVE.map((h, i) => {
+                  const played = seekable && i / WAVE.length < ratio;
+                  return (
+                    <span
+                      key={i}
+                      className="epv-bar"
+                      style={{
+                        flex: 1,
+                        minWidth: 0,
+                        height: `${h}%`,
+                        borderRadius: 1,
+                        background: played ? CYAN : "var(--epv-rail)",
+                      }}
+                    />
+                  );
+                })}
               </div>
 
-              {/* Progress bar */}
-              <div style={{ marginTop: 10, height: 3, width: "100%", borderRadius: 999, background: "rgba(255,255,255,0.08)", overflow: "hidden" }}>
-                <div
+              {/* Quiet meta + time */}
+              <div className="mt-2 flex items-center justify-between gap-3">
+                <span
+                  className="truncate"
                   style={{
-                    height: "100%",
-                    borderRadius: 999,
-                    width: `${progressPct}%`,
-                    background: "linear-gradient(90deg, #00F0FF, #38BDF8)",
-                    transition: "width 150ms linear",
+                    fontFamily: "var(--font-mono)",
+                    fontSize: 10.5,
+                    letterSpacing: "0.11em",
+                    textTransform: "uppercase",
+                    color: status === "error" ? "rgba(248,113,113,0.75)" : FAINT,
                   }}
-                />
-              </div>
-              <div style={{ marginTop: 6, fontFamily: "var(--font-mono)", fontSize: 11, color: "rgba(234,242,255,0.4)" }}>
-                {fmtTime(currentTime)} / {fmtTime(duration)}
+                >
+                  {statusWord} · {sampleLabel} · {language.toUpperCase()}
+                </span>
+                <span
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: 11,
+                    color: FAINT,
+                    fontVariantNumeric: "tabular-nums",
+                    flexShrink: 0,
+                  }}
+                >
+                  {fmtTime(currentTime)} / {fmtTime(duration)}
+                </span>
               </div>
             </div>
           </div>
 
-          <p style={{ marginTop: 16, fontFamily: "var(--font-display)", fontSize: 14.5, fontWeight: 500, color: "#fff", margin: "16px 0 2px" }}>
-            {buttonLabel} — {isEs ? sample.labelEs : sample.label}
-          </p>
+          {/* Inline notices */}
           {outdated && status !== "loading" && (
-            <p style={{ fontFamily: "var(--font-display)", fontSize: 12.5, color: "#FBBF24", margin: "2px 0" }}>
+            <p style={{ fontFamily: "var(--font-display)", fontSize: 12.5, lineHeight: 1.5, color: "rgba(251,191,36,0.85)", margin: "12px 0 0" }}>
               {isEs
                 ? "Selección cambiada — pulsa reproducir para escuchar esta versión."
                 : "Selection changed — press play to hear this one."}
             </p>
           )}
           {status === "error" && errorMsg && (
-            <p role="alert" style={{ fontFamily: "var(--font-display)", fontSize: 12.5, color: "#F87171", margin: "2px 0" }}>
+            <p role="alert" style={{ fontFamily: "var(--font-display)", fontSize: 12.5, lineHeight: 1.5, color: "#F87171", margin: "12px 0 0" }}>
               {errorMsg}
             </p>
           )}
-          {text && (
-            <p style={{ fontFamily: "var(--font-display)", fontSize: 13, lineHeight: 1.6, color: "rgba(234,242,255,0.55)", margin: "10px 0 0", fontStyle: "italic" }}>
-              &ldquo;{text}&rdquo;
+
+          {/* Footer: transcript + watermark */}
+          <div style={{ marginTop: 16, paddingTop: 14, borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+            {text && (
+              <p
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontSize: 13.5,
+                  lineHeight: 1.65,
+                  color: "rgba(234,242,255,0.66)",
+                  borderLeft: "1px solid rgba(255,255,255,0.14)",
+                  paddingLeft: 12,
+                  margin: "0 0 12px",
+                }}
+              >
+                &ldquo;{text}&rdquo;
+              </p>
+            )}
+            <p style={{ fontFamily: "var(--font-display)", fontSize: 12, lineHeight: 1.5, color: FAINT, margin: 0 }}>
+              {watermark}
             </p>
-          )}
+          </div>
         </div>
 
-        {/* Watermark + CTAs */}
-        <p style={{ textAlign: "center", fontFamily: "var(--font-display)", fontSize: 12.5, color: "rgba(234,242,255,0.4)", margin: "18px 0 28px" }}>
-          {watermark}
-        </p>
-
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center" }}>
+        {/* ── CTAs */}
+        <div className="mt-7 flex flex-col gap-2.5 sm:flex-row sm:justify-center sm:gap-3">
           <a
             href="#demo"
+            className="epv-cta rounded-[10px] px-6 py-3.5 text-center sm:py-3"
             style={{
               fontFamily: "var(--font-display)",
               fontWeight: 500,
               fontSize: 14,
-              padding: "13px 24px",
-              borderRadius: 12,
               background: "rgba(255,255,255,0.05)",
-              border: "1px solid rgba(255,255,255,0.16)",
-              color: "rgba(234,242,255,0.88)",
+              border: "1px solid rgba(255,255,255,0.14)",
+              color: "rgba(234,242,255,0.85)",
               textDecoration: "none",
             }}
           >
@@ -433,16 +508,15 @@ export default function PublicVoicePreview() {
           </a>
           <a
             href="/get-started"
+            className="epv-cta rounded-[10px] px-6 py-3.5 text-center sm:py-3"
             style={{
               fontFamily: "var(--font-display)",
               fontWeight: 600,
               fontSize: 14,
-              padding: "13px 24px",
-              borderRadius: 12,
-              background: "linear-gradient(135deg, #00F0FF 0%, #38BDF8 100%)",
+              background: CYAN,
+              border: "1px solid transparent",
               color: "#04121A",
               textDecoration: "none",
-              boxShadow: "0 0 22px rgba(0,240,255,0.35)",
             }}
           >
             {isEs ? "Empezar prueba gratis →" : "Start free trial →"}

@@ -347,3 +347,38 @@ body {
   border-radius: 8px;
 }
 .esmi-scroll::-webkit-scrollbar-thumb:hover { background: rgba(0, 240, 255, 0.4); }
+
+/* ─── Public voice preview (try-esmi) ─────────────────────────────────────
+   Restrained control-bar chrome: ~150ms state transitions, no glow bloom.
+   Cyan is reserved for the play control and the played portion of the
+   waveform; every other affordance moves in white-alpha only.            */
+.epv-pill,
+.epv-seg,
+.epv-cta {
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+.epv-pill:hover,
+.epv-seg:hover {
+  background-color: rgba(255, 255, 255, 0.07);
+  color: #EAF2FF;
+}
+.epv-pill:hover { border-color: rgba(255, 255, 255, 0.22); }
+.epv-cta:hover { background-color: rgba(255, 255, 255, 0.09); border-color: rgba(255, 255, 255, 0.24); }
+/* The solid-teal CTA keeps its fill on hover — brighten instead of tint. */
+.epv-cta:last-child:hover { background-color: #5CF7FF; border-color: transparent; }
+
+.epv-play { transition: transform 150ms ease, filter 150ms ease; }
+.epv-play:hover:not(:disabled) { filter: brightness(1.08); transform: scale(1.04); }
+.epv-play:active:not(:disabled) { transform: scale(0.97); }
+
+/* Unplayed rail colour rides a custom property so the inline per-bar
+   background (which always wins over a stylesheet rule) can still respond
+   to :hover on the track. */
+.epv-scrub { --epv-rail: rgba(255, 255, 255, 0.15); }
+.epv-scrub[data-seekable="true"]:hover { --epv-rail: rgba(255, 255, 255, 0.24); }
+.epv-bar { transition: background-color 120ms linear; }
+
+@media (prefers-reduced-motion: reduce) {
+  .epv-pill, .epv-seg, .epv-cta, .epv-play, .epv-bar { transition: none; }
+  .epv-play:hover:not(:disabled), .epv-play:active:not(:disabled) { transform: none; }
+}
