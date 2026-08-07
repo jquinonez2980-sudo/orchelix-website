@@ -22,9 +22,9 @@ const inputCls =
   "w-full rounded-md border border-line bg-surface px-2.5 py-2 text-sm text-ink " +
   "focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500";
 
-/* Only one real entry: voice_library.py (Python backend) maps just
-   "esmi-default" to a real ElevenLabs voiceId today. The Section 3.3 8-voice
-   roster is a design placeholder — none of those ids exist in
+/* Four real entries: voice_library.py (Python backend) maps these to real
+   ElevenLabs voiceIds. The rest of the Section 3.3 8-voice roster is still a
+   design placeholder — none of those other ids exist in
    voice_library.VOICE_LIBRARY yet, and selecting one would 503 from
    POST /platform/voice/preview ("no ElevenLabs voice is mapped"). Add a row
    here only once its mapping is real and test-called (see that file's own
@@ -33,7 +33,30 @@ const VOICE_CATALOG = [
   {
     id: "esmi-default",
     name: "Esmi",
+    personality: "Current & Familiar",
     tagline: "The current Esmi voice — already live on your assistant.",
+    popular: false,
+  },
+  {
+    id: "sofia",
+    name: "Sofia",
+    personality: "Calm & Professional",
+    tagline: "Steady and reassuring — a calm, professional front desk voice.",
+    popular: true,
+  },
+  {
+    id: "ava",
+    name: "Ava",
+    personality: "Soft & Caring",
+    tagline: "Gentle and warm — puts callers at ease right away.",
+    popular: true,
+  },
+  {
+    id: "noah",
+    name: "Noah",
+    personality: "Neutral & Trustworthy",
+    tagline: "Even-keeled and dependable — a safe, professional default.",
+    popular: false,
   },
 ] as const;
 
@@ -64,12 +87,16 @@ function Section({
 function VoiceCard({
   selected,
   name,
+  personality,
   tagline,
+  popular,
   onSelect,
 }: {
   selected: boolean;
   name: string;
+  personality: string;
   tagline: string;
+  popular?: boolean;
   onSelect: () => void;
 }) {
   return (
@@ -90,7 +117,15 @@ function VoiceCard({
         {selected ? <Check className="h-4 w-4" strokeWidth={2.5} /> : name.charAt(0)}
       </div>
       <div className="min-w-0">
-        <p className="text-sm font-semibold text-ink">{name}</p>
+        <div className="flex items-center gap-1.5">
+          <p className="text-sm font-semibold text-ink">{name}</p>
+          {popular && (
+            <span className="rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-800">
+              Popular
+            </span>
+          )}
+        </div>
+        <p className="mt-0.5 text-xs font-medium text-teal-700">{personality}</p>
         <p className="mt-0.5 text-xs leading-5 text-ink-3">{tagline}</p>
       </div>
     </button>
@@ -257,7 +292,9 @@ export default function VoiceStudio() {
                 key={v.id}
                 selected={form.voice_id === v.id}
                 name={v.name}
+                personality={v.personality}
                 tagline={v.tagline}
+                popular={v.popular}
                 onSelect={() => setForm({ ...form, voice_id: v.id })}
               />
             ))}
