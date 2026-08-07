@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import {
   addKnowledgeEntry,
   deleteKnowledgeEntry,
@@ -8,11 +9,46 @@ import {
   testKnowledge,
   updateKnowledgeEntry,
   uploadKnowledgePdf,
+  KNOWLEDGE_LANGUAGES,
   MAX_PDF_MB,
   type KnowledgeEntry,
+  type KnowledgeLanguage,
   type KnowledgePdfEntry,
 } from "../../lib/esmiPlatform";
 import { Badge } from "../Badge";
+
+const LANGUAGE_LABEL: Record<KnowledgeLanguage, string> = {
+  en: "English",
+  es: "Spanish",
+  auto: "Auto",
+};
+
+const selectCls =
+  "h-9 rounded-md border border-line bg-surface px-2.5 text-sm text-ink " +
+  "focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500";
+
+function LanguageSelect({
+  value,
+  onChange,
+}: {
+  value: KnowledgeLanguage;
+  onChange: (v: KnowledgeLanguage) => void;
+}) {
+  return (
+    <select
+      className={selectCls}
+      value={value}
+      onChange={(e) => onChange(e.target.value as KnowledgeLanguage)}
+      aria-label="Language"
+    >
+      {KNOWLEDGE_LANGUAGES.map((lang) => (
+        <option key={lang} value={lang}>
+          {LANGUAGE_LABEL[lang]}
+        </option>
+      ))}
+    </select>
+  );
+}
 
 const inputCls =
   "w-full rounded-md border border-line bg-surface px-2.5 py-2 text-sm text-ink " +
@@ -96,6 +132,7 @@ function SubLabel({ children }: { children: React.ReactNode }) {
 function AddEntryForm({ onAdded }: { onAdded: (entry: KnowledgeEntry) => void }) {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
+  const [language, setLanguage] = useState<KnowledgeLanguage>("auto");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [justAdded, setJustAdded] = useState(false);
@@ -112,10 +149,12 @@ function AddEntryForm({ onAdded }: { onAdded: (entry: KnowledgeEntry) => void })
       const entry = await addKnowledgeEntry({
         question: question.trim() || undefined,
         answer: answer.trim(),
+        language,
       });
       onAdded(entry);
       setQuestion("");
       setAnswer("");
+      setLanguage("auto");
       setJustAdded(true);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to add entry");
@@ -155,6 +194,16 @@ function AddEntryForm({ onAdded }: { onAdded: (entry: KnowledgeEntry) => void })
             maxLength={4000}
           />
           <span className="self-end text-xs text-ink-4">{answer.length}/4000</span>
+        </label>
+        <label className={labelCls}>
+          Language
+          <LanguageSelect
+            value={language}
+            onChange={(v) => {
+              setLanguage(v);
+              setJustAdded(false);
+            }}
+          />
         </label>
       </div>
       <div className="mt-3 flex items-center gap-3">
@@ -197,10 +246,16 @@ function EntryRow({
   const [saving, setSaving] = useState(false);
   const [q, setQ] = useState(entry.question ?? "");
   const [a, setA] = useState(entry.answer);
+  // A never-set entry (null) defaults its edit field to "auto" rather than
+  // leaving the <select> on an unrepresentable value — saving without
+  // touching it turns that null into an explicit "auto", same as editing
+  // question/answer already rewrites the whole field, not a diff.
+  const [lang, setLang] = useState<KnowledgeLanguage>(entry.language ?? "auto");
 
   const startEdit = () => {
     setQ(entry.question ?? "");
     setA(entry.answer);
+    setLang(entry.language ?? "auto");
     setError(null);
     setEditing(true);
   };
@@ -212,6 +267,7 @@ function EntryRow({
       const updated = await updateKnowledgeEntry(entry.id, {
         question: q.trim() || undefined,
         answer: a,
+        language: lang,
       });
       onUpdated(updated);
       setEditing(false);
@@ -234,7 +290,8 @@ function EntryRow({
     }
   };
 
-  const dirty = q !== (entry.question ?? "") || a !== entry.answer;
+  const dirty =
+    q !== (entry.question ?? "") || a !== entry.answer || lang !== (entry.language ?? "auto");
 
   return (
     <div className="border-t border-line px-4 py-3 first:border-t-0 sm:px-6">
@@ -255,6 +312,7 @@ function EntryRow({
             placeholder="Answer"
             maxLength={4000}
           />
+          <LanguageSelect value={lang} onChange={setLang} />
           <div className="flex items-center gap-2">
             <button
               type="button"
@@ -277,9 +335,12 @@ function EntryRow({
       ) : (
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            {entry.question && (
-              <p className="text-sm font-medium text-ink">{entry.question}</p>
-            )}
+            <div className="flex flex-wrap items-center gap-2">
+              {entry.question && (
+                <p className="text-sm font-medium text-ink">{entry.question}</p>
+              )}
+              {entry.language && <Badge tone="neutral">{LANGUAGE_LABEL[entry.language]}</Badge>}
+            </div>
             <p className="mt-0.5 whitespace-pre-wrap text-sm text-ink-2">{entry.answer}</p>
             <p className="mt-1 text-xs text-ink-4">Added {fmtDate(entry.created_at)}</p>
           </div>
@@ -611,6 +672,13 @@ export default function KnowledgeManager() {
 
   return (
     <div className="space-y-6">
+      <p className="text-sm text-ink-3">
+        Looking to change your prices?{" "}
+        <Link href="/dashboard/settings" className="text-teal-700 hover:underline">
+          Manage prices in Settings →
+        </Link>
+      </p>
+
       <Section
         title="FAQs & notes"
         description="A question and answer works best (it matches how customers usually ask), but a plain note is fine too — just leave the question blank. Changes are searchable within about a minute."

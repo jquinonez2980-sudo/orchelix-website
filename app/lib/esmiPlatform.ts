@@ -634,10 +634,17 @@ export async function runQualityStudioScenario(
 
 /* ── Knowledge base (FAQ / text entries) ───────────────────────────────────── */
 
+export const KNOWLEDGE_LANGUAGES = ["en", "es", "auto"] as const;
+
+export type KnowledgeLanguage = (typeof KNOWLEDGE_LANGUAGES)[number];
+
 export type KnowledgeEntry = {
   id: string;
   question: string | null;
   answer: string;
+  // null = unspecified (never set, or created before this field existed) —
+  // a real, distinct state from explicitly choosing "auto".
+  language: KnowledgeLanguage | null;
   created_at: string;
 };
 
@@ -670,7 +677,7 @@ export async function fetchKnowledge(): Promise<KnowledgeListResponse> {
 }
 
 export async function addKnowledgeEntry(
-  entry: { question?: string; answer: string },
+  entry: { question?: string; answer: string; language?: KnowledgeLanguage | "" },
 ): Promise<KnowledgeEntry> {
   const res = await fetch("/api/platform/knowledge", {
     method: "POST",
@@ -687,7 +694,7 @@ export async function addKnowledgeEntry(
    disagree with the original archived in R2. */
 export async function updateKnowledgeEntry(
   id: string,
-  entry: { question?: string; answer: string },
+  entry: { question?: string; answer: string; language?: KnowledgeLanguage | "" },
 ): Promise<KnowledgeEntry> {
   const res = await fetch(`/api/platform/knowledge/${encodeURIComponent(id)}`, {
     method: "PUT",
