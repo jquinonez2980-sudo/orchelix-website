@@ -3,6 +3,7 @@ import Image from "next/image";
 import Nav from "../components/sections/Nav";
 import Footer from "../components/sections/Footer";
 import EsmiChat from "./EsmiChat";
+import PublicVoicePreview from "./PublicVoicePreview";
 import JsonLd from "../components/JsonLd";
 
 const SITE_URL = "https://www.orchelix.com";
@@ -109,6 +110,7 @@ export default async function TryEsmiPage({
       <Nav theme="dark" />
       <main id="top">
         <EsmiHero />
+        <PublicVoicePreview />
         <DemoStage tenantId={tenantId} companyName={companyName} />
         <Capabilities />
         <TrustStrip />
