@@ -325,6 +325,13 @@ export type ServiceSettings = {
   name_es: string;
 };
 
+// Voice Studio (docs/ESMI_DASHBOARD_UX.md Section 3.4). Range/values match
+// platform_api/config.py's _VOICE_SPEED_MIN/MAX and _LANGUAGE_PREFS exactly.
+export const VOICE_SPEED_MIN = 0.85;
+export const VOICE_SPEED_MAX = 1.15;
+export const LANGUAGE_PREFS = ["auto", "en", "es"] as const;
+export type LanguagePref = (typeof LANGUAGE_PREFS)[number];
+
 export type PlatformConfig = {
   company_name: string;
   /* IANA zone. Not a display string — it decides how business_hours are read
@@ -342,6 +349,13 @@ export type PlatformConfig = {
     booking_to: string;
     escalation_to: string;
   };
+  // Voice Studio. voice_id is a short id resolved server-side through
+  // voice_library.VOICE_LIBRARY (Python) — empty string means "not chosen
+  // yet". There is no separate greeting_es field on the backend; `greeting`
+  // above is the only saved greeting text regardless of language_pref.
+  voice_id: string;
+  speed: number;
+  language_pref: LanguagePref;
 };
 
 export type ConfigResponse = {
@@ -365,6 +379,9 @@ export type ConfigUpdate = Partial<{
   }>;
   services: Record<string, ServiceSettings>;
   emails: Partial<PlatformConfig["emails"]>;
+  voice_id: string;
+  speed: number;
+  language_pref: LanguagePref;
   expected_version: number;
 }>;
 
@@ -424,6 +441,38 @@ export async function fetchConfigVersions(): Promise<ConfigVersionsResponse> {
 
 export async function fetchConfigVersion(version: number): Promise<ConfigVersionDetail> {
   const res = await fetch(`/api/platform/config/versions/${version}`, { cache: "no-store" });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
+
+/* ── Voice Studio preview (POST /platform/voice/preview) ───────────────────
+   Mirrors platform_api/voice_preview.py's actual contract: tenant_id is NOT
+   in the body (the proxy injects X-Tenant-Id from the Clerk org, same as
+   every other /platform/* call) — that deviates from the illustrative
+   contract in docs/ESMI_DASHBOARD_UX.md Section 4, which the backend file's
+   own docstring notes and explains. */
+
+export type VoicePreviewRequest = {
+  voice_id: string;
+  speed: number;
+  language: LanguagePref;
+  text: string;
+};
+
+export type VoicePreviewResponse = {
+  url: string;
+  duration_sec: number;
+  cache_key: string;
+};
+
+export async function fetchVoicePreview(
+  req: VoicePreviewRequest,
+): Promise<VoicePreviewResponse> {
+  const res = await fetch("/api/platform/voice/preview", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(req),
+  });
   if (!res.ok) throw new Error(await readErrorDetail(res));
   return res.json();
 }

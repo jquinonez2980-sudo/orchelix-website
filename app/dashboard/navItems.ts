@@ -1,4 +1,5 @@
 import {
+  AudioLines,
   BarChart3,
   BookOpen,
   CalendarDays,
@@ -28,6 +29,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "Appointments", href: "/dashboard/appointments", icon: CalendarDays },
   { label: "Leads", href: "/dashboard/leads", icon: Inbox },
   { label: "Knowledge", href: "/dashboard/knowledge", icon: BookOpen },
+  { label: "Voice", href: "/dashboard/voice", icon: AudioLines },
   { label: "Usage", href: "/dashboard/usage", icon: BarChart3 },
   { label: "Billing", href: "/dashboard/billing", icon: CreditCard },
   { label: "Settings", href: "/dashboard/settings", icon: Settings },
