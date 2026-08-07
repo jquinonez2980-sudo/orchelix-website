@@ -87,10 +87,16 @@ export default function Submitted({
           </li>
         </ul>
 
-        <div className="mt-6 border-t border-line pt-5">
+        <div className="mt-6 flex flex-wrap gap-3 border-t border-line pt-5">
+          <a
+            href="/dashboard/onboarding/voice"
+            className="inline-flex rounded-lg bg-navy-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-700"
+          >
+            Preview your voice &amp; greeting
+          </a>
           <a
             href="/dashboard"
-            className="inline-flex rounded-lg bg-navy-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-navy-700"
+            className="inline-flex rounded-lg border border-line px-5 py-2.5 text-sm font-medium text-ink-2 transition hover:bg-surface-2"
           >
             Go to your dashboard
           </a>

@@ -85,10 +85,16 @@ export default function DraftModeBanner() {
   /* Precedence: an unfinished onboarding is the more specific and more
      actionable explanation, so it wins. Billing copy only applies to a tenant
      that got all the way through approval and was later switched off. */
-  const copy =
-    status.onboarding_status && status.onboarding_status !== "active"
-      ? (COPY[status.onboarding_status] ?? FALLBACK)
-      : (ACCOUNT_COPY[status.account_status ?? ""] ?? FALLBACK);
+  const midOnboarding = Boolean(status.onboarding_status && status.onboarding_status !== "active");
+  const copy = midOnboarding
+    ? (COPY[status.onboarding_status as string] ?? FALLBACK)
+    : (ACCOUNT_COPY[status.account_status ?? ""] ?? FALLBACK);
+
+  // Onboarding voice gate (docs/ESMI_DASHBOARD_UX.md Section 7 Step 3) — a
+  // reachable link from anywhere in the dashboard while onboarding is
+  // incomplete, since this banner is the one thing every dashboard page
+  // already renders for exactly this population.
+  const showVoiceCta = midOnboarding && !status.onboarding_voice_previewed;
 
   return (
     <div
@@ -105,6 +111,14 @@ export default function DraftModeBanner() {
         <div className="min-w-0">
           <p className="text-sm font-semibold text-amber-900">{copy.title}</p>
           <p className="mt-0.5 text-xs leading-5 text-amber-800">{copy.body}</p>
+          {showVoiceCta && (
+            <a
+              href="/dashboard/onboarding/voice"
+              className="mt-1.5 inline-block text-xs font-semibold text-amber-900 underline underline-offset-2"
+            >
+              Preview your voice &amp; greeting →
+            </a>
+          )}
         </div>
       </div>
     </div>

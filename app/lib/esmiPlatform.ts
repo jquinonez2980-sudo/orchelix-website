@@ -1205,6 +1205,10 @@ export type TenantStatus = {
   can_serve_traffic: boolean;
   account_status: AccountStatus | null;
   plan: string | null;
+  // Onboarding voice gate (docs/ESMI_DASHBOARD_UX.md Section 7 Step 3) — true
+  // once POST /platform/voice/preview has ever returned 200 for this tenant.
+  // Set server-side only; a failed preview never flips this.
+  onboarding_voice_previewed: boolean;
 };
 
 export async function fetchTenantStatus(): Promise<TenantStatus> {

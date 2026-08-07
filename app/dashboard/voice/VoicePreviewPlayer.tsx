@@ -30,6 +30,11 @@ type VoicePreviewPlayerProps = {
   // last SAVED config, a different concept from "outdated" (which is about
   // this player's own loaded audio vs. current inputs, saved or not).
   draft?: boolean;
+  // Fires once per successful fetchVoicePreview() call — i.e. the backend
+  // actually returned 200, not just that playback started. The onboarding
+  // voice-gate step (app/dashboard/onboarding/voice) uses this to unlock its
+  // Continue button; VoiceStudio doesn't pass it and is unaffected.
+  onPreviewSuccess?: () => void;
 };
 
 const LANGUAGE_LABEL: Record<LanguagePref, string> = {
@@ -54,6 +59,7 @@ export default function VoicePreviewPlayer({
   language,
   text,
   draft = false,
+  onPreviewSuccess,
 }: VoicePreviewPlayerProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [status, setStatus] = useState<PlayerStatus>("idle");
@@ -88,6 +94,7 @@ export default function VoicePreviewPlayer({
       // Actual <audio> playback kicks off from the effect below, once `src`
       // is set and the element has re-rendered with the new source.
       setStatus("playing");
+      onPreviewSuccess?.();
     } catch (e) {
       setStatus("error");
       setErrorMsg(e instanceof Error ? e.message : "Preview failed — try again.");
