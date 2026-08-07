@@ -594,6 +594,16 @@ export const QUALITY_STUDIO_SCENARIOS = [
     label: "After hours",
     description: "A caller asks for a time no business is ever open at.",
   },
+  {
+    id: "angry_urgent",
+    label: "Angry / urgent caller",
+    description: "A frustrated caller demands to speak with a person right away.",
+  },
+  {
+    id: "existing_client_reschedule",
+    label: "Existing client reschedule",
+    description: "A returning caller needs to move their appointment to a new time.",
+  },
 ] as const;
 
 export type QualityStudioScenarioId = (typeof QUALITY_STUDIO_SCENARIOS)[number]["id"];
