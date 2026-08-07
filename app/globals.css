@@ -382,3 +382,79 @@ body {
   .epv-pill, .epv-seg, .epv-cta, .epv-play, .epv-bar { transition: none; }
   .epv-play:hover:not(:disabled), .epv-play:active:not(:disabled) { transform: none; }
 }
+
+/* ─── Voice Studio (dashboard /dashboard/voice) ───────────────────────────
+   Light-theme sibling of the .epv-* try-esmi transport above: same player
+   DNA (a static waveform that doubles as the scrub track, one saturated
+   control, quiet mono meta) rendered in the dashboard's navy/teal tokens
+   instead of the dark glass palette.                                      */
+
+/* Unplayed rail rides a custom property so the inline per-bar background
+   (which always beats a stylesheet rule) still responds to :hover. */
+.vs-scrub { --vs-rail: var(--line-strong); }
+.vs-scrub[data-seekable="true"]:hover { --vs-rail: var(--ink-4); }
+.vs-bar { transition: background-color 120ms linear; }
+
+.vs-play { transition: transform 150ms var(--ease-standard), filter 150ms var(--ease-standard); }
+.vs-play:hover:not(:disabled) { filter: brightness(1.06); transform: scale(1.04); }
+.vs-play:active:not(:disabled) { transform: scale(0.97); }
+
+/* Speed slider. The played portion is an inline linear-gradient set from
+   React (--vs-track); only the thumb + track geometry live here, because
+   ::-webkit-slider-thumb / ::-moz-range-thumb can't be expressed inline. */
+.vs-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 18px;
+  background: transparent;
+  cursor: pointer;
+}
+.vs-range::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--vs-track);
+}
+.vs-range::-moz-range-track {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--vs-track);
+}
+.vs-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  margin-top: -5px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--teal-500);
+  box-shadow: 0 1px 3px rgba(10, 37, 64, 0.22);
+  transition: transform 120ms var(--ease-standard), box-shadow 120ms var(--ease-standard);
+}
+.vs-range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--teal-500);
+  box-shadow: 0 1px 3px rgba(10, 37, 64, 0.22);
+  transition: transform 120ms var(--ease-standard), box-shadow 120ms var(--ease-standard);
+}
+.vs-range:hover::-webkit-slider-thumb { transform: scale(1.12); }
+.vs-range:hover::-moz-range-thumb { transform: scale(1.12); }
+/* The global :focus-visible outline sits on the <input> box, not the thumb —
+   ring the thumb too so keyboard users can see what they're dragging. */
+.vs-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.24); }
+.vs-range:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.24); }
+
+.vs-surface::placeholder { color: var(--ink-4); }
+
+@media (prefers-reduced-motion: reduce) {
+  .vs-play, .vs-bar { transition: none; }
+  .vs-play:hover:not(:disabled), .vs-play:active:not(:disabled) { transform: none; }
+  .vs-range::-webkit-slider-thumb { transition: none; }
+  .vs-range::-moz-range-thumb { transition: none; }
+  .vs-range:hover::-webkit-slider-thumb { transform: none; }
+  .vs-range:hover::-moz-range-thumb { transform: none; }
+}

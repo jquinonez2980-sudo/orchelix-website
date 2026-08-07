@@ -5,10 +5,16 @@ import { Pause, Play } from "lucide-react";
 import { fetchVoicePreview, type LanguagePref } from "../../lib/esmiPlatform";
 
 /* THE premium player (docs/ESMI_DASHBOARD_UX.md Section 3.5). Reused
-   as-is by VoiceStudio; the public try-esmi page (Section 6) is meant to
-   reuse the same component later, which is why this file takes no
-   dashboard-specific props (tenant auth stays in fetchVoicePreview's own
-   proxy call, not this component).
+   as-is by VoiceStudio and the onboarding voice gate; the public try-esmi
+   page (Section 6) runs the same *DNA* in its own dark-theme component
+   (app/try-esmi/PublicVoicePreview.tsx) — see that file's header for why
+   it can't literally import this one. This file takes no dashboard-specific
+   props (tenant auth stays in fetchVoicePreview's own proxy call, not this
+   component) so a light-theme host anywhere can drop it in.
+
+   Presentation: a slim transport bar. One saturated control (play/pause),
+   a static waveform that doubles as the scrub track, and a quiet mono meta
+   line — deliberately not a hero play button with a bouncing equalizer.
 
    State machine: idle -> loading -> playing <-> paused, or -> error at any
    point loading/playing can fail. "Outdated" is a separate axis layered on
@@ -43,7 +49,20 @@ const LANGUAGE_LABEL: Record<LanguagePref, string> = {
   es: "Spanish",
 };
 
-const BAR_COUNT = 16;
+/* The waveform doubles as the progress track: a fixed, non-animated
+   silhouette whose played portion fills teal. Heights come from a
+   deterministic formula (never Math.random) so server and client render
+   byte-identical markup and hydration stays quiet. Mirrors the try-esmi
+   player's WAVE, at the narrower bar count a dashboard column affords. */
+const WAVE = Array.from({ length: 48 }, (_, i) => {
+  const a = Math.abs(Math.sin(i * 1.31) * Math.cos(i * 0.47));
+  const b = Math.abs(Math.sin(i * 0.19 + 1.2));
+  // Taper the very edges so the silhouette reads as a clip, not a crop.
+  const edge = Math.min(1, Math.min(i, 47 - i) / 5 + 0.45);
+  return Math.round((0.24 + 0.76 * (a * 0.65 + b * 0.35)) * edge * 100);
+});
+
+const SEEK_STEP_SEC = 5;
 
 function fmtTime(sec: number): string {
   if (!Number.isFinite(sec) || sec < 0) sec = 0;
@@ -62,6 +81,7 @@ export default function VoicePreviewPlayer({
   onPreviewSuccess,
 }: VoicePreviewPlayerProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const scrubRef = useRef<HTMLDivElement | null>(null);
   const [status, setStatus] = useState<PlayerStatus>("idle");
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [loadedKey, setLoadedKey] = useState<string | null>(null);
@@ -128,30 +148,73 @@ export default function VoicePreviewPlayer({
     load();
   };
 
+  // Seeking only makes sense against audio that still matches the current
+  // inputs — an outdated clip's timeline isn't the one the meta line
+  // describes, so the track goes inert rather than lying about position.
+  const seekable = Boolean(audioUrl) && duration > 0 && !outdated;
+
+  const seekTo = (sec: number) => {
+    const el = audioRef.current;
+    if (!el || !seekable) return;
+    const next = Math.max(0, Math.min(duration, sec));
+    el.currentTime = next;
+    setCurrentTime(next);
+  };
+
+  const handleScrubClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rail = scrubRef.current;
+    if (!rail || !seekable) return;
+    const rect = rail.getBoundingClientRect();
+    if (rect.width <= 0) return;
+    seekTo(((e.clientX - rect.left) / rect.width) * duration);
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === " " || e.key === "Spacebar") {
       e.preventDefault();
       handleToggle();
+      return;
+    }
+    if (e.key === "ArrowRight") {
+      e.preventDefault();
+      seekTo(currentTime + SEEK_STEP_SEC);
+      return;
+    }
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      seekTo(currentTime - SEEK_STEP_SEC);
     }
   };
 
-  const progressPct = duration > 0 ? Math.min(100, (currentTime / duration) * 100) : 0;
-  const animated = status === "playing";
+  const ratio = duration > 0 ? Math.min(1, Math.max(0, currentTime / duration)) : 0;
 
   let buttonLabel: string;
   if (status === "loading") buttonLabel = "Preparing preview…";
-  else if (status === "playing") buttonLabel = "Playing preview";
+  else if (status === "playing") buttonLabel = "Pause preview";
   else if (status === "error") buttonLabel = "Retry preview";
   else if (outdated) buttonLabel = "Re-preview to hear your latest changes";
+  else if (status === "paused") buttonLabel = "Resume preview";
   else buttonLabel = "Preview with current greeting";
+
+  // First word of the meta line. Before anything has ever loaded this doubles
+  // as the call to action, so the slim bar still tells you what to press.
+  let statusWord: string;
+  if (status === "loading") statusWord = "Preparing";
+  else if (status === "playing") statusWord = "Playing";
+  else if (status === "paused") statusWord = "Paused";
+  else if (status === "error") statusWord = "Error";
+  else if (outdated) statusWord = "Press play";
+  else if (audioUrl) statusWord = "Ready";
+  else statusWord = "Preview greeting";
 
   return (
     <div
       role="group"
       aria-label="Voice preview player"
+      aria-keyshortcuts="Space ArrowLeft ArrowRight"
       tabIndex={0}
       onKeyDown={handleKeyDown}
-      className="rounded-lg border border-line bg-surface p-4 shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
+      className="rounded-xl border border-line bg-surface px-3.5 py-3.5 shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-teal-500 sm:px-4"
     >
       {audioUrl && (
         <audio
@@ -176,82 +239,100 @@ export default function VoicePreviewPlayer({
         />
       )}
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3.5 sm:gap-4">
+        {/* Play / pause — the only saturated element in the bar */}
         <button
           type="button"
           onClick={handleToggle}
           disabled={status === "loading"}
           aria-label={buttonLabel}
+          title={buttonLabel}
           className={
-            "flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-white shadow-md " +
-            "transition-transform duration-150 hover:scale-105 disabled:cursor-wait disabled:opacity-70 " +
-            (status === "error" ? "bg-rose-500 hover:bg-rose-400" : "bg-teal-500 hover:bg-teal-400")
+            "vs-play flex h-10 w-10 shrink-0 items-center justify-center rounded-full disabled:cursor-wait " +
+            (status === "error"
+              ? "border border-rose-200 bg-rose-50 text-rose-600"
+              : "bg-teal-500 text-white shadow-sm")
           }
         >
           {status === "loading" ? (
             <span
               aria-hidden
-              className="h-5 w-5 animate-spin rounded-full border-2 border-white/40 border-t-white"
+              className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white"
             />
           ) : status === "playing" ? (
-            <Pause className="h-6 w-6" fill="currentColor" strokeWidth={0} />
+            <Pause className="h-4 w-4" fill="currentColor" strokeWidth={0} />
           ) : (
-            <Play className="ml-0.5 h-6 w-6" fill="currentColor" strokeWidth={0} />
+            <Play className="ml-0.5 h-4 w-4" fill="currentColor" strokeWidth={0} />
           )}
         </button>
 
         <div className="min-w-0 flex-1">
-          {/* Waveform */}
-          <div className="flex h-8 items-end gap-[3px]" aria-hidden="true">
-            {Array.from({ length: BAR_COUNT }).map((_, i) => (
-              <span
-                key={i}
-                className="w-full rounded-full bg-teal-400"
-                style={{
-                  height: "100%",
-                  animation: animated
-                    ? `esmi-wave 900ms ease-in-out ${(i % 8) * 90}ms infinite`
-                    : status === "idle" || status === "paused"
-                      ? `esmi-wave-idle 2400ms ease-in-out ${(i % 8) * 120}ms infinite`
-                      : "none",
-                  transform: animated || status === "idle" || status === "paused" ? undefined : "scaleY(0.2)",
-                  opacity: status === "error" ? 0.25 : 1,
-                }}
-              />
-            ))}
+          {/* Waveform doubles as the progress track — static bars, teal fill,
+              click or ←/→ to seek. */}
+          <div
+            ref={scrubRef}
+            onClick={handleScrubClick}
+            role="progressbar"
+            aria-label="Playback progress"
+            aria-valuemin={0}
+            aria-valuemax={Math.max(1, Math.round(duration))}
+            aria-valuenow={Math.round(currentTime)}
+            aria-valuetext={`${fmtTime(currentTime)} of ${fmtTime(duration)}`}
+            data-seekable={seekable}
+            className="vs-scrub flex items-center gap-px"
+            style={{ height: 24, cursor: seekable ? "pointer" : "default" }}
+          >
+            {WAVE.map((h, i) => {
+              const played = seekable && i / WAVE.length < ratio;
+              return (
+                <span
+                  key={i}
+                  className="vs-bar"
+                  style={{
+                    flex: 1,
+                    minWidth: 0,
+                    height: `${h}%`,
+                    borderRadius: 1,
+                    background: played ? "var(--teal-500)" : "var(--vs-rail)",
+                    opacity: status === "error" ? 0.4 : 1,
+                  }}
+                />
+              );
+            })}
           </div>
 
-          {/* Progress bar */}
-          <div className="mt-1.5 h-1 w-full overflow-hidden rounded-full bg-surface-2">
-            <div
-              className="h-full rounded-full bg-teal-500 transition-[width] duration-150"
-              style={{ width: `${progressPct}%` }}
-            />
-          </div>
-          <div className="mt-1 flex items-center justify-between text-xs text-ink-4">
-            <span>
-              {fmtTime(currentTime)} / {fmtTime(duration)}
+          {/* Quiet meta: status · voice · speed · language, then time */}
+          <div className="mt-2 flex items-center gap-2.5">
+            <span
+              className={`min-w-0 flex-1 truncate font-mono text-[10px] uppercase tracking-[0.11em] ${
+                status === "error" ? "text-rose-400" : "text-ink-4"
+              }`}
+            >
+              {statusWord} · {voiceName} · {speed.toFixed(2)}× · {LANGUAGE_LABEL[language]}
             </span>
             {draft && (
-              <span className="rounded-full bg-amber-100 px-2 py-0.5 font-medium text-amber-800">
+              <span
+                title="Unsaved changes — this preview reflects your draft, not what's saved."
+                className="shrink-0 rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 font-mono text-[10px] font-medium uppercase tracking-[0.09em] text-amber-700"
+              >
                 Draft
               </span>
             )}
+            <span className="shrink-0 font-mono text-[11px] tabular-nums text-ink-4">
+              {fmtTime(currentTime)} / {fmtTime(duration)}
+            </span>
           </div>
         </div>
       </div>
 
-      <p className="mt-3 text-sm font-medium text-ink">{buttonLabel}</p>
-      <p className="text-xs text-ink-3">
-        Voice: {voiceName} · {speed.toFixed(2)}× · {LANGUAGE_LABEL[language]}
-      </p>
+      {/* Inline notices — a quiet line, never a boxed alert */}
       {outdated && status !== "loading" && (
-        <p className="mt-1 text-xs font-medium text-amber-700">
-          Outdated — re-preview to hear your latest changes
+        <p className="mt-2.5 text-xs leading-5 text-amber-700">
+          Settings changed — press play to hear this version.
         </p>
       )}
       {status === "error" && errorMsg && (
-        <p className="mt-1 text-xs text-rose-600" role="alert">
+        <p className="mt-2.5 text-xs leading-5 text-rose-600" role="alert">
           {errorMsg}
         </p>
       )}
