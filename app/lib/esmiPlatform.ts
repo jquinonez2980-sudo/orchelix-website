@@ -130,6 +130,8 @@ export type ChatDetail = {
   messages: ChatMessage[];
 };
 
+export type LanguageMix = { en: number; es: number; unknown: number };
+
 export type OverviewBucket = {
   from: string;
   to: string;
@@ -140,6 +142,21 @@ export type OverviewBucket = {
   minutes_used: number;
   est_revenue_booked: number | null;
   web_chats: number;
+  language_mix: LanguageMix;
+};
+
+export type RecentActivityItem = {
+  type: "call" | "chat";
+  at: string | null;
+  outcome: CallOutcome | ChatOutcome | null;
+  language: "en" | "es" | null;
+};
+
+export type SetupChecklistItem = { key: string; label: string; done: boolean };
+
+export type SetupChecklist = {
+  onboarding_status: string;
+  items: SetupChecklistItem[];
 };
 
 export type OverviewResponse = {
@@ -148,6 +165,8 @@ export type OverviewResponse = {
   window_days: number;
   current: OverviewBucket;
   previous: OverviewBucket;
+  recent_activity: RecentActivityItem[];
+  setup_checklist: SetupChecklist | null;
 };
 
 export type AppointmentStatus = "upcoming" | "past";

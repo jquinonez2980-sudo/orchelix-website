@@ -60,7 +60,7 @@ function fmtCaller(e164: string | null): string {
 // platform_api/call_log.py's OUTCOMES) is the spec's "Missed" concept, and
 // "other" isn't one of the spec's five — kept neutral as a reasonable
 // fallback for whatever it turns out to mean on a given call.
-const OUTCOME_STYLE: Record<string, { label: string; tone: BadgeTone }> = {
+export const OUTCOME_STYLE: Record<string, { label: string; tone: BadgeTone }> = {
   booked: { label: "Booked", tone: "positive" }, // teal
   escalated: { label: "Escalated", tone: "warning" }, // amber
   info: { label: "Info", tone: "neutral" }, // slate
