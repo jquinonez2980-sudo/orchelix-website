@@ -1242,3 +1242,43 @@ export async function fetchTenantStatus(): Promise<TenantStatus> {
   if (!res.ok) throw new Error(await readErrorDetail(res));
   return res.json();
 }
+
+/* ── Scheduling (docs/ESMI_DASHBOARD_UX.md Section 5.4) ─────────────────────
+   Read-only: calendar connection status + an echo of the hours Settings
+   (SettingsForm.tsx) owns. No buffers/confirmation-toggle fields exist on
+   the backend — this type doesn't invent any either. */
+
+export type SchedulingCalendarStatus = {
+  location_id: string;
+  location_name: string;
+  calendar_id: string | null;
+  reachable: boolean;
+  detail: string | null;
+};
+
+export type SchedulingLocationHours = {
+  name: string;
+  business_days: number[];
+  business_hours: [number, number];
+  has_day_overrides: boolean;
+};
+
+export type SchedulingHours = {
+  business_days: number[];
+  business_hours: [number, number];
+  locations: Record<string, SchedulingLocationHours> | null;
+};
+
+export type SchedulingStatus = {
+  tenant_id: string;
+  connected: boolean;
+  detail: string | null;
+  calendars: SchedulingCalendarStatus[];
+  hours: SchedulingHours;
+};
+
+export async function fetchSchedulingStatus(): Promise<SchedulingStatus> {
+  const res = await fetch("/api/platform/scheduling/status", { cache: "no-store" });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
