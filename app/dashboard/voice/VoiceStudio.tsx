@@ -16,7 +16,7 @@ import {
 } from "../../lib/esmiPlatform";
 import { useActiveOrgSlug } from "../useActiveOrgSlug";
 import VoicePreviewPlayer from "./VoicePreviewPlayer";
-import QualityStudioStub from "./QualityStudioStub";
+import QualityStudio from "./QualityStudio";
 
 const inputCls =
   "w-full rounded-md border border-line bg-surface px-2.5 py-2 text-sm text-ink " +
@@ -383,7 +383,7 @@ export default function VoiceStudio() {
         </div>
       </div>
 
-      <QualityStudioStub />
+      <QualityStudio />
     </div>
   );
 }

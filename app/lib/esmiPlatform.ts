@@ -533,6 +533,73 @@ export async function applyVoiceSync(): Promise<VoiceSyncResponse> {
   return res.json();
 }
 
+/* ── Quality Studio (POST /platform/quality-studio/run) ─────────────────────
+   Runs a FIXED scripted scenario through the tenant's real agent (same
+   graph.py /chat uses) with write-tools (booking/escalation) short-circuited
+   server-side — see platform_api/quality_studio.py's module docstring. The
+   scenario list here is presentation-only (id/label/description strings for
+   the picker UI); the actual scripted caller lines live server-side in
+   quality_studio_scenarios.py and are never sent from the client. */
+
+export const QUALITY_STUDIO_SCENARIOS = [
+  {
+    id: "new_lead_books",
+    label: "New lead books appointment",
+    description: "A first-time caller asks about availability and books a slot.",
+  },
+  {
+    id: "faq_only",
+    label: "FAQ only",
+    description: "A caller asks about pricing and hours without booking anything.",
+  },
+  {
+    id: "spanish_caller",
+    label: "Spanish caller",
+    description: "A full conversation in Spanish, checking language detection.",
+  },
+  {
+    id: "after_hours",
+    label: "After hours",
+    description: "A caller asks for a time no business is ever open at.",
+  },
+] as const;
+
+export type QualityStudioScenarioId = (typeof QUALITY_STUDIO_SCENARIOS)[number]["id"];
+
+export type QualityStudioTurn = {
+  speaker: "caller" | "esmi";
+  text: string;
+  timestamp: string;
+  tools_called: string[];
+};
+
+export type QualityStudioDisposition = "booked" | "escalated" | "info" | "no_signal";
+
+export type QualityStudioRunResponse = {
+  scenario_id: string;
+  label: string;
+  language: string;
+  tenant_id: string;
+  transcript: QualityStudioTurn[];
+  tools_called: string[];
+  disposition: QualityStudioDisposition;
+  success: boolean;
+  duration_ms: number;
+  note: string;
+};
+
+export async function runQualityStudioScenario(
+  scenarioId: QualityStudioScenarioId,
+): Promise<QualityStudioRunResponse> {
+  const res = await fetch("/api/platform/quality-studio/run", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ scenario_id: scenarioId }),
+  });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
+
 /* ── Knowledge base (FAQ / text entries) ───────────────────────────────────── */
 
 export type KnowledgeEntry = {
