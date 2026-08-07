@@ -1282,3 +1282,24 @@ export async function fetchSchedulingStatus(): Promise<SchedulingStatus> {
   if (!res.ok) throw new Error(await readErrorDetail(res));
   return res.json();
 }
+
+/* ── Analytics (docs/ESMI_DASHBOARD_UX.md Section 5.5, light v1) ────────────
+   Real, cheap insights from the `calls` table — no new tables, no chart
+   library. Peak-hours heatmap / booking-conversion-rate / lead-quality-score
+   aren't computed here — the page shows honest "coming soon" cards instead. */
+
+export type AnalyticsDayCount = { date: string; count: number };
+
+export type AnalyticsResponse = {
+  tenant_id: string;
+  business_tz: string;
+  window_days: number;
+  volume_by_day: AnalyticsDayCount[];
+  language_mix: LanguageMix;
+};
+
+export async function fetchAnalytics(): Promise<AnalyticsResponse> {
+  const res = await fetch("/api/platform/analytics", { cache: "no-store" });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
