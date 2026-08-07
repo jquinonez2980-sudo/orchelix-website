@@ -150,7 +150,16 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
-  overflow-y: auto !important;          /* prevent scroll-lock from Clerk modal */
+  /* Defeats Clerk's modal scroll-lock (it sets `overflow: hidden` here) while
+     keeping <body> out of the scrolling-box business. It must NOT be `auto`:
+     that makes body a scroll container, and `position: sticky` pins to its
+     nearest scrolling ancestor — so the marketing Nav (a body descendant)
+     would stick to a box whose height is content-driven and never scrolls,
+     i.e. it scrolls away with the page. The viewport scroller is <html>
+     above. Shorthand, not `overflow-y: visible`: with overflow-x left at
+     hidden by Clerk's shorthand, a `visible` counterpart computes back to
+     `auto` per CSS overflow §3 and the bug returns while a modal is open. */
+  overflow: visible !important;
   -webkit-overflow-scrolling: touch;    /* smooth momentum scroll on iOS */
 }
 
