@@ -1,161 +1,75 @@
-const steps = [
-  {
-    n: "1",
-    title: "Map the workflow.",
-    desc: "A senior consultant sits with your team and writes the workflow we'll automate first.",
-  },
-  {
-    n: "2",
-    title: "Deploy in 14 days.",
-    desc: "Your first agent goes live in your tools — phone, inbox, CRM, ledger — with a scorecard you can read on Monday morning.",
-  },
-  {
-    n: "3",
-    title: "Audit every action.",
-    desc: "Every call, email, and reconciled line is logged. Approve, override, or coach in one click.",
-  },
-  {
-    n: "4",
-    title: "Scale on your timeline.",
-    desc: "Add the next agent when the first one has earned the room. Same console. Same consultant.",
-  },
-];
+/* The pilot, set as a ruled schedule on ledger stock. The sequence carries
+   real information — these are dated stages, not decorative numbering. */
 
-export default function HowItWorks() {
+import { Section, SectionTitle, Prose } from "@/app/components/ledger";
+import type { Messages } from "@/app/i18n/messages/en";
+
+export default function HowItWorks({ t }: { t: Messages }) {
   return (
-    <section
-      id="how"
-      className="py-20 sm:py-24 lg:py-32"
-      style={{
-        borderTop: "1px solid var(--line)",
-        borderBottom: "1px solid var(--line)",
-        background:
-          "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(10,37,64,0.025), transparent 70%), var(--surface-2)",
-      }}
-    >
-      <div className="mx-auto max-w-[1200px] px-6 sm:px-8 lg:px-10">
-        <div style={{ display: "grid", gap: 18, maxWidth: 720, marginBottom: 80 }}>
-          <Eyebrow>How Orchelix works</Eyebrow>
-          <h2 style={sectionH2}>Designed for owners, not just engineers.</h2>
-          <p style={sectionP}>
-            A focused two-week pilot, one workflow instrumented end-to-end, and only expand once you can see it earning its keep.
-          </p>
+    <Section id="how" tone="stock">
+      <div className="grid gap-x-14 gap-y-6 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+        {/* Sticky wrapper, not a styled heading: the title holds beside the
+            stages instead of leaving the column empty once the reader is
+            partway down the schedule. */}
+        <div style={{ position: "sticky", top: "6.5rem", alignSelf: "start" }}>
+          <SectionTitle tone="stock" max="14ch">
+            {t.home.pilotTitle}
+          </SectionTitle>
         </div>
 
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
-          {steps.map((step, i) => (
-            <div key={i} style={{ position: "relative", paddingRight: 16 }}>
-              {/* Connector line — desktop only */}
-              {i < steps.length - 1 && (
-                <div
-                  className="hidden lg:block"
-                  style={{
-                    position: "absolute",
-                    top: 18,
-                    left: 60,
-                    right: -16,
-                    height: 1,
-                    background:
-                      "linear-gradient(90deg, var(--line-strong) 0%, var(--line-strong) 50%, transparent 100%)",
-                  }}
-                />
-              )}
+        <div>
+          <Prose tone="stock" size="1.0625rem" max="58ch" style={{ marginBottom: "3rem" }}>
+            {t.home.pilotBody}
+          </Prose>
 
-              <div
+          <ol className="m-0 list-none p-0" style={{ borderTop: "2px solid var(--lg-rule)" }}>
+            {t.home.stages.map((s) => (
+              <li
+                key={s.day}
+                className="lg-row"
                 style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 10,
-                  background: "#fff",
-                  color: "var(--navy-600)",
-                  fontFamily: "var(--font-mono)",
-                  fontWeight: 600,
-                  fontSize: 14,
-                  lineHeight: 1,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  border: "1px solid var(--line)",
-                  boxShadow:
-                    "0 1px 0 rgba(255,255,255,0.8) inset, 0 1px 2px rgba(10,37,64,0.05)",
-                  marginBottom: 22,
-                  position: "relative",
+                  gridTemplateColumns: "minmax(0,1fr)",
+                  padding: "1.6rem 0",
+                  borderBottomColor: "rgba(16,36,58,0.14)",
+                  gap: "0.45rem",
                 }}
               >
-                {step.n}
-              </div>
-
-              <h3
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontWeight: 600,
-                  fontSize: 18,
-                  lineHeight: 1.3,
-                  letterSpacing: "-0.012em",
-                  margin: "0 0 8px",
-                  color: "var(--ink)",
-                }}
-              >
-                {step.title}
-              </h3>
-              <p
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontWeight: 400,
-                  fontSize: 14.5,
-                  lineHeight: 1.6,
-                  color: "var(--ink-2)",
-                  margin: 0,
-                }}
-              >
-                {step.desc}
-              </p>
-            </div>
-          ))}
+                <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                  <span
+                    className="lg-fig"
+                    style={{
+                      fontSize: "0.625rem",
+                      letterSpacing: "0.14em",
+                      textTransform: "uppercase",
+                      color: "var(--lg-rule)",
+                      minWidth: "6rem",
+                    }}
+                  >
+                    {s.day}
+                  </span>
+                  <h3
+                    style={{
+                      fontFamily: "var(--font-display)",
+                      fontStretch: "86%",
+                      fontWeight: 600,
+                      fontSize: "1.25rem",
+                      letterSpacing: "-0.01em",
+                      textTransform: "uppercase",
+                      color: "var(--lg-ink-on-stock)",
+                      margin: 0,
+                    }}
+                  >
+                    {s.title}
+                  </h3>
+                </div>
+                <Prose tone="stock" size="0.9375rem" max="60ch">
+                  {s.desc}
+                </Prose>
+              </li>
+            ))}
+          </ol>
         </div>
       </div>
-    </section>
+    </Section>
   );
 }
-
-function Eyebrow({ children }: { children: React.ReactNode }) {
-  return (
-    <span
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: 10,
-        fontFamily: "var(--font-mono)",
-        fontWeight: 500,
-        fontSize: 11,
-        lineHeight: 1,
-        letterSpacing: "0.18em",
-        textTransform: "uppercase",
-        color: "var(--teal-700)",
-      }}
-    >
-      <span style={{ width: 18, height: 1, background: "currentColor", opacity: 0.7, display: "inline-block" }} />
-      {children}
-    </span>
-  );
-}
-
-const sectionH2: React.CSSProperties = {
-  fontFamily: "var(--font-display)",
-  fontWeight: 600,
-  fontSize: 46,
-  lineHeight: 1.06,
-  letterSpacing: "-0.028em",
-  color: "var(--ink)",
-  margin: 0,
-};
-
-const sectionP: React.CSSProperties = {
-  fontFamily: "var(--font-display)",
-  fontWeight: 400,
-  fontSize: 18,
-  lineHeight: 1.55,
-  color: "var(--ink-2)",
-  margin: 0,
-  maxWidth: 620,
-};

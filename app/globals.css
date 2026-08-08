@@ -135,6 +135,229 @@
   --duration-slow:   380ms;
 }
 
+/* ─── The Ruled Record ─────────────────────────────────────────────────────
+   The marketing world: a bound ledger. Navy buckram field, gold foil stamp,
+   red column ruling, ruled registers. These tokens are additive — the navy/
+   teal/gold scales above still serve /dashboard and /try-esmi untouched.   */
+
+:root {
+  /* Buckram — the binding cloth. The dominant field. */
+  --lg-field:      #071A2E;
+  --lg-field-2:    #0B2338;
+  --lg-field-3:    #102C44;
+
+  /* Ledger stock — the ruled writing surface, for regions that must read. */
+  --lg-stock:      #EDE9DC;
+  --lg-stock-2:    #E2DDCB;
+
+  /* Foil stamp. The single sharp accent. */
+  --lg-foil:       #D9A21B;
+  --lg-foil-lift:  #EFBB3C;
+
+  /* Column ruling. Red is the rule; it is not an alert colour here. */
+  --lg-rule:       #B4342A;
+  --lg-rule-quiet: rgba(180, 52, 42, 0.34);
+
+  /* Text-safe steps of the two status hues.
+
+     `--lg-rule` and `--lg-tick` were specified as marks — rules, borders, and
+     the small drawn swatches — where contrast is not a text requirement. Used
+     as TEXT on the field they measure 2.73:1 and 4.40:1, both under the
+     4.5:1 floor. These lighter steps measure 5.28:1 and 5.91:1.
+
+     Rule: the base value draws, the -text value is read. Any status word,
+     disposition label, or inline message uses the -text step. This is the
+     same relationship `--lg-foil-lift` has to `--lg-foil`, not a new hue. */
+  --lg-rule-text:  #DE6A5C;
+  --lg-tick-text:  #37A87E;
+
+  /* Ink on the field. Tinted from the field's own hue — never gray. */
+  --lg-ink:        #F4F1E8;
+  --lg-ink-2:      rgba(238, 240, 245, 0.72);
+  --lg-ink-3:      rgba(226, 232, 242, 0.52);
+  --lg-hair:       rgba(226, 232, 242, 0.16);
+  --lg-hair-2:     rgba(226, 232, 242, 0.09);
+
+  /* Ink on stock. */
+  --lg-ink-on-stock:   #10243A;
+  --lg-ink-on-stock-2: #4A5A6E;
+
+  --lg-tick:       #2F8F6B;
+}
+
+/* ─── The Ruled Record, applied to the product surface ───────────────────
+   `.lg-app` scopes the dashboard into this world by retargeting the Tailwind
+   `@theme` custom properties for that subtree only.
+
+   WHY THIS WAY: the dashboard is ~8,300 lines of Tailwind utilities bound to
+   those tokens (`bg-surface`, `text-ink`, `border-line`) with zero hardcoded
+   colours, and Tailwind emits them as `background-color: var(--color-surface)`.
+   Redefining the variables here converts sixteen routes without touching the
+   markup, which also means no functionality moves.
+
+   WHY SCOPED, NOT GLOBAL: the same tokens still dress /acumen,
+   /ai-receptionist, /blog, /es/* and ContactForm, which are light-world.
+   Editing the `@theme` block itself would render those dark-on-light and
+   break them. Do not "simplify" this by moving the values up.
+
+   Density stays tighter than marketing — this is an operating surface, not a
+   page to be read. Only colour, radius, and elevation move. */
+
+.lg-app {
+  /* Grounds. `surface` is a panel, `paper` the page behind it. */
+  --color-paper:       var(--lg-field);
+  --color-surface:     var(--lg-field);
+  --color-surface-2:   var(--lg-field-2);
+
+  /* Ink, tinted from the field — never gray. */
+  --color-ink:         var(--lg-ink);
+  --color-ink-2:       var(--lg-ink-2);
+  --color-ink-3:       var(--lg-ink-3);
+  --color-ink-4:       var(--lg-ink-3);
+
+  /* Rules. `line` is a hairline; `line-strong` is the ruling. */
+  --color-line:        var(--lg-hair);
+  --color-line-strong: var(--lg-rule-quiet);
+
+  /* The accent collapses to foil. Teal has no role in this world. */
+  --color-teal-50:     rgba(217, 162, 27, 0.10);
+  --color-teal-200:    var(--lg-rule-quiet);
+  --color-teal-300:    var(--lg-foil-lift);
+  --color-teal-500:    var(--lg-foil);
+  --color-teal-600:    var(--lg-foil);
+  --color-teal-700:    var(--lg-foil);
+
+  /* Navy was the primary-button fill on a light ground; on the field it would
+     disappear, so it becomes foil. */
+  --color-navy-500:    var(--lg-foil-lift);
+  --color-navy-600:    var(--lg-foil);
+  --color-navy-900:    var(--lg-field);
+
+  /* Radius 0 is literal in this world, including here. */
+  --radius-xs: 0px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+
+  /* No elevation. Blocks are ruled onto the field, never floated above it.
+     These four are the project's own aliases, used by inline styles. The
+     Tailwind `shadow-*` utilities do NOT read them — they set `--tw-shadow`
+     directly — so they are neutralised separately below. */
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+  --shadow-xl: none;
+
+  background: var(--lg-field);
+  color: var(--lg-ink);
+}
+
+/* The primary button carries `text-white` from Tailwind's built-in palette,
+   which is not a theme token and so cannot be retargeted by variable. Foil
+   needs dark ink on it; this scoped rule outranks `.text-white` (0,2,0 beats
+   0,1,0) without editing thirty-five call sites. */
+/* Compound selectors on purpose: the status block below also maps
+   `.text-white`, and at equal specificity the later rule would win and put
+   light ink back on a gold fill. Matching both classes outranks it. */
+.lg-app .bg-navy-600.text-white,
+.lg-app .bg-teal-500.text-white,
+.lg-app .bg-navy-600,
+.lg-app .bg-teal-500 {
+  color: #2A1D02;
+}
+
+/* Tailwind's `shadow-*` utilities compile to `--tw-shadow`, not to the
+   project's `--shadow-*` aliases, so overriding the aliases alone leaves the
+   drop shadows on screen. No Float means no elevation: a block is ruled onto
+   the field, not lifted off it. */
+.lg-app .shadow-sm,
+.lg-app .shadow-md,
+.lg-app .shadow-lg,
+.lg-app .shadow-xl,
+.lg-app [class*="shadow-"] {
+  box-shadow: none;
+}
+
+/* The success banner in QualityStudio reads its colour from teal, which the
+   scope collapses to foil — the same value warning uses. Success is tick
+   green here so the two states stay distinguishable in the same component. */
+.lg-app .text-teal-900 { color: var(--lg-tick-text); }
+
+/* Focus ring matches the rest of the world: foil, squared. */
+.lg-app :focus-visible {
+  outline: 2px solid var(--lg-foil);
+  outline-offset: 2px;
+  border-radius: 0;
+}
+
+/* ── Status colour on the operating surface ──────────────────────────────
+   The dashboard carries real state — failed, needs attention, succeeded —
+   and unlike a marketing page it has to be readable at a glance in a table.
+   Those states arrive as Tailwind's built-in palettes (rose/amber/violet),
+   which are literal hex and cannot be retargeted by variable, so they are
+   mapped here onto the vocabulary the call register already ships:
+
+     ROUTED   rule red     → failure, escalation, destructive
+     BOOKED   foil         → attention, pending, warning
+     ANSWERED tick green   → success
+     CLOSED   ink 3        → inert, archived
+
+   No colour is invented — all four already carry status meaning in the
+   shipped register. Note this does extend DESIGN.md's "Red Is Structure"
+   rule, which was written from the marketing build; see the note added
+   alongside it. */
+
+.lg-app .text-rose-400,
+.lg-app .text-rose-600,
+.lg-app .text-rose-700,
+.lg-app .text-red-700 { color: var(--lg-rule-text); }
+.lg-app .bg-rose-600 { background-color: var(--lg-rule); color: var(--lg-ink); }
+.lg-app .bg-rose-50 { background-color: rgba(180, 52, 42, 0.12); }
+.lg-app .border-rose-200 { border-color: var(--lg-rule-quiet); }
+
+.lg-app .text-amber-600,
+.lg-app .text-amber-700,
+.lg-app .text-amber-800,
+.lg-app .text-amber-900,
+.lg-app .text-amber-950 { color: var(--lg-foil); }
+.lg-app .bg-amber-400,
+.lg-app .bg-amber-500 { background-color: var(--lg-foil); color: #2A1D02; }
+.lg-app .bg-amber-50 { background-color: rgba(217, 162, 27, 0.10); }
+.lg-app .border-amber-200,
+.lg-app .border-amber-300 { border-color: rgba(217, 162, 27, 0.34); }
+
+/* Violet had no semantic role — it was decoration on an informational
+   panel. It collapses to the inert tier. */
+.lg-app .text-violet-700 { color: var(--lg-ink-2); }
+.lg-app .bg-violet-50 { background-color: rgba(226, 232, 242, 0.05); }
+.lg-app .border-violet-200 { border-color: var(--lg-hair); }
+
+/* Tailwind built-ins used as surfaces inside panels. */
+.lg-app .bg-white { background-color: var(--lg-field-2); }
+.lg-app .text-white { color: var(--lg-ink); }
+.lg-app .border-white { border-color: var(--lg-hair); }
+
+/* Themed browser surfaces inside the app shell. */
+.lg-app {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(217, 162, 27, 0.38) transparent;
+}
+.lg-app ::-webkit-scrollbar { width: 10px; height: 10px; }
+.lg-app ::-webkit-scrollbar-thumb {
+  background: rgba(217, 162, 27, 0.32);
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+/* Tabular figures everywhere a number is a quantity, not a word. */
+.lg-fig {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "zero" 1;
+}
+
 * { box-sizing: border-box; }
 
 html {
@@ -163,9 +386,42 @@ body {
   -webkit-overflow-scrolling: touch;    /* smooth momentum scroll on iOS */
 }
 
+/* ─── Browser surfaces ────────────────────────────────────────────────────
+   The parts we did not draw still carry the design: selection, caret,
+   scrollbar, and focus ring ship with defaults that belong to no system.  */
+
 ::selection {
-  background: var(--teal-200);
-  color: var(--navy-700);
+  background: var(--lg-foil);
+  color: var(--lg-field);
+}
+
+:root { accent-color: var(--lg-foil); }
+
+/* Caret picks up the foil on the dark field, ink on stock. */
+.lg-field input,
+.lg-field textarea { caret-color: var(--lg-foil); }
+
+.lg-field {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(217, 162, 27, 0.38) transparent;
+}
+.lg-field ::-webkit-scrollbar { width: 10px; height: 10px; }
+.lg-field ::-webkit-scrollbar-thumb {
+  background: rgba(217, 162, 27, 0.32);
+  border: 3px solid transparent;
+  background-clip: content-box;
+  /* Square, like everything else in this world — a rounded thumb was the
+     one leftover soft corner on the field. */
+  border-radius: 0;
+}
+.lg-field ::-webkit-scrollbar-thumb:hover { background-clip: content-box; background-color: rgba(217, 162, 27, 0.55); }
+
+/* Links inside prose sit on the baseline rule, not a browser underline. */
+.lg-prose a {
+  color: inherit;
+  text-decoration-color: var(--lg-foil);
+  text-underline-offset: 0.22em;
+  text-decoration-thickness: 1px;
 }
 
 /* Live status dot — used in nav, console, footer */
@@ -179,27 +435,338 @@ body {
   to { transform: rotate(360deg); }
 }
 
-/* Skip-to-content link for keyboard accessibility */
+/* Skip-to-content link. Stamped, square, and mono — the first thing a
+   keyboard user sees should already be in the world. */
 .skip-link {
   position: absolute;
   left: -9999px;
   top: 8px;
-  padding: 8px 16px;
-  background: var(--navy-600);
-  color: #fff;
-  font-size: 14px;
+  padding: 0.7rem 1.1rem;
+  background: var(--lg-foil);
+  color: #2A1D02;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.625rem;
   font-weight: 500;
-  border-radius: 8px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  border-radius: 0;
   text-decoration: none;
   z-index: 9999;
 }
 .skip-link:focus { left: 8px; }
 
-/* Focus ring — all interactive elements */
+/* Focus ring. The teal default now reaches only the routes still in the old
+   light world — /acumen, /blog, /ai-receptionist, /missed-calls,
+   /home-services, /kitchen-bath, and the /es legacy sub-routes. /try-esmi and
+   /dashboard are converted and override it via `.lg-world`/`.lg-field` below
+   and `.lg-app` above. */
 :focus-visible {
   outline: 2px solid var(--teal-500);
   outline-offset: 2px;
   border-radius: 4px;
+}
+
+/* Everywhere in the ledger world the ring is foil, and it squares off to
+   match the ruling rather than rounding against it. `.lg-world` is emitted by
+   every Section primitive, so this reaches the pale stock tones too — they
+   carry no `.lg-field` class and would otherwise keep the teal default. */
+.lg-world :focus-visible,
+.lg-field :focus-visible {
+  outline: 2px solid var(--lg-foil);
+  outline-offset: 3px;
+  border-radius: 0;
+}
+
+/* ─── Ledger components ───────────────────────────────────────────────────
+   The register is the hero: a ruled table with its own notation. Rows are
+   real rows — gridlines, tabular figures, a disposition tick.             */
+
+.lg-row {
+  display: grid;
+  align-items: center;
+  border-bottom: 1px solid var(--lg-hair-2);
+}
+.lg-row:last-child { border-bottom: 0; }
+
+/* Register columns live here, not inline, so they can actually respond.
+   Below 640px the disposition drops to its own full-width line and the
+   reason is allowed to wrap instead of truncating. */
+/* The language column is sized for its HEAD, not its content: the cells hold
+   "EN"/"ES" but the header is "LANG" in English and "IDIOMA" in Spanish, and
+   at 3rem the Spanish head collided with the next column. Sizing a grid to the
+   shortest language is how translated layouts break. */
+.lg-reg-row {
+  grid-template-columns: 5rem 4.6rem minmax(0, 1fr) 9.4rem 6.4rem;
+  column-gap: 0;
+}
+
+/* Vertical column ruling — this is what makes it a ledger rather than a
+   table. Every column after the first is ruled off in red. */
+.lg-reg-row > * {
+  padding-inline: 0.85rem;
+}
+.lg-reg-row > *:first-child { padding-inline-start: 0.6rem; }
+.lg-reg-row > * + * {
+  border-left: 1px solid var(--lg-rule-quiet);
+}
+
+/* Alternating ruled band — the pale stripe ledger stock is printed with.
+   Desktop only: at mobile widths the columns unrule and each entry becomes
+   two stacked lines, so a filled band bounds every entry into a box and the
+   record stops reading as continuous. */
+@media (min-width: 901px) {
+  .lg-register .lg-row:nth-child(odd) {
+    background: rgba(226, 232, 242, 0.028);
+  }
+}
+
+.lg-reg-reason {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lg-reg-outcome { white-space: nowrap; text-align: right; }
+.lg-reg-disp { white-space: nowrap; text-align: right; }
+
+/* Below 900px the outcome and disposition drop onto their own line under the
+   reason, indented to the reason's column, so nothing truncates. The vertical
+   ruling retires with the columns it was ruling. */
+/* Two lines per entry, not three: the reason takes the first line, and the
+   outcome and disposition share the second. Keeps the register readable at
+   375px without pushing the offer copy a full extra viewport down. */
+@media (max-width: 900px) {
+  .lg-reg-row {
+    grid-template-columns: 3.7rem 2.4rem minmax(0, 1fr) auto;
+    row-gap: 0.15rem;
+  }
+  .lg-reg-row > * + * { border-left: 0; }
+  .lg-reg-row > * { padding-inline: 0.5rem; }
+  .lg-reg-row > *:first-child { padding-inline-start: 0.45rem; }
+  .lg-reg-reason {
+    grid-column: 3 / -1;
+    grid-row: 1;
+    white-space: normal;
+    overflow: visible;
+  }
+  .lg-reg-outcome {
+    grid-column: 3;
+    grid-row: 2;
+    text-align: left;
+    white-space: normal;
+  }
+  .lg-reg-disp { grid-column: 4; grid-row: 2; text-align: right; }
+  .lg-reg-head-outcome, .lg-reg-head-disp { display: none; }
+}
+
+/* At phone width the entry collapses to a single ruled line. Two-line entries
+   bounded by a hairline read as a stack of blocks however the fill is handled;
+   one line per entry is what makes it a continuous ruled record. The outcome
+   detail is the one thing that gives way — the reason and the disposition are
+   what the row is for. */
+@media (max-width: 640px) {
+  .lg-reg-row {
+    grid-template-columns: 3.4rem 2.5rem minmax(0, 1fr) auto;
+    row-gap: 0;
+  }
+  .lg-reg-reason {
+    grid-column: 3;
+    grid-row: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .lg-reg-outcome { display: none; }
+  .lg-reg-disp { grid-column: 4; grid-row: 1; text-align: right; }
+}
+
+/* Mobile first viewport: the register leads. The offer copy follows it,
+   so the opening screen is the artifact, not a generic headline stack. */
+@media (max-width: 1023px) {
+  .lg-hero-grid { display: flex; flex-direction: column; }
+  .lg-hero-register { order: -1; }
+}
+
+/* Vertical column ruling — the red rule that makes it a ledger, not a table. */
+.lg-ruled > * + * {
+  border-left: 1px solid var(--lg-rule-quiet);
+}
+
+/* A ruled band read across the page. The rule sits between columns only, so
+   the first cell of each wrapped row is never ruled off from nothing. */
+.lg-band > * {
+  border-left: 1px solid var(--lg-rule-quiet);
+  padding-left: 1.1rem;
+}
+.lg-band > *:nth-child(2n + 1) { border-left: 0; padding-left: 0; }
+@media (min-width: 640px) {
+  .lg-band > * { border-left: 1px solid var(--lg-rule-quiet); padding-left: 1.1rem; }
+  .lg-band > *:nth-child(2n + 1) { border-left: 1px solid var(--lg-rule-quiet); padding-left: 1.1rem; }
+  .lg-band > *:nth-child(3n + 1) { border-left: 0; padding-left: 0; }
+}
+@media (min-width: 1024px) {
+  .lg-band > * { border-left: 1px solid var(--lg-rule-quiet); padding-left: 1.1rem; }
+  .lg-band > *:nth-child(3n + 1) { border-left: 1px solid var(--lg-rule-quiet); padding-left: 1.1rem; }
+  .lg-band > *:first-child { border-left: 0; padding-left: 0; }
+}
+
+/* The authored moment: rows settle in sequence, then the tick lands.
+   Exponential ease-out from an already-visible default — the register is
+   readable with JS off and with motion suppressed. */
+@keyframes lg-settle {
+  from { transform: translateY(6px); opacity: 0.35; }
+  to   { transform: translateY(0);   opacity: 1; }
+}
+@keyframes lg-tick-in {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+
+.lg-register .lg-row {
+  animation: lg-settle 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--i, 0) * 90ms);
+}
+.lg-register .lg-tick {
+  animation: lg-tick-in 340ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--i, 0) * 90ms + 380ms);
+}
+
+/* ─── Materials ───────────────────────────────────────────────────────────
+   Buckram cloth and gold foil are produced as materials, not as tokens that
+   merely name them. The cloth is a shipped raster-equivalent tile; the foil
+   is a metallic ramp with an impressed edge that catches light.            */
+
+.lg-cloth {
+  background-color: var(--lg-field);
+  background-image: url("/textures/buckram.svg");
+  background-repeat: repeat;
+  background-size: 180px 180px;
+}
+.lg-cloth-2 { background-color: var(--lg-field-2); }
+.lg-cloth-3 { background-color: var(--lg-field-3); }
+
+/* Gold foil: a reflection ramp across the block, a bright top lip and a dark
+   bottom lip so the block reads as pressed into the surface. */
+.lg-foil-surface {
+  background-image: linear-gradient(
+    100deg,
+    #8A6410 0%, #C08F18 14%, #F6DC8C 31%, #DFAE33 44%,
+    #B5820F 58%, #F0CE6A 74%, #CE9A1E 88%, #8F6A12 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 244, 205, 0.85),
+    inset 0 -1px 0 rgba(74, 48, 4, 0.9),
+    0 1px 0 rgba(0, 0, 0, 0.5),
+    0 14px 26px -16px rgba(0, 0, 0, 0.75);
+}
+
+/* The wordmark, stamped. The lockup art becomes a mask so the foil ramp
+   shows through the letterforms instead of a flat white knockout. */
+.lg-foil-mark {
+  background-image: linear-gradient(
+    100deg,
+    #9A7314 0%, #D3A021 16%, #F8E29B 34%, #E2B33A 47%,
+    #BC8912 61%, #F3D276 77%, #C8941B 100%
+  );
+  -webkit-mask-image: var(--lg-mark);
+  mask-image: var(--lg-mark);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-position: left center;
+  mask-position: left center;
+}
+
+/* The margin rule — the red vertical the ledger is ruled with. */
+.lg-margin-rule { position: relative; }
+.lg-margin-rule::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  background: var(--lg-rule);
+  opacity: 0.55;
+}
+
+/* Measure ticks down the field edge — the ruled page's own scale. Minor
+   ticks every 14px, a major tick every fifth, so it reads as a graduated
+   measure rather than a dotted line. */
+.lg-ticks {
+  background-image:
+    repeating-linear-gradient(to bottom, rgba(180, 52, 42, 0.85) 0 1px, transparent 1px 70px),
+    repeating-linear-gradient(to bottom, rgba(180, 52, 42, 0.5) 0 1px, transparent 1px 14px);
+  background-size: 100% 100%, 55% 100%;
+  background-position: left top, left top;
+  background-repeat: repeat-y, repeat-y;
+}
+
+/* The stamp — the primary action. Foil, pressed on activation. */
+.lg-stamp {
+  transition: transform 120ms var(--ease-standard), box-shadow 120ms var(--ease-standard), filter 120ms var(--ease-standard);
+}
+.lg-stamp:hover { filter: brightness(1.07) saturate(1.04); }
+.lg-stamp:active {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 244, 205, 0.5),
+    inset 0 -1px 0 rgba(74, 48, 4, 0.95),
+    inset 0 2px 6px rgba(58, 38, 2, 0.5),
+    0 0 0 rgba(0, 0, 0, 0);
+}
+
+/* Disclosure rows. The default triangle belongs to no design system, so the
+   marker is drawn: a foil rule that extends when the row opens.
+
+   The rule keeps a fixed 26px box and scales inside it rather than animating
+   its width. As a `flex: 0 0 auto` item, an animated width would reflow the
+   summary text beside it on every frame — the label would visibly shuffle as
+   the row opened. scaleX from a left origin is the same picture, laid out
+   once. */
+.lg-summary {
+  list-style: none;
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+}
+.lg-summary::-webkit-details-marker { display: none; }
+.lg-summary::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 26px;
+  height: 1px;
+  background: var(--lg-foil);
+  transform-origin: left center;
+  transform: translateY(-0.3em) scaleX(0.46);
+  transition: transform 220ms var(--ease-emphasized);
+}
+details[open] > .lg-summary::before {
+  transform: translateY(-0.3em) scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lg-summary::before { transition: none; }
+}
+
+/* Quiet action — the rule beneath it draws in from the left. */
+.lg-quiet { position: relative; }
+.lg-quiet::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -3px;
+  height: 1px;
+  background: var(--lg-foil);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lg-quiet:hover::after { transform: scaleX(1); }
+
+@media (prefers-reduced-motion: reduce) {
+  .lg-register .lg-row,
+  .lg-register .lg-tick { animation: none; }
+  .lg-stamp, .lg-quiet::after { transition: none; }
 }
 
 /* EsmiChat keyframes */
@@ -213,70 +780,19 @@ body {
   30%           { transform: translateY(-5px); opacity: 1; }
 }
 
-@keyframes esmi-pulse-ring {
-  0%   { box-shadow: 0 0 0 0 rgba(34,197,94,0.40); }
-  70%  { box-shadow: 0 0 0 5px rgba(34,197,94,0); }
-  100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
-}
+/* Contact form inputs. Still live: ContactForm renders on /ai-receptionist
+   and the /es tree, which have not been converted to the ledger world yet.
+   Retire this rule when those routes are converted.
 
-/* Solutions card hover — eliminates "use client" / useState in Solutions.tsx */
-.sol-card {
-  transform: translateY(0);
-  border-color: var(--line) !important;
-  box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset, 0 1px 0 rgba(10,37,64,0.02) !important;
-  transition: transform 320ms var(--ease-standard), border-color 320ms var(--ease-standard), box-shadow 320ms var(--ease-standard);
-}
-.sol-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--line-strong) !important;
-  box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset, 0 24px 56px -16px rgba(10,37,64,0.14), 0 6px 14px -4px rgba(10,37,64,0.06) !important;
-}
-.sol-hairline {
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 460ms var(--ease-standard);
-}
-.sol-card:hover .sol-hairline { transform: scaleX(1); }
-.sol-arrow {
-  opacity: 0.85;
-  transition: transform 260ms var(--ease-standard), opacity 260ms var(--ease-standard);
-}
-.sol-card:hover .sol-arrow { transform: translateX(5px); opacity: 1; }
-
-/* Social icon links in Footer */
-.social-icon-link {
-  transition: border-color 180ms var(--ease-standard), color 180ms var(--ease-standard);
-}
-.social-icon-link:hover {
-  border-color: var(--teal-400) !important;
-  color: var(--teal-700) !important;
-}
-
-/* Contact form inputs */
+   Removed here: `.sol-card` / `.sol-hairline` / `.sol-arrow` (the old
+   Solutions hover-lift), `.social-icon-link`, and `.nav-link`. All were dead
+   after the ledger rebuild, and the card lift-and-glow contradicted the
+   world's No Float rule — leaving it in the stylesheet invited someone to
+   reuse a shadow vocabulary this design does not have. */
 .contact-input:focus {
   outline: none;
   border-color: var(--teal-500) !important;
   box-shadow: 0 0 0 3px rgba(20,184,166,0.15);
-}
-
-/* Nav link — animated teal underline on hover */
-.nav-link {
-  position: relative;
-}
-.nav-link::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 1px;
-  background: var(--teal-500);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 240ms cubic-bezier(0.2, 0.6, 0.2, 1);
-}
-.nav-link:hover::after {
-  transform: scaleX(1);
 }
 
 /* ─── Esmi dark glassmorphism theme (scoped to /try-esmi) ─────────────────
@@ -308,17 +824,7 @@ body {
 }
 
 /* Aurora drift behind the hero / CTA */
-@keyframes esmi-aurora {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1);       opacity: 0.9; }
-  50%      { transform: translate3d(4%, -3%, 0) scale(1.12); opacity: 1;   }
-}
-
 /* Soft breathing glow for accents */
-@keyframes esmi-glow-pulse {
-  0%, 100% { opacity: 0.55; transform: scale(1);    }
-  50%      { opacity: 1;    transform: scale(1.06); }
-}
-
 /* Waveform bar bounce — staggered via inline animation-delay */
 @keyframes esmi-wave {
   0%, 100% { transform: scaleY(0.28); }
@@ -332,11 +838,6 @@ body {
 }
 
 /* Slow vertical float for glass panels */
-@keyframes esmi-float {
-  0%, 100% { transform: translateY(0);    }
-  50%      { transform: translateY(-7px); }
-}
-
 /* Conic sheen sweep on the demo console border */
 @keyframes esmi-sheen {
   to { transform: rotate(360deg); }
@@ -346,35 +847,37 @@ body {
   .esmi-dark [data-esmi-motion] { animation: none !important; }
 }
 
-/* Esmi dark chat — placeholder + thin glowing scrollbar */
-.esmi-input::placeholder { color: rgba(234, 242, 255, 0.38); }
+/* Placeholder for the Esmi chat input. The cyan scrollbar that sat here was
+   removed with the try-esmi conversion — that surface now carries `.lg-field`
+   and inherits the world's foil scrollbar. */
+.esmi-input::placeholder { color: var(--lg-ink-3); }
 
-.esmi-scroll { scrollbar-width: thin; scrollbar-color: rgba(0,240,255,0.25) transparent; }
-.esmi-scroll::-webkit-scrollbar { width: 8px; }
-.esmi-scroll::-webkit-scrollbar-thumb {
-  background: rgba(0, 240, 255, 0.22);
-  border-radius: 8px;
+/* Typing indicator. Replaces `esmi-bounce`, whose vertical hop read as
+   playful for what is simply a working state. Opacity only: the dots hold
+   position and breathe, which is legible at 6px and calm beside a serif
+   transcript. */
+@keyframes lg-typing {
+  0%, 100% { opacity: 0.28; }
+  50%      { opacity: 1; }
 }
-.esmi-scroll::-webkit-scrollbar-thumb:hover { background: rgba(0, 240, 255, 0.4); }
+
+@media (prefers-reduced-motion: reduce) {
+  [style*="lg-typing"] { animation: none !important; opacity: 0.7 !important; }
+}
 
 /* ─── Public voice preview (try-esmi) ─────────────────────────────────────
    Restrained control-bar chrome: ~150ms state transitions, no glow bloom.
-   Cyan is reserved for the play control and the played portion of the
-   waveform; every other affordance moves in white-alpha only.            */
+   Converted to the ledger world — the played portion of the waveform and the
+   play control carry foil; every other affordance moves in ink-alpha only. */
 .epv-pill,
 .epv-seg,
-.epv-cta {
-  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
-}
 .epv-pill:hover,
 .epv-seg:hover {
-  background-color: rgba(255, 255, 255, 0.07);
-  color: #EAF2FF;
+  background-color: rgba(226, 232, 242, 0.07);
+  color: var(--lg-ink);
 }
-.epv-pill:hover { border-color: rgba(255, 255, 255, 0.22); }
-.epv-cta:hover { background-color: rgba(255, 255, 255, 0.09); border-color: rgba(255, 255, 255, 0.24); }
+.epv-pill:hover { border-color: var(--lg-ink-3); }
 /* The solid-teal CTA keeps its fill on hover — brighten instead of tint. */
-.epv-cta:last-child:hover { background-color: #5CF7FF; border-color: transparent; }
 
 .epv-play { transition: transform 150ms ease, filter 150ms ease; }
 .epv-play:hover:not(:disabled) { filter: brightness(1.08); transform: scale(1.04); }
@@ -383,8 +886,8 @@ body {
 /* Unplayed rail colour rides a custom property so the inline per-bar
    background (which always wins over a stylesheet rule) can still respond
    to :hover on the track. */
-.epv-scrub { --epv-rail: rgba(255, 255, 255, 0.15); }
-.epv-scrub[data-seekable="true"]:hover { --epv-rail: rgba(255, 255, 255, 0.24); }
+.epv-scrub { --epv-rail: var(--lg-hair); }
+.epv-scrub[data-seekable="true"]:hover { --epv-rail: var(--lg-ink-3); }
 .epv-bar { transition: background-color 120ms linear; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -400,8 +903,8 @@ body {
 
 /* Unplayed rail rides a custom property so the inline per-bar background
    (which always beats a stylesheet rule) still responds to :hover. */
-.vs-scrub { --vs-rail: var(--line-strong); }
-.vs-scrub[data-seekable="true"]:hover { --vs-rail: var(--ink-4); }
+.vs-scrub { --vs-rail: var(--lg-hair); }
+.vs-scrub[data-seekable="true"]:hover { --vs-rail: var(--lg-ink-3); }
 .vs-bar { transition: background-color 120ms linear; }
 
 .vs-play { transition: transform 150ms var(--ease-standard), filter 150ms var(--ease-standard); }
@@ -420,13 +923,13 @@ body {
   cursor: pointer;
 }
 .vs-range::-webkit-slider-runnable-track {
-  height: 6px;
-  border-radius: 999px;
+  height: 4px;
+  border-radius: 0;
   background: var(--vs-track);
 }
 .vs-range::-moz-range-track {
-  height: 6px;
-  border-radius: 999px;
+  height: 4px;
+  border-radius: 0;
   background: var(--vs-track);
 }
 .vs-range::-webkit-slider-thumb {
@@ -435,29 +938,29 @@ body {
   width: 16px;
   height: 16px;
   margin-top: -5px;
-  border-radius: 50%;
-  background: #fff;
-  border: 2px solid var(--teal-500);
-  box-shadow: 0 1px 3px rgba(10, 37, 64, 0.22);
+  border-radius: 0;
+  background: var(--lg-foil);
+  border: 1px solid var(--lg-field);
+  box-shadow: none;
   transition: transform 120ms var(--ease-standard), box-shadow 120ms var(--ease-standard);
 }
 .vs-range::-moz-range-thumb {
   width: 14px;
   height: 14px;
-  border-radius: 50%;
-  background: #fff;
-  border: 2px solid var(--teal-500);
-  box-shadow: 0 1px 3px rgba(10, 37, 64, 0.22);
+  border-radius: 0;
+  background: var(--lg-foil);
+  border: 1px solid var(--lg-field);
+  box-shadow: none;
   transition: transform 120ms var(--ease-standard), box-shadow 120ms var(--ease-standard);
 }
 .vs-range:hover::-webkit-slider-thumb { transform: scale(1.12); }
 .vs-range:hover::-moz-range-thumb { transform: scale(1.12); }
 /* The global :focus-visible outline sits on the <input> box, not the thumb —
    ring the thumb too so keyboard users can see what they're dragging. */
-.vs-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.24); }
-.vs-range:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.24); }
+.vs-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px rgba(217, 162, 27, 0.45); }
+.vs-range:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px rgba(217, 162, 27, 0.45); }
 
-.vs-surface::placeholder { color: var(--ink-4); }
+.vs-surface::placeholder { color: var(--lg-ink-3); }
 
 @media (prefers-reduced-motion: reduce) {
   .vs-play, .vs-bar { transition: none; }
@@ -467,3 +970,5 @@ body {
   .vs-range:hover::-webkit-slider-thumb { transform: none; }
   .vs-range:hover::-moz-range-thumb { transform: none; }
 }
+
+/* rebuild touch */

@@ -1,171 +1,285 @@
-import Image from "next/image";
+/* The register is the hero — the artifact at full scale with its own ruled
+   grid and notation, the way the craft bar puts the map itself in the first
+   viewport. On mobile the register leads and the offer copy follows it. */
 
-// Encoded hero image path (used in both the preload srcset and the Image component).
-// Matches the deviceSizes array in next.config.ts: [390, 750, 1080, 1200, 1920].
-const HERO_SRC = "/images/hero/hero-main.png";
-const HERO_ENCODED = encodeURIComponent(HERO_SRC);
-const HERO_Q = 75;
-const HERO_SRCSET = [390, 750, 1080, 1200, 1920]
-  .map((w) => `/_next/image?url=${HERO_ENCODED}&w=${w}&q=${HERO_Q} ${w}w`)
-  .join(", ");
-const HERO_SIZES = "(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px";
+import { Stamp, QuietAction } from "@/app/components/ledger";
+import { localizedHref, type Locale } from "@/app/i18n/config";
+import type { Messages } from "@/app/i18n/messages/en";
 
-export default function Hero() {
+type Disposition = "BOOKED" | "ROUTED" | "ANSWERED" | "CLOSED";
+
+type Entry = {
+  time: string;
+  lang: "EN" | "ES";
+  reason: string;
+  disposition: Disposition;
+  detail: string;
+};
+
+/* Illustrative register. Shapes and dispositions mirror real Esmi call
+   handling; the entries themselves are authored, and the page says so.
+
+   The reasons are deliberately NOT translated between locales: they are what
+   callers actually said, and a night on a bilingual line genuinely contains
+   both languages. Translating them would misrepresent the product. Only the
+   chrome — column heads, caption, dispositions — changes language. */
+const ENTRIES: Entry[] = [
+  { time: "18:42", lang: "ES", reason: "Plantilla de encimera", disposition: "BOOKED", detail: "Jue 9:00" },
+  { time: "19:07", lang: "EN", reason: "After-hours, no heat", disposition: "ROUTED", detail: "On-call tech" },
+  { time: "19:51", lang: "ES", reason: "Seguimiento de cotización", disposition: "ANSWERED", detail: "Callback set" },
+  { time: "20:26", lang: "EN", reason: "Reschedule — slab template", disposition: "BOOKED", detail: "Fri 11:15" },
+  { time: "21:14", lang: "EN", reason: "New lead — kitchen remodel", disposition: "BOOKED", detail: "Tue 14:30" },
+  { time: "21:58", lang: "ES", reason: "Horario y dirección", disposition: "ANSWERED", detail: "From knowledge base" },
+  { time: "22:35", lang: "EN", reason: "Invoice question", disposition: "ROUTED", detail: "Accounts, 09:00" },
+  { time: "23:36", lang: "ES", reason: "Estado del trabajo #4471", disposition: "ANSWERED", detail: "From knowledge base" },
+  { time: "01:03", lang: "EN", reason: "Water leak — commercial", disposition: "ROUTED", detail: "On-call tech" },
+  { time: "02:18", lang: "EN", reason: "Wrong number", disposition: "CLOSED", detail: "No action" },
+];
+
+const DISPOSITION_ORDER: Disposition[] = ["BOOKED", "ROUTED", "ANSWERED", "CLOSED"];
+
+/* The -text steps, not the base marks: these values are read as words, and
+   `--lg-rule` / `--lg-tick` measure 2.73:1 and 4.40:1 as text on the field.
+   The small swatches in the legend use the same values for consistency —
+   they sit beside the label they key. */
+const DISPOSITION_COLOR: Record<Disposition, string> = {
+  BOOKED: "var(--lg-foil)",
+  ROUTED: "var(--lg-rule-text)",
+  ANSWERED: "var(--lg-tick-text)",
+  CLOSED: "var(--lg-ink-3)",
+};
+
+/* Counts are derived, never typed — the foot rule can only ever describe the
+   rows actually rendered above it. */
+const TALLY = DISPOSITION_ORDER.map((d) => ({
+  d,
+  n: ENTRIES.filter((e) => e.disposition === d).length,
+})).filter((x) => x.n > 0);
+
+export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
   return (
-    <>
-      {/*
-        Explicit preload with fetchpriority="high" so the browser queues the
-        hero image at the highest network priority the moment it parses the
-        document head — Next.js's auto-generated preload (from priority=true on
-        the <Image>) lacks this attribute in the current Next.js version.
-        The imageSrcSet mirrors what next/image serves so the browser
-        de-duplicates the fetch and pulls from its preload cache.
-      */}
-      <link
-        rel="preload"
-        as="image"
-        href={`/_next/image?url=${HERO_ENCODED}&w=750&q=${HERO_Q}`}
-        imageSrcSet={HERO_SRCSET}
-        imageSizes={HERO_SIZES}
-        fetchPriority="high"
-      />
-    <section
-      id="top"
-      className="relative overflow-hidden"
-      style={{ minHeight: "clamp(600px, 90vh, 920px)" }}
-    >
-      {/* Full-bleed image */}
-      <div className="absolute inset-0">
-        <Image
-          src="/images/hero/hero-main.png"
-          alt="Business professional using Orchelix AI agents with analytics overlays"
-          fill
-          priority
-          quality={75}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 1200px"
-          style={{ objectFit: "cover", objectPosition: "65% center" }}
-        />
-      </div>
-
-      {/* Gradient veil — dark left, clear right */}
+    <section id="top" className="lg-world lg-field lg-cloth relative">
+      {/* Measure ticks down the field edge — the ruled page's own scale. */}
       <div
         aria-hidden="true"
-        className="absolute inset-0"
-        style={{
-          background: `linear-gradient(105deg,
-            rgba(6,18,36,0.97) 0%,
-            rgba(6,18,36,0.93) 28%,
-            rgba(6,18,36,0.72) 48%,
-            rgba(6,18,36,0.18) 66%,
-            transparent 78%
-          )`,
-        }}
+        className="lg-ticks pointer-events-none absolute inset-y-0 left-0 hidden w-[7px] lg:block"
       />
 
-      {/* Bottom fade into next section */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 h-28"
-        style={{ background: "linear-gradient(to top, rgba(6,18,36,0.55), transparent)" }}
-      />
-
-      {/* Content */}
-      <div
-        className="relative z-10 mx-auto flex max-w-[1200px] flex-col justify-center px-6 py-28 sm:px-8 sm:py-32 lg:px-10 lg:py-[148px]"
-        style={{ minHeight: "inherit" }}
-      >
-        <div className="max-w-[580px]">
-          <Eyebrow>Multi-agent revenue operations</Eyebrow>
-
+      <div className="lg-hero-grid relative mx-auto grid max-w-[1320px] gap-y-14 px-5 pt-16 pb-16 sm:px-8 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-x-14 lg:px-10 lg:pt-24 lg:pb-24">
+        {/* ── Offer column ── */}
+        <div className="max-w-[34rem] self-center">
           <h1
-            className="mt-7 mb-8 text-balance text-[42px] leading-[1.04] font-medium tracking-[-0.032em] text-white sm:text-[60px] sm:leading-[1.02] sm:tracking-[-0.035em] lg:text-[76px] lg:leading-[1.01] lg:tracking-[-0.038em]"
-            style={{ fontFamily: "var(--font-display)" }}
+            style={{
+              fontFamily: "var(--font-display)",
+              fontStretch: "82%",
+              fontWeight: 700,
+              fontSize: "clamp(2.5rem, 5.4vw, 4.25rem)",
+              lineHeight: 0.94,
+              letterSpacing: "-0.028em",
+              textTransform: "uppercase",
+              color: "var(--lg-ink)",
+              textWrap: "balance",
+              margin: 0,
+            }}
           >
-            AI agents that{" "}
-            <span
-              className="font-normal italic"
-              style={{
-                background: "linear-gradient(115deg, #E6FAF7 0%, var(--teal-300) 42%, var(--teal-600) 100%)",
-                WebkitBackgroundClip: "text",
-                backgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                paddingRight: "0.1em",
-              }}
-            >
-              actually run
-            </span>{" "}
-            your revenue operations.
+            {t.home.heroTitle[0]}
+            <br />
+            {t.home.heroTitle[1]}
           </h1>
 
           <p
-            className="mb-10 max-w-[500px] text-[17px] leading-[1.6] text-white/70 sm:text-[18px] lg:text-[19px]"
-            style={{ fontFamily: "var(--font-display)" }}
+            className="lg-prose"
+            style={{
+              fontFamily: "var(--font-body)",
+              fontSize: "1.0625rem",
+              lineHeight: 1.62,
+              color: "var(--lg-ink-2)",
+              maxWidth: "40ch",
+              marginTop: "1.7rem",
+              marginBottom: 0,
+            }}
           >
-            A multi-agent system that qualifies leads, handles calls, closes
-            deals, and runs the financial close — so your team spends their
-            time on the work that compounds.
+            {t.home.heroBody}
           </p>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <a
-              href="/book"
-              className="inline-flex h-12 items-center rounded-xl bg-white px-6 text-[15px] font-medium transition-opacity hover:opacity-90"
-              style={{
-                fontFamily: "var(--font-display)",
-                color: "var(--navy-700)",
-                boxShadow: "0 1px 0 rgba(255,255,255,0.15) inset, 0 4px 20px rgba(0,0,0,0.30)",
-              }}
-            >
-              Book a demo <span className="ml-1.5 opacity-65">→</span>
-            </a>
-            <a
-              href="/how-it-works"
-              className="inline-flex h-12 items-center rounded-xl border border-white/25 px-6 text-[15px] font-medium text-white/90 transition-colors hover:bg-white/10"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
-              See how it works
-            </a>
+          <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">
+            <Stamp href={localizedHref("/book", locale)}>{t.common.bookPilot}</Stamp>
+            <QuietAction href="/try-esmi">{t.common.hearRealCall}</QuietAction>
           </div>
 
-          <ProofBar />
+          {/* Drawn rules, not glyphs. */}
+          <div
+            className="lg-fig mt-9 flex flex-wrap items-center gap-y-2"
+            style={{
+              fontSize: "0.6875rem",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "var(--lg-ink-2)",
+            }}
+          >
+            <a href="tel:+15615661066" style={{ color: "inherit", textDecoration: "none" }}>
+              {t.common.phone}
+            </a>
+            <Sep />
+            <span>EN · ES</span>
+            <Sep />
+            <span>{t.common.countries}</span>
+          </div>
+        </div>
+
+        {/* ── The register ── */}
+        <div className="lg-hero-register lg-margin-rule self-center lg:pl-8">
+          <Register t={t} />
         </div>
       </div>
     </section>
-    </>
   );
 }
 
-function Eyebrow({ children }: { children: React.ReactNode }) {
+function Sep() {
   return (
     <span
-      className="inline-flex items-center gap-2.5 text-[11px] leading-none font-medium uppercase tracking-[0.18em] text-teal-400"
-      style={{ fontFamily: "var(--font-mono)" }}
-    >
-      <span className="inline-block h-px w-[18px] bg-current opacity-70" />
-      {children}
-    </span>
+      aria-hidden="true"
+      style={{
+        display: "inline-block",
+        width: 1,
+        height: "0.85em",
+        background: "var(--lg-rule)",
+        opacity: 0.75,
+        margin: "0 0.85em",
+      }}
+    />
   );
 }
 
-function ProofBar() {
+function Register({ t }: { t: Messages }) {
+  const c = t.home.columns;
+  const d = t.home.dispositions;
+
   return (
-    <div
-      className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] leading-none font-medium tracking-[0.02em] text-white/70"
-      style={{ fontFamily: "var(--font-mono)" }}
-    >
-      <a
-        href="tel:+15615661066"
-        className="text-white/60 hover:text-white/90 transition-colors"
-        style={{ textDecoration: "none", letterSpacing: "0.04em" }}
+    <figure className="m-0" style={{ minWidth: 0 }}>
+      <figcaption
+        className="lg-fig flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1"
+        style={{
+          fontSize: "0.6875rem",
+          letterSpacing: "0.13em",
+          textTransform: "uppercase",
+          color: "var(--lg-ink-2)",
+          paddingBottom: "0.8rem",
+          borderBottom: "2px solid var(--lg-rule)",
+        }}
       >
-        (561)&nbsp;566-1066
-      </a>
-      <span className="inline-block h-1 w-1 rounded-full bg-teal-500" />
-      <span>EN&nbsp;·&nbsp;ES&nbsp;bilingual</span>
-      <span className="inline-block h-1 w-1 rounded-full bg-teal-500" />
-      <span>SOC&nbsp;2&nbsp;in-progress</span>
-      <span className="inline-block h-1 w-1 rounded-full bg-teal-500" />
-      <span>PIPEDA-aligned</span>
-    </div>
+        <span>{t.home.registerCaption}</span>
+        <span style={{ color: "var(--lg-ink-3)" }}>{t.home.registerWindow}</span>
+      </figcaption>
+
+      {/* Column heads */}
+      <div
+        className="lg-fig lg-row lg-reg-row"
+        style={{
+          fontSize: "0.625rem",
+          letterSpacing: "0.14em",
+          textTransform: "uppercase",
+          color: "var(--lg-ink-3)",
+          padding: "0.7rem 0",
+          borderBottom: "1px solid var(--lg-hair)",
+        }}
+      >
+        <span>{c.time}</span>
+        <span>{c.lang}</span>
+        <span>{c.reason}</span>
+        <span className="lg-reg-head-outcome">{c.outcome}</span>
+        <span className="lg-reg-head-disp">{c.disposition}</span>
+      </div>
+
+      <div className="lg-register">
+        {ENTRIES.map((e, i) => (
+          <div
+            key={e.time}
+            className="lg-row lg-reg-row"
+            style={{ "--i": i, padding: "0.72rem 0" } as React.CSSProperties}
+          >
+            <span className="lg-fig" style={{ fontSize: "0.8125rem", color: "var(--lg-ink-2)" }}>
+              {e.time}
+            </span>
+
+            <span
+              className="lg-fig"
+              style={{
+                fontSize: "0.625rem",
+                letterSpacing: "0.08em",
+                color: e.lang === "ES" ? "var(--lg-foil)" : "var(--lg-ink-3)",
+              }}
+            >
+              {e.lang}
+            </span>
+
+            <span
+              className="lg-reg-reason"
+              lang={e.lang.toLowerCase()}
+              style={{
+                fontFamily: "var(--font-body)",
+                fontSize: "0.9375rem",
+                color: "var(--lg-ink)",
+              }}
+            >
+              {e.reason}
+            </span>
+
+            <span
+              className="lg-fig lg-reg-outcome"
+              style={{ fontSize: "0.6875rem", color: "var(--lg-ink-3)", letterSpacing: "0.03em" }}
+            >
+              {e.detail}
+            </span>
+
+            <span
+              className="lg-fig lg-tick lg-reg-disp"
+              style={{
+                fontSize: "0.625rem",
+                letterSpacing: "0.09em",
+                color: DISPOSITION_COLOR[e.disposition],
+              }}
+            >
+              {d[e.disposition]}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {/* Foot rule — the ledger's subtotal line, tallied from the rows above. */}
+      <div
+        className="lg-fig flex flex-wrap items-center gap-x-5 gap-y-2"
+        style={{
+          fontSize: "0.625rem",
+          letterSpacing: "0.11em",
+          textTransform: "uppercase",
+          color: "var(--lg-ink-2)",
+          borderTop: "2px solid var(--lg-rule)",
+          paddingTop: "0.85rem",
+        }}
+      >
+        <span style={{ color: "var(--lg-ink-3)" }}>{t.home.tallyCalls.replace("{n}", String(ENTRIES.length))}</span>
+        {TALLY.map((x) => (
+          <span key={x.d} className="inline-flex items-center gap-1.5">
+            <span aria-hidden="true" style={{ width: 9, height: 2, background: DISPOSITION_COLOR[x.d] }} />
+            {x.n} {d[x.d].toLowerCase()}
+          </span>
+        ))}
+      </div>
+
+      <p
+        className="lg-fig"
+        style={{
+          fontSize: "0.6875rem",
+          letterSpacing: "0.03em",
+          color: "var(--lg-ink-2)",
+          marginTop: "0.8rem",
+          marginBottom: 0,
+        }}
+      >
+        {t.home.illustrative}
+      </p>
+    </figure>
   );
 }

@@ -1,318 +1,258 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import {
+  localizedHref,
+  otherLocale,
+  stripLocale,
+  TRANSLATED_PATHS,
+  type Locale,
+} from "@/app/i18n/config";
+import type { Messages } from "@/app/i18n/messages/en";
 
-const NAV_LINKS = [
-  { label: "Agents",     href: "/solutions" },
-  { label: "AcumenAI",   href: "/acumen" },
-  { label: "Platform",   href: "/how-it-works" },
-  { label: "Industries", href: "/industries" },
-  { label: "Pricing",    href: "/pricing" },
-  { label: "Try Esmi",   href: "/try-esmi" },
-  { label: "About",      href: "/about" },
-];
+/* Five items. Products, How it works, Industries, Pricing, About.
+   Hrefs point at the routes that exist today; the /products/* consolidation
+   in REDESIGN-PLAN.md is a follow-up, and a nav of 404s helps nobody.
 
+   Copy arrives as a prop rather than being imported: catalogues are
+   server-only, and this is a client component for the mobile drawer. */
 
-export default function Nav({ theme = "light" }: { theme?: "light" | "dark" }) {
+/* Only the slices this component renders. Nav is a client component, so its
+   props cross the server/client boundary in the RSC payload — passing the
+   whole catalogue would ship every page's copy to the browser for a header. */
+export type NavCopy = Pick<Messages, "nav" | "meta">;
+
+const EN_FALLBACK: NavCopy = {
+  nav: {
+    products: "Products",
+    howItWorks: "How it works",
+    industries: "Industries",
+    pricing: "Pricing",
+    about: "About",
+    book: "Book a pilot",
+    openMenu: "Open menu",
+    closeMenu: "Close menu",
+    home: "Orchelix — Home",
+  },
+  meta: { localeName: "English", switchTo: "Español", switchLabel: "Cambiar a español" },
+};
+
+/* Props default to English so the routes under `app/(site)/` — which are
+   English-only and outside the locale segment — can render the shared chrome
+   without threading a catalogue through every one of them. */
+export default function Nav({
+  locale = "en",
+  t = EN_FALLBACK,
+}: {
+  locale?: Locale;
+  t?: NavCopy;
+} = {}) {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
   const pathname = usePathname();
-  const isEs = pathname.startsWith("/es");
 
-  const dark = theme === "dark";
-  const c = dark
-    ? {
-        headerBg: "rgba(10,15,28,0.72)",
-        border: "rgba(255,255,255,0.10)",
-        link: "rgba(234,242,255,0.66)",
-        accent: "#00F0FF",
-        phone: "rgba(234,242,255,0.66)",
-        ctaBg: "linear-gradient(135deg, #00F0FF 0%, #38BDF8 100%)",
-        ctaColor: "#04121A",
-        ctaShadow: "0 0 20px rgba(0,240,255,0.35)",
-        btnBg: "rgba(255,255,255,0.06)",
-        btnColor: "rgba(234,242,255,0.80)",
-        drawerBg: "rgba(10,15,28,0.96)",
-        mobileLink: "#EAF2FF",
-        mobileBorder: "rgba(255,255,255,0.08)",
-      }
-    : {
-        headerBg: "rgba(251,251,252,0.78)",
-        border: "var(--line)",
-        link: "var(--ink-2)",
-        accent: "var(--teal-700)",
-        phone: "var(--ink-2)",
-        ctaBg: "var(--navy-600)",
-        ctaColor: "#fff",
-        ctaShadow: "0 1px 0 rgba(255,255,255,0.08) inset, 0 1px 2px rgba(10,37,64,0.10)",
-        btnBg: "#fff",
-        btnColor: "var(--ink-2)",
-        drawerBg: "var(--paper)",
-        mobileLink: "var(--ink)",
-        mobileBorder: "rgba(228,232,238,0.7)",
-      };
+  const links = [
+    { label: t.nav.products, href: localizedHref("/solutions", locale) },
+    { label: t.nav.howItWorks, href: localizedHref("/how-it-works", locale) },
+    { label: t.nav.industries, href: localizedHref("/industries", locale) },
+    { label: t.nav.pricing, href: localizedHref("/pricing", locale) },
+    { label: t.nav.about, href: localizedHref("/about", locale) },
+  ];
+
+  /* The switcher keeps you on the page you are reading rather than dumping you
+     on the home page of the other language — the single most common failure of
+     bolted-on bilingual sites. The one exception is a page that has no
+     translation yet: there, the home page is the honest destination, because
+     the alternative is a 404 or an English page wearing a Spanish URL. */
+  const other = otherLocale(locale);
+  const currentPath = stripLocale(pathname || "/");
+  const switchHref = TRANSLATED_PATHS.has(currentPath)
+    ? localizedHref(currentPath, other)
+    : localizedHref("/", other);
+  const bookHref = localizedHref("/book", locale);
 
   useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") close(); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+    };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [open]);
 
+  const linkStyle: React.CSSProperties = {
+    fontFamily: "var(--font-display)",
+    fontStretch: "88%",
+    fontWeight: 500,
+    fontSize: "0.8125rem",
+    letterSpacing: "0.075em",
+    textTransform: "uppercase",
+    color: "var(--lg-ink-2)",
+    textDecoration: "none",
+  };
+
   return (
     <header
+      className="lg-field lg-cloth"
       style={{
         position: "sticky",
         top: 0,
         zIndex: 50,
-        background: c.headerBg,
-        backdropFilter: "saturate(140%) blur(14px)",
-        WebkitBackdropFilter: "saturate(140%) blur(14px)",
-        borderBottom: `1px solid ${c.border}`,
+        borderBottom: "1px solid var(--lg-hair)",
       }}
     >
-      <div
-        style={{
-          maxWidth: 1200,
-          margin: "0 auto",
-          padding: "18px 40px",
-          display: "flex",
-          alignItems: "center",
-          gap: 40,
-        }}
-      >
-        {/* Logo */}
+      <div className="mx-auto flex max-w-[1320px] items-center gap-8 px-5 py-4 sm:px-8 lg:px-10">
         <a
-          href="/"
+          href={localizedHref("/", locale)}
           onClick={close}
-          aria-label="Orchelix — Home"
+          aria-label={t.nav.home}
           style={{ display: "flex", alignItems: "center", textDecoration: "none", flexShrink: 0 }}
         >
-          <Image
-            src="/orchelix-lockup-horizontal.png"
-            alt="Orchelix AI Consulting"
-            width={160}
-            height={40}
-            style={{ height: 40, width: "auto", filter: dark ? "brightness(0) invert(1)" : undefined }}
+          {/* Foil-stamped wordmark: the lockup's alpha becomes a mask so the
+              gold ramp shows through the letterforms. */}
+          <span
+            aria-hidden="true"
+            className="lg-foil-mark"
+            style={
+              {
+                "--lg-mark": "url(/orchelix-lockup-horizontal.png)",
+                display: "block",
+                width: 97,
+                height: 34,
+              } as React.CSSProperties
+            }
           />
         </a>
 
-        {/* Desktop nav — hidden below lg */}
-        <nav
-          aria-label="Primary"
-          className="hidden lg:flex"
-          style={{ gap: 32, marginLeft: 4, alignItems: "center" }}
-        >
-          {NAV_LINKS.map(({ label, href }) => (
-            <a
-              key={label}
-              href={href}
-              className="nav-link"
-              style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 500,
-                fontSize: 14,
-                lineHeight: 1,
-                color: c.link,
-                textDecoration: "none",
-                padding: "8px 0",
-                whiteSpace: "nowrap",
-                transition: "color 180ms",
-              }}
-            >
+        <nav className="ml-auto hidden items-center gap-8 lg:flex">
+          {links.map(({ label, href }) => (
+            <a key={href} href={href} className="lg-quiet" style={linkStyle}>
               {label}
             </a>
           ))}
-          <a
-            href={isEs ? "/" : "/es"}
-            className="nav-link"
-            style={{
-              fontFamily: "var(--font-display)",
-              fontWeight: 500,
-              fontSize: 14,
-              lineHeight: 1,
-              color: c.accent,
-              textDecoration: "none",
-              padding: "8px 0",
-              transition: "color 180ms",
-            }}
-          >
-            {isEs ? "English" : "Español"}
-          </a>
         </nav>
 
-        {/* Desktop CTA — hidden below lg */}
-        <div
-          className="hidden lg:flex"
-          style={{ marginLeft: "auto", gap: 12, alignItems: "center" }}
-        >
+        <div className="ml-auto flex items-center gap-5 lg:ml-0">
           <a
-            href="tel:+15615661066"
+            href={switchHref}
+            className="lg-fig lg-quiet hidden sm:inline-flex"
             style={{
-              fontFamily: "var(--font-mono)",
-              fontWeight: 500,
-              fontSize: 13,
-              lineHeight: 1,
-              letterSpacing: "0.04em",
-              color: c.phone,
+              fontSize: "0.6875rem",
+              letterSpacing: "0.11em",
+              color: "var(--lg-ink-3)",
               textDecoration: "none",
-              whiteSpace: "nowrap",
-              transition: "color 180ms",
             }}
+            lang={other}
+            hrefLang={other}
+            aria-label={t.meta.switchLabel}
           >
-            (561) 566-1066
+            {other.toUpperCase()}
           </a>
+
           <a
-            href="/book"
+            href={bookHref}
+            className="lg-stamp lg-foil-surface inline-flex items-center whitespace-nowrap"
             style={{
               fontFamily: "var(--font-display)",
-              fontWeight: 500,
-              fontSize: 14,
-              lineHeight: 1,
-              padding: "13px 20px",
-              borderRadius: 10,
-              background: c.ctaBg,
-              color: c.ctaColor,
+              fontStretch: "88%",
+              fontWeight: 700,
+              fontSize: "0.75rem",
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              color: "#2A1D02",
+              padding: "0.6rem 1.05rem",
               textDecoration: "none",
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              whiteSpace: "nowrap",
-              boxShadow: c.ctaShadow,
-              transition: "background 220ms var(--ease-standard)",
             }}
           >
-            Book a demo
+            {t.nav.book}
           </a>
-        </div>
 
-        {/* Mobile hamburger — visible below lg */}
-        <button
-          type="button"
-          onClick={() => setOpen(v => !v)}
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-          className="inline-flex items-center justify-center lg:hidden"
-          style={{
-            marginLeft: "auto",
-            width: 40,
-            height: 40,
-            borderRadius: 10,
-            border: `1px solid ${c.border}`,
-            background: c.btnBg,
-            color: c.btnColor,
-            cursor: "pointer",
-            flexShrink: 0,
-          }}
-        >
-          {open ? (
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <path d="M18 6 6 18M6 6l12 12" />
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+            aria-controls="mobile-nav"
+            aria-label={open ? t.nav.closeMenu : t.nav.openMenu}
+            className="lg:hidden"
+            style={{
+              background: "transparent",
+              border: "1px solid var(--lg-hair)",
+              color: "var(--lg-ink)",
+              padding: "0.5rem 0.65rem",
+              cursor: "pointer",
+              lineHeight: 0,
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5">
+              {open ? <path d="M4 4l10 10M14 4L4 14" /> : <path d="M2 5h14M2 9h14M2 13h14" />}
             </svg>
-          ) : (
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <path d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          )}
-        </button>
+          </button>
+        </div>
       </div>
 
-      {/* Mobile drawer */}
       {open && (
-        <div
+        <nav
+          id="mobile-nav"
           className="lg:hidden"
-          style={{
-            borderTop: `1px solid ${c.border}`,
-            background: c.drawerBg,
-            backdropFilter: dark ? "blur(14px)" : undefined,
-            WebkitBackdropFilter: dark ? "blur(14px)" : undefined,
-            padding: "8px 24px 24px",
-          }}
+          style={{ borderTop: "1px solid var(--lg-hair)", background: "var(--lg-field-2)" }}
         >
-          <nav aria-label="Primary mobile" style={{ display: "flex", flexDirection: "column" }}>
-            {NAV_LINKS.map(({ label, href }) => (
+          <div className="mx-auto max-w-[1320px] px-5 py-2 sm:px-8">
+            {links.map(({ label, href }) => (
               <a
-                key={label}
+                key={href}
                 href={href}
                 onClick={close}
                 style={{
-                  fontFamily: "var(--font-display)",
-                  fontWeight: 500,
-                  fontSize: 15,
-                  lineHeight: 1,
-                  color: c.mobileLink,
-                  textDecoration: "none",
-                  padding: "14px 0",
-                  borderBottom: `1px solid ${c.mobileBorder}`,
-                  transition: "color 180ms",
+                  ...linkStyle,
+                  display: "block",
+                  fontSize: "0.9375rem",
+                  color: "var(--lg-ink)",
+                  padding: "0.95rem 0",
+                  borderBottom: "1px solid var(--lg-hair-2)",
                 }}
               >
                 {label}
               </a>
             ))}
-            <a
-              href={isEs ? "/" : "/es"}
-              onClick={close}
-              style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 500,
-                fontSize: 15,
-                lineHeight: 1,
-                color: c.accent,
-                textDecoration: "none",
-                padding: "14px 0",
-                borderBottom: `1px solid ${c.mobileBorder}`,
-                transition: "color 180ms",
-              }}
-            >
-              {isEs ? "English" : "Español"}
-            </a>
-          </nav>
 
-          <div style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 12 }}>
-            <a
-              href="tel:+15615661066"
-              onClick={close}
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontWeight: 500,
-                fontSize: 14,
-                lineHeight: 1,
-                letterSpacing: "0.04em",
-                color: c.phone,
-                textDecoration: "none",
-                textAlign: "center",
-                padding: "12px 0",
-              }}
-            >
-              (561) 566-1066
-            </a>
-            <a
-              href="/book"
-              onClick={close}
-              style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 500,
-                fontSize: 15,
-                lineHeight: 1,
-                padding: "15px 20px",
-                borderRadius: 10,
-                background: c.ctaBg,
-                color: c.ctaColor,
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                boxShadow: c.ctaShadow,
-                transition: "background 200ms var(--ease-standard)",
-              }}
-            >
-              Book a demo
-            </a>
+            <div className="flex items-center gap-6 py-5">
+              <a
+                href={bookHref}
+                onClick={close}
+                className="lg-stamp lg-foil-surface inline-flex items-center"
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontStretch: "88%",
+                  fontWeight: 700,
+                  fontSize: "0.8125rem",
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: "#2A1D02",
+                  padding: "0.8rem 1.35rem",
+                  textDecoration: "none",
+                }}
+              >
+                {t.nav.book}
+              </a>
+              <a
+                href={switchHref}
+                onClick={close}
+                className="lg-fig"
+                style={{
+                  fontSize: "0.75rem",
+                  letterSpacing: "0.11em",
+                  color: "var(--lg-ink-3)",
+                  textDecoration: "none",
+                }}
+                lang={other}
+                hrefLang={other}
+              >
+                {t.meta.switchTo}
+              </a>
+            </div>
           </div>
-        </div>
+        </nav>
       )}
     </header>
   );

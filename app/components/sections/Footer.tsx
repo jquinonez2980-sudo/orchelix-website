@@ -1,316 +1,168 @@
-"use client";
+import { localizedHref, otherLocale, type Locale } from "@/app/i18n/config";
+import enMessages, { type Messages } from "@/app/i18n/messages/en";
 
-import Image from "next/image";
-import { usePathname } from "next/navigation";
+/* Server component now — the locale arrives as a prop, so there is nothing to
+   read from the client. The blog stays per-locale because the Spanish posts
+   are a separate, hand-written set that was never machine-translated. */
 
-// Built per-locale so Spanish pages link to the Spanish blog. Without this the
-// /es/* tree only reached /es/blog via the sitemap, leaving it orphaned and
-// "Crawled — currently not indexed" in Search Console.
-function getColumns(isEs: boolean) {
-  return [
+/* Footer is a server component, so importing the English catalogue as a
+   default costs nothing on the client. Routes under `app/(site)/` are
+   English-only and rely on this. */
+export default function Footer({
+  locale = "en",
+  t = enMessages,
+}: {
+  locale?: Locale;
+  t?: Messages;
+} = {}) {
+  const L = (path: string) => localizedHref(path, locale);
+  const other = otherLocale(locale);
+
+  const columns = [
     {
-      h: "Agents",
+      head: t.footer.products,
       links: [
-        { label: "Virtual Receptionist", href: "/ai-receptionist" },
-        { label: "Sales & Marketing",    href: "/solutions#agent-revops" },
-        { label: "Accounting OS",        href: "/acumen" },
-        { label: "Industries",            href: "/industries" },
+        { label: t.footer.links.esmi, href: "/ai-receptionist" },
+        { label: t.footer.links.revops, href: `${L("/solutions")}#agent-revops` },
+        { label: t.footer.links.acumen, href: "/acumen" },
+        { label: t.footer.links.industries, href: L("/industries") },
       ],
     },
     {
-      h: "Company",
+      head: t.footer.company,
       links: [
-        { label: "Contact",    href: "/#contact" },
-        { label: "Pricing",    href: "/pricing" },
-        { label: "Blog",       href: isEs ? "/es/blog" : "/blog" },
-        { label: "Try Esmi",   href: "/try-esmi" },
-        { label: "Book a demo", href: "/book" },
+        { label: t.footer.links.howItWorks, href: L("/how-it-works") },
+        { label: t.footer.links.pricing, href: L("/pricing") },
+        { label: t.footer.links.about, href: L("/about") },
+        { label: t.footer.links.blog, href: locale === "es" ? "/es/blog" : "/blog" },
+        { label: t.footer.links.book, href: L("/book") },
       ],
     },
     {
-      h: "Trust",
+      head: t.footer.trust,
       links: [
-        { label: "Privacy Policy",   href: "/privacy" },
-        { label: "Terms of Service", href: "/terms" },
-        { label: "PIPEDA",           href: "/privacy" },
-        { label: "Security",         href: "/privacy" },
+        { label: t.footer.links.privacy, href: "/privacy" },
+        { label: t.footer.links.terms, href: "/terms" },
+        { label: t.footer.links.pipeda, href: "/privacy" },
+        { label: t.footer.links.security, href: "/privacy" },
       ],
     },
   ];
-}
 
-export default function Footer({ theme = "light" }: { theme?: "light" | "dark" }) {
-  const pathname = usePathname();
-  const isEs = pathname?.startsWith("/es") ?? false;
-  const columns = getColumns(isEs);
-  const dark = theme === "dark";
-  const c = dark
-    ? {
-        bg: "#080C16",
-        border: "rgba(255,255,255,0.10)",
-        text: "rgba(234,242,255,0.66)",
-        accent: "#00F0FF",
-        iconBg: "rgba(255,255,255,0.05)",
-        iconBorder: "rgba(255,255,255,0.12)",
-        legalDot: "rgba(234,242,255,0.30)",
-        logoFilter: "brightness(0) invert(1)" as const,
-      }
-    : {
-        bg: "var(--surface-2)",
-        border: "var(--line)",
-        text: "var(--ink-2)",
-        accent: "var(--teal-700)",
-        iconBg: "#fff",
-        iconBorder: "var(--line)",
-        legalDot: "var(--ink-4)",
-        logoFilter: undefined,
-      };
+  const headStyle: React.CSSProperties = {
+    fontFamily: "var(--font-mono)",
+    fontSize: "0.625rem",
+    letterSpacing: "0.14em",
+    textTransform: "uppercase",
+    color: "var(--lg-ink-3)",
+    paddingBottom: "0.8rem",
+    marginBottom: "0.4rem",
+    marginTop: 0,
+    fontWeight: 500,
+    borderBottom: "1px solid var(--lg-rule-quiet)",
+  };
+
+  const linkStyle: React.CSSProperties = {
+    fontFamily: "var(--font-body)",
+    fontSize: "0.9375rem",
+    color: "var(--lg-ink-2)",
+    textDecoration: "none",
+    display: "block",
+    padding: "0.42rem 0",
+    width: "fit-content",
+  };
 
   return (
     <footer
-      id="about"
-      style={{
-        position: "relative",
-        background: c.bg,
-        borderTop: `1px solid ${c.border}`,
-        overflow: "hidden",
-      }}
-      className="px-6 pb-8 pt-20 sm:px-8 sm:pt-24 lg:px-10 lg:pt-24"
+      className="lg-field lg-cloth"
+      style={{ borderTop: "1px solid var(--lg-hair)" }}
     >
-      {/* Subtle helix watermark — via next/image so it gets AVIF/WebP */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          left: -120,
-          bottom: -120,
-          width: 420,
-          height: 420,
-          pointerEvents: "none",
-          maskImage: "radial-gradient(circle at 50% 50%, black 30%, transparent 70%)",
-          WebkitMaskImage: "radial-gradient(circle at 50% 50%, black 30%, transparent 70%)",
-        }}
-      >
-        <Image
-          src={dark ? "/orchelix-mark-light.png" : "/orchelix-mark.png"}
-          alt=""
-          width={420}
-          height={420}
-          quality={50}
-          style={{ opacity: dark ? 0.06 : 0.04, objectFit: "contain" }}
-        />
-      </div>
-
-      {/* Top hairline accent */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          top: 0,
-          height: 1,
-          background: dark
-            ? "linear-gradient(90deg, transparent 0%, rgba(0,240,255,0.5) 30%, rgba(168,85,247,0.5) 70%, transparent 100%)"
-            : "linear-gradient(90deg, transparent 0%, var(--teal-200) 30%, var(--navy-300) 70%, transparent 100%)",
-          opacity: dark ? 0.55 : 0.4,
-        }}
-      />
-
-      <div className="relative mx-auto max-w-[1200px]">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-10 lg:grid-cols-[1.6fr_1fr_1fr_1fr] lg:gap-14">
-          {/* Brand column */}
+      <div className="mx-auto max-w-[1320px] px-5 py-16 sm:px-8 lg:px-10 lg:py-20">
+        <div className="grid gap-x-12 gap-y-12 lg:grid-cols-[minmax(0,1.25fr)_repeat(3,minmax(0,1fr))]">
           <div>
-            <a href="/" style={{ display: "inline-flex", alignItems: "center", textDecoration: "none" }}>
-              <Image
-                src="/orchelix-lockup-horizontal.png"
-                alt="Orchelix AI Consulting"
-                width={170}
-                height={42}
-                style={{ height: 42, width: "auto", filter: c.logoFilter }}
+            <a href={L("/")} aria-label={t.nav.home} style={{ display: "inline-flex" }}>
+              <span
+                aria-hidden="true"
+                className="lg-foil-mark"
+                style={
+                  {
+                    "--lg-mark": "url(/orchelix-lockup-horizontal.png)",
+                    display: "block",
+                    width: 91,
+                    height: 32,
+                  } as React.CSSProperties
+                }
               />
             </a>
+
             <p
+              className="lg-prose"
               style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 400,
-                fontSize: 14,
-                lineHeight: 1.65,
-                color: c.text,
-                margin: "20px 0 24px",
-                maxWidth: 360,
+                fontFamily: "var(--font-body)",
+                fontSize: "0.9375rem",
+                lineHeight: 1.6,
+                color: "var(--lg-ink-3)",
+                maxWidth: "38ch",
+                marginTop: "1.4rem",
+                marginBottom: "1.6rem",
               }}
             >
-              AI agents for SMEs, professional firms, and service organizations
-              across North America. West Palm Beach, FL · South Florida · GTA
-              Ontario · remote across the US and Canada.
+              {t.footer.blurb}
             </p>
 
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
-              <span
-                style={{
-                  width: 6,
-                  height: 6,
-                  borderRadius: "50%",
-                  background: dark ? "#00F0FF" : "var(--teal-500)",
-                  boxShadow: dark ? "0 0 0 3px rgba(0,240,255,0.22)" : "0 0 0 3px rgba(20,184,166,0.18)",
-                  display: "inline-block",
-                  animation: "pulse 2.4s ease-in-out infinite",
-                }}
-              />
-              <span
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontWeight: 500,
-                  fontSize: 11,
-                  lineHeight: 1,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  color: c.text,
-                }}
-              >
-                Now booking Q3 pilots
-              </span>
-            </div>
-
-            <div style={{ marginTop: 16 }}>
-              <a
-                href="tel:+15615661066"
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontWeight: 500,
-                  fontSize: 13,
-                  lineHeight: 1,
-                  letterSpacing: "0.04em",
-                  color: c.accent,
-                  textDecoration: "none",
-                }}
-              >
-                (561) 566-1066
-              </a>
-            </div>
-
-            <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
-              <a
-                href="https://instagram.com/orchelix"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Orchelix on Instagram"
-                className="social-icon-link"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: 36,
-                  height: 36,
-                  borderRadius: 10,
-                  border: `1px solid ${c.iconBorder}`,
-                  color: c.text,
-                  background: c.iconBg,
-                  textDecoration: "none",
-                }}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-                </svg>
-              </a>
-              <a
-                href="https://linkedin.com/company/orchelix-ai-consulting"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Orchelix on LinkedIn"
-                className="social-icon-link"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: 36,
-                  height: 36,
-                  borderRadius: 10,
-                  border: `1px solid ${c.iconBorder}`,
-                  color: c.text,
-                  background: c.iconBg,
-                  textDecoration: "none",
-                }}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
-                  <rect x="2" y="9" width="4" height="12"/>
-                  <circle cx="4" cy="4" r="2"/>
-                </svg>
-              </a>
-            </div>
+            <a
+              href="tel:+15615661066"
+              className="lg-fig lg-quiet"
+              style={{
+                fontSize: "0.8125rem",
+                letterSpacing: "0.07em",
+                color: "var(--lg-ink)",
+                textDecoration: "none",
+              }}
+            >
+              {t.common.phone}
+            </a>
           </div>
 
-          {/* Link columns */}
           {columns.map((col) => (
-            <div key={col.h}>
-              <h3
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontWeight: 500,
-                  fontSize: 11,
-                  lineHeight: 1,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  color: c.text,
-                  margin: "0 0 22px",
-                }}
-              >
-                {col.h}
-              </h3>
-              <ul
-                style={{
-                  listStyle: "none",
-                  padding: 0,
-                  margin: 0,
-                  display: "grid",
-                  gap: 12,
-                }}
-              >
-                {col.links.map((l) => (
-                  <li key={l.label}>
-                    <a
-                      href={l.href}
-                      style={{
-                        fontFamily: "var(--font-display)",
-                        fontWeight: 500,
-                        fontSize: 14,
-                        lineHeight: 1,
-                        color: c.text,
-                        textDecoration: "none",
-                        transition: "color 180ms var(--ease-standard)",
-                      }}
-                    >
-                      {l.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <nav key={col.head} aria-label={col.head}>
+              <h2 style={headStyle}>{col.head}</h2>
+              {col.links.map((l) => (
+                <a key={l.label + l.href} href={l.href} className="lg-quiet" style={linkStyle}>
+                  {l.label}
+                </a>
+              ))}
+            </nav>
           ))}
         </div>
 
-        {/* Legal row */}
         <div
-          className="mt-16 flex flex-col gap-3 pt-6 sm:flex-row sm:items-center sm:justify-between"
+          className="lg-fig mt-14 flex flex-wrap items-center justify-between gap-x-6 gap-y-3"
           style={{
-            borderTop: `1px solid ${c.border}`,
-            fontFamily: "var(--font-mono)",
-            fontWeight: 500,
-            fontSize: 11.5,
-            lineHeight: 1,
-            letterSpacing: "0.02em",
-            color: c.text,
+            borderTop: "1px solid var(--lg-hair)",
+            paddingTop: "1.5rem",
+            fontSize: "0.6875rem",
+            letterSpacing: "0.06em",
+            color: "var(--lg-ink-3)",
           }}
         >
-          <span>© 2026 Orchelix AI Consulting Inc. · West Palm Beach, FL.</span>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 16 }}>
-            <a href="/privacy" style={{ color: "inherit", textDecoration: "none" }}>Privacy</a>
-            <span aria-hidden="true" style={{ width: 3, height: 3, borderRadius: "50%", background: c.legalDot, display: "inline-block" }} />
-            <a href="/terms" style={{ color: "inherit", textDecoration: "none" }}>Terms</a>
+          <span>© {new Date().getFullYear()} {t.footer.rights}</span>
+          <span className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            <a href="/privacy" className="lg-quiet" style={{ color: "inherit", textDecoration: "none" }}>
+              {t.footer.privacyShort}
+            </a>
+            <a href="/terms" className="lg-quiet" style={{ color: "inherit", textDecoration: "none" }}>
+              {t.footer.termsShort}
+            </a>
+            <a
+              href={localizedHref("/", other)}
+              className="lg-quiet"
+              style={{ color: "inherit", textDecoration: "none" }}
+              lang={other}
+              hrefLang={other}
+            >
+              {t.meta.switchTo}
+            </a>
           </span>
         </div>
       </div>

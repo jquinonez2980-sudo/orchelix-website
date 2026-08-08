@@ -46,7 +46,53 @@
       "Bash(xargs grep -l \"bold\\\\|split.*\\\\*\\\\*\")",
       "WebFetch(domain:orhelix-website.vercel.app)",
       "PowerShell(Get-CimInstance *)",
-      "PowerShell(Get-NetTCPConnection *)"
+      "PowerShell(Get-NetTCPConnection *)",
+      "Bash(npx --no-install lighthouse --version)",
+      "Read(//c/Program Files/Google/Chrome/Application/**)",
+      "Read(//c/Program Files \\(x86\\)/Google/Chrome/Application/**)",
+      "Bash(npm start *)",
+      "Bash(export CHROME_PATH=\"/c/Program Files/Google/Chrome/Application/chrome.exe\")",
+      "Bash(npx -y lighthouse@13.3.0 http://localhost:3000 --quiet --chrome-flags=\"--headless=new --no-sandbox\" --output=json --output-path=./lh-report.json --only-categories=performance,accessibility,best-practices,seo)",
+      "Bash(node *)",
+      "Bash(npx -y lighthouse@13.3.0 http://localhost:3000 --quiet --chrome-flags=\"--headless=new --no-sandbox\" --output=json --output-path=./lh-report2.json --only-categories=performance,accessibility,best-practices,seo)",
+      "Bash(xargs echo \"stylesheet links:\")",
+      "Bash(xargs echo \"inline style tags:\")",
+      "Bash(npx -y lighthouse@13.3.0 https://www.orchelix.com --quiet --chrome-flags=\"--headless=new --no-sandbox\" --output=json --output-path=./lh-www.json --only-categories=performance,accessibility,best-practices,seo)",
+      "Bash(npx --no-install vercel --version)",
+      "Bash(npx --no-install vercel env ls)",
+      "Bash(pkill -f \"next start\")",
+      "Bash(pkill -f \"next-server\")",
+      "Bash(npx kill-port *)",
+      "Bash(vercel --prod)",
+      "Bash(vercel env *)"
     ]
-  }
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ ! -f \"${CLAUDE_PROJECT_DIR}/.claude/skills/impeccable/scripts/hook.mjs\" ] || node \"${CLAUDE_PROJECT_DIR}/.claude/skills/impeccable/scripts/hook.mjs\"",
+            "timeout": 5,
+            "statusMessage": "Checking UI changes"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ ! -f \"${CLAUDE_PROJECT_DIR}/.claude/skills/impeccable/scripts/hook.mjs\" ] || node \"${CLAUDE_PROJECT_DIR}/.claude/skills/impeccable/scripts/hook.mjs\"",
+            "timeout": 30,
+            "statusMessage": "Design deep pass"
+          }
+        ]
+      }
+    ]
+  },
+  "description": "Impeccable design detector: immediate-tier checks after Edit/Write/MultiEdit on UI files, full-rule deep pass on Stop."
 }
