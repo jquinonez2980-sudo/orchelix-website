@@ -270,8 +270,20 @@ function Gated({ onDemo, error }: { onDemo: () => void; error: string | null }) 
         )}
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          {/* Google sign-in */}
-          <SignInButton mode="modal">
+          {/* Google sign-in.
+
+              Both redirect props are set explicitly. A modal sign-in never
+              routes through /sign-in, so nothing in that page governs where
+              it lands — without these, Clerk falls back to the instance-level
+              "after sign-in" setting, which points at the Esmi dashboard.
+              That is how an AcumenAI customer ended up looking at another
+              product's console. The person is already on /app; keep them
+              here. */}
+          <SignInButton
+            mode="modal"
+            forceRedirectUrl="/app"
+            fallbackRedirectUrl="/app"
+          >
             <button
               style={{
                 display: "flex",
@@ -495,7 +507,13 @@ function DemoConsole({
           </span>
         </div>
         <div style={{ display: "flex", gap: 10, flexShrink: 0 }}>
-          <SignInButton mode="modal">
+          {/* "Sign in for live data", from inside the demo workspace. Same
+              reasoning as the gated screen's button — pin it to /app. */}
+          <SignInButton
+            mode="modal"
+            forceRedirectUrl="/app"
+            fallbackRedirectUrl="/app"
+          >
             <button
               style={{
                 display: "inline-flex",
