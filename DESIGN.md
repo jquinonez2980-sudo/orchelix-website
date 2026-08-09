@@ -143,6 +143,8 @@ components:
 >
 > **The token file is deliberately split.** `app/globals.css` holds three unrelated systems in one file: the Tailwind `@theme` navy/teal/gold scales and their `:root` aliases (product surfaces — dashboard, forms, legacy marketing routes), the `--lg-*` block (this system), and the `.esmi-dark` block (`/try-esmi` only). Do not "unify" them. The `--lg-*` block is additive and is the only source of truth for anything documented here.
 >
+> **Two files are exempt from the detector, and the exemption is recorded here because it cannot be recorded where it is configured.** `.impeccable/config.json` holds `detector.ignoreFiles` as bare globs with no room for a reason, so: `app/api/contact/route.ts` and `app/api/leads/meta/route.ts` are transactional **email** templates, not web UI. Inline hex, table layout, and rounded corners are the only styling mail clients render reliably, and a design system for the web surface has no business governing them. They accounted for 41 of the 74 findings outstanding at the end of the conversion. Nothing else is ignored; every remaining finding is a real one on an unconverted surface.
+>
 > **The site is in a mixed state.** `/book`, `/acumen`, `/blog`, `/ai-receptionist`, `/missed-calls`, `/home-services`, `/kitchen-bath`, and the whole `/es` tree still carry the previous light/teal design. They now sit under the new `Nav` and `Footer`, so a visitor can cross from this world into the old one in a single click. Anything new on those routes should be built in this system, not matched to the page around it.
 
 ## Overview

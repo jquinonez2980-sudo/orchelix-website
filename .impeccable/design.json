@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-08T00:00:00.000Z",
+  "generatedAt": "2026-08-09T05:26:30.978Z",
   "title": "Design System: Orchelix Marketing — The Ruled Record",
   "extensions": {
     "scope": {
@@ -382,27 +382,67 @@
       {
         "name": "ease-standard",
         "value": "cubic-bezier(0.2, 0.6, 0.2, 1)",
-        "purpose": "Stamp hover/active transitions (120ms)."
+        "purpose": "State: hover, focus, toggles, and the stamp press."
       },
       {
         "name": "ease-emphasized",
         "value": "cubic-bezier(0.16, 1, 0.3, 1)",
-        "purpose": "Register settle, tick wipe, quiet-action rule draw, disclosure marker growth."
+        "purpose": "Entrance and rule-drawing. Within a rounding error of the canonical strong ease-out; the vocabulary deliberately adds no third curve."
       },
       {
-        "name": "register-settle",
-        "value": "lg-settle 620ms cubic-bezier(0.16,1,0.3,1) both; animation-delay: calc(var(--i) * 90ms)",
-        "purpose": "Rows settle in sequence from an already-visible default."
+        "name": "dur-press",
+        "value": "120ms",
+        "purpose": "Press — the stamp impressing into the cover."
       },
       {
-        "name": "tick-in",
-        "value": "lg-tick-in 340ms cubic-bezier(0.16,1,0.3,1) both; animation-delay: calc(var(--i) * 90ms + 380ms)",
-        "purpose": "Disposition wipes in via clip-path behind its row."
+        "name": "dur-state",
+        "value": "180ms",
+        "purpose": "Hover, focus, toggles, and the nav's scroll rule."
+      },
+      {
+        "name": "dur-rule",
+        "value": "260ms",
+        "purpose": "Rule — a line drawing in from one origin."
+      },
+      {
+        "name": "dur-strike",
+        "value": "300ms",
+        "purpose": "Strike — a mark revealed left-to-right."
+      },
+      {
+        "name": "dur-settle",
+        "value": "380ms",
+        "purpose": "Settle — a row landing into place from 6px."
+      },
+      {
+        "name": "stagger",
+        "value": "45ms",
+        "purpose": "Between siblings in a settling run."
+      },
+      {
+        "name": "verb-rule",
+        "value": "@keyframes lg-rule-draw { from { transform: scaleX(0) } to { transform: scaleX(1) } }",
+        "purpose": "Rule. Applied to `.lg-anchor::before` and `.lg-pending-rule`; transform-origin is the left edge."
+      },
+      {
+        "name": "verb-settle",
+        "value": "@keyframes lg-settle { from { transform: translateY(6px); opacity: 0.35 } to { transform: translateY(0); opacity: 1 } }",
+        "purpose": "Settle. Applied to `.lg-settle-item` and the call register's rows. The 0.35 floor means a stranded animation degrades to dimmed, never to hidden."
+      },
+      {
+        "name": "verb-strike",
+        "value": "@keyframes lg-strike { from { clip-path: inset(0 100% 0 0) } to { clip-path: inset(0 0 0 0) } }",
+        "purpose": "Strike. Applied to `.lg-strike` — the register's disposition marks and each arriving word group in the /try-esmi transcript. `inset()` is logical-property safe."
+      },
+      {
+        "name": "reveal-gate",
+        "value": "[data-lg-in=\"true\"] .lg-settle-item { animation: lg-settle var(--lg-dur-settle) var(--ease-emphasized) both }",
+        "purpose": "Motion Waits. Animations are declared only under the attribute RevealObserver sets on first viewport entry, so the resting state is the final state. Blocks already on screen at mount are never observed and never animate."
       },
       {
         "name": "reduced-motion",
         "value": "@media (prefers-reduced-motion: reduce) { animation: none; transition: none; }",
-        "purpose": "Every animation in the world has a suppressed path; the default state is the legible one."
+        "purpose": "Every verb ships its suppression in the same commit. Fewer and gentler, not zero: colour and opacity transitions that aid comprehension stay."
       }
     ],
     "breakpoints": [
@@ -568,7 +608,7 @@
       "name": "Disclosure Row",
       "kind": "custom",
       "refersTo": "register-row",
-      "description": "Native details/summary with the browser triangle replaced by a drawn foil rule that grows when open.",
+      "description": "A question that opens. The native marker is removed and drawn instead: a foil rule that extends from 12px to 26px when the row opens. Shared primitive as of 2026-08-08 — /pricing, /ai-receptionist, and every sector page render through it.",
       "html": "<details class=\"ds-disc\" open><summary class=\"ds-disc-s\">What happens in the first fourteen days?</summary><p class=\"ds-disc-p\">A senior consultant configures the line, the knowledge base, and the escalation rules, then runs Esmi on your real number.</p></details>",
       "css": ".ds-disc { background-color: #071A2E; border-top: 2px solid #B4342A; border-bottom: 1px solid rgba(226,232,242,0.09); padding: 1.1rem 20px; } .ds-disc-s { list-style: none; display: flex; align-items: baseline; gap: 0.9rem; cursor: pointer; font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 86%; font-weight: 600; font-size: 1.0625rem; letter-spacing: -0.008em; text-transform: uppercase; color: #F4F1E8; } .ds-disc-s::-webkit-details-marker { display: none; } .ds-disc-s::before { content: \"\"; flex: 0 0 auto; width: 12px; height: 1px; background: #D9A21B; transform: translateY(-0.3em); transition: width 220ms cubic-bezier(0.16,1,0.3,1); } .ds-disc[open] > .ds-disc-s::before { width: 26px; } .ds-disc-s:focus-visible { outline: 2px solid #D9A21B; outline-offset: 3px; } .ds-disc-p { font-family: Literata, Georgia, serif; font-size: 0.9375rem; line-height: 1.62; color: rgba(238,240,245,0.72); max-width: 58ch; margin: 0.9rem 0 0; }"
     },
@@ -587,6 +627,14 @@
       "description": "The page unit. Full-bleed band in one of five tones; tone change is the only section divider.",
       "html": "<section class=\"ds-sec\"><div class=\"ds-sec-in\"><h2 class=\"ds-sec-h\">The rate schedule</h2><p class=\"ds-sec-p\">Pick a starting point by call volume. Every tier includes the full dashboard — the difference is capacity, not capability.</p></div></section><section class=\"ds-sec ds-sec-stock\"><div class=\"ds-sec-in\"><h2 class=\"ds-sec-h ds-sec-h-stock\">Try Esmi on your real line</h2><p class=\"ds-sec-p ds-sec-p-stock\">Fourteen days, your own number, every call on the record.</p></div></section>",
       "css": ".ds-sec { display: block; background-color: #0B2338; background-image: url(/textures/buckram.svg); background-repeat: repeat; background-size: 180px 180px; } .ds-sec-stock { background-color: #EDE9DC; background-image: none; } .ds-sec-in { max-width: 1320px; margin: 0 auto; padding: 5rem 1.25rem; } .ds-sec-h { font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 82%; font-weight: 700; font-size: clamp(1.85rem, 3.2vw, 2.9rem); line-height: 1.02; letter-spacing: -0.022em; text-transform: uppercase; color: #F4F1E8; max-width: 20ch; margin: 0; } .ds-sec-h-stock { color: #10243A; } .ds-sec-p { font-family: Literata, Georgia, serif; font-size: 1.0625rem; line-height: 1.62; color: rgba(238,240,245,0.72); max-width: 52ch; margin: 1.3rem 0 0; } .ds-sec-p-stock { color: #4A5A6E; }"
+    },
+    {
+      "name": "Anchor Rule",
+      "kind": "custom",
+      "refersTo": "register-row",
+      "description": "The red top rule every data block hangs from, drawn as a pseudo-element so it can be scaled. On first viewport entry it draws in from the left in 260ms; at rest it is simply present at full width.",
+      "html": "<dl class=\"ds-anchor\"><div class=\"ds-anchor-row\"><dt>Languages</dt><dd>English and Spanish, natively</dd></div><div class=\"ds-anchor-row\"><dt>Hours</dt><dd>24/7, nights and weekends included</dd></div></dl>",
+      "css": ".ds-anchor { position: relative; margin: 0; font-family: 'Azeret Mono', ui-monospace, monospace; } .ds-anchor::before { content: \"\"; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--lg-rule, #B4342A); transform-origin: left center; animation: ds-rule-draw 260ms cubic-bezier(0.16,1,0.3,1) both; } .ds-anchor-row { display: grid; grid-template-columns: 9rem minmax(0,1fr); padding: 0.8rem 0; border-bottom: 1px solid var(--lg-hair-2, rgba(226,232,242,0.09)); } .ds-anchor-row dt { font-size: 0.625rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--lg-ink-3, rgba(226,232,242,0.52)); } .ds-anchor-row dd { margin: 0; font-family: Literata, Georgia, serif; font-size: 0.9375rem; color: var(--lg-ink, #F4F1E8); } @keyframes ds-rule-draw { from { transform: scaleX(0) } to { transform: scaleX(1) } } @media (prefers-reduced-motion: reduce) { .ds-anchor::before { animation: none } }"
     }
   ],
   "narrative": {
@@ -670,6 +718,31 @@
         "name": "The No Float Rule",
         "body": "Surfaces do not lift. There is no ambient shadow, no hover elevation, no card. Hover changes a rule, a brightness, or a fill — never a translateY on a container.",
         "section": "elevation"
+      },
+      {
+        "name": "The Closed Vocabulary Rule",
+        "section": "motion",
+        "body": "Four verbs, three durations, one stagger, two curves — closed the same way the type ramp is closed. A motion value that is not in the table is drift, not a decision. There is no third easing curve, and `ease-in` is never used on this surface."
+      },
+      {
+        "name": "The Nothing Loops Rule",
+        "section": "motion",
+        "body": "No animation repeats. `infinite` does not appear on this surface. A state that persists is drawn as a held mark, not a breathing one. Three loops were removed on 2026-08-08: a three-dot \"AI thinking\" indicator with a blinking caret, a waveform breathing on an untouched page, and a tool spinner repeating a label written beside it."
+      },
+      {
+        "name": "The Legible Default Rule",
+        "section": "motion",
+        "body": "Every verb animates to the resting state, never from invisibility. Remove the animation — by reduced motion, by JS being off, by an observer that never fires — and the final state is what is already on the page. A page whose content is gated behind an animation is broken, not animated."
+      },
+      {
+        "name": "The Reduced Motion Rule",
+        "section": "motion",
+        "body": "Fewer and gentler, not zero. Transform- and clip-based movement is dropped so nothing travels or wipes; colour and opacity transitions that aid comprehension stay. Every verb ships its `prefers-reduced-motion` path in the same commit as the verb."
+      },
+      {
+        "name": "The Real Cadence Rule",
+        "section": "motion",
+        "body": "Where motion represents something happening, it is driven by the real event and not by a timer imitating one. /try-esmi strikes each word group as the backend's SSE stream delivers it, so the pace on screen is the model's pace — which is also why there is no skip control: there is no artificial queue to skip past. A simulated typing cadence would be a fabrication in motion, and the honesty standard does not stop at copy."
       }
     ],
     "dos": [
@@ -683,7 +756,8 @@
       "Do change axis when two data blocks sit in sequence — a RuledList followed by a Band, never a RuledList followed by a RuledList.",
       "Do ship materials as produced assets: a real tile, a real ramp with lit and shadowed lips.",
       "Do use real semantic tables and definition lists for tabular content, with a caption and scoped headers.",
-      "Do provide a reduced-motion path for every animation, and make the default state the legible one."
+      "Do provide a reduced-motion path for every animation, and make the default state the legible one.",
+      "Do let the shared RevealObserver gate below-the-fold motion. It is the site's only scroll-driven code; a per-page observer is how a codebase ends up with five slightly different reveal thresholds."
     ],
     "donts": [
       "Don't add a second foil element to a screen that already has a stamp. Foil on five elements is what destroyed the stamp's meaning once already.",
@@ -697,7 +771,10 @@
       "Don't introduce a font-size that is not in typography.scale, and don't hand-write a clamp() for a heading — use PageTitle or SectionTitle.",
       "Don't set body copy in uppercase or in the condensed display face, and don't set a figure in the body serif.",
       "Don't show the alternating register band below 901px, or let a register entry occupy more than one line below 640px.",
-      "Don't merge the --lg-* block with the navy/teal/gold @theme scales in app/globals.css. They serve different surfaces and the split is intentional."
+      "Don't merge the --lg-* block with the navy/teal/gold @theme scales in app/globals.css. They serve different surfaces and the split is intentional.",
+      "Don't write `infinite`, a pulsing dot, a blinking caret, or a spinner. A persistent state is a held mark, not a breathing one.",
+      "Don't invent a duration or an easing curve. Four verbs, three durations, one stagger, two curves — the vocabulary is closed.",
+      "Don't animate anything but `transform`, `opacity`, and `clip-path`, and don't gate content behind an animation."
     ]
   }
 }
