@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-09T05:26:30.978Z",
+  "generatedAt": "2026-08-09T10:02:31.559Z",
   "title": "Design System: Orchelix Marketing — The Ruled Record",
   "extensions": {
     "scope": {
@@ -743,6 +743,11 @@
         "name": "The Real Cadence Rule",
         "section": "motion",
         "body": "Where motion represents something happening, it is driven by the real event and not by a timer imitating one. /try-esmi strikes each word group as the backend's SSE stream delivers it, so the pace on screen is the model's pace — which is also why there is no skip control: there is no artificial queue to skip past. A simulated typing cadence would be a fabrication in motion, and the honesty standard does not stop at copy."
+      },
+      {
+        "name": "The Foreign Mark Rule",
+        "section": "colors",
+        "body": "A third party's brand is not ours to restyle, and the conversion stops at its edge. /app's 'Sign in with Google' buttons carry Google's own dark button spec — ground #131314, border #8E918F, label #E3E3E3 — because Google's branding guidelines permit only light (#FFFFFF), neutral (#F2F2F2), or dark (#131314) grounds beneath the multicolour mark, and a house navy is none of them. The four logo colours (#4285F4, #34A853, #FBBC05, #EA4335) are likewise fixed. These seven values are the only colours on a converted surface that are outside this palette on purpose. Any future third-party mark gets the same treatment: use their sanctioned form, document it, and change nothing else."
       }
     ],
     "dos": [
@@ -774,7 +779,8 @@
       "Don't merge the --lg-* block with the navy/teal/gold @theme scales in app/globals.css. They serve different surfaces and the split is intentional.",
       "Don't write `infinite`, a pulsing dot, a blinking caret, or a spinner. A persistent state is a held mark, not a breathing one.",
       "Don't invent a duration or an easing curve. Four verbs, three durations, one stagger, two curves — the vocabulary is closed.",
-      "Don't animate anything but `transform`, `opacity`, and `clip-path`, and don't gate content behind an animation."
+      "Don't animate anything but `transform`, `opacity`, and `clip-path`, and don't gate content behind an animation.",
+      "Don't restyle a third party's brand mark to fit the world. Use their sanctioned form and document the exception."
     ]
   }
 }

@@ -524,11 +524,15 @@ body {
 }
 .skip-link:focus { left: 8px; }
 
-/* Focus ring. The teal default now reaches only the routes still in the old
-   light world — /acumen, /blog, /ai-receptionist, /missed-calls,
-   /home-services, /kitchen-bath, and the /es legacy sub-routes. /try-esmi and
-   /dashboard are converted and override it via `.lg-world`/`.lg-field` below
-   and `.lg-app` above. */
+/* Focus ring, light-world default.
+
+   Every route this comment used to name — /acumen, /blog, /ai-receptionist,
+   /missed-calls, /home-services, /kitchen-bath, /es/recepcionista-ia — is
+   converted, and each now overrides this via `.lg-world` / `.lg-field` below
+   or `.lg-app` above. What is left reaching it: /privacy, /terms,
+   /get-started, /sign-in, and /sign-up. Those five are the last light-world
+   surfaces on the site, and this rule and its 4px radius are the last thing
+   the detector flags in this file. Retire both together when they convert. */
 :focus-visible {
   outline: 2px solid var(--teal-500);
   outline-offset: 2px;
