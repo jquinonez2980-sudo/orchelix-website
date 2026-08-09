@@ -11,7 +11,13 @@ export default function AcumenAppLayout({ children }: { children: React.ReactNod
   return (
     <ClerkProvider afterSignOutUrl="/">
       <ScrollUnlocker />
-      {children}
+      {/* `lg-app` scopes the console into the ledger world by retargeting the
+          design tokens for this subtree only; `lg-cloth` gives it the same
+          buckram ground as the marketing surface. The console's own markup
+          is unchanged by the scope — it reads tokens, and the tokens moved. */}
+      <div className="lg-app lg-cloth" style={{ minHeight: "100vh" }}>
+        {children}
+      </div>
     </ClerkProvider>
   );
 }

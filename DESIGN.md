@@ -200,6 +200,8 @@ A single dark cloth field in three tonal steps, two pale ledger-stock inversions
 
 **The Red Is Structure Rule.** Rule red is a ruling colour. It draws column verticals, section top rules, ticks, and separators. It never carries error, danger, destructive, or "urgent" meaning on this surface. On the marketing surface an error is drawn with a device — a margin annotation of a heavy ink rule and a mono label — not by borrowing the rule; `/book` and `/try-esmi` both do this. The product surface is the documented exception: see The Status Scale above.
 
+**The Foreign Mark Rule.** A third party's brand is not ours to restyle, and the conversion stops at its edge. `/app`'s "Sign in with Google" buttons carry Google's own dark button spec — ground `#131314`, border `#8E918F`, label `#E3E3E3` — because Google's branding guidelines permit only light (`#FFFFFF`), neutral (`#F2F2F2`), or dark (`#131314`) grounds beneath the multicolour mark, and a house navy is none of them. The four logo colours (`#4285F4`, `#34A853`, `#FBBC05`, `#EA4335`) are likewise fixed. These seven values are the only colours on a converted surface that are outside this palette on purpose; the detector is right to flag them and this note is the answer. Any future third-party mark gets the same treatment: use their sanctioned form, document it here, and change nothing else.
+
 **The Tinted Ink Rule.** No neutral gray text. Every ink on the field is pulled toward the field's blue-white; every ink on stock is pulled toward the field's navy. Measured contrast on the field runs 4.68–8.41:1 alpha-composited; a new ink value has to land inside that band.
 
 ## Typography

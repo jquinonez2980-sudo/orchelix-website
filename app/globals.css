@@ -271,6 +271,54 @@
   --shadow-lg: none;
   --shadow-xl: none;
 
+  /* ── The back-compat aliases, retargeted too ──────────────────────────
+     The block above retargets the `--color-*` tokens, which is enough for
+     any surface styled with Tailwind utilities: `bg-surface` emits
+     `background-color: var(--color-surface)` and picks the override up.
+
+     It is NOT enough for a surface styled with inline `var(--ink)`. Those
+     aliases are declared on `:root` as `--ink: var(--color-ink)`, and a
+     custom property's `var()` is substituted at computed-value time on the
+     element that declares it — so `--ink` resolved against `:root`'s
+     `--color-ink` and inherits down as that literal. Redefining
+     `--color-ink` here never reaches it.
+
+     /app is styled almost entirely with inline `var(--ink)` / `var(--line)`,
+     which is exactly why it stayed light while /dashboard converted. Both
+     halves are now retargeted, so the scope covers either styling method. */
+  --paper:       var(--lg-field);
+  --surface:     var(--lg-field);
+  --surface-2:   var(--lg-field-2);
+
+  --ink:         var(--lg-ink);
+  --ink-2:       var(--lg-ink-2);
+  --ink-3:       var(--lg-ink-3);
+  --ink-4:       var(--lg-ink-3);
+
+  --line:        var(--lg-hair);
+  --line-strong: var(--lg-rule-quiet);
+
+  --teal-50:     rgba(217, 162, 27, 0.10);
+  --teal-200:    var(--lg-rule-quiet);
+  --teal-300:    var(--lg-foil-lift);
+  --teal-500:    var(--lg-foil);
+  --teal-600:    var(--lg-foil);
+  --teal-700:    var(--lg-foil);
+
+  --navy-500:    var(--lg-foil-lift);
+  --navy-600:    var(--lg-foil);
+  --navy-700:    var(--lg-field);
+  --navy-900:    var(--lg-field);
+
+  /* Gold was AcumenAI's own accent on a light ground. On the field it is the
+     same metal as the foil, so it collapses into it rather than running a
+     second warm scale beside it. */
+  --gold-50:     rgba(217, 162, 27, 0.10);
+  --gold-100:    var(--lg-rule-quiet);
+  --gold-500:    var(--lg-foil);
+  --gold-600:    var(--lg-foil);
+  --gold-700:    var(--lg-foil-lift);
+
   background: var(--lg-field);
   color: var(--lg-ink);
 }

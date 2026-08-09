@@ -13,9 +13,12 @@ import {
 } from "@/app/lib/acumenApi";
 import { useAcumenToken } from "./useAcumenToken";
 
-const GOLD = "#B7791F";
-const GOLD_BG = "#FBF3DD";
-const GOLD_BORDER = "#F6E4B8";
+/* AcumenAI ran its own gold scale on a light ground. Inside `.lg-app` it is
+   the same metal as the marketing surface's foil, so the three constants
+   resolve to ledger tokens rather than a second warm palette beside it. */
+const GOLD = "var(--lg-foil)";
+const GOLD_BG = "rgba(217, 162, 27, 0.10)";
+const GOLD_BORDER = "var(--lg-rule-quiet)";
 
 function money(s: string | null): string {
   if (s == null) return "—";
@@ -77,15 +80,13 @@ export default function AcumenDashboard() {
           gap: 16,
         }}
       >
-        <div
-          style={{
-            width: 40,
-            height: 40,
-            border: "3px solid var(--gold-100)",
-            borderTopColor: "var(--gold-500)",
-            borderRadius: "50%",
-            animation: "spin 0.8s linear infinite",
-          }}
+        {/* Was a rotating ring on `spin … infinite`. The Nothing Loops Rule
+            reaches this surface now: a state that persists is a held mark,
+            not a breathing one. The rule draws once, in 260ms, and holds. */}
+        <span
+          className="lg-pending-rule"
+          aria-hidden="true"
+          style={{ display: "block", width: 26, height: 1, background: GOLD }}
         />
         <p
           style={{
@@ -96,7 +97,6 @@ export default function AcumenDashboard() {
         >
           Loading demo workspace…
         </p>
-        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
   }
@@ -164,11 +164,14 @@ function Gated({ onDemo, error }: { onDemo: () => void; error: string | null }) 
         style={{
           maxWidth: 480,
           width: "100%",
-          background: "#fff",
+          background: "var(--lg-field-2)",
           border: "1px solid var(--line)",
-          borderRadius: 24,
+          borderRadius: 0,
           padding: "48px 40px",
-          boxShadow: "0 8px 48px -16px rgba(10,37,64,0.14), 0 2px 8px -4px rgba(10,37,64,0.06)",
+          /* The card's lift shadow went with the conversion. The No Float
+             Rule holds here too: the only box-shadow in this world is the
+             foil's own stamping relief. Depth is the tonal step between
+             field and field-2, and the hairline that rules the panel off. */
           textAlign: "center",
         }}
       >
@@ -180,10 +183,9 @@ function Gated({ onDemo, error }: { onDemo: () => void; error: string | null }) 
             justifyContent: "center",
             width: 56,
             height: 56,
-            borderRadius: 16,
-            background: `linear-gradient(135deg, ${GOLD_BG} 0%, #fff 100%)`,
+            borderRadius: 0,
+            background: GOLD_BG,
             border: `1px solid ${GOLD_BORDER}`,
-            boxShadow: `0 0 0 4px ${GOLD_BG}`,
             marginBottom: 24,
           }}
         >
@@ -253,10 +255,11 @@ function Gated({ onDemo, error }: { onDemo: () => void; error: string | null }) 
             style={{
               marginBottom: 20,
               padding: "10px 14px",
-              borderRadius: 10,
-              border: "1px solid #E7B8B8",
-              background: "#FBEEEE",
-              color: "#9A3434",
+              borderRadius: 0,
+              border: 0,
+              borderLeft: "2px solid var(--lg-ink)",
+              background: "transparent",
+              color: "var(--lg-ink-2)",
               fontFamily: "var(--font-mono)",
               fontSize: 12,
               textAlign: "left",
@@ -277,24 +280,26 @@ function Gated({ onDemo, error }: { onDemo: () => void; error: string | null }) 
                 gap: 10,
                 width: "100%",
                 height: 48,
-                borderRadius: 12,
-                border: "1px solid var(--line-strong)",
-                background: "#fff",
-                color: "var(--ink)",
+                borderRadius: 0,
+                /* Google's own dark button spec — their ground, border, and
+                   label colour, not ours. Their branding guidelines permit
+                   light (#FFFFFF), neutral (#F2F2F2), or dark (#131314)
+                   only; the multicolour mark may not sit on a house colour,
+                   so the conversion stops at this button's edge. */
+                border: "1px solid #8E918F",
+                background: "#131314",
+                color: "#E3E3E3",
                 fontFamily: "var(--font-display)",
                 fontSize: 15,
                 fontWeight: 500,
                 cursor: "pointer",
-                boxShadow: "0 1px 3px rgba(10,37,64,0.07)",
-                transition: "box-shadow 180ms, background 180ms",
+                transition: "background 180ms",
               }}
               onMouseOver={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.boxShadow =
-                  "0 3px 10px rgba(10,37,64,0.10)";
+                (e.currentTarget as HTMLButtonElement).style.background = "#1F1F20";
               }}
               onMouseOut={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.boxShadow =
-                  "0 1px 3px rgba(10,37,64,0.07)";
+                (e.currentTarget as HTMLButtonElement).style.background = "#131314";
               }}
             >
               <GoogleIcon />
@@ -334,7 +339,7 @@ function Gated({ onDemo, error }: { onDemo: () => void; error: string | null }) 
               gap: 8,
               width: "100%",
               height: 48,
-              borderRadius: 12,
+              borderRadius: 0,
               border: `1px solid ${GOLD_BORDER}`,
               background: GOLD_BG,
               color: GOLD,
@@ -345,7 +350,7 @@ function Gated({ onDemo, error }: { onDemo: () => void; error: string | null }) 
               transition: "background 180ms",
             }}
             onMouseOver={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background = "#F6E4B8";
+              (e.currentTarget as HTMLButtonElement).style.background = "rgba(217, 162, 27, 0.18)";
             }}
             onMouseOut={(e) => {
               (e.currentTarget as HTMLButtonElement).style.background = GOLD_BG;
@@ -448,7 +453,7 @@ function DemoConsole({
           background: GOLD_BG,
           border: `1px solid ${GOLD_BORDER}`,
           borderTop: "none",
-          borderRadius: "0 0 16px 16px",
+          borderRadius: 0,
           marginBottom: 32,
           flexWrap: "wrap",
         }}
@@ -463,11 +468,10 @@ function DemoConsole({
           <span
             style={{
               display: "inline-block",
-              width: 8,
-              height: 8,
-              borderRadius: "50%",
+              width: 14,
+              height: 2,
+              borderRadius: 0,
               background: GOLD,
-              boxShadow: `0 0 0 3px ${GOLD_BORDER}`,
             }}
           />
           <span
@@ -499,10 +503,12 @@ function DemoConsole({
                 gap: 7,
                 height: 34,
                 padding: "0 16px",
-                borderRadius: 9,
-                border: `1px solid ${GOLD_BORDER}`,
-                background: "#fff",
-                color: GOLD,
+                borderRadius: 0,
+                /* Carries the Google mark too, so it takes the same
+                   sanctioned dark treatment as the primary button above. */
+                border: "1px solid #8E918F",
+                background: "#131314",
+                color: "#E3E3E3",
                 fontFamily: "var(--font-display)",
                 fontSize: 13,
                 fontWeight: 500,
@@ -519,7 +525,7 @@ function DemoConsole({
             style={{
               height: 34,
               padding: "0 14px",
-              borderRadius: 9,
+              borderRadius: 0,
               border: `1px solid ${GOLD_BORDER}`,
               background: "transparent",
               color: `${GOLD}aa`,
@@ -550,7 +556,7 @@ function DemoConsole({
           </span>
           <DevelopmentNote className="mt-2 block" />
           <h1
-            className="mt-2 text-[30px] font-semibold tracking-[-0.02em]"
+            className="mt-2 text-[1.5rem] font-semibold tracking-[-0.02em]"
             style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
           >
             Books for {data.period}
@@ -569,7 +575,7 @@ function DemoConsole({
       {/* Pipeline beats */}
       <section className="mt-10">
         <h2
-          className="mb-3 text-[18px] font-semibold"
+          className="mb-3 text-[1.0625rem] font-semibold"
           style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
         >
           Pipeline run
@@ -628,10 +634,10 @@ function DemoConsole({
               >
                 <span
                   style={{
-                    width: 7,
-                    height: 7,
-                    borderRadius: "50%",
-                    background: b.ok ? "#16A34A" : GOLD,
+                    width: 14,
+                    height: 2,
+                    borderRadius: 0,
+                    background: b.ok ? "var(--lg-tick)" : GOLD,
                     display: "inline-block",
                     flexShrink: 0,
                   }}
@@ -726,7 +732,7 @@ function DemoConsole({
         style={{
           marginTop: 32,
           padding: "20px 24px",
-          borderRadius: 16,
+          borderRadius: 0,
           background: "var(--surface-2)",
           border: "1px solid var(--line)",
           fontFamily: "var(--font-mono)",
@@ -880,7 +886,7 @@ function LiveConsole({ token }: { token: string | null }) {
           </span>
           <DevelopmentNote className="mt-2 block" />
           <h1
-            className="mt-2 text-[30px] font-semibold tracking-[-0.02em]"
+            className="mt-2 text-[1.5rem] font-semibold tracking-[-0.02em]"
             style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
           >
             Books for {period}
@@ -901,7 +907,7 @@ function LiveConsole({ token }: { token: string | null }) {
                   borderColor: "var(--line-strong)",
                   color: "var(--ink)",
                   fontFamily: "var(--font-mono)",
-                  background: "#fff",
+                  background: "var(--lg-field-2)",
                 }}
               >
                 <option value="">All</option>
@@ -926,7 +932,7 @@ function LiveConsole({ token }: { token: string | null }) {
                 borderColor: "var(--line-strong)",
                 color: "var(--ink)",
                 fontFamily: "var(--font-mono)",
-                background: "#fff",
+                background: "var(--lg-field-2)",
               }}
             >
               {periods.map((p) => (
@@ -944,9 +950,10 @@ function LiveConsole({ token }: { token: string | null }) {
         <div
           className="mb-6 rounded-xl border px-4 py-3 text-[13px]"
           style={{
-            borderColor: "#E7B8B8",
-            background: "#FBEEEE",
-            color: "#9A3434",
+            borderColor: "transparent",
+            borderLeft: "2px solid var(--lg-ink)",
+            background: "transparent",
+            color: "var(--lg-ink-2)",
             fontFamily: "var(--font-mono)",
           }}
         >
@@ -991,7 +998,7 @@ function LiveConsole({ token }: { token: string | null }) {
               className="rounded-lg px-3 py-1.5 text-[13px] font-semibold"
               style={{
                 background: "var(--gold-500)",
-                color: "#1A1206",
+                color: "#2A1D02",
                 fontFamily: "var(--font-display)",
                 opacity: bulkBusy ? 0.6 : 1,
                 cursor: bulkBusy ? "default" : "pointer",
@@ -1040,7 +1047,7 @@ function LiveConsole({ token }: { token: string | null }) {
                     className="rounded-lg px-3 py-1.5 text-[13px] font-semibold"
                     style={{
                       background: "var(--gold-500)",
-                      color: "#1A1206",
+                      color: "#2A1D02",
                       fontFamily: "var(--font-display)",
                       cursor: "pointer",
                     }}
@@ -1097,8 +1104,8 @@ function LiveConsole({ token }: { token: string | null }) {
                 <span
                   className="rounded-full px-2 py-0.5 text-[11px] font-semibold"
                   style={{
-                    background: "#ECFDF5",
-                    color: "#16A34A",
+                    background: "transparent",
+                    color: "var(--lg-tick-text)",
                     fontFamily: "var(--font-mono)",
                     whiteSpace: "nowrap",
                   }}
@@ -1241,7 +1248,7 @@ function Kpi({
         {label}
       </div>
       <div
-        className="mt-2 text-[26px] font-semibold leading-none tracking-[-0.02em]"
+        className="mt-2 text-[1.5rem] font-semibold leading-none tracking-[-0.02em]"
         style={{
           fontFamily: "var(--font-display)",
           color: gold ? GOLD : "var(--ink)",
@@ -1268,7 +1275,7 @@ function Section({
     <section className="mt-10">
       <div className="mb-3 flex items-center justify-between gap-3">
         <h2
-          className="flex items-baseline gap-2 text-[18px] font-semibold"
+          className="flex items-baseline gap-2 text-[1.0625rem] font-semibold"
           style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
         >
           {title}
