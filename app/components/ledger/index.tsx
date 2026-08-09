@@ -320,7 +320,7 @@ export function RuledList({
       {items.map(([term, def], i) => (
         <div
           key={term}
-          className="lg-row lg-settle-item"
+          className="lg-row lg-settle-item lg-elevate"
           style={{
             "--i": i,
             gridTemplateColumns: `${labelWidth} minmax(0,1fr)`,
@@ -387,7 +387,7 @@ export function Band({
       {items.map(([term, def], i) => (
         <div
           key={term}
-          className="lg-settle-item"
+          className="lg-settle-item lg-elevate"
           style={{ "--i": i, padding: "1.1rem 1.1rem 1.2rem 0" } as CSSProperties}
         >
           <dt
@@ -436,7 +436,7 @@ export function Disclosure({
       {items.map((f, i) => (
         <details
           key={f.q}
-          className="lg-settle-item"
+          className="lg-settle-item lg-elevate"
           style={{
             "--i": i,
             borderBottom: `1px solid ${hairFor(tone)}`,
@@ -484,7 +484,7 @@ export function EntryList({
       {entries.map((e, i) => (
         <article
           key={e.title}
-          className="lg-row lg-settle-item"
+          className="lg-row lg-settle-item lg-elevate"
           style={{
             "--i": i,
             gridTemplateColumns: "minmax(0,1fr)",

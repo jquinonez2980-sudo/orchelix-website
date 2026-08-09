@@ -141,18 +141,27 @@
    teal/gold scales above still serve /dashboard and /try-esmi untouched.   */
 
 :root {
-  /* Buckram — the binding cloth. The dominant field. */
-  --lg-field:      #071A2E;
-  --lg-field-2:    #0B2338;
-  --lg-field-3:    #102C44;
+  /* Buckram — the binding cloth. The dominant field.
+
+     Darkened 2026-08-09: the original values (#071A2E family) sat too light
+     and too gray for the cloth weave riding on top of them, so the two
+     together read as washed denim rather than a bound cover. These are the
+     same hues pushed 40-50% darker with a touch more saturation — richer
+     ink-navy, not gray-blue. */
+  --lg-field:      #050C18;
+  --lg-field-2:    #0A1729;
+  --lg-field-3:    #11223C;
 
   /* Ledger stock — the ruled writing surface, for regions that must read. */
   --lg-stock:      #EDE9DC;
   --lg-stock-2:    #E2DDCB;
 
-  /* Foil stamp. The single sharp accent. */
-  --lg-foil:       #D9A21B;
-  --lg-foil-lift:  #EFBB3C;
+  /* Foil stamp. The single sharp accent. Sharpened 2026-08-09 alongside the
+     field: more saturated, a brighter lift, so it reads as struck metal
+     against the darker cover instead of dulled brass. */
+  --lg-foil:       #E3A611;
+  --lg-foil-lift:  #FFCB47;
+  --lg-foil-glow:  rgba(227, 166, 17, 0.45);
 
   /* Column ruling. Red is the rule; it is not an alert colour here. */
   --lg-rule:       #B4342A;
@@ -859,6 +868,79 @@ body {
   mask-position: left center;
 }
 
+/* ─── Elevation (2026-08-09 addendum) ─────────────────────────────────────
+   DESIGN.md's "No Float Rule" was a deliberate choice for the original
+   ledger world: nothing lifts, nothing glows. Jorge asked for a sharper,
+   more dimensional feel — a stacked-ledger pop-out with a lit gold edge and
+   a record that responds to touch — so this section supersedes that rule
+   for the elements that opt into it below. It doesn't apply anywhere else;
+   the rest of the surface stays flat by default.
+
+   `.lg-panel` is the pop-out itself: a slightly raised slab, cut from the
+   field, with the gilded edge of a stacked book along its top and its own
+   fine ruled grid instead of the woven cloth (the weave reads as fabric at
+   this scale; a grid reads as a ledger page under glass).
+
+   `.lg-elevate` is the per-row response: a struck-metal rule left of the
+   row and a lift on hover, so the record feels touchable without ever
+   drifting into ambient float. Still triggered-only per the Motion
+   section — nothing here loops or animates unprompted. */
+
+.lg-panel {
+  position: relative;
+  border: 1px solid var(--lg-hair);
+  background-image:
+    url("/textures/grid.svg"),
+    linear-gradient(180deg, rgba(17, 34, 60, 0.55) 0%, rgba(5, 12, 24, 0.4) 100%);
+  background-size: 48px 48px, auto;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 48px 90px -36px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(0, 0, 0, 0.45);
+}
+.lg-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent, var(--lg-foil-lift) 18%, var(--lg-foil) 50%, var(--lg-foil-lift) 82%, transparent
+  );
+  box-shadow: 0 0 18px 1px var(--lg-foil-glow);
+}
+
+.lg-elevate {
+  transition:
+    transform var(--lg-dur-state) var(--ease-emphasized),
+    background-color var(--lg-dur-state) var(--ease-standard),
+    box-shadow var(--lg-dur-state) var(--ease-standard);
+}
+.lg-elevate:hover {
+  transform: translateX(2px) translateY(-1px);
+  background-color: rgba(227, 166, 17, 0.05);
+  box-shadow: inset 2px 0 0 var(--lg-foil), 0 8px 20px -14px rgba(0, 0, 0, 0.7);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lg-elevate { transition: none; }
+  .lg-elevate:hover { transform: none; }
+}
+
+/* Table rows can't take `.lg-elevate`'s transform reliably across browsers,
+   so the rate schedule on /pricing gets the same struck-metal rule through
+   its cells instead — no lift, same lit-on-touch feel. */
+.lg-schedule tbody tr {
+  transition: background-color var(--lg-dur-state) var(--ease-standard);
+}
+.lg-schedule tbody tr:hover > * {
+  background-color: rgba(227, 166, 17, 0.05);
+}
+.lg-schedule tbody tr:hover > th {
+  box-shadow: inset 2px 0 0 var(--lg-foil);
+}
+
 /* The margin rule — the red vertical the ledger is ruled with. */
 .lg-margin-rule { position: relative; }
 .lg-margin-rule::before {
@@ -888,7 +970,15 @@ body {
 .lg-stamp {
   transition: transform 120ms var(--ease-standard), box-shadow 120ms var(--ease-standard), filter 120ms var(--ease-standard);
 }
-.lg-stamp:hover { filter: brightness(1.07) saturate(1.04); }
+.lg-stamp:hover {
+  filter: brightness(1.07) saturate(1.04);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 244, 205, 0.85),
+    inset 0 -1px 0 rgba(74, 48, 4, 0.9),
+    0 1px 0 rgba(0, 0, 0, 0.5),
+    0 18px 32px -14px rgba(0, 0, 0, 0.8),
+    0 0 22px 0 var(--lg-foil-glow);
+}
 .lg-stamp:active {
   transform: translateY(2px);
   box-shadow:

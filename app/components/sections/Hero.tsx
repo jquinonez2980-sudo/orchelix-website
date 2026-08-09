@@ -129,7 +129,9 @@ export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
 
         {/* ── The register ── */}
         <div className="lg-hero-register lg-margin-rule self-center lg:pl-8">
-          <Register t={t} />
+          <div className="lg-panel" style={{ padding: "1.75rem 1.5rem" }}>
+            <Register t={t} />
+          </div>
         </div>
       </div>
     </section>
@@ -196,7 +198,7 @@ function Register({ t }: { t: Messages }) {
         {ENTRIES.map((e, i) => (
           <div
             key={e.time}
-            className="lg-row lg-reg-row"
+            className="lg-row lg-reg-row lg-elevate"
             style={{ "--i": i, padding: "0.72rem 0" } as React.CSSProperties}
           >
             <span className="lg-fig" style={{ fontSize: "0.8125rem", color: "var(--lg-ink-2)" }}>

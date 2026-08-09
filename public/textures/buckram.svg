@@ -40,7 +40,11 @@
     </filter>
   </defs>
 
-  <rect width="180" height="180" filter="url(#warpDark)" opacity="0.30"/>
-  <rect width="180" height="180" filter="url(#warpLit)" opacity="0.16"/>
-  <rect width="180" height="180" filter="url(#weftLit)" opacity="0.12"/>
+  <!-- 2026-08-09: opacities cut roughly two-thirds. At the original values
+       the lit threads read as a visible cross-hatch weave — stonewashed
+       denim — rather than a cover cloth's grain. This keeps the material
+       (still a produced tile, not a flat colour) while making it recede. -->
+  <rect width="180" height="180" filter="url(#warpDark)" opacity="0.10"/>
+  <rect width="180" height="180" filter="url(#warpLit)" opacity="0.055"/>
+  <rect width="180" height="180" filter="url(#weftLit)" opacity="0.04"/>
 </svg>

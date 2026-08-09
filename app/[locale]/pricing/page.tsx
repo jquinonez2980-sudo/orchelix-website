@@ -269,8 +269,9 @@ function RateSchedule({ t, locale }: { t: Messages; locale: Locale }) {
   ];
 
   return (
+    <div className="lg-panel" style={{ padding: "1.75rem 1.5rem" }}>
     <div className="overflow-x-auto">
-      <table className="lg-fig w-full" style={{ borderCollapse: "collapse", minWidth: 720 }}>
+      <table className="lg-fig lg-schedule w-full" style={{ borderCollapse: "collapse", minWidth: 720 }}>
         <caption className="sr-only">{p.scheduleCaption}</caption>
         <thead>
           <tr>
@@ -369,6 +370,7 @@ function RateSchedule({ t, locale }: { t: Messages; locale: Locale }) {
           </tr>
         </tbody>
       </table>
+    </div>
     </div>
   );
 }

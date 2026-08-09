@@ -294,6 +294,21 @@ There are no elevation shadows in this system. Nothing floats, nothing is lifted
 
 **The No Float Rule.** Surfaces do not lift. There is no ambient shadow, no hover elevation, no card. Hover changes a rule, a brightness, or a fill — never a `translateY` on a container.
 
+> **Superseded 2026-08-09, scoped.** Jorge asked for a sharper, more dimensional
+> site — a stacked-ledger pop-out with a lit gold edge, and a record that
+> responds to touch — after the original field colour and cloth weave read as
+> washed denim rather than a bound cover. Two additions now exist outside this
+> rule: `.lg-panel` (a raised slab with a foil top edge and a fine ruled grid,
+> used for the homepage register and the `/pricing` rate schedule) and
+> `.lg-elevate` (a struck-metal rule plus a small lift on hover, wired into
+> `RuledList`, `Band`, `EntryList`, and `Disclosure` in
+> `app/components/ledger/index.tsx`, so it reaches every page built from
+> those primitives). Both stay **triggered-only** — hover or arrival in the
+> viewport, nothing ambient, nothing looping — so they don't violate the
+> Motion section's actual thesis, only this one line about shadow. See also
+> the darkened field and sharpened foil tokens in `app/globals.css`, which
+> apply everywhere and are not scoped.
+
 ## Motion
 
 **Creative North Star: "The Record Being Written"**

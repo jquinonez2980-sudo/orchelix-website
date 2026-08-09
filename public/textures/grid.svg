@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <!--
+    The ruled-page grid used inside .lg-panel pop-outs — a ledger page under
+    glass, in place of the woven cloth. Thin lines, gold-tinted at very low
+    alpha, one minor line and no major line at this tile size (the major
+    line is drawn per-instance by the panel's border/foil edge instead).
+  -->
+  <path d="M0.5 0V48" stroke="#E3A611" stroke-opacity="0.10" stroke-width="1"/>
+  <path d="M0 0.5H48" stroke="#E3A611" stroke-opacity="0.07" stroke-width="1"/>
+</svg>
