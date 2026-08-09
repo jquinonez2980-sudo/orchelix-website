@@ -3,6 +3,7 @@ import { ClerkProvider, OrganizationSwitcher } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { ADMIN_ORG_SLUG } from "@/app/lib/platformProxy";
 import DashboardShell from "./DashboardShell";
+import { clerkWidgetAppearance } from "@/app/lib/clerkAppearance";
 
 /* Esmi tenant dashboard shell (/dashboard).
    ClerkProvider is scoped here — same pattern as the AcumenAI console at
@@ -20,27 +21,6 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Esmi Dashboard",
   robots: { index: false, follow: false },
-};
-
-/* Clerk portals its popovers and modals to the document root, outside the
-   `.lg-app` scope, so utility classes alone leave them light-on-dark. The
-   `variables` API is Clerk's own token surface and ships with @clerk/nextjs —
-   no @clerk/themes dependency needed. Values mirror the ledger tokens; they
-   are literals because Clerk resolves them in JS, where `var()` would not
-   compute. */
-const clerkWidgetAppearance = {
-  variables: {
-    colorBackground: "#071A2E",
-    colorText: "#F4F1E8",
-    colorTextSecondary: "rgba(238, 240, 245, 0.72)",
-    colorPrimary: "#D9A21B",
-    colorInputBackground: "#0B2338",
-    colorInputText: "#F4F1E8",
-    borderRadius: "0px",
-  },
-  elements: {
-    organizationSwitcherTrigger: "text-ink hover:bg-surface-2",
-  },
 };
 
 function OrgGate() {

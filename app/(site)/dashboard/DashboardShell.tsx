@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
+import { clerkWidgetAppearance } from "@/app/lib/clerkAppearance";
 import { Menu, X } from "lucide-react";
 import DraftModeBanner from "./DraftModeBanner";
 import { NAV_ITEMS, isNavItemActive, type NavItem } from "./navItems";
@@ -15,23 +16,6 @@ import { NAV_ITEMS, isNavItemActive, type NavItem } from "./navItems";
    to match this shell's existing styling approach rather than its inline
    styles. Purely chrome — Gate/org-check logic stays in layout.tsx and is
    passed in as `children`, so this component doesn't need to know about it. */
-
-/* Same reasoning as layout.tsx: Clerk portals its dropdowns outside the
-   `.lg-app` scope, so its own `variables` API carries the ledger palette. */
-const clerkWidgetAppearance = {
-  variables: {
-    colorBackground: "#071A2E",
-    colorText: "#F4F1E8",
-    colorTextSecondary: "rgba(238, 240, 245, 0.72)",
-    colorPrimary: "#D9A21B",
-    colorInputBackground: "#0B2338",
-    colorInputText: "#F4F1E8",
-    borderRadius: "0px",
-  },
-  elements: {
-    organizationSwitcherTrigger: "text-ink hover:bg-surface-2",
-  },
-};
 
 // Source asset is a 566×273 wordmark, not a square icon — size by height
 // and derive width from its real aspect ratio (matches how the marketing
@@ -194,7 +178,7 @@ export default function DashboardShell({
               afterSelectOrganizationUrl="/dashboard"
               appearance={clerkWidgetAppearance}
             />
-            <UserButton />
+            <UserButton appearance={clerkWidgetAppearance} />
           </div>
         </header>
 
