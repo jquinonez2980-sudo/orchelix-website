@@ -42,3 +42,12 @@ next-env.d.ts
 
 .vercel
 .env*
+
+# Scratch clones / vendored experiments kept inside the repo working tree.
+# Untracked today, so Vercel never sees them — but they carry their own
+# tsconfig and deps, and `next build` type-checks them, so a `git add -A`
+# would commit them and break the production build (liquid-glass-react's
+# example imports a `Github` icon lucide-react does not export).
+liquid-glass-js/
+liquid-glass-react/
+liquid-logo/
