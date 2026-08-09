@@ -74,6 +74,8 @@ export const config = {
     "/industries",
     "/about",
     "/book",
+    "/home-services",
+    "/kitchen-bath",
     /* Clerk surfaces. */
     "/app(.*)",
     "/dashboard(.*)",

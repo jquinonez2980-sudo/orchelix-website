@@ -29,6 +29,7 @@ const es: Messages = {
     industries: "Industrias",
     pricing: "Precios",
     about: "Nosotros",
+    tryEsmi: "Escucha a Esmi",
     book: "Agenda un piloto",
     openMenu: "Abrir menú",
     closeMenu: "Cerrar menú",
@@ -624,6 +625,91 @@ const es: Messages = {
         notSent: "No se envió",
         errorTail:
           "No se envió nada — inténtalo de nuevo, o llama al número de arriba y lo agendamos directamente.",
+      },
+    },
+
+    /* Las dos páginas verticales comparten una sola forma y, por lo tanto,
+       un solo contrato de copia. Ver el comentario en en.ts para la lista
+       de afirmaciones eliminadas en la conversión del 2026-08-08. */
+    verticals: {
+      homeServices: {
+        title: "Recepcionista de IA para servicios del hogar",
+        description:
+          "Esmi contesta cada llamada de climatización, plomería, techado y electricidad — fuera de horario, en pleno trabajo, en inglés y español — y agenda el trabajo en tu calendario.",
+        heading: "La llamada de las 8 de la noche es de quien conteste",
+        lede: "Una recepcionista bilingüe para negocios de servicios del hogar. Esmi contesta fuera de horario, los fines de semana y mientras tu cuadrilla está en un trabajo — califica el servicio y lo agenda directo en tu calendario.",
+        facts: [
+          ["Oficios", "Climatización, plomería, techado, electricidad"],
+          ["Idiomas", "Inglés y español, de forma nativa"],
+          ["Horario", "24/7, noches y fines de semana incluidos"],
+          ["En vivo en", "14 días desde la primera llamada"],
+        ] as [string, string][],
+        slipsHeading: "Lo que te cuesta el teléfono",
+        slips: [
+          {
+            title: "Las llamadas fuera de horario caen en el buzón",
+            desc: "Una emergencia a las ocho de la noche se agenda con quien conteste. Un buzón de voz es una decisión que toma por ti la siguiente empresa de la lista.",
+          },
+          {
+            title: "Tu cuadrilla no puede contestar desde un trabajo",
+            desc: "Cada timbre que atiende un técnico es trabajo interrumpido. El teléfono compite con aquello por lo que realmente te pagan.",
+          },
+          {
+            title: "Quien llama en español recibe menos",
+            desc: "Una parte importante del mercado preferiría agendar en español, y casi nadie tiene personal para atenderlo fuera de horario.",
+          },
+        ],
+        callHeading: "Cómo transcurre la llamada",
+        call: [
+          ["Contesta", "Esmi atiende la llamada a cualquier hora, en inglés o español."],
+          ["Califica", "Emergencia o rutina, dentro o fuera del área de servicio — las preguntas que harías tú, hechas como las harías tú."],
+          ["Escala", "Una emergencia real localiza tu teléfono de guardia con el resumen de la conversación adjunto."],
+          ["Agenda", "Todo lo demás entra en tu calendario con nombre, dirección y problema, y una confirmación para quien llamó."],
+          ["Registra", "Transcripción, motivo y disposición en cada llamada — revisables y reversibles."],
+        ] as [string, string][],
+        closeHeading: "En tu línea en catorce días",
+        closeBody:
+          "Starter cuesta $299 al mes con la configuración hecha por nosotros. Un piloto de catorce días cuesta $149, acreditado a tu primera factura si continúas.",
+      },
+
+      kitchenBath: {
+        title: "Recepcionista de IA para cocina, baño y piedra",
+        description:
+          "Esmi contesta cada llamada de constructores de cocinas, fabricantes de piedra y firmas de diseño/construcción — cotiza los rangos que tú defines, califica a los propietarios y agenda consultas 24/7 en inglés y español.",
+        heading: "Tu próximo trabajo de cocina llama mientras estás en este",
+        lede: "Una recepcionista bilingüe para fabricantes, constructores de cocinas y firmas de diseño/construcción. Esmi cotiza los rangos iniciales que tú defines, separa a los propietarios serios de los curiosos y agenda la consulta en tu calendario.",
+        facts: [
+          ["Oficios", "Fabricación, cocina y baño, diseño/construcción"],
+          ["Idiomas", "Inglés y español, de forma nativa"],
+          ["Horario", "24/7, noches y fines de semana incluidos"],
+          ["En vivo en", "14 días desde la primera llamada"],
+        ] as [string, string][],
+        slipsHeading: "Lo que te cuesta el teléfono",
+        slips: [
+          {
+            title: "La llamada llega mientras estás en la sierra",
+            desc: "Un propietario listo para gastar cae en el buzón y marca al siguiente taller de la lista antes de que te hayas limpiado las manos.",
+          },
+          {
+            title: "El taller que contesta se lleva la visita",
+            desc: "Los propietarios reúnen varias cotizaciones antes de decidir, y la visita al sitio es donde realmente se gana el trabajo.",
+          },
+          {
+            title: "Quien llama en español recibe menos",
+            desc: "Cuadrillas, oficios y muchos propietarios preferirían hablar en español. La mayoría de los talleres no puede atenderlos; Esmi lo hace de forma nativa.",
+          },
+        ],
+        callHeading: "Cómo transcurre la llamada",
+        call: [
+          ["Contesta", "Esmi atiende la llamada a cualquier hora, por teléfono o chat web, en inglés o español."],
+          ["Cotiza", "Tus rangos iniciales, exactamente como los defines — tus números, nunca una cifra inventada."],
+          ["Califica", "Presupuesto, plazo y alcance. Diseñadores y oficios quedan marcados como prioritarios."],
+          ["Agenda", "La consulta entra en tu calendario real durante la llamada, con cada detalle enviado a ti después."],
+          ["Registra", "Transcripción, motivo y disposición en cada llamada — revisables y reversibles."],
+        ] as [string, string][],
+        closeHeading: "En tu línea en catorce días",
+        closeBody:
+          "Orchelix opera en Canadá y Estados Unidos, con área de servicio en el sur de Florida. Starter cuesta $299 al mes con la configuración hecha por nosotros, y un piloto de catorce días cuesta $149.",
       },
     },
   },

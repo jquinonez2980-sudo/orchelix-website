@@ -60,6 +60,10 @@ export function Section({
        legacy teal focus ring that still serves /dashboard and /try-esmi. */
     <section
       id={id}
+      /* One reveal block per section — the One Moment Rule made structural.
+         RevealObserver marks this on entry and the data blocks inside key
+         their Rule and Settle off it. */
+      data-lg-reveal=""
       className={`lg-world ${TONE_CLASS[tone]} ${className}`}
       style={{ ...TONE_STYLE[tone], ...style }}
     >
@@ -309,16 +313,20 @@ export function RuledList({
   topRule?: string;
 }) {
   return (
-    <dl className="lg-fig m-0" style={{ borderTop: `1px solid ${topRule}` }}>
-      {items.map(([term, def]) => (
+    <dl
+      className="lg-fig lg-anchor m-0"
+      style={{ "--lg-anchor-w": "1px", "--lg-anchor-c": topRule } as CSSProperties}
+    >
+      {items.map(([term, def], i) => (
         <div
           key={term}
-          className="lg-row"
+          className="lg-row lg-settle-item"
           style={{
+            "--i": i,
             gridTemplateColumns: `${labelWidth} minmax(0,1fr)`,
             padding: "0.8rem 0",
             borderBottomColor: hairFor(tone),
-          }}
+          } as CSSProperties}
         >
           <dt
             style={{
@@ -346,23 +354,42 @@ export function RuledList({
   );
 }
 
+/* `cols` is the lg column count, not a class string.
+
+   It used to take an arbitrary Tailwind class, which meant the grid and the
+   vertical ruling could disagree: the ruling lives in `.lg-band` CSS keyed
+   on `nth-child`, and it had no way to know what the caller had asked for.
+   A count keeps them in step and emits `data-cols` for the stylesheet. The
+   union is closed to the counts the CSS actually rules. */
+const BAND_COLS: Record<2 | 3 | 4 | 5, string> = {
+  2: "lg:grid-cols-2",
+  3: "lg:grid-cols-3",
+  4: "lg:grid-cols-4",
+  5: "lg:grid-cols-5",
+};
+
 /** A ruled band read across the page — label stacked above value. */
 export function Band({
   items,
   tone = "field",
-  cols = "lg:grid-cols-5",
+  cols = 5,
 }: {
   items: [string, ReactNode][];
   tone?: Tone;
-  cols?: string;
+  cols?: 2 | 3 | 4 | 5;
 }) {
   return (
     <dl
-      className={`lg-fig lg-band m-0 grid grid-cols-2 sm:grid-cols-3 ${cols}`}
-      style={{ borderTop: "1px solid var(--lg-rule)" }}
+      data-cols={cols}
+      className={`lg-fig lg-band lg-anchor m-0 grid grid-cols-2 sm:grid-cols-3 ${BAND_COLS[cols]}`}
+      style={{ "--lg-anchor-w": "1px" } as CSSProperties}
     >
-      {items.map(([term, def]) => (
-        <div key={term} style={{ padding: "1.1rem 1.1rem 1.2rem 0" }}>
+      {items.map(([term, def], i) => (
+        <div
+          key={term}
+          className="lg-settle-item"
+          style={{ "--i": i, padding: "1.1rem 1.1rem 1.2rem 0" } as CSSProperties}
+        >
           <dt
             style={{
               fontSize: "0.625rem",
@@ -403,19 +430,20 @@ export function EntryList({
 }) {
   return (
     <div
-      className={`grid gap-x-14 ${columns === 2 ? "sm:grid-cols-2" : ""}`}
-      style={{ borderTop: "2px solid var(--lg-rule)" }}
+      className={`lg-anchor grid gap-x-14 ${columns === 2 ? "sm:grid-cols-2" : ""}`}
+      style={{ "--lg-anchor-w": "2px" } as CSSProperties}
     >
-      {entries.map((e) => (
+      {entries.map((e, i) => (
         <article
           key={e.title}
-          className="lg-row"
+          className="lg-row lg-settle-item"
           style={{
+            "--i": i,
             gridTemplateColumns: "minmax(0,1fr)",
             padding: "1.6rem 0",
             gap: "0.5rem",
             borderBottomColor: hairFor(tone),
-          }}
+          } as CSSProperties}
         >
           <div className="flex flex-wrap items-baseline justify-between gap-x-5 gap-y-1">
             <EntryTitle tone={tone} size="1.0625rem">

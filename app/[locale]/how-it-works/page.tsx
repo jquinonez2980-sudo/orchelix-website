@@ -160,7 +160,7 @@ export default async function HowItWorksPage({ params }: PageProps<"/[locale]">)
           <Prose tone="stock-2" size="1.0625rem" max="62ch" style={{ marginTop: "1.3rem", marginBottom: "2.5rem" }}>
             {p.consultantLede}
           </Prose>
-          <Band tone="stock-2" cols="lg:grid-cols-4" items={p.consultantBand} />
+          <Band tone="stock-2" cols={4} items={p.consultantBand} />
         </Section>
 
         {/* ── Close ── */}

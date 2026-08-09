@@ -2,6 +2,7 @@ import "./globals.css";
 import { Archivo, Literata, Azeret_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import JsonLd from "./components/JsonLd";
+import RevealObserver from "./components/ledger/RevealObserver";
 
 /* Shared root-layout shell.
 
@@ -115,6 +116,9 @@ export default function Shell({
           {skipLabel}
         </a>
         {children}
+        {/* The site's only scroll-driven mechanism. Mounted once at the root
+            so no page brings its own observer. */}
+        <RevealObserver />
         <Analytics />
       </body>
     </html>

@@ -624,10 +624,32 @@ body {
   .lg-band > *:nth-child(2n + 1) { border-left: 1px solid var(--lg-rule-quiet); padding-left: 1.1rem; }
   .lg-band > *:nth-child(3n + 1) { border-left: 0; padding-left: 0; }
 }
+/* At lg the column count varies per band, so the "first cell of a wrapped
+   row" test has to vary with it. This block used to zero the border on
+   `:first-child` only, which silently assumed the band never wrapped — it
+   ruled off the first cell of every row after the first from nothing, which
+   is the one thing the Band spec forbids. It was wrong for the 6-item band
+   on / and /solutions (5 columns, so cell 6 opens row two) and for any band
+   given a column count other than 5.
+
+   `data-cols` is emitted by the primitive, so the ruling now follows the
+   count instead of guessing it. */
 @media (min-width: 1024px) {
-  .lg-band > * { border-left: 1px solid var(--lg-rule-quiet); padding-left: 1.1rem; }
-  .lg-band > *:nth-child(3n + 1) { border-left: 1px solid var(--lg-rule-quiet); padding-left: 1.1rem; }
-  .lg-band > *:first-child { border-left: 0; padding-left: 0; }
+  /* The narrower breakpoints zero the border with `:nth-child(…)`, which is
+     more specific than `.lg-band > *` — so re-asserting on the bare child
+     selector alone does not undo them, whatever the source order. Each
+     earlier pattern has to be re-asserted at its own specificity before the
+     lg pattern is applied above it. */
+  .lg-band > *,
+  .lg-band > *:nth-child(2n + 1),
+  .lg-band > *:nth-child(3n + 1) {
+    border-left: 1px solid var(--lg-rule-quiet);
+    padding-left: 1.1rem;
+  }
+  .lg-band[data-cols="2"] > *:nth-child(2n + 1),
+  .lg-band[data-cols="3"] > *:nth-child(3n + 1),
+  .lg-band[data-cols="4"] > *:nth-child(4n + 1),
+  .lg-band[data-cols="5"] > *:nth-child(5n + 1) { border-left: 0; padding-left: 0; }
 }
 
 /* ─── The four verbs ──────────────────────────────────────────────────────
@@ -660,6 +682,44 @@ body {
 
 .lg-strike {
   animation: lg-strike var(--lg-dur-strike) var(--ease-emphasized) both;
+}
+
+/* ─── Motion Waits ────────────────────────────────────────────────────────
+   Nothing below the fold animates until it enters the viewport, and nothing
+   animates twice. `RevealObserver` sets `data-lg-in="true"` on a block the
+   first time it intersects, then stops observing it.
+
+   Note which way round this is written: the animation is declared ONLY under
+   `[data-lg-in="true"]`. Without the attribute there is no animation at all,
+   so the resting state is the final state — which is what makes the page
+   correct with JS off, with the observer unsupported, and in the frame
+   before it fires. Declaring the animation unconditionally and pausing it
+   would hide content behind a script, which is the Legible Default Rule's
+   whole objection. */
+
+/* Rule — the anchor bar above a data block draws in from the left.
+   The rule is a pseudo-element rather than a `border-top` because a border
+   cannot be scaled; primitives set the width and colour through the two
+   custom properties. */
+.lg-anchor { position: relative; }
+.lg-anchor::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--lg-anchor-w, 1px);
+  background: var(--lg-anchor-c, var(--lg-rule));
+  transform-origin: left center;
+}
+[data-lg-in="true"] .lg-anchor::before {
+  animation: lg-rule-draw var(--lg-dur-rule) var(--ease-emphasized) both;
+}
+
+/* Settle — rows land in sequence. `--i` carries the row index. */
+[data-lg-in="true"] .lg-settle-item {
+  animation: lg-settle var(--lg-dur-settle) var(--ease-emphasized) both;
+  animation-delay: calc(var(--i, 0) * var(--lg-stagger));
 }
 
 /* The call register's authored moment: rows settle in sequence and each
@@ -816,8 +876,40 @@ details[open] > .lg-summary::before {
 @media (prefers-reduced-motion: reduce) {
   .lg-register .lg-row,
   .lg-register .lg-tick,
-  .lg-strike { animation: none; }
+  .lg-strike,
+  [data-lg-in="true"] .lg-anchor::before,
+  [data-lg-in="true"] .lg-settle-item { animation: none; }
   .lg-stamp, .lg-quiet::after { transition: none; }
+}
+
+/* Anchors sit under a sticky header, so a jump has to clear it or the
+   heading lands behind the chrome. */
+:target,
+[id] { scroll-margin-top: 5.5rem; }
+
+/* ─── The nav rules the page off ──────────────────────────────────────────
+   At rest the header sits flush with the field. Past the first 24px the
+   hairline becomes the red rule and the header steps up one tone, so the
+   chrome separates from a dark section instead of floating in it.
+
+   The hairline was `--lg-hair`, which composites to roughly 1.3:1 on the
+   field — present in the DOM, invisible on screen.
+
+   Colour only. The header does not shrink, blur, or lift: The No Float Rule
+   applies to the chrome too. */
+.lg-nav {
+  border-bottom: 1px solid var(--lg-hair);
+  transition:
+    border-bottom-color var(--lg-dur-state) var(--ease-standard),
+    background-color var(--lg-dur-state) var(--ease-standard);
+}
+.lg-nav[data-ruled="true"] {
+  border-bottom-color: var(--lg-rule);
+  background-color: var(--lg-field-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lg-nav { transition: none; }
 }
 
 /* EsmiChat keyframes */

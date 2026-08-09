@@ -23,6 +23,9 @@ export default function Footer({
       head: t.footer.products,
       links: [
         { label: t.footer.links.esmi, href: "/ai-receptionist" },
+        /* /try-esmi was absent from the nav and from here both — the live
+           product demo had no route in from the chrome at all. */
+        { label: t.nav.tryEsmi, href: "/try-esmi" },
         { label: t.footer.links.revops, href: `${L("/solutions")}#agent-revops` },
         { label: t.footer.links.acumen, href: "/acumen" },
         { label: t.footer.links.industries, href: L("/industries") },

@@ -184,7 +184,7 @@ export default async function SolutionsPage({ params }: PageProps<"/[locale]">) 
               <Prose tone="stock" size="1.0625rem" max="56ch" style={{ marginBottom: "2.5rem" }}>
                 {p.deploymentLede}
               </Prose>
-              <Band tone="stock" cols="lg:grid-cols-4" items={p.deploymentBand} />
+              <Band tone="stock" cols={4} items={p.deploymentBand} />
             </div>
           </div>
         </Section>

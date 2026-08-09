@@ -205,7 +205,7 @@ export default async function PricingPage({ params }: PageProps<"/[locale]">) {
             {p.afterStartHeading}
           </SectionTitle>
           <div className="mt-10">
-            <Band tone="stock-2" cols="lg:grid-cols-3" items={p.afterStart} />
+            <Band tone="stock-2" cols={3} items={p.afterStart} />
           </div>
         </Section>
 

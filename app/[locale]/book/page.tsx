@@ -132,7 +132,7 @@ export default async function BookPage({ params }: PageProps<"/[locale]">) {
           <Prose size="1.0625rem" max="60ch" style={{ marginTop: "1.3rem", marginBottom: "2.5rem" }}>
             {p.dataLede}
           </Prose>
-          <Band cols="lg:grid-cols-4" items={p.dataBand} />
+          <Band cols={4} items={p.dataBand} />
         </Section>
       </main>
       <Footer locale={locale} t={t} />

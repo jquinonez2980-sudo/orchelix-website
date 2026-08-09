@@ -61,8 +61,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/try-esmi`,      lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/acumen`,        lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/missed-calls`,  lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/kitchen-bath`,  lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/home-services`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    /* /kitchen-bath and /home-services moved into the locale segment on
+       2026-08-08 and are emitted by localizedEntries() above, with their
+       Spanish alternates. Listing them here as well would duplicate them. */
     { url: `${BASE}/privacy`,       lastModified: now, changeFrequency: "yearly",  priority: 0.3 },
     { url: `${BASE}/terms`,         lastModified: now, changeFrequency: "yearly",  priority: 0.3 },
     { url: `${BASE}/es/recepcionista-ia`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },

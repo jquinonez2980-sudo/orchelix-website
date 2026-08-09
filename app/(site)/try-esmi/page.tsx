@@ -189,7 +189,7 @@ export default async function TryEsmiPage({
           <SectionTitle max="20ch">How Esmi is operated</SectionTitle>
           <div className="mt-10">
             <Band
-              cols="lg:grid-cols-4"
+              cols={4}
               items={[
                 ["Languages", "English and Spanish, natively"],
                 ["Privacy", "PIPEDA-aligned for Canadian operations"],

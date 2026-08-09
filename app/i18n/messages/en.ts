@@ -21,6 +21,7 @@ const en = {
     industries: "Industries",
     pricing: "Pricing",
     about: "About",
+    tryEsmi: "Hear Esmi",
     book: "Book a pilot",
     openMenu: "Open menu",
     closeMenu: "Close menu",
@@ -612,6 +613,110 @@ const en = {
         notSent: "Not sent",
         errorTail:
           "Nothing was sent — please try again, or call the number above and we will book it directly.",
+      },
+    },
+
+    /* The two vertical landing pages share one shape, so they share one
+       copy contract. Converted from the light world 2026-08-08.
+
+       Claims removed in that pass, all of them barred by PRODUCT.md's
+       "no outcome metrics, conversion rates, latency figures, or benchmark
+       numbers":
+       - "$400+" / "a $400–$1,500 emergency job"     (benchmark)
+       - "40%+ South Florida calls in Spanish"        (benchmark)
+       - "$8–15K, the average job that hits voicemail" (benchmark)
+       - "Homeowners collect 3–4 quotes"              (benchmark)
+       - "answers on the first ring" / "instantly"    (latency — the same
+         claim already struck from /try-esmi as unverified)
+       - "one captured job pays for the year"         (ROI outcome)
+       Also removed: "Esmi Local … 48 hours" and "Esmi Pro … 5 business
+       days", which named plans that no longer exist and contradicted the
+       canonical 14-day engagement; a setup-refund guarantee that appears
+       nowhere in PRODUCT.md or on /pricing; and "works with … across the
+       Greater Toronto Area", which implied client references the site does
+       not have and a geography PRODUCT.md does not carry.
+
+       What survived is capability and commercial fact, both checkable:
+       24/7, EN/ES, the 14-day engagement, and the published rate card. */
+    verticals: {
+      homeServices: {
+        title: "AI receptionist for home services",
+        description:
+          "Esmi answers every HVAC, plumbing, roofing, and electrical call — after hours, on the job, in English and Spanish — and books the work onto your calendar.",
+        heading: "The 8pm call goes to whoever answers",
+        lede: "A bilingual receptionist for home-services businesses. Esmi picks up after hours, on weekends, and while your crew is on a job — qualifies the work, and books it straight onto your calendar.",
+        facts: [
+          ["Trades", "HVAC, plumbing, roofing, electrical"],
+          ["Languages", "English and Spanish, natively"],
+          ["Hours", "24/7, nights and weekends included"],
+          ["Live in", "14 days from the first call"],
+        ] as [string, string][],
+        slipsHeading: "What the phone costs you",
+        slips: [
+          {
+            title: "After-hours calls reach voicemail",
+            desc: "An emergency at eight in the evening books with whoever picks up. A voicemail is a decision made on your behalf by the next company on the list.",
+          },
+          {
+            title: "Your crew cannot answer from a job",
+            desc: "Every ring a tech takes is work interrupted. The phone competes with the thing you are actually paid to do.",
+          },
+          {
+            title: "Spanish-speaking callers get less",
+            desc: "A significant share of the market would rather book in Spanish, and almost nobody staffs for it after hours.",
+          },
+        ],
+        callHeading: "How the call goes",
+        call: [
+          ["Answers", "Esmi takes the call at any hour, in English or Spanish."],
+          ["Qualifies", "Emergency or routine, in the service area or not — the questions you would ask, asked the way you ask them."],
+          ["Escalates", "A real emergency pages your on-call phone with the conversation summary attached."],
+          ["Books", "Everything else goes onto your calendar with name, address, and issue, and a confirmation to the caller."],
+          ["Records", "A transcript, a reason, and a disposition on every call — reviewable, and reversible."],
+        ] as [string, string][],
+        closeHeading: "Live on your line in fourteen days",
+        closeBody:
+          "Starter is $299 a month with setup done for you. A fourteen-day pilot is $149, credited to your first invoice if you continue.",
+      },
+
+      kitchenBath: {
+        title: "AI receptionist for kitchen, bath & stone",
+        description:
+          "Esmi answers every call for kitchen builders, stone fabricators, and design/build firms — quotes the ranges you set, qualifies homeowners, and books consultations 24/7 in English and Spanish.",
+        heading: "Your next kitchen job calls while you're on this one",
+        lede: "A bilingual receptionist for fabricators, kitchen builders, and design/build firms. Esmi quotes the starting ranges you set, separates serious homeowners from browsers, and books the consultation into your calendar.",
+        facts: [
+          ["Trades", "Fabrication, kitchen and bath, design/build"],
+          ["Languages", "English and Spanish, natively"],
+          ["Hours", "24/7, nights and weekends included"],
+          ["Live in", "14 days from the first call"],
+        ] as [string, string][],
+        slipsHeading: "What the phone costs you",
+        slips: [
+          {
+            title: "The call comes while you are on the saw",
+            desc: "A homeowner ready to spend reaches voicemail, and dials the next shop on the list before you have wiped your hands.",
+          },
+          {
+            title: "The shop that answers books the visit",
+            desc: "Homeowners gather several quotes before they commit, and the site visit is where the job is actually won.",
+          },
+          {
+            title: "Spanish-speaking callers get less",
+            desc: "Crews, trades, and plenty of homeowners would rather talk in Spanish. Most shops cannot serve them; Esmi does it natively.",
+          },
+        ],
+        callHeading: "How the call goes",
+        call: [
+          ["Answers", "Esmi takes the call at any hour, on the phone or in web chat, in English or Spanish."],
+          ["Quotes", "Your starting ranges, exactly as you set them — your numbers, never a figure it invented."],
+          ["Qualifies", "Budget, timeline, and scope. Designers and trades are flagged for priority."],
+          ["Books", "The consultation goes into your real calendar on the call, with every detail sent to you afterwards."],
+          ["Records", "A transcript, a reason, and a disposition on every call — reviewable, and reversible."],
+        ] as [string, string][],
+        closeHeading: "Live on your line in fourteen days",
+        closeBody:
+          "Orchelix operates across Canada and the United States, with a South Florida service area. Starter is $299 a month with setup done for you, and a fourteen-day pilot is $149.",
       },
     },
   },
