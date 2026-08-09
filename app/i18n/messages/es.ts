@@ -635,6 +635,23 @@ const es: Messages = {
        siete páginas sectoriales. Ver el comentario en en.ts para lo que se
        eliminó en la conversión (tres testimonios con el prefijo literal
        «[Placeholder]») y lo que se corrigió (el plazo de puesta en marcha). */
+    /* /blog — índice y estructura del artículo. Los cuerpos de artículo
+       quedan fuera de este pase de forma deliberada; ver el comentario en
+       en.ts. */
+    blog: {
+      title: "Blog",
+      description:
+        "Guías prácticas sobre recepcionistas de IA, agentes de IA y la automatización de la recepción — precios, comparativas y cómo ponerlos a trabajar en tu negocio.",
+      heading: "La IA en la recepción, explicada",
+      lede: "Guías sobre recepcionistas de IA, agentes de IA y la automatización de las conversaciones con clientes — escritas para dueños de negocio, no para ingenieros.",
+      readingSuffix: "min de lectura",
+      allArticles: "Todos los artículos",
+      keepReading: "Sigue leyendo",
+      closeHeading: "Leerlo no es lo mismo que escucharlo",
+      closeBody:
+        "Hay una grabación real de Esmi en la página de demo, y el mismo agente en un chat donde puedes escribir. Dos minutos, sin formulario.",
+    },
+
     aiReceptionist: {
       title: "Recepcionista de IA para pequeñas empresas",
       description:

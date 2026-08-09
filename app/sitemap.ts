@@ -1,5 +1,5 @@
 import { MetadataRoute } from "next";
-import { getSortedPosts } from "@/app/(site)/blog/posts";
+import { getPosts, postHref } from "@/app/i18n/posts";
 import { LOCALES, LOCALIZED_PATHS, TRANSLATED_PATHS, localizedHref } from "@/app/i18n/config";
 import { INDUSTRY_SLUGS } from "@/app/i18n/industries";
 
@@ -45,19 +45,23 @@ function localizedEntries(now: Date): MetadataRoute.Sitemap {
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
-  const blogPosts: MetadataRoute.Sitemap = getSortedPosts().map((post) => ({
-    url: `${BASE}/blog/${post.slug}`,
-    lastModified: new Date(post.dateModified ?? post.datePublished),
-    changeFrequency: "monthly",
-    priority: 0.7,
-  }));
+  /* Both locales' posts, from the same module the routes prerender from.
+     The Spanish set is separate rather than translated, so it is enumerated
+     rather than derived from the English slugs. */
+  const blogPosts: MetadataRoute.Sitemap = LOCALES.flatMap((l) =>
+    getPosts(l).map((post) => ({
+      url: `${BASE}${postHref(l, post.slug)}`,
+      lastModified: new Date(post.dateModified ?? post.datePublished),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    }))
+  );
 
   return [
     /* Localized marketing pages, derived from the routing config. */
     ...localizedEntries(now),
 
     /* Everything outside the locale segment — English-only today. */
-    { url: `${BASE}/blog`,          lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
     { url: `${BASE}/try-esmi`,      lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/acumen`,        lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/missed-calls`,  lastModified: now, changeFrequency: "monthly", priority: 0.8 },
@@ -78,10 +82,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: 0.8,
       }))
     ),
-    { url: `${BASE}/es/blog`,                            lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
-    { url: `${BASE}/es/blog/que-es-un-recepcionista-ia`,                         lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE}/es/blog/recepcionista-ia-vs-servicio-de-contestadora`,        lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE}/es/blog/cuanto-cuesta-un-recepcionista-ia`,                  lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     ...blogPosts,
   ];
 }

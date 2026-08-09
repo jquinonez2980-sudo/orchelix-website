@@ -80,6 +80,8 @@ export const config = {
     "/kitchen-bath",
     "/ai-receptionist",
     "/ai-receptionist/:path*",
+    "/blog",
+    "/blog/:path*",
     /* Clerk surfaces. */
     "/app(.*)",
     "/dashboard(.*)",

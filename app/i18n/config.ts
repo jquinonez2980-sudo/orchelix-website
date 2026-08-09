@@ -29,6 +29,7 @@ export const LOCALIZED_PATHS = [
   "/home-services",
   "/kitchen-bath",
   "/ai-receptionist",
+  "/blog",
 ] as const;
 
 /* Which paths actually have Spanish copy today.
@@ -51,6 +52,7 @@ export const TRANSLATED_PATHS = new Set<string>([
   "/home-services",
   "/kitchen-bath",
   "/ai-receptionist",
+  "/blog",
 ]);
 
 export function localesFor(path: string): Locale[] {

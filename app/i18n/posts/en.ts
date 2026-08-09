@@ -39,7 +39,7 @@ export const POSTS: Post[] = [
     body: [
       {
         type: "p",
-        text: "**An AI receptionist is a virtual phone agent that answers your incoming calls automatically — greeting callers, answering questions, qualifying leads, and booking appointments — without a person picking up the phone.** It works 24/7 and hands off to your team when a call needs a human. Think of it as a front-desk employee that never sleeps, never takes a lunch break, and never misses a ring.",
+        text: "**An AI receptionist is a virtual phone agent that answers your incoming calls automatically — greeting callers, answering questions, qualifying leads, and booking appointments — without a person picking up the phone.** It works 24/7 and hands off to your team when a call needs a human. Think of it as a front-desk employee that works every shift, including the ones nobody wants.",
       },
       { type: "h2", text: "How does an AI receptionist work?" },
       {
@@ -49,7 +49,7 @@ export const POSTS: Post[] = [
       {
         type: "ul",
         items: [
-          "**It answers instantly** — on the first ring, any hour of the day.",
+          "**It answers** — at any hour of the day, without a queue or a mailbox.",
           "**It understands the caller** — using natural conversation, not a rigid phone tree.",
           "**It takes action** — answers FAQs, qualifies the lead, and books an appointment on your live calendar.",
           "**It confirms** — sends a text confirmation and logs a summary to your CRM.",
@@ -130,7 +130,7 @@ export const POSTS: Post[] = [
       { type: "h2", text: "The quick verdict" },
       {
         type: "p",
-        text: "An **answering service** is best when you mainly need a friendly human to take messages and route calls. An **AI receptionist** is best when you want the call *resolved* — questions answered, leads qualified, and appointments booked — instantly, around the clock, without a callback.",
+        text: "An **answering service** is best when you mainly need a friendly human to take messages and route calls. An **AI receptionist** is best when you want the call *resolved* — questions answered, leads qualified, and appointments booked — on the call, around the clock, without a callback.",
       },
       {
         type: "callout",
@@ -166,7 +166,7 @@ export const POSTS: Post[] = [
       {
         type: "ul",
         items: [
-          "**Speed to answer:** AI answers on the first ring, every time. Answering services depend on operator availability.",
+          "**Speed to answer:** an AI agent takes concurrent calls, so it does not queue behind operator availability the way an answering service does.",
           "**Booking:** AI books directly into your calendar; most answering services only take a message.",
           "**After-hours:** AI is genuinely 24/7 at no premium; human services often charge more for nights and weekends.",
           "**Languages:** AI can be bilingual and switch mid-call; human coverage depends on who's staffed.",
@@ -262,7 +262,7 @@ export const POSTS: Post[] = [
       { type: "h2", text: "AI receptionist vs. a human receptionist vs. an answering service" },
       {
         type: "p",
-        text: "A full-time receptionist in the US typically costs **$3,000–$4,500+ per month** once you include salary, benefits, and overhead — and they work one shift, not 24/7. A traditional answering service is cheaper but usually just takes messages, leaving you to call people back. An AI receptionist sits in between on price while doing more of the actual work: it answers instantly, qualifies the caller, and [books the appointment](/ai-receptionist) on the same call.",
+        text: "A full-time receptionist in the US typically costs **$3,000–$4,500+ per month** once you include salary, benefits, and overhead — and they work one shift, not 24/7. A traditional answering service is cheaper but usually just takes messages, leaving you to call people back. An AI receptionist sits in between on price while doing more of the actual work: it answers, qualifies the caller, and [books the appointment](/ai-receptionist) on the same call.",
       },
       {
         type: "p",
@@ -465,7 +465,7 @@ export const POSTS: Post[] = [
       },
       {
         type: "p",
-        text: "Esmi handles emergency calls around the clock. You set the escalation rules: for true emergencies (complete failure, elderly resident, commercial account), Esmi connects the caller to your on-call tech immediately. For non-urgent after-hours calls, it books a first-available appointment and sends the summary.",
+        text: "Esmi handles emergency calls around the clock. You set the escalation rules: for true emergencies (complete failure, elderly resident, commercial account), Esmi connects the caller to your on-call tech on the same call. For non-urgent after-hours calls, it books a first-available appointment and sends the summary.",
       },
       {
         type: "p",
@@ -588,9 +588,9 @@ export const POSTS: Post[] = [
       {
         type: "ul",
         items: [
-          "Answers immediately, greets the caller professionally, and identifies the nature of the matter",
+          "Answers, greets the caller professionally, and identifies the nature of the matter",
           "Asks qualifying questions: practice area, urgency, brief description of the situation",
-          "Books a consultation on the attorney's calendar, or escalates urgent matters to the on-call attorney immediately",
+          "Books a consultation on the attorney's calendar, or escalates urgent matters to the on-call attorney on the same call",
           "Sends a full call summary to the intake coordinator or attorney before the consultation",
         ],
       },

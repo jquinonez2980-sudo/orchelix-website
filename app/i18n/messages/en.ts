@@ -647,6 +647,24 @@ const en = {
        whose quotes were literally prefixed "[Placeholder]" and were shipping
        on the live page — PRODUCT.md is explicit that there are no public
        testimonials and that absent proof is never fabricated. */
+    /* /blog — index and article chrome. Article bodies are deliberately out
+       of scope for this pass: ArticleBody still renders the light world's
+       long-form styling, and a documented Read variant of Prose is a
+       separate piece of work. The chrome around it is the ledger. */
+    blog: {
+      title: "Blog",
+      description:
+        "Practical guides on AI receptionists, AI agents, and automating the front desk — pricing, comparisons, and how to put them to work in your business.",
+      heading: "AI for the front desk, explained",
+      lede: "Guides on AI receptionists, AI agents, and automating customer conversations — written for business owners, not engineers.",
+      readingSuffix: "min read",
+      allArticles: "All articles",
+      keepReading: "Keep reading",
+      closeHeading: "Reading is not the same as hearing it",
+      closeBody:
+        "There is a real Esmi recording on the demo page, and the same agent in a chat you can type into. Two minutes, no form.",
+    },
+
     aiReceptionist: {
       title: "AI receptionist for small business",
       description:

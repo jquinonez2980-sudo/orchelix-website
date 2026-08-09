@@ -1,4 +1,4 @@
-import type { Block } from "./posts";
+import type { Block } from "@/app/i18n/posts";
 
 /* Renders inline markup inside a block's text:
    - [label](/href) → anchor (internal-link friendly)
