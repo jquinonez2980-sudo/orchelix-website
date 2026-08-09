@@ -11,7 +11,6 @@ import {
   Prose,
   Stamp,
   QuietAction,
-  StatusKey,
   RuledList,
   Band,
   EntryList,
@@ -115,16 +114,18 @@ export default async function TryEsmiPage({
         <Section tone="field">
           <div className="grid gap-x-16 gap-y-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-center">
             <div>
-              <div className="mb-5">
-                <StatusKey>In production</StatusKey>
-              </div>
-
+              {/* The `In production` StatusKey that sat here was a kicker —
+                  a small-caps label above a heading — which DESIGN.md's No
+                  Kicker Rule bans outright. The claim is true and worth
+                  making, so it moves into the prose, which is where that
+                  rule says context belongs. */}
               <PageTitle max="13ch">Hear Esmi take a call</PageTitle>
 
               <Prose size="1.0625rem" max="42ch" style={{ marginTop: "1.7rem" }}>
-                A real recording first, then the same agent live in a chat you
-                can type into. No form, no scheduling — the product doing its
-                job, and the record it leaves behind.
+                Esmi is answering calls in production today. A real recording
+                first, then the same agent live in a chat you can type into.
+                No form, no scheduling — the product doing its job, and the
+                record it leaves behind.
               </Prose>
 
               <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">

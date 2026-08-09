@@ -183,6 +183,27 @@
   --lg-ink-on-stock-2: #4A5A6E;
 
   --lg-tick:       #2F8F6B;
+
+  /* ── Motion: The Record Being Written ──────────────────────────────────
+     Motion in this world is inscription. A ledger's things get ruled,
+     struck, settled, and stamped — nothing floats, fades ambiently, or
+     glows. That is the same refusal the Elevation section makes about
+     shadow, extended to time.
+
+     Four verbs, and nothing outside them ships. Three of the four already
+     existed welded to the call register; these tokens are what let the rest
+     of the site use them without re-deriving a duration per page.
+
+     No new easing curve. `--ease-emphasized` (0.16, 1, 0.3, 1) is within a
+     rounding error of the canonical strong ease-out, and a parallel scale
+     is a defect. Entrance and rule use emphasized; state uses standard.
+     `ease-in` is never used — it delays the exact moment being watched. */
+  --lg-dur-press:   120ms;  /* Press  — the stamp impressing            */
+  --lg-dur-state:   180ms;  /* hover, focus, toggles                    */
+  --lg-dur-rule:    260ms;  /* Rule   — a line drawing in               */
+  --lg-dur-strike:  300ms;  /* Strike — a mark revealed left-to-right   */
+  --lg-dur-settle:  380ms;  /* Settle — a row landing into place        */
+  --lg-stagger:      45ms;  /* between siblings in a settling run       */
 }
 
 /* ─── The Ruled Record, applied to the product surface ───────────────────
@@ -430,10 +451,10 @@ body {
   50%       { opacity: 0.55; }
 }
 
-/* Spinner used in Esmi chat tool-status pill */
-@keyframes esmi-spin {
-  to { transform: rotate(360deg); }
-}
+/* `esmi-spin` was removed 2026-08-08 with the chat's tool-status spinner.
+   The spinner added nothing the tool's own label ("Checking your calendar…")
+   did not already say, and it was a third loop on one surface. The tool
+   status now uses `.lg-pending-rule`, the same device as the pending state. */
 
 /* Skip-to-content link. Stamped, square, and mono — the first thing a
    keyboard user sees should already be in the world. */
@@ -609,25 +630,49 @@ body {
   .lg-band > *:first-child { border-left: 0; padding-left: 0; }
 }
 
-/* The authored moment: rows settle in sequence, then the tick lands.
-   Exponential ease-out from an already-visible default — the register is
-   readable with JS off and with motion suppressed. */
+/* ─── The four verbs ──────────────────────────────────────────────────────
+   Settle, Strike, Rule, Press. Every animation on this surface is one of
+   them; a fifth is a design-system change, not a page decision.
+
+   Each animates from an already-legible default, so the content reads with
+   JS off and with motion suppressed. Only transform, opacity, and clip-path
+   are touched — the three that skip layout and paint. */
+
+/* Settle — a row lands into place. */
 @keyframes lg-settle {
   from { transform: translateY(6px); opacity: 0.35; }
   to   { transform: translateY(0);   opacity: 1; }
 }
-@keyframes lg-tick-in {
+
+/* Strike — a mark is revealed left-to-right, the way it would be written.
+   `inset()` is logical-property safe, so this survives an RTL locale. */
+@keyframes lg-strike {
   from { clip-path: inset(0 100% 0 0); }
   to   { clip-path: inset(0 0 0 0); }
 }
 
+/* Rule — a line draws in from one origin. Also the mechanism behind
+   `.lg-quiet::after` and `.lg-summary::before`, which predate the token. */
+@keyframes lg-rule-draw {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+.lg-strike {
+  animation: lg-strike var(--lg-dur-strike) var(--ease-emphasized) both;
+}
+
+/* The call register's authored moment: rows settle in sequence and each
+   disposition is struck as its row lands. Retimed 2026-08-08 from
+   620ms/90ms — ten rows took 1.43s, which read as slow rather than
+   precise. The same picture now lands in 785ms. */
 .lg-register .lg-row {
-  animation: lg-settle 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  animation-delay: calc(var(--i, 0) * 90ms);
+  animation: lg-settle var(--lg-dur-settle) var(--ease-emphasized) both;
+  animation-delay: calc(var(--i, 0) * var(--lg-stagger));
 }
 .lg-register .lg-tick {
-  animation: lg-tick-in 340ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  animation-delay: calc(var(--i, 0) * 90ms + 380ms);
+  animation: lg-strike var(--lg-dur-strike) var(--ease-emphasized) both;
+  animation-delay: calc(var(--i, 0) * var(--lg-stagger) + 180ms);
 }
 
 /* ─── Materials ───────────────────────────────────────────────────────────
@@ -763,9 +808,15 @@ details[open] > .lg-summary::before {
 }
 .lg-quiet:hover::after { transform: scaleX(1); }
 
+/* Reduced motion: fewer and gentler, not zero. Transform- and clip-based
+   movement is dropped so nothing travels or wipes; colour and opacity
+   transitions that aid comprehension are left alone. Every verb animates
+   from a legible default, so removing the animation leaves the final
+   state — never a hidden element. */
 @media (prefers-reduced-motion: reduce) {
   .lg-register .lg-row,
-  .lg-register .lg-tick { animation: none; }
+  .lg-register .lg-tick,
+  .lg-strike { animation: none; }
   .lg-stamp, .lg-quiet::after { transition: none; }
 }
 
@@ -831,11 +882,9 @@ details[open] > .lg-summary::before {
   50%      { transform: scaleY(1);    }
 }
 
-/* Idle waveform — gentle, low amplitude */
-@keyframes esmi-wave-idle {
-  0%, 100% { transform: scaleY(0.18); }
-  50%      { transform: scaleY(0.42); }
-}
+/* `esmi-wave-idle` was removed 2026-08-08. It ran the waveform forever on an
+   untouched page — an ambient loop with no trigger. The idle bars are now
+   static; VoiceWave animates only while a request is in flight. */
 
 /* Slow vertical float for glass panels */
 /* Conic sheen sweep on the demo console border */
@@ -852,17 +901,28 @@ details[open] > .lg-summary::before {
    and inherits the world's foil scrollbar. */
 .esmi-input::placeholder { color: var(--lg-ink-3); }
 
-/* Typing indicator. Replaces `esmi-bounce`, whose vertical hop read as
-   playful for what is simply a working state. Opacity only: the dots hold
-   position and breathe, which is legible at 6px and calm beside a serif
-   transcript. */
-@keyframes lg-typing {
-  0%, 100% { opacity: 0.28; }
-  50%      { opacity: 1; }
+/* `lg-typing` was removed 2026-08-08 along with the three pulsing dots and
+   the blinking caret it drove. Both were looping "AI thinking" devices —
+   the most recognisable tell of an AI wrapper, and the thing this world is
+   supposed to be the opposite of. What replaced them:
+
+   - waiting for the first token → `.lg-pending-rule`, the Rule verb, drawn
+     once and held (no loop, because nothing is repeating);
+   - arriving tokens → `.lg-strike`, the Strike verb, one wipe per word group
+     at the backend's real cadence.
+
+   The `[style*="lg-typing"]` reduced-motion hack went with it; both verbs
+   are covered by the vocabulary's own reduced-motion block above. */
+
+/* The pending rule: a line opened in the record while an entry is awaited.
+   Draws from a left origin in one pass, then holds. */
+.lg-pending-rule {
+  transform-origin: left center;
+  animation: lg-rule-draw var(--lg-dur-rule) var(--ease-emphasized) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [style*="lg-typing"] { animation: none !important; opacity: 0.7 !important; }
+  .lg-pending-rule { animation: none; }
 }
 
 /* ─── Public voice preview (try-esmi) ─────────────────────────────────────

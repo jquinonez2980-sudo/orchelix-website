@@ -290,6 +290,41 @@ There are no elevation shadows in this system. Nothing floats, nothing is lifted
 
 **The No Float Rule.** Surfaces do not lift. There is no ambient shadow, no hover elevation, no card. Hover changes a rule, a brightness, or a fill — never a `translateY` on a container.
 
+## Motion
+
+**Creative North Star: "The Record Being Written"**
+
+Motion in this world is *inscription*. A ledger's things get ruled, struck, settled, and stamped — nothing floats, fades ambiently, or glows. This is the same refusal the Elevation section makes about shadow, extended to time: the record is the composition, so motion may only show the record being made.
+
+That produces the two things the category's motion never has. Everything is **triggered** — by arrival in the viewport, by a hover, by a click, by a real network event — and nothing loops. And everything animates **from an already-legible default**, so the page reads with JS off, with motion suppressed, and in the frame before any animation starts.
+
+### The four verbs
+
+Every animation on this surface is one of these four. A fifth is a change to this document, not a decision a page gets to make on its own.
+
+| Verb | What it does | Properties | Duration | Curve |
+| --- | --- | --- | --- | --- |
+| **Rule** | a line draws in from one origin | `transform: scaleX` | `--lg-dur-rule` 260ms | `--ease-emphasized` |
+| **Settle** | a row lands into place from 6px | `transform: translateY`, `opacity` | `--lg-dur-settle` 380ms | `--ease-emphasized` |
+| **Strike** | a mark is revealed left-to-right | `clip-path: inset()` | `--lg-dur-strike` 300ms | `--ease-emphasized` |
+| **Press** | the stamp impresses into the cover | `transform: translateY`, `box-shadow` | `--lg-dur-press` 120ms | `--ease-standard` |
+
+Plus one state duration — `--lg-dur-state` (180ms, `--ease-standard`) — for hover, focus, and toggles, and `--lg-stagger` (45ms) between siblings in a settling run.
+
+Keyframes: `lg-settle`, `lg-strike`, `lg-rule-draw`. Utility classes: `.lg-strike`, `.lg-pending-rule`. `.lg-quiet::after` and `.lg-summary::before` are Rule, written before the token existed.
+
+### Named Rules
+
+**The Closed Vocabulary Rule.** Four verbs, three durations, one stagger, two curves — closed the same way the type ramp is closed. A motion value that is not in the table above is drift, not a decision. In particular there is **no new easing curve**: `--ease-emphasized` (`0.16, 1, 0.3, 1`) is within a rounding error of the canonical strong ease-out, and a second scale beside it would be a defect. `ease-in` is never used on this surface — it starts slow and delays the exact moment the user is watching.
+
+**The Nothing Loops Rule.** No animation repeats. `infinite` does not appear on this surface. A state that persists is drawn as a held mark, not as a breathing one: the chat's pending state is a foil rule that draws once in 260ms and holds, because a line held open in a ledger is a real thing and a pulsing dot is not. Three loops were removed on 2026-08-08 — `lg-typing` (a three-dot "AI thinking" indicator and a blinking caret), `esmi-wave-idle` (a waveform breathing on an untouched page), and `esmi-spin` (a tool spinner that repeated a label already written beside it). The waveform's remaining animation is gated on a request actually being in flight.
+
+**The Legible Default Rule.** Every verb animates *to* the resting state, never *from* invisibility. Remove the animation — by reduced motion, by JS being off, by an observer that never fires — and the final state is what's already on the page. A page whose content is gated behind an animation is broken, not animated.
+
+**The Reduced Motion Rule.** Fewer and gentler, not zero. Transform- and clip-based movement is dropped so nothing travels or wipes; colour and opacity transitions that aid comprehension stay. Every verb ships its `prefers-reduced-motion` path in the same commit as the verb.
+
+**The Real Cadence Rule.** Where motion represents something happening, it is driven by the real event and not by a timer that imitates one. `/try-esmi` strikes each word group as the backend's SSE stream delivers it, so the pace on screen *is* the model's pace — which is also why there is no "skip" control: there is no artificial queue to skip past. A simulated typing cadence would be a fabrication in motion, and the honesty standard does not stop at copy.
+
 ## Shapes
 
 Zero radius, everywhere. Corners are square on the stamp, on the mobile menu button, on section edges, on table cells, and on the focus ring — `.lg-field :focus-visible` explicitly resets `border-radius: 0` so the ring squares off against the register's ruling instead of rounding over it. There is no rounded corner anywhere on the field — the last one, an 8px scrollbar thumb, was removed. Radius 0 is literal, not approximate.
@@ -330,7 +365,7 @@ A real `<table>` with `border-collapse: collapse`, a screen-reader caption, `sco
 ### The Call Register (signature component)
 The system's defining artifact and the hero of the home page. A `<figure>` with a mono caption on a `2px` red rule, a mono column-head row, ten ruled entries, and a foot rule whose tally is *derived from the rendered rows, never typed*. Each entry carries a tabular time, a language marker (foil when `ES`), a serif reason, a mono outcome, and a mono disposition coloured by its key. A `lg-margin-rule` red vertical runs down its left edge and `lg-ticks` graduated measure ticks (minor every 14px, major every 70px) run down the field edge beside it.
 
-Motion: rows settle in sequence (`translateY(6px)` + `opacity 0.35 → 1`, 620ms, `cubic-bezier(0.16, 1, 0.3, 1)`, staggered 90ms per row), then the disposition tick wipes in via `clip-path` 380ms behind it. Both animate from an already-legible default, so the register reads with JS off, and both are disabled entirely under `prefers-reduced-motion`.
+Motion: Settle, then Strike. Rows land in sequence (`--lg-dur-settle`, `--lg-stagger` per row), and each disposition is struck in via `clip-path` 180ms behind its own row, so the mark lands as the row does. Retimed 2026-08-08 from 620ms/90ms, where ten rows took 1.43s and read as slow rather than precise; the same picture now lands in 785ms. Both animate from an already-legible default, so the register reads with JS off, and both are disabled under `prefers-reduced-motion`.
 
 ### Browser Surfaces
 Not optional, and not left to the browser: selection is foil-on-field, `accent-color` is foil, the caret on the field is foil, the field scrollbar is a thin translucent-foil thumb, and the focus ring on the field is a squared `2px` foil outline at `3px` offset.
@@ -357,6 +392,9 @@ Not optional, and not left to the browser: selection is foil-on-field, `accent-c
 - **Don't** put an eyebrow, kicker, or `01/02/03` numbering above a heading.
 - **Don't** ship a row of same-size icon + heading + text cards, or gradient text, or a sparkline standing in for content.
 - **Don't** use a Unicode glyph as a rule, bullet, arrow, or separator. Rules are drawn; icons are inline SVG paths.
+- **Don't** write `infinite`, a pulsing dot, a blinking caret, or a spinner. A persistent state is a held mark, not a breathing one.
+- **Don't** invent a duration or an easing curve. Four verbs, three durations, one stagger, two curves — the vocabulary is closed.
+- **Don't** animate anything but `transform`, `opacity`, and `clip-path`, and don't gate content behind an animation.
 - **Don't** introduce a font-size that is not in `typography.scale`, and don't hand-write a `clamp()` for a heading — use `PageTitle` or `SectionTitle`.
 - **Don't** set body copy in uppercase or in the condensed display face, and don't set a figure in the body serif.
 - **Don't** show the alternating register band below 901px, or let a register entry occupy more than one line below 640px.

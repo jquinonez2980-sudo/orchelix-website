@@ -89,6 +89,11 @@ const TOOL_LABELS_ES: Record<string, string> = {
   search_knowledge_base: "Buscando información…",
 };
 
+/* The line held open while the first token is awaited. Named, not implied by
+   an animation — a screen reader gets the same information the sighted user
+   gets from the drawn rule. */
+const PENDING_LABEL = { en: "Answering", es: "Respondiendo" } as const;
+
 const FOIL = "var(--lg-foil)";
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -137,6 +142,7 @@ export default function EsmiChat({
   const isEs = locale === "es";
   const quickReplies = isEs ? QUICK_REPLIES_ES : QUICK_REPLIES;
   const toolLabels = isEs ? TOOL_LABELS_ES : TOOL_LABELS;
+  const pendingLabel = PENDING_LABEL[locale];
 
   const [messages, setMessages] = useState<Message[]>(() => [{ id: uid(), role: "assistant", content: welcome(defaultLocale) }]);
   const [input, setInput] = useState("");
@@ -500,7 +506,13 @@ export default function EsmiChat({
         }}
       >
         {messages.map((msg) => (
-          <MessageBubble key={msg.id} message={msg} onSlotSelect={sendMessage} toolLabels={toolLabels} />
+          <MessageBubble
+            key={msg.id}
+            message={msg}
+            onSlotSelect={sendMessage}
+            toolLabels={toolLabels}
+            pendingLabel={pendingLabel}
+          />
         ))}
 
         {showQuickReplies && (
@@ -600,15 +612,18 @@ export default function EsmiChat({
 // Animated bar waveform that reacts to chat activity. Idle = gentle low pulse;
 // thinking = medium bounce; speaking = bright, fast, glowing.
 
+/* The idle state used to run `esmi-wave-idle 2.4s … infinite` — a waveform
+   breathing on an empty page, forever, whether or not anyone had interacted
+   with it. That is an ambient loop with no trigger, and it went.
+
+   Bars are now static at rest and animate only while a request is actually
+   in flight. The motion is the request; when there is no request there is no
+   motion. The static bars still read as a waveform, so the affordance
+   survives without the theatre. */
 function VoiceWave({ activity }: { activity: Activity }) {
   const bars = [0, 1, 2, 3, 4];
-  const speaking = activity === "speaking";
   const idle = activity === "idle";
-
-  const anim = idle ? "esmi-wave-idle" : "esmi-wave";
-  const duration = speaking ? 0.7 : activity === "thinking" ? 1 : 2.4;
-  const color = idle ? "rgba(217,162,27,0.45)" : FOIL;
-  const glow = "none";
+  const duration = activity === "speaking" ? 0.7 : 1;
 
   return (
     <div
@@ -630,10 +645,13 @@ function VoiceWave({ activity }: { activity: Activity }) {
             width: 3,
             height: 18,
             borderRadius: 0,
-            background: color,
-            boxShadow: glow,
+            background: idle ? "rgba(217,162,27,0.45)" : FOIL,
             transformOrigin: "center",
-            animation: `${anim} ${duration}s ease-in-out ${i * 0.12}s infinite`,
+            transform: idle ? "scaleY(0.28)" : undefined,
+            transition: `background-color var(--lg-dur-state) var(--ease-standard)`,
+            animation: idle
+              ? undefined
+              : `esmi-wave ${duration}s ease-in-out ${i * 0.12}s infinite`,
           }}
         />
       ))}
@@ -647,10 +665,12 @@ function MessageBubble({
   message,
   onSlotSelect,
   toolLabels,
+  pendingLabel,
 }: {
   message: Message;
   onSlotSelect: (v: string) => void;
   toolLabels: Record<string, string>;
+  pendingLabel: string;
 }) {
   const isUser = message.role === "user";
 
@@ -712,40 +732,37 @@ function MessageBubble({
       </div>
 
       <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 8 }}>
-        {/* Typing dots */}
+        {/* Awaiting the first token — a line opened in the record. */}
         {isStreaming && !hasContent && !message.toolActive && (
           <div
+            role="status"
             style={{
               display: "inline-flex",
               padding: "12px 16px",
               background: "rgba(226,232,242,0.05)",
               border: "1px solid var(--lg-hair-2)",
               borderRadius: 0,
-            }}
-          >
-            <TypingDots />
-          </div>
-        )}
-
-        {/* Tool status pill */}
-        {message.toolActive && (
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "8px 12px 8px 10px",
-              background: "rgba(217,162,27,0.08)",
-              borderLeft: `1px solid ${FOIL}`,
-              borderRadius: 0,
-              fontSize: 12,
-              fontWeight: 500,
-              color: FOIL,
               alignSelf: "flex-start",
             }}
           >
-            <Spinner />
-            {toolLabels[message.toolActive] ?? "Working…"}
+            <PendingRule label={pendingLabel} />
+          </div>
+        )}
+
+        {/* A real tool call is running. Same device, the tool's own label. */}
+        {message.toolActive && (
+          <div
+            role="status"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              padding: "8px 12px",
+              background: "rgba(217,162,27,0.08)",
+              borderRadius: 0,
+              alignSelf: "flex-start",
+            }}
+          >
+            <PendingRule label={toolLabels[message.toolActive] ?? "Working…"} />
           </div>
         )}
 
@@ -766,21 +783,7 @@ function MessageBubble({
               maxWidth: "82%",
             }}
           >
-            {isStreaming ? stripSlotLines(message.content) : message.content}
-            {isStreaming && (
-              <span
-                style={{
-                  display: "inline-block",
-                  width: 2,
-                  height: 13,
-                  borderRadius: 0,
-                  verticalAlign: "text-bottom",
-                  marginLeft: 2,
-                  background: FOIL,
-                  animation: "lg-typing 1.4s ease-in-out infinite",
-                }}
-              />
-            )}
+            {isStreaming ? <StruckText text={stripSlotLines(message.content)} /> : message.content}
           </div>
         )}
 
@@ -931,39 +934,62 @@ function QuickReplies({
 
 // ── Micro-components ──────────────────────────────────────────────────────────
 
-function TypingDots() {
+/* PendingRule — what replaced the three pulsing dots.
+
+   The dots were `lg-typing 1.4s ease-in-out infinite` with an 0.18s stagger:
+   a looping "AI thinking" indicator, which is the single most recognisable
+   tell of an AI wrapper, and foil on a 6px dot besides — a Foil Scarcity
+   violation. Both went.
+
+   This is the Rule verb. A line is opened in the record and held open while
+   the entry is awaited. It draws once, in 260ms, and then holds; there is no
+   loop, because nothing is actually repeating. The real liveness signal is
+   the tokens themselves, which begin arriving within a few hundred
+   milliseconds and are struck in as they land. */
+/* StruckText — what replaced the blinking caret.
+
+   The caret was a 2px foil bar on `lg-typing … infinite`: the terminal-cursor
+   tell that every AI wrapper ships. This renders the same real SSE stream as
+   the Strike verb instead — each word group revealed left-to-right by a
+   clip-path wipe as it arrives, the way a machine writes a transcript.
+
+   There is no artificial pacing here and therefore nothing to skip: the
+   cadence is the backend's actual token cadence, and each wipe is 300ms
+   against a stream that is already moving. A "skip" control would have
+   nothing to skip past.
+
+   Word groups sit at stable indices, so an arriving token mounts a new span
+   (which animates once) and leaves every earlier span alone (which does not
+   re-animate). Whitespace stays as plain text nodes so `pre-wrap` wrapping
+   is unaffected by the inline-block word boxes. */
+function StruckText({ text }: { text: string }) {
   return (
-    <span style={{ display: "inline-flex", alignItems: "center", gap: 5, height: 16 }}>
-      {[0, 1, 2].map((i) => (
-        <span
-          key={i}
-          style={{
-            display: "inline-block",
-            width: 6,
-            height: 6,
-            borderRadius: 0,
-            background: FOIL,
-            animation: `lg-typing 1.4s ease-in-out ${i * 0.18}s infinite`,
-          }}
-        />
-      ))}
-    </span>
+    <>
+      {text.split(/(\s+)/).map((part, i) =>
+        /^\s+$/.test(part) || part === "" ? (
+          part
+        ) : (
+          <span key={i} className="lg-strike" style={{ display: "inline-block" }}>
+            {part}
+          </span>
+        )
+      )}
+    </>
   );
 }
 
-function Spinner() {
+function PendingRule({ label }: { label?: string }) {
   return (
-    <svg
-      width="12"
-      height="12"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      style={{ animation: "esmi-spin 0.8s linear infinite", flexShrink: 0 }}
+    <span
+      className="lg-fig inline-flex items-center gap-3"
+      style={{ fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: FOIL }}
     >
-      <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-    </svg>
+      <span
+        aria-hidden="true"
+        className="lg-pending-rule"
+        style={{ display: "block", width: 26, height: 1, background: FOIL }}
+      />
+      {label}
+    </span>
   );
 }
