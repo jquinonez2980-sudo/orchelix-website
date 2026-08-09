@@ -3,7 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-const CYAN = "#00F0FF";
+const FOIL = "var(--lg-foil)";
 
 const BUSINESS_TYPES = [
   { value: "", label: "What kind of business? (optional)" },
@@ -18,10 +18,11 @@ const inputStyle: React.CSSProperties = {
   width: "100%",
   fontFamily: "var(--font-display)",
   fontSize: 15,
-  color: "#fff",
-  background: "rgba(255,255,255,0.04)",
-  border: "1px solid rgba(255,255,255,0.14)",
-  borderRadius: 10,
+  color: "var(--lg-ink)",
+  background: "transparent",
+  border: 0,
+  borderBottom: "1px solid var(--lg-hair)",
+  borderRadius: 0,
   padding: "13px 14px",
   outline: "none",
 };
@@ -93,10 +94,11 @@ export default function LeadCaptureForm() {
         maxWidth: 440,
         margin: "0 auto",
         textAlign: "left",
-        background: "rgba(255,255,255,0.03)",
-        border: "1px solid rgba(255,255,255,0.1)",
-        borderRadius: 16,
-        padding: "24px 24px 22px",
+        background: "transparent",
+        border: 0,
+        borderTop: "2px solid var(--lg-rule)",
+        borderRadius: 0,
+        padding: "1.8rem 0 0",
       }}
     >
       <form onSubmit={handleSubmit} noValidate>
@@ -145,11 +147,11 @@ export default function LeadCaptureForm() {
             name="business_type"
             value={businessType}
             onChange={(e) => setBusinessType(e.target.value)}
-            style={{ ...inputStyle, color: businessType ? "#fff" : "rgba(234,242,255,0.5)" }}
+            style={{ ...inputStyle, color: businessType ? "var(--lg-ink)" : "var(--lg-ink-3)" }}
             disabled={submitting}
           >
             {BUSINESS_TYPES.map((t) => (
-              <option key={t.value} value={t.value} style={{ color: "#0A0F1C" }}>
+              <option key={t.value} value={t.value} style={{ color: "var(--lg-field-2)" }}>
                 {t.label}
               </option>
             ))}
@@ -159,37 +161,37 @@ export default function LeadCaptureForm() {
         <button
           type="submit"
           disabled={!canSubmit}
+          className="lg-stamp lg-foil-surface"
           style={{
             width: "100%",
             fontFamily: "var(--font-display)",
             fontWeight: 600,
             fontSize: 15,
-            padding: "15px 28px",
-            borderRadius: 12,
-            border: "none",
-            background: canSubmit
-              ? "linear-gradient(135deg, #00F0FF 0%, #38BDF8 100%)"
-              : "rgba(255,255,255,0.08)",
-            color: canSubmit ? "#04121A" : "rgba(234,242,255,0.4)",
+            letterSpacing: "0.08em",
+            textTransform: "uppercase" as const,
+            padding: "0.95rem 1.7rem",
+            borderRadius: 0,
+            border: 0,
+            color: "#2A1D02",
             cursor: canSubmit ? "pointer" : "not-allowed",
-            boxShadow: canSubmit ? "0 0 28px rgba(0,240,255,0.45)" : "none",
+            opacity: canSubmit ? 1 : 0.45,
             display: "inline-flex",
             alignItems: "center",
             justifyContent: "center",
             gap: 8,
           }}
         >
-          {submitting ? "Getting your demo ready…" : "Get my live demo →"}
+          {submitting ? "Getting your demo ready…" : "Get my live demo"}
         </button>
 
         {error && (
-          <div style={{ marginTop: 14 }}>
+          <div style={{ marginTop: 14, paddingLeft: "0.9rem", borderLeft: "2px solid var(--lg-ink)" }}>
             <p
               role="alert"
               style={{
                 fontFamily: "var(--font-display)",
                 fontSize: 13,
-                color: "#FCA5A5",
+                color: "var(--lg-ink)",
                 margin: "0 0 6px",
               }}
             >
@@ -200,11 +202,11 @@ export default function LeadCaptureForm() {
               style={{
                 fontFamily: "var(--font-display)",
                 fontSize: 13,
-                color: CYAN,
+                color: FOIL,
                 textDecoration: "underline",
               }}
             >
-              Continue to demo without signing up →
+              Continue to demo without signing up
             </a>
           </div>
         )}

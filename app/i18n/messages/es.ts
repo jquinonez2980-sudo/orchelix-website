@@ -638,6 +638,61 @@ const es: Messages = {
     /* /blog — índice y estructura del artículo. Los cuerpos de artículo
        quedan fuera de este pase de forma deliberada; ver el comentario en
        en.ts. */
+    /* /acumen y /missed-calls — ver el comentario en en.ts para las
+       correcciones de honestidad aplicadas en la conversión. */
+    acumen: {
+      title: "AcumenAI — libros que se concilian solos",
+      description:
+        "AcumenAI es el sistema de contabilidad y finanzas: lee estados de cuenta, verifica cada transacción contra el saldo corriente del propio banco, clasifica al catálogo de cuentas y envía las excepciones a aprobación humana de un clic — con un registro auditable completo.",
+      heading: "Libros que se concilian solos",
+      lede: "AcumenAI lee un estado de cuenta, contrasta cada transacción con el saldo corriente del propio banco, la clasifica en la cuenta contable correcta y envía a revisión solo lo que exige criterio — con un registro auditable detrás de cada paso.",
+      facts: [
+        ["Estado", "En desarrollo"],
+        ["Verificación", "Cadena de saldos, no inferencia"],
+        ["Aprobación", "Una persona aprueba, nunca captura"],
+        ["Registro", "Cada paso registrado y exportable"],
+      ] as [string, string][],
+      whyHeading: "Exactitud que puedes auditar, no solo creer",
+      why: [
+        {
+          title: "Verificación por cadena de saldos",
+          desc: "El importe con signo de cada transacción debe igualar el cambio en el saldo corriente del propio banco. Aritmética, no la conjetura de un modelo — así los signos invertidos y las filas perdidas salen a la luz en vez de colarse.",
+        },
+        {
+          title: "Un registro que resiste una auditoría",
+          desc: "Cada lectura, clasificación y aprobación queda registrada con fecha, hora y motivo, atribuible y exportable. La base de cumplimiento que una firma contable realmente necesita.",
+        },
+        {
+          title: "Una persona aprueba, nunca captura",
+          desc: "Las transacciones claras se clasifican solas; lo que exige criterio pasa a una cola de aprobar o rechazar con un clic. Las reglas por cliente aprenden con el tiempo, así que la cola se encoge conforme maduran los libros.",
+        },
+      ],
+      closeHeading: "Vela correr sobre tus propios libros",
+      closeBody:
+        "AcumenAI hace la lectura, la aritmética y la captura. Tu equipo revisa las excepciones y aprueba — la parte que exige criterio. Un piloto de catorce días lo pone frente a tu contabilidad real.",
+      openConsole: "Abrir la consola",
+    },
+
+    missedCalls: {
+      title: "Deja de perder citas por llamadas no contestadas",
+      description:
+        "Esmi es una recepcionista de IA que contesta fuera de horario, agenda citas en tu calendario y captura prospectos — en inglés y español. Escúchala en dos minutos.",
+      heading: "Deja de perder citas por llamadas fuera de horario",
+      lede: "Esmi contesta cuando tú no puedes, agenda en tu calendario mientras quien llama sigue en la línea y te envía el prospecto por mensaje. Inglés y español en el mismo número.",
+      bullets: [
+        ["Contesta", "Cuando estás ocupado, cerrado o con un cliente"],
+        ["Agenda", "Directo en tu calendario — sin “luego te llamamos”"],
+        ["Registra", "Cada llamada, chat y cita en un solo tablero"],
+        ["Idiomas", "Inglés y español en la misma línea"],
+      ] as [string, string][],
+      formHeading: "Escúchala en tu propio teléfono",
+      formLede:
+        "Déjanos un número y lo llamamos con Esmi en la línea, para que escuches lo que escucharían tus propios clientes.",
+      closeHeading: "Escucha la llamada antes de decidir",
+      closeBody:
+        "Hay una grabación real en la página de demo, y el mismo agente en un chat donde puedes escribir. Dos minutos, sin formulario.",
+    },
+
     blog: {
       title: "Blog",
       description:

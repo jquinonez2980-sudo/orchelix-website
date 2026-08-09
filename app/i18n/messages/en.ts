@@ -651,6 +651,74 @@ const en = {
        of scope for this pass: ArticleBody still renders the light world's
        long-form styling, and a documented Read variant of Prose is a
        separate piece of work. The chrome around it is the ledger. */
+    /* /acumen — the AcumenAI product page, converted 2026-08-08.
+
+       Honesty corrections in that pass:
+       - "One bookkeeper, 200 clients." was a capacity claim with no basis on
+         hand; PRODUCT.md bars outcome metrics outright.
+       - the page carried no shipping status at all, while PRODUCT.md lists
+         AcumenAI as in development and requires roadmap products to read as
+         roadmap. It now says so in the opening, matching /app.
+       - "Go to Dashboard" pointed at a raw Vercel preview host
+         (landing-pink-five-23.vercel.app) rather than /app. */
+    acumen: {
+      title: "AcumenAI — books that reconcile themselves",
+      description:
+        "AcumenAI is the accounting and finance OS: it reads bank statements, verifies every transaction against the bank's own running balance, categorises to the GL, and queues exceptions for one-click human approval — with a full audit trail.",
+      heading: "Books that reconcile themselves",
+      lede: "AcumenAI reads a bank statement, checks every transaction against the bank's own running balance, categorises it to the right GL account, and queues only the judgment calls for a person — with an audit trail behind every step.",
+      facts: [
+        ["Status", "In development"],
+        ["Verification", "Balance-chain, not inference"],
+        ["Approval", "A person approves, never keys"],
+        ["Record", "Every step logged and exportable"],
+      ] as [string, string][],
+      whyHeading: "Accuracy you can audit, not just trust",
+      why: [
+        {
+          title: "Balance-chain verification",
+          desc: "Every transaction's signed amount must equal the change in the bank's own running balance. Arithmetic, not a language model's guess — so sign-flips and dropped rows surface instead of slipping through.",
+        },
+        {
+          title: "An audit trail that survives review",
+          desc: "Every parse, categorisation, and approval is logged with a timestamp and a reason, attributable and exportable. The compliance backbone an accounting practice actually needs.",
+        },
+        {
+          title: "A person approves, never keys",
+          desc: "Clear transactions are categorised automatically; the judgment calls are queued for one-click approve or reject. Per-client rules learn over time, so the queue shrinks as the books mature.",
+        },
+      ],
+      closeHeading: "See it run on your own books",
+      closeBody:
+        "AcumenAI does the reading, the arithmetic, and the data entry. Your team reviews the exceptions and approves — the part that needs judgment. A fourteen-day pilot puts it against your real ledger.",
+      openConsole: "Open the console",
+    },
+
+    /* /missed-calls — the Esmi direct-response landing page, converted
+       2026-08-08. It was the last surface carrying the `esmi-dark`
+       glassmorphism world: cyan #00F0FF to purple #A855F7 gradient text,
+       blurred colour blobs, and glass panels — the exact palette the redesign
+       brief names as the thing to avoid. */
+    missedCalls: {
+      title: "Stop losing bookings to missed calls",
+      description:
+        "Esmi is an AI receptionist that answers after hours, books appointments on your calendar, and captures leads — in English and Spanish. Hear it in two minutes.",
+      heading: "Stop losing bookings to missed and after-hours calls",
+      lede: "Esmi answers when you cannot, books on your calendar while the caller is still on the line, and texts you the lead. English and Spanish on the same number.",
+      bullets: [
+        ["Answers", "When you are busy, closed, or with a client"],
+        ["Books", "Directly on your calendar — no “we’ll call you back”"],
+        ["Records", "Every call, chat, and appointment in one dashboard"],
+        ["Languages", "English and Spanish on the same line"],
+      ] as [string, string][],
+      formHeading: "Hear it on your own phone",
+      formLede:
+        "Leave a number and we will call it with Esmi on the line, so you hear what your own callers would hear.",
+      closeHeading: "Hear the call before you decide",
+      closeBody:
+        "There is a real recording on the demo page, and the same agent in a chat you can type into. Two minutes, no form.",
+    },
+
     blog: {
       title: "Blog",
       description:

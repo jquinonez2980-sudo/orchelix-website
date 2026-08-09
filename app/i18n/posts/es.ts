@@ -260,7 +260,7 @@ export const ES_POSTS: EsPost[] = [
       { type: "h2", text: "Recepcionista con IA vs. recepcionista humano vs. servicio de contestadora" },
       {
         type: "p",
-        text: "Un recepcionista de tiempo completo en los EE. UU. generalmente cuesta **$3,000–$4,500+ por mes** al incluir salario, prestaciones y gastos generales — y trabaja un solo turno, no 24/7. Un servicio de contestadora tradicional es más económico pero generalmente solo toma mensajes, dejándote la tarea de devolver llamadas. Un recepcionista con IA se sitúa entre ambos en precio mientras hace más trabajo real: contesta, califica al cliente y [agenda la cita](/es/recepcionista-ia) en la misma llamada.",
+        text: "Un recepcionista de tiempo completo en los EE. UU. suele estimarse en torno a **$3,000–$4,500 por mes** al incluir salario, prestaciones y gastos generales — tómalo como una cifra aproximada de referencia, no como una cotización, porque varía mucho según el mercado y el puesto — y trabaja un solo turno, no 24/7. Un servicio de contestadora tradicional es más económico pero generalmente solo toma mensajes, dejándote la tarea de devolver llamadas. Un recepcionista con IA se sitúa entre ambos en precio mientras hace más trabajo real: contesta, califica al cliente y [agenda la cita](/es/recepcionista-ia) en la misma llamada.",
       },
       {
         type: "p",

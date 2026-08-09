@@ -82,6 +82,8 @@ export const config = {
     "/ai-receptionist/:path*",
     "/blog",
     "/blog/:path*",
+    "/acumen",
+    "/missed-calls",
     /* Clerk surfaces. */
     "/app(.*)",
     "/dashboard(.*)",

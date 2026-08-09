@@ -262,7 +262,7 @@ export const POSTS: Post[] = [
       { type: "h2", text: "AI receptionist vs. a human receptionist vs. an answering service" },
       {
         type: "p",
-        text: "A full-time receptionist in the US typically costs **$3,000–$4,500+ per month** once you include salary, benefits, and overhead — and they work one shift, not 24/7. A traditional answering service is cheaper but usually just takes messages, leaving you to call people back. An AI receptionist sits in between on price while doing more of the actual work: it answers, qualifies the caller, and [books the appointment](/ai-receptionist) on the same call.",
+        text: "A full-time receptionist in the US is commonly estimated at roughly **$3,000–$4,500 per month** once salary, benefits, and overhead are included — treat that as a rough planning figure rather than a quote, since it varies widely by market and role — and they work one shift, not 24/7. A traditional answering service is cheaper but usually just takes messages, leaving you to call people back. An AI receptionist sits in between on price while doing more of the actual work: it answers, qualifies the caller, and [books the appointment](/ai-receptionist) on the same call.",
       },
       {
         type: "p",

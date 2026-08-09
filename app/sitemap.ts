@@ -63,14 +63,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     /* Everything outside the locale segment — English-only today. */
     { url: `${BASE}/try-esmi`,      lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/acumen`,        lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/missed-calls`,  lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     /* /kitchen-bath and /home-services moved into the locale segment on
        2026-08-08 and are emitted by localizedEntries() above, with their
        Spanish alternates. Listing them here as well would duplicate them. */
     { url: `${BASE}/privacy`,       lastModified: now, changeFrequency: "yearly",  priority: 0.3 },
     { url: `${BASE}/terms`,         lastModified: now, changeFrequency: "yearly",  priority: 0.3 },
-    { url: `${BASE}/es/recepcionista-ia`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     /* Sector pages, derived from the same slug list the route prerenders
        from, in every locale that has the parent's copy. Hardcoding them here
        is how the sitemap and the router drifted apart before. */

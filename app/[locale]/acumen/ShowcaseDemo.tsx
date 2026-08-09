@@ -82,7 +82,7 @@ export default function ShowcaseDemo() {
             linear-gradient(180deg, #102C44 0%, #061B33 100%)
           `,
           boxShadow: `
-            0 1px 0 rgba(255,255,255,0.10) inset,
+            0 1px 0 var(--lg-hair) inset,
             0 0 0 1px rgba(217,162,27,0.08),
             0 40px 100px -30px rgba(10,37,64,0.55),
             0 24px 60px -20px rgba(217,162,27,0.16)
@@ -95,7 +95,7 @@ export default function ShowcaseDemo() {
           className="pointer-events-none absolute inset-0 opacity-40"
           style={{
             backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)",
+              "linear-gradient(var(--lg-hair-2) 1px, transparent 1px), linear-gradient(90deg, var(--lg-hair-2) 1px, transparent 1px)",
             backgroundSize: "28px 28px",
             maskImage: "linear-gradient(180deg, black 0%, transparent 75%)",
             WebkitMaskImage: "linear-gradient(180deg, black 0%, transparent 75%)",
@@ -167,7 +167,7 @@ export default function ShowcaseDemo() {
             fontFamily: "var(--font-display)",
             background: GOLD,
             color: "#1A1206",
-            boxShadow: "0 1px 0 rgba(255,255,255,0.25) inset, 0 8px 20px -8px rgba(217,162,27,0.55)",
+            boxShadow: "0 1px 0 var(--lg-ink-3) inset, 0 8px 20px -8px rgba(217,162,27,0.55)",
           }}
         >
           {running && !done ? "Running…" : done ? "Run it again" : "Run the demo"}
@@ -190,8 +190,8 @@ function Row({ on, n, label, tone, children }: {
     <div
       className="flex items-start gap-3 rounded-[11px] px-3.5 py-3 transition-all duration-500"
       style={{
-        background: on ? (tone === "gold" ? "rgba(217,162,27,0.10)" : "rgba(255,255,255,0.04)") : "rgba(255,255,255,0.02)",
-        border: `1px solid ${on ? (tone === "gold" ? "rgba(217,162,27,0.22)" : "rgba(255,255,255,0.07)") : "rgba(255,255,255,0.04)"}`,
+        background: on ? (tone === "gold" ? "rgba(217,162,27,0.10)" : "var(--lg-hair-2)") : "var(--lg-hair-2)",
+        border: `1px solid ${on ? (tone === "gold" ? "rgba(217,162,27,0.22)" : "var(--lg-hair-2)") : "var(--lg-hair-2)"}`,
         opacity: on ? 1 : 0.28,
         transform: on ? "translateY(0)" : "translateY(4px)",
       }}
@@ -200,8 +200,8 @@ function Row({ on, n, label, tone, children }: {
         className="mt-0.5 shrink-0 inline-flex h-5 w-5 items-center justify-center rounded-full text-[10px] font-bold"
         style={{
           fontFamily: "var(--font-mono)",
-          background: on ? (tone === "gold" ? GOLD : "rgba(255,255,255,0.10)") : "rgba(255,255,255,0.06)",
-          color: on ? (tone === "gold" ? "#1A1206" : "rgba(255,255,255,0.75)") : "rgba(255,255,255,0.30)",
+          background: on ? (tone === "gold" ? GOLD : "var(--lg-hair)") : "var(--lg-hair-2)",
+          color: on ? (tone === "gold" ? "#1A1206" : "var(--lg-ink-2)") : "var(--lg-ink-3)",
         }}
       >
         {n}
@@ -222,7 +222,7 @@ function BeatIngest({ beat, on, active }: { beat: Beats["ingest"]; on: boolean; 
     <Row on={on} n="1" label="Ingest — a statement arrives">
       <div className="text-[13px] font-semibold text-white/90" style={{ fontFamily: "var(--font-display)" }}>
         {txns} transactions parsed
-        <span className="ml-2 rounded-full px-2 py-0.5 text-[10px] font-medium align-middle" style={{ background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.6)", fontFamily: "var(--font-mono)" }}>
+        <span className="ml-2 rounded-full px-2 py-0.5 text-[10px] font-medium align-middle" style={{ background: "var(--lg-hair)", color: "var(--lg-ink-2)", fontFamily: "var(--font-mono)" }}>
           {beat.bank_code} auto-detected
         </span>
       </div>
@@ -275,7 +275,7 @@ function BeatAudit({ beat, on }: { beat: Beats["audit"]; on: boolean }) {
       </div>
       <div className="mt-1.5 flex flex-wrap gap-1.5">
         {beat.event_types.map((t) => (
-          <span key={t} className="rounded-full px-2 py-0.5 text-[9.5px] font-medium" style={{ background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.55)", fontFamily: "var(--font-mono)" }}>
+          <span key={t} className="rounded-full px-2 py-0.5 text-[9.5px] font-medium" style={{ background: "var(--lg-hair-2)", color: "var(--lg-ink-3)", fontFamily: "var(--font-mono)" }}>
             {t}
           </span>
         ))}

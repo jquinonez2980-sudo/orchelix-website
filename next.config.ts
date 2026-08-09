@@ -32,6 +32,15 @@ const nextConfig: NextConfig = {
         destination: '/solutions',
         statusCode: 301,
       },
+      // The hand-written Spanish landing page that predated the i18n system.
+      // /es/ai-receptionist is the same subject in the converted world and
+      // carries the real Spanish catalogue, so the old slug forwards rather
+      // than sitting alongside it as a second, worse copy.
+      {
+        source: '/es/recepcionista-ia',
+        destination: '/es/ai-receptionist',
+        statusCode: 301,
+      },
     ];
   },
 
