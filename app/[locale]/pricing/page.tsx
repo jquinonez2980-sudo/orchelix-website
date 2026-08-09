@@ -15,6 +15,7 @@ import {
   Stamp,
   QuietAction,
   Band,
+  Disclosure,
 } from "@/app/components/ledger";
 
 const SITE_URL = "https://www.orchelix.com";
@@ -212,31 +213,8 @@ export default async function PricingPage({ params }: PageProps<"/[locale]">) {
         {/* ── Questions ── */}
         <Section tone="field">
           <SectionTitle max="14ch">{p.questionsHeading}</SectionTitle>
-          <div className="mt-10" style={{ borderTop: "2px solid var(--lg-rule)" }}>
-            {p.faq.map((f) => (
-              <details
-                key={f.q}
-                style={{ borderBottom: "1px solid var(--lg-hair-2)", padding: "1.1rem 0" }}
-              >
-                <summary
-                  className="lg-summary"
-                  style={{
-                    fontFamily: "var(--font-display)",
-                    fontStretch: "88%",
-                    fontWeight: 600,
-                    fontSize: "1rem",
-                    letterSpacing: "0.005em",
-                    color: "var(--lg-ink)",
-                    cursor: "pointer",
-                  }}
-                >
-                  {f.q}
-                </summary>
-                <Prose size="0.9375rem" max="72ch" style={{ marginTop: "0.85rem" }}>
-                  {f.a}
-                </Prose>
-              </details>
-            ))}
+          <div className="mt-10">
+            <Disclosure items={p.faq} />
           </div>
         </Section>
 

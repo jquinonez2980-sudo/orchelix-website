@@ -631,6 +631,74 @@ const es: Messages = {
     /* Las dos páginas verticales comparten una sola forma y, por lo tanto,
        un solo contrato de copia. Ver el comentario en en.ts para la lista
        de afirmaciones eliminadas en la conversión del 2026-08-08. */
+    /* /ai-receptionist — la página de producto de Esmi y la matriz de las
+       siete páginas sectoriales. Ver el comentario en en.ts para lo que se
+       eliminó en la conversión (tres testimonios con el prefijo literal
+       «[Placeholder]») y lo que se corrigió (el plazo de puesta en marcha). */
+    aiReceptionist: {
+      title: "Recepcionista de IA para pequeñas empresas",
+      description:
+        "Esmi contesta cada llamada 24/7, califica a quien llama, agenda la cita y transfiere a una persona cuando hace falta — en inglés y español, con transcripción y motivo en cada llamada.",
+      heading: "El teléfono se contesta, y la llamada queda escrita",
+      lede: "Esmi es la recepcionista que no se va a casa. Contesta, califica, agenda en tu calendario real y deja un registro que puedes leer después — en inglés o español, según hable quien llama.",
+      facts: [
+        ["Estado", "En producción, contestando llamadas hoy"],
+        ["Idiomas", "Inglés y español, de forma nativa"],
+        ["Horario", "24/7, noches y fines de semana incluidos"],
+        ["En vivo en", "14 días desde la primera llamada"],
+      ] as [string, string][],
+      doesHeading: "Qué hace durante una llamada",
+      does: [
+        ["Contesta", "Cada llamada, a cualquier hora, en el idioma de quien llama — ni un menú ni un buzón."],
+        ["Califica", "Las preguntas que harías tú, hechas como las harías tú, antes de gastar el tiempo de nadie."],
+        ["Agenda", "En tu calendario en vivo, durante la llamada, con confirmación enviada a quien llamó."],
+        ["Escala", "Cuando la llamada necesita a una persona, la transfiere con toda la conversación adjunta."],
+        ["Registra", "Transcripción, motivo y disposición en cada llamada — revisables y reversibles."],
+      ] as [string, string][],
+      sectorsHeading: "Hecho para cómo contesta el teléfono tu sector",
+      sectorsLede:
+        "El agente es el mismo; las preguntas, el enrutamiento y el vocabulario no lo son. Estos son los sectores para los que hemos configurado a Esmi.",
+      sectorsIndexLabel: "Sectores en esta página",
+      faqHeading: "Lo que preguntan primero",
+      faq: [
+        {
+          q: "¿Qué es una recepcionista de IA?",
+          a: "Una recepcionista de IA es un agente telefónico virtual que contesta tus llamadas entrantes de forma automática — saluda, responde preguntas comunes, califica prospectos y agenda citas — sin que una persona levante el teléfono. Esmi funciona 24/7 y escala a tu equipo cuando la llamada necesita a alguien.",
+        },
+        {
+          q: "¿En qué se diferencia de un servicio de contestadora tradicional?",
+          a: "Una contestadora tradicional toma mensajes y los reenvía; tú sigues devolviendo las llamadas. Esmi resuelve toda la interacción en tiempo real — responde, califica y agenda la cita en tu calendario antes de que cuelguen — así no queda nada pendiente de seguimiento.",
+        },
+        {
+          q: "¿La recepcionista de IA puede agendar citas?",
+          a: "Sí. Esmi consulta tu calendario en vivo, ofrece los espacios libres, agenda la cita y envía una confirmación por SMS — todo en la misma llamada. Sin transferencia a tu personal.",
+        },
+        {
+          q: "¿Esmi habla español?",
+          a: "Sí. Esmi es bilingüe (inglés y español) y puede cambiar de idioma a mitad de la llamada, lo que importa para atender el sur de Florida y los mercados bilingües.",
+        },
+        {
+          q: "¿Qué pasa cuando una llamada necesita a una persona?",
+          a: "Esmi escala a tu equipo y transfiere todo el contexto de la llamada — quién llama, qué necesita y un resumen — para que quien la reciba no empiece de cero.",
+        },
+        {
+          q: "¿Cuánto tarda la puesta en marcha?",
+          a: "El primer agente entra en operación catorce días después de la primera llamada. Lo configuramos con tus guiones, tu calendario y tus preguntas frecuentes, y lo probamos contigo antes de que conteste algo real.",
+        },
+        {
+          q: "¿Quien llama sabrá que habla con una IA?",
+          a: "Esmi está diseñada para ser natural y útil, y somos transparentes sobre cómo se presenta. Tú controlas el saludo y el tono para que refleje tu marca.",
+        },
+        {
+          q: "¿Cuánto cuesta una recepcionista de IA?",
+          a: "Starter cuesta $299 al mes, Growth $599 y Scale $999, con la configuración hecha por nosotros. Un piloto de catorce días cuesta $149, acreditado a tu primera factura si continúas.",
+        },
+      ],
+      closeHeading: "Escúchala antes de contratarla",
+      closeBody:
+        "Hay una grabación real en la página de demo, y el mismo agente está ahí en un chat donde puedes escribir. Sin formulario, sin agendar — el producto haciendo su trabajo.",
+    },
+
     verticals: {
       homeServices: {
         title: "Recepcionista de IA para servicios del hogar",

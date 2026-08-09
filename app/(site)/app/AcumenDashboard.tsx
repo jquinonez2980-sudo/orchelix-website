@@ -112,6 +112,43 @@ export default function AcumenDashboard() {
 
 // ── Gated sign-in card ────────────────────────────────────────────────────────
 
+/* Shipping status, stated on the surface itself.
+
+   PRODUCT.md lists AcumenAI as in development and requires that the site
+   "must not present all three as equally shipped" — Esmi carries the proof,
+   the other two are roadmap and must read as such. This is a working console
+   headlined in the present tense ("Your live books, every period"), so
+   without a marker it reads as a shipped product and contradicts /solutions,
+   which says plainly that AcumenAI is in development.
+
+   Rendered on all three entry screens rather than only the gated one: the
+   gated screen sits behind Clerk, so signed-in operators and the demo
+   workspace would otherwise never see it. Remove only when the status in
+   PRODUCT.md changes. */
+function DevelopmentNote({ className = "" }: { className?: string }) {
+  return (
+    <span
+      className={className}
+      style={{
+        display: "inline-flex",
+        alignItems: "baseline",
+        gap: 7,
+        fontFamily: "var(--font-mono)",
+        fontSize: 11,
+        letterSpacing: "0.12em",
+        textTransform: "uppercase",
+        color: "var(--ink-2)",
+      }}
+    >
+      <span
+        aria-hidden="true"
+        style={{ width: 14, height: 2, background: GOLD, transform: "translateY(-0.25em)" }}
+      />
+      In development — not yet generally available
+    </span>
+  );
+}
+
 function Gated({ onDemo, error }: { onDemo: () => void; error: string | null }) {
   return (
     <div
@@ -179,6 +216,8 @@ function Gated({ onDemo, error }: { onDemo: () => void; error: string | null }) 
         >
           AcumenAI · Operator Console
         </span>
+
+        <DevelopmentNote className="mt-2.5 mb-3.5" />
 
         <h1
           style={{
@@ -509,6 +548,7 @@ function DemoConsole({
           >
             AcumenAI · Demo Console
           </span>
+          <DevelopmentNote className="mt-2 block" />
           <h1
             className="mt-2 text-[30px] font-semibold tracking-[-0.02em]"
             style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}
@@ -838,6 +878,7 @@ function LiveConsole({ token }: { token: string | null }) {
           >
             AcumenAI · Operator console
           </span>
+          <DevelopmentNote className="mt-2 block" />
           <h1
             className="mt-2 text-[30px] font-semibold tracking-[-0.02em]"
             style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}

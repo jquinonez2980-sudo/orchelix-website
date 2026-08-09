@@ -418,6 +418,54 @@ export function Band({
   );
 }
 
+/* Disclosure rows. The native marker is removed and drawn instead: a foil
+   rule that extends when the row opens (`.lg-summary`).
+
+   Lifted out of /pricing, where it was inline, because two more pages now
+   need it and per-page copies of a component are how the site drifted
+   before. /pricing renders through this now too. */
+export function Disclosure({
+  items,
+  tone = "field",
+}: {
+  items: { q: string; a: string }[];
+  tone?: Tone;
+}) {
+  return (
+    <div className="lg-anchor" style={{ "--lg-anchor-w": "2px" } as CSSProperties}>
+      {items.map((f, i) => (
+        <details
+          key={f.q}
+          className="lg-settle-item"
+          style={{
+            "--i": i,
+            borderBottom: `1px solid ${hairFor(tone)}`,
+            padding: "1.1rem 0",
+          } as CSSProperties}
+        >
+          <summary
+            className="lg-summary"
+            style={{
+              fontFamily: "var(--font-display)",
+              fontStretch: "88%",
+              fontWeight: 600,
+              fontSize: "1rem",
+              letterSpacing: "0.005em",
+              color: inkFor(tone),
+              cursor: "pointer",
+            }}
+          >
+            {f.q}
+          </summary>
+          <Prose tone={tone} size="0.9375rem" max="72ch" style={{ marginTop: "0.85rem" }}>
+            {f.a}
+          </Prose>
+        </details>
+      ))}
+    </div>
+  );
+}
+
 /** Stacked ruled entries — a heading and a paragraph per row. */
 export function EntryList({
   entries,

@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { getSortedPosts } from "@/app/(site)/blog/posts";
-import { LOCALIZED_PATHS, TRANSLATED_PATHS, localizedHref } from "@/app/i18n/config";
+import { LOCALES, LOCALIZED_PATHS, TRANSLATED_PATHS, localizedHref } from "@/app/i18n/config";
+import { INDUSTRY_SLUGS } from "@/app/i18n/industries";
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.orchelix.com";
 
@@ -56,7 +57,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...localizedEntries(now),
 
     /* Everything outside the locale segment — English-only today. */
-    { url: `${BASE}/ai-receptionist`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${BASE}/blog`,          lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
     { url: `${BASE}/try-esmi`,      lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/acumen`,        lastModified: now, changeFrequency: "monthly", priority: 0.8 },
@@ -67,13 +67,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/privacy`,       lastModified: now, changeFrequency: "yearly",  priority: 0.3 },
     { url: `${BASE}/terms`,         lastModified: now, changeFrequency: "yearly",  priority: 0.3 },
     { url: `${BASE}/es/recepcionista-ia`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/ai-receptionist/hvac`,               lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/ai-receptionist/dental`,             lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/ai-receptionist/law-firm`,           lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/ai-receptionist/real-estate`,        lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/ai-receptionist/residential-design`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/ai-receptionist/stone-distribution`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE}/ai-receptionist/stone-fabrication`,  lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    /* Sector pages, derived from the same slug list the route prerenders
+       from, in every locale that has the parent's copy. Hardcoding them here
+       is how the sitemap and the router drifted apart before. */
+    ...INDUSTRY_SLUGS.flatMap((slug) =>
+      LOCALES.filter((l) => l === "en" || TRANSLATED_PATHS.has("/ai-receptionist")).map((l) => ({
+        url: `${BASE}${localizedHref(`/ai-receptionist/${slug}`, l)}`,
+        lastModified: now,
+        changeFrequency: "monthly" as const,
+        priority: 0.8,
+      }))
+    ),
     { url: `${BASE}/es/blog`,                            lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
     { url: `${BASE}/es/blog/que-es-un-recepcionista-ia`,                         lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/es/blog/recepcionista-ia-vs-servicio-de-contestadora`,        lastModified: now, changeFrequency: "monthly", priority: 0.7 },

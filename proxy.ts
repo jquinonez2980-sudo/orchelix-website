@@ -41,10 +41,12 @@ const localizedPaths = new Set<string>(LOCALIZED_PATHS);
 
 /** True for an unprefixed marketing path that must be rewritten to /en. */
 function needsLocaleRewrite(pathname: string): boolean {
-  if (localizedPaths.has(pathname)) return true;
-  /* Trailing-slash and nested variants of a localized root, e.g. /book/ */
-  const trimmed = pathname.replace(/\/+$/, "");
-  return trimmed !== "" && localizedPaths.has(trimmed);
+  const trimmed = pathname.replace(/\/+$/, "") || "/";
+  if (localizedPaths.has(trimmed)) return true;
+  /* Routes nested under a localized parent — /ai-receptionist/hvac and the
+     other six sector pages. `/` is excluded because every path starts with
+     it, which would rewrite the whole site. */
+  return LOCALIZED_PATHS.some((p) => p !== "/" && trimmed.startsWith(`${p}/`));
 }
 
 export default function proxy(req: NextRequest, event: Parameters<typeof clerk>[1]) {
@@ -76,6 +78,8 @@ export const config = {
     "/book",
     "/home-services",
     "/kitchen-bath",
+    "/ai-receptionist",
+    "/ai-receptionist/:path*",
     /* Clerk surfaces. */
     "/app(.*)",
     "/dashboard(.*)",

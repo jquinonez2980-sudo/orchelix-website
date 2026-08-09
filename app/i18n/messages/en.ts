@@ -638,6 +638,79 @@ const en = {
 
        What survived is capability and commercial fact, both checkable:
        24/7, EN/ES, the 14-day engagement, and the published rate card. */
+    /* /ai-receptionist — the Esmi product page and the parent of the seven
+       sector pages. Sector copy itself lives in app/i18n/industries/.
+
+       Corrected in the 2026-08-08 conversion: the setup answer said "Esmi
+       typically launches in 2–3 weeks", which contradicted the canonical
+       14-day engagement in PRODUCT.md. Removed entirely: three testimonials
+       whose quotes were literally prefixed "[Placeholder]" and were shipping
+       on the live page — PRODUCT.md is explicit that there are no public
+       testimonials and that absent proof is never fabricated. */
+    aiReceptionist: {
+      title: "AI receptionist for small business",
+      description:
+        "Esmi answers every call 24/7, qualifies the caller, books the appointment, and hands off to a person when it matters — in English and Spanish, with a transcript and a reason on every call.",
+      heading: "The phone is answered, and the call is written down",
+      lede: "Esmi is the receptionist that does not go home. It answers, qualifies, books into your real calendar, and leaves a record you can read afterwards — in English or Spanish, whichever the caller uses.",
+      facts: [
+        ["Status", "In production, answering calls today"],
+        ["Languages", "English and Spanish, natively"],
+        ["Hours", "24/7, nights and weekends included"],
+        ["Live in", "14 days from the first call"],
+      ] as [string, string][],
+      doesHeading: "What it does on a call",
+      does: [
+        ["Answers", "Every call, at any hour, in the caller's language — not a menu and not a mailbox."],
+        ["Qualifies", "The questions you would ask, asked the way you ask them, before anyone's time is spent."],
+        ["Books", "Into your live calendar, on the call, with a confirmation sent to the caller."],
+        ["Escalates", "When a call needs a person, it hands off with the whole conversation attached."],
+        ["Records", "A transcript, a reason, and a disposition on every call — reviewable, and reversible."],
+      ] as [string, string][],
+      sectorsHeading: "Built for the way your sector answers the phone",
+      sectorsLede:
+        "The agent is the same; the questions, the routing, and the vocabulary are not. These are the sectors we have configured Esmi for.",
+      sectorsIndexLabel: "Sectors on this page",
+      faqHeading: "Questions people ask first",
+      faq: [
+        {
+          q: "What is an AI receptionist?",
+          a: "An AI receptionist is a virtual phone agent that answers your incoming calls automatically — greeting callers, answering common questions, qualifying leads, and booking appointments — without a human picking up the phone. Esmi works 24/7 and escalates to your team when a call needs a person.",
+        },
+        {
+          q: "How is an AI receptionist different from a traditional answering service?",
+          a: "A traditional answering service takes messages and forwards them; you still call people back. Esmi handles the whole interaction in real time — answering questions, qualifying the caller, and booking the appointment on your calendar before they hang up — so there's nothing to follow up on later.",
+        },
+        {
+          q: "Can the AI receptionist book appointments?",
+          a: "Yes. Esmi reads your live calendar, offers open slots, books the appointment, and sends a confirmation by SMS — all on the same call. No staff handoff required.",
+        },
+        {
+          q: "Does Esmi speak Spanish?",
+          a: "Yes. Esmi is bilingual (English and Spanish) and can switch language mid-call, which matters for serving South Florida and bilingual markets.",
+        },
+        {
+          q: "What happens when a call needs a human?",
+          a: "Esmi escalates to your team and hands off the full call context — who's calling, what they need, and a summary — so the person taking over isn't starting from scratch.",
+        },
+        {
+          q: "How long does it take to set up?",
+          a: "The first agent goes live fourteen days from the first call. We configure it on your scripts, calendar, and FAQs, then test it with you before it answers anything real.",
+        },
+        {
+          q: "Will callers know they're talking to AI?",
+          a: "Esmi is designed to be natural and helpful, and we're transparent about how it's introduced. You control the greeting and tone so it reflects your brand.",
+        },
+        {
+          q: "How much does an AI receptionist cost?",
+          a: "Starter is $299 a month, Growth $599, and Scale $999, with setup done for you. A fourteen-day pilot is $149, credited to your first invoice if you continue.",
+        },
+      ],
+      closeHeading: "Hear it before you buy it",
+      closeBody:
+        "There is a real recording on the demo page, and the same agent is there in a chat you can type into. No form, no scheduling — the product doing its job.",
+    },
+
     verticals: {
       homeServices: {
         title: "AI receptionist for home services",
