@@ -13,7 +13,9 @@ import {
   QuietAction,
   RuledList,
   Band,
+  PageVisual,
 } from "@/app/components/ledger";
+import howItWorksDiagram from "@/public/how-it-works-diagram.png";
 
 export function generateStaticParams() {
   return localesFor("/how-it-works").map((locale) => ({ locale }));
@@ -55,12 +57,7 @@ export default async function HowItWorksPage({ params }: PageProps<"/[locale]">)
             <div className="flex flex-col items-end gap-8">
               {/* Input → AI → structured output, the page's whole argument in
                   one diagram before the schedule spells it out step by step. */}
-              <img
-                src="/how-it-works-diagram.png"
-                alt=""
-                aria-hidden="true"
-                style={{ width: "100%", maxWidth: 340, height: "auto" }}
-              />
+              <PageVisual src={howItWorksDiagram} max={340} />
               <div className="flex flex-wrap items-center gap-x-7 gap-y-4 lg:justify-end">
                 <Stamp href={localizedHref("/book", locale)}>{t.common.bookPilot}</Stamp>
                 <QuietAction href={localizedHref("/pricing", locale)}>{t.common.seePricing}</QuietAction>

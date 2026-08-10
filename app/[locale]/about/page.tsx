@@ -13,7 +13,9 @@ import {
   QuietAction,
   RuledList,
   EntryList,
+  PageVisual,
 } from "@/app/components/ledger";
+import aboutVisual from "@/public/about-visual.png";
 
 export function generateStaticParams() {
   return localesFor("/about").map((locale) => ({ locale }));
@@ -55,12 +57,7 @@ export default async function AboutPage({ params }: PageProps<"/[locale]">) {
             <div className="flex flex-col items-end gap-8">
               {/* Brand accent filling what was previously dead white space in
                   this column — the logo's own helix motif, decorative only. */}
-              <img
-                src="/about-visual.png"
-                alt=""
-                aria-hidden="true"
-                style={{ width: "100%", maxWidth: 320, height: "auto" }}
-              />
+              <PageVisual src={aboutVisual} max={320} />
               <div className="flex flex-wrap items-center gap-x-7 gap-y-4 lg:justify-end">
                 <Stamp href={localizedHref("/book", locale)}>{t.common.talkToConsultant}</Stamp>
                 <QuietAction href={localizedHref("/how-it-works", locale)}>

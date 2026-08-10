@@ -11,7 +11,9 @@ import {
   Prose,
   Stamp,
   QuietAction,
+  PageVisual,
 } from "@/app/components/ledger";
+import industriesVisual from "@/public/industries-visual.png";
 
 export function generateStaticParams() {
   return localesFor("/industries").map((locale) => ({ locale }));
@@ -51,12 +53,7 @@ export default async function IndustriesPage({ params }: PageProps<"/[locale]">)
               </Prose>
             </div>
             <div className="flex flex-col items-end gap-8">
-              <img
-                src="/industries-visual.png"
-                alt=""
-                aria-hidden="true"
-                style={{ width: "100%", maxWidth: 340, height: "auto" }}
-              />
+              <PageVisual src={industriesVisual} max={340} />
               <div className="flex flex-wrap items-center gap-x-7 gap-y-4 lg:justify-end">
                 <Stamp href={localizedHref("/book", locale)}>{t.common.bookPilot}</Stamp>
                 <QuietAction href="/try-esmi">{t.common.hearRealCall}</QuietAction>

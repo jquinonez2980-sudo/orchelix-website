@@ -829,6 +829,31 @@ body {
   animation-delay: calc(var(--i, 0) * var(--lg-stagger));
 }
 
+/* Settle — the decorative visual in a page's opening column.
+
+   Not wired through RevealObserver, and it cannot be. All six of these sit in
+   their page's first Section, and the observer deliberately skips anything
+   already on screen at mount (see its own note: content already on screen at
+   load does not animate). Registering them there would mark nothing and
+   animate nothing. They follow the other sanctioned on-load path instead —
+   the call register's — and run once at mount.
+
+   The purpose is the one the Motion Waits comment already argues for, applied
+   to a picture: until `PageVisual` these were bare image tags with no
+   reserved box, so each popped in when its PNG finished downloading
+   and shoved the CTA row below it down the page. That shift was the jarring
+   change. Reserving the box removes it; this settles the picture into the
+   reserved box so it arrives rather than appears.
+
+   The delay is not decoration either — it clears the heading, so the eye
+   reads the page's first line before the decoration beside it moves. Without
+   it the aria-hidden ornament is the first thing that moves in the viewport,
+   which inverts the hierarchy the column is arranged in. */
+.lg-settle-media {
+  animation: lg-settle var(--lg-dur-settle) var(--ease-emphasized) both;
+  animation-delay: 120ms;
+}
+
 /* The call register's authored moment: rows settle in sequence and each
    disposition is struck as its row lands. Retimed 2026-08-08 from
    620ms/90ms — ten rows took 1.43s, which read as slow rather than
@@ -1052,6 +1077,7 @@ details[open] > .lg-summary::before {
   .lg-register .lg-row,
   .lg-register .lg-tick,
   .lg-strike,
+  .lg-settle-media,
   [data-lg-in="true"] .lg-anchor::before,
   [data-lg-in="true"] .lg-settle-item { animation: none; }
   .lg-stamp, .lg-quiet::after { transition: none; }

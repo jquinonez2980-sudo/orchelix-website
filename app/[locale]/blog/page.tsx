@@ -14,7 +14,9 @@ import {
   Prose,
   Stamp,
   QuietAction,
+  PageVisual,
 } from "@/app/components/ledger";
+import blogVisual from "@/public/blog-visual.png";
 
 /* Converted from the light world 2026-08-08 — index and article chrome only.
    Article bodies keep the previous long-form styling on purpose: a documented
@@ -90,12 +92,7 @@ export default async function BlogIndexPage({ params }: PageProps<"/[locale]">) 
               </Prose>
             </div>
             <div className="flex flex-col items-end gap-8">
-              <img
-                src="/blog-visual.png"
-                alt=""
-                aria-hidden="true"
-                style={{ width: "100%", maxWidth: 300, height: "auto" }}
-              />
+              <PageVisual src={blogVisual} max={300} />
               <div className="flex flex-wrap items-center gap-x-7 gap-y-4 lg:justify-end">
                 <Stamp href={localizedHref("/book", locale)}>{t.common.bookPilot}</Stamp>
                 <QuietAction href="/try-esmi">{t.common.hearRealCall}</QuietAction>

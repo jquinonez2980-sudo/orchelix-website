@@ -6,6 +6,7 @@
 
    Seed key 8a1b2873. See the direction contract in app/layout.tsx. */
 
+import Image, { type StaticImageData } from "next/image";
 import type { CSSProperties, ReactNode } from "react";
 
 type Tone = "field" | "field-2" | "field-3" | "stock" | "stock-2";
@@ -79,6 +80,53 @@ export function Section({
 }
 
 /** Page-opening headline. Condensed caps — the ledger's column-head voice. */
+/* The decorative visual in a page's opening column.
+
+   Six pages carried this as a hand-written <img> with `width: 100%` and no
+   reserved box, which had two consequences worth naming because they are the
+   reason this component exists:
+
+   1. The picture had no dimensions, so the browser could not reserve space
+      for it. It appeared whenever its PNG finished arriving and shoved the
+      CTA row beneath it down the page — the layout shift was the animation.
+   2. Nothing resized them. `about-visual.png` is a 1.2MB, 971px-wide PNG
+      being painted into a 320px box.
+
+   `<Image>` with a static import fixes both: Next reads the intrinsic size at
+   build time (so the ratio can't be typed in wrong, the way the Nav lockup's
+   was), reserves the box, and serves a variant matched to `max`. The blur
+   placeholder is what makes the settle honest — the box holds the picture's
+   own colours from the first frame, so the motion lands real content rather
+   than fading up an empty rectangle.
+
+   `alt=""` + `aria-hidden` is deliberate and inherited: these carry no
+   information the surrounding copy doesn't already state. */
+export function PageVisual({
+  src,
+  max,
+}: {
+  src: StaticImageData;
+  /* Also the layout cap. `width: 100%` means the picture is never wider than
+     this, so it doubles as the `sizes` hint — no media query needed. */
+  max: number;
+}) {
+  return (
+    <Image
+      src={src}
+      alt=""
+      aria-hidden="true"
+      placeholder="blur"
+      /* Above the fold, so lazy would defer a picture that is already on
+         screen. Not `preload` either — that queue belongs to the heading,
+         which is the LCP element and the thing worth reading first. */
+      loading="eager"
+      sizes={`${max}px`}
+      className="lg-settle-media"
+      style={{ width: "100%", maxWidth: max, height: "auto" }}
+    />
+  );
+}
+
 export function PageTitle({
   children,
   tone = "field",
@@ -233,7 +281,10 @@ export function Stamp({
         fontSize: size,
         letterSpacing: "0.08em",
         textTransform: "uppercase",
-        color: "#FFFFFF",
+        /* Same role as the Nav stamps: text ON the accent, not beside it.
+           `--lg-foil-ink` is 6.42:1 on the magenta; `--lg-ink` would be
+           2.1:1. Third and last hardcoded white from the rebrand. */
+        color: "var(--lg-foil-ink)",
         padding: "0.95rem 1.7rem",
         textDecoration: "none",
       }}

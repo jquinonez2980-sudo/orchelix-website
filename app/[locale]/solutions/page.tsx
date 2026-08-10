@@ -16,7 +16,9 @@ import {
   StatusKey,
   RuledList,
   Band,
+  PageVisual,
 } from "@/app/components/ledger";
+import solutionsVisual from "@/public/solutions-visual.png";
 
 const SITE_URL = "https://www.orchelix.com";
 
@@ -91,12 +93,7 @@ export default async function SolutionsPage({ params }: PageProps<"/[locale]">) 
               </Prose>
             </div>
             <div className="flex flex-col items-end gap-8">
-              <img
-                src="/solutions-visual.png"
-                alt=""
-                aria-hidden="true"
-                style={{ width: "100%", maxWidth: 320, height: "auto" }}
-              />
+              <PageVisual src={solutionsVisual} max={320} />
               <div className="flex flex-wrap items-center gap-x-7 gap-y-4 lg:justify-end">
                 <Stamp href={localizedHref("/book", locale)}>{t.common.bookPilot}</Stamp>
                 <QuietAction href="/try-esmi">{t.common.hearRealCall}</QuietAction>
