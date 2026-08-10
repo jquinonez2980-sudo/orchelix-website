@@ -83,6 +83,7 @@ typography:
     textTransform: "uppercase"
 rounded:
   none: "0px"
+  panel: "18px"
 spacing:
   hair: "0.5rem"
   cell: "0.85rem"
@@ -356,7 +357,9 @@ Keyframes: `lg-settle`, `lg-strike`, `lg-rule-draw`. Utility classes: `.lg-strik
 
 ## Shapes
 
-Zero radius, everywhere. Corners are square on the stamp, on the mobile menu button, on section edges, on table cells, and on the focus ring — `.lg-field :focus-visible` explicitly resets `border-radius: 0` so the ring squares off against the register's ruling instead of rounding over it. There is no rounded corner anywhere on the field — the last one, an 8px scrollbar thumb, was removed. Radius 0 is literal, not approximate.
+Zero radius, everywhere. Corners are square on the stamp, on the mobile menu button, on section edges, on table cells, and on the focus ring — the global `:focus-visible` and `.lg-field :focus-visible` both set `border-radius: 0` so the ring squares off against the register's ruling instead of rounding over it. There is no rounded corner anywhere on the field — the last two, an 8px scrollbar thumb and a 4px global focus ring, were both removed. Radius 0 is literal, not approximate.
+
+**`panel` (`18px`) is the one exception, and it is not this world's.** It belongs to the `/try-esmi` glass chat panel — a translucent, blurred pane that is a deliberate material treatment on a surface the Scope note above explicitly puts outside this document. It is recorded in the `rounded` scale anyway for one reason: the value lives in the shared `app/globals.css`, so anything reading that file has to be told the difference between a chosen shape and drift. Recording it is not permission to use it. **Nothing on the marketing surface may carry `panel`** — a rounded corner here would be the first soft edge in a world whose entire form language is the ruled edge, and the `/try-esmi` panel earns its radius by being glass, which the marketing surface has none of.
 
 The recurring silhouette is the ruled block: a heavy top rule in `rule` graphite (`2px` for a primary register, `1px` for a nested one), a run of rows separated by hairlines, and — where it is a real tally — a second heavy rule closing the foot. Verticals are `1px` `rule-quiet` between columns. Every rule in this world is a drawn CSS border, gradient, or element; Unicode box-drawing characters, bullets, and glyph separators are not used. Icons are inline SVG paths (the nav toggle is the only one).
 

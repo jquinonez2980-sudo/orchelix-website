@@ -588,7 +588,13 @@
         "role": "none",
         "displayName": "Square",
         "canonical": "0px",
-        "note": "Radius 0 is literal across the ledger world and the product surface. The scrollbar thumb, the skip link, and the voice studio's 999px slider track and 50% thumb have all been squared. The one surviving 4px radius is the legacy global :focus-visible, which now reaches only the unconverted light routes."
+        "note": "Radius 0 is literal across the ledger world and the product surface. The scrollbar thumb, the skip link, the voice studio's 999px slider track and 50% thumb, and the legacy global :focus-visible 4px ring have all been squared. `panel` is the only non-zero radius in the system and it is scoped out of this surface entirely."
+      },
+      "panel": {
+        "role": "panel",
+        "displayName": "Glass Panel",
+        "canonical": "18px",
+        "note": "The /try-esmi glass chat panel only — a translucent blurred pane with its own material treatment, on a surface the DESIGN.md Scope note places outside this document. Recorded here because the value lives in the shared app/globals.css and a reader of that file has to be able to tell a chosen shape from drift. Nothing on the marketing surface may use it."
       }
     }
   },
