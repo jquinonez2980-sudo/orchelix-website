@@ -43,6 +43,21 @@ next-env.d.ts
 .vercel
 .env*
 
+# Design source material — the raw exports, AI-generated originals, and
+# camera-roll-named intermediates that the committed assets in public/ were
+# derived from (e.g. helix-pattern.png came out of a grok-image-*.jpg).
+# They are several MB, nothing imports them, and they kept landing loose in
+# public/ where a `git add -A` would sweep them into the repo. Drop new ones
+# here instead; only the exported asset belongs in public/.
+design-sources/
+
+# Belt-and-braces for sources that land straight in public/ anyway: these two
+# shapes are never a real asset name. Deliberately NOT ignoring things like
+# public/Blog.jpg — an ordinary name could plausibly be a real asset later,
+# and silently ignoring one is worse than an occasional manual cleanup.
+/public/grok-image-*
+/public/[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]-[0-9a-f]*-[0-9a-f]*-[0-9a-f]*-[0-9a-f]*.*
+
 # Scratch clones / vendored experiments kept inside the repo working tree.
 # Untracked today, so Vercel never sees them — but they carry their own
 # tsconfig and deps, and `next build` type-checks them, so a `git add -A`
