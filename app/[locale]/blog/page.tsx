@@ -82,16 +82,24 @@ export default async function BlogIndexPage({ params }: PageProps<"/[locale]">) 
       <main id="main-content">
         {/* ── Opening ── */}
         <Section tone="field">
-          <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.7fr)] lg:items-end">
+          <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.7fr)] lg:items-start">
             <div>
               <PageTitle max="15ch">{p.heading}</PageTitle>
               <Prose size="1.0625rem" max="48ch" style={{ marginTop: "1.7rem" }}>
                 {p.lede}
               </Prose>
             </div>
-            <div className="flex flex-wrap items-center gap-x-7 gap-y-4 lg:justify-end">
-              <Stamp href={localizedHref("/book", locale)}>{t.common.bookPilot}</Stamp>
-              <QuietAction href="/try-esmi">{t.common.hearRealCall}</QuietAction>
+            <div className="flex flex-col items-end gap-8">
+              <img
+                src="/blog-visual.png"
+                alt=""
+                aria-hidden="true"
+                style={{ width: "100%", maxWidth: 300, height: "auto" }}
+              />
+              <div className="flex flex-wrap items-center gap-x-7 gap-y-4 lg:justify-end">
+                <Stamp href={localizedHref("/book", locale)}>{t.common.bookPilot}</Stamp>
+                <QuietAction href="/try-esmi">{t.common.hearRealCall}</QuietAction>
+              </div>
             </div>
           </div>
         </Section>

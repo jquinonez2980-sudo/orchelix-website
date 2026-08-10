@@ -62,7 +62,7 @@ export const orgJsonLd = {
       "@id": `${SITE_URL}/#org`,
       name: "Orchelix AI Consulting Inc.",
       url: SITE_URL,
-      logo: `${SITE_URL}/orchelix-lockup-horizontal.png`,
+      logo: `${SITE_URL}/orchelix-logo-full-color.png`,
       image: `${SITE_URL}/og-image.jpg`,
       description:
         "Multi-agent systems for revenue operations, deployed by senior consultants. Bilingual English and Spanish call handling with a reviewable audit trail. Operating in Canada and the United States.",
@@ -107,7 +107,7 @@ export default function Shell({
   return (
     <html lang={lang} className={fontClassNames}>
       <head>
-        <meta name="theme-color" content="#071A2E" />
+        <meta name="theme-color" content="#FFFFFF" />
         <JsonLd data={orgJsonLd} />
       </head>
       <body>

@@ -136,19 +136,18 @@ export default function Nav({
           aria-label={t.nav.home}
           style={{ display: "flex", alignItems: "center", textDecoration: "none", flexShrink: 0 }}
         >
-          {/* Foil-stamped wordmark: the lockup's alpha becomes a mask so the
-              gold ramp shows through the letterforms. */}
-          <span
-            aria-hidden="true"
-            className="lg-foil-mark"
-            style={
-              {
-                "--lg-mark": "url(/orchelix-lockup-horizontal.png)",
-                display: "block",
-                width: 97,
-                height: 34,
-              } as React.CSSProperties
-            }
+          {/* 2026-08-10 rebrand: the wordmark used to be a gold-foil mask
+              effect over the old lockup's alpha (a stamp catching light on
+              a dark field). The new brand's logo is full colour on its own
+              — graphite structure, magenta strand — and the field is light
+              now, so it just renders directly rather than being masked
+              behind a metallic ramp. */}
+          <img
+            src="/orchelix-logo-full-color.png"
+            alt={t.nav.home}
+            width={140}
+            height={49}
+            style={{ display: "block", height: 34, width: "auto" }}
           />
         </a>
 
@@ -190,7 +189,7 @@ export default function Nav({
               fontSize: "0.75rem",
               letterSpacing: "0.08em",
               textTransform: "uppercase",
-              color: "#2A1D02",
+              color: "#FFFFFF",
               padding: "0.6rem 1.05rem",
               textDecoration: "none",
             }}
@@ -204,12 +203,13 @@ export default function Nav({
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? t.nav.closeMenu : t.nav.openMenu}
-            className="lg:hidden"
+            className="lg:hidden flex items-center justify-center"
             style={{
               background: "transparent",
               border: "1px solid var(--lg-hair)",
               color: "var(--lg-ink)",
-              padding: "0.5rem 0.65rem",
+              width: 44,
+              height: 44,
               cursor: "pointer",
               lineHeight: 0,
             }}
@@ -258,7 +258,7 @@ export default function Nav({
                   fontSize: "0.8125rem",
                   letterSpacing: "0.08em",
                   textTransform: "uppercase",
-                  color: "#2A1D02",
+                  color: "#FFFFFF",
                   padding: "0.8rem 1.35rem",
                   textDecoration: "none",
                 }}

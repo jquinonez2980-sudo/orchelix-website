@@ -45,16 +45,26 @@ export default async function HowItWorksPage({ params }: PageProps<"/[locale]">)
       <main id="main-content">
         {/* ── Opening ── */}
         <Section tone="field">
-          <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] lg:items-end">
+          <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] lg:items-start">
             <div>
               <PageTitle max="15ch">{p.heading}</PageTitle>
               <Prose size="1.0625rem" max="48ch" style={{ marginTop: "1.7rem" }}>
                 {p.lede}
               </Prose>
             </div>
-            <div className="flex flex-wrap items-center gap-x-7 gap-y-4 lg:justify-end">
-              <Stamp href={localizedHref("/book", locale)}>{t.common.bookPilot}</Stamp>
-              <QuietAction href={localizedHref("/pricing", locale)}>{t.common.seePricing}</QuietAction>
+            <div className="flex flex-col items-end gap-8">
+              {/* Input → AI → structured output, the page's whole argument in
+                  one diagram before the schedule spells it out step by step. */}
+              <img
+                src="/how-it-works-diagram.png"
+                alt=""
+                aria-hidden="true"
+                style={{ width: "100%", maxWidth: 340, height: "auto" }}
+              />
+              <div className="flex flex-wrap items-center gap-x-7 gap-y-4 lg:justify-end">
+                <Stamp href={localizedHref("/book", locale)}>{t.common.bookPilot}</Stamp>
+                <QuietAction href={localizedHref("/pricing", locale)}>{t.common.seePricing}</QuietAction>
+              </div>
             </div>
           </div>
         </Section>

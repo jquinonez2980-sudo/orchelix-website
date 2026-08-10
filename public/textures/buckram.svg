@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180">
   <!--
-    Buckram binding cloth.
+    Buckram binding cloth — fine weave.
 
     Two crossed turbulence fields stand in for warp and weft: the warp is
     stretched vertically (low x-frequency, high y-frequency), the weft the
@@ -10,11 +10,32 @@
     threads as translucent black — instead of relying on a blend mode. Blend
     modes collapse to nothing over a ground this dark, which is how a texture
     ends up technically present and visually absent.
+
+    Two things changed when the hero was given real depth:
+
+    1. `stitchTiles="stitch"` on every turbulence. Without it each noise field
+       is generated independently of the tile edge, so the 180px repeat showed
+       as a faint grid across any large field. The cloth was seaming.
+
+    2. A relief pass. The flat lit/dark layers said "there is grain here" but
+       carried no light direction, so the weave read as printed on the surface
+       rather than raised out of it. `weaveRelief` builds a bump map from the
+       crossed threads and lights it with a single distant source, so every
+       thread now has a lit flank and a shadowed one. The light comes from the
+       upper left, which is the same direction the foil ramp is lit from — one
+       light source for the whole world, not two.
+
+    The flat lit and dark layers keep their original weights. They were tuned
+    against this field colour and they still balance; the relief is signed and
+    nets to zero over a flat area, so it adds direction without adding lift.
+    Anything that changes the net brightness of this tile changes the navy the
+    whole site is built on — check the field colour, not just the grain, after
+    touching any opacity here.
   -->
   <defs>
     <!-- Lit threads: RGB forced to white, alpha taken from luminance. -->
     <filter id="warpLit" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
-      <feTurbulence type="fractalNoise" baseFrequency="0.12 0.95" numOctaves="3" seed="11"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.12 0.95" numOctaves="3" seed="11" stitchTiles="stitch"/>
       <feColorMatrix type="matrix" values="
         0 0 0 0 1
         0 0 0 0 1
@@ -22,7 +43,7 @@
         0.34 0.34 0.34 0 -0.12"/>
     </filter>
     <filter id="weftLit" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
-      <feTurbulence type="fractalNoise" baseFrequency="0.95 0.12" numOctaves="3" seed="29"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.95 0.12" numOctaves="3" seed="29" stitchTiles="stitch"/>
       <feColorMatrix type="matrix" values="
         0 0 0 0 1
         0 0 0 0 1
@@ -31,16 +52,78 @@
     </filter>
     <!-- Shadowed threads: RGB forced to black, alpha from inverted luminance. -->
     <filter id="warpDark" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
-      <feTurbulence type="fractalNoise" baseFrequency="0.12 0.95" numOctaves="3" seed="11"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.12 0.95" numOctaves="3" seed="11" stitchTiles="stitch"/>
       <feColorMatrix type="matrix" values="
         0 0 0 0 0
         0 0 0 0 0
         0 0 0 0 0
         -0.34 -0.34 -0.34 0 0.86"/>
     </filter>
+
+    <!--
+      Relief: the weave lit by a single distant source.
+
+      The two thread fields are averaged into one height field, reduced to a
+      bump map with `luminanceToAlpha` (which is the channel `feDiffuseLighting`
+      actually reads), then lit. `surfaceScale` is deliberately low — buckram is
+      a tight bookcloth, not a knit, and a high relief turns the grain into
+      gravel at the exact viewing distance this ships at.
+
+      The relief MUST be signed around its own mean, and this is the whole
+      trick. `feDiffuseLighting` over a shallow bump returns something close to
+      a uniform mid-grey. Convert that straight to white-with-alpha — the
+      obvious move, and what the flat layers do — and you have not built relief,
+      you have laid a flat white veil across the field. The first pass did
+      exactly that and lifted the navy to a slate grey.
+
+      So the lit result is split at mid-grey instead. Above it the surface faces
+      the light and takes white; below it the surface turns away and takes
+      black; at mid-grey both are fully transparent. Both ramps are the same
+      slope, so the layer adds and removes light in equal measure and nets to
+      nothing over a flat area. The field colour survives, and only the threads
+      change. `feMerge` returns the pair as one layer so this still costs a
+      single rect.
+    -->
+    <filter id="weaveRelief" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.12 0.95" numOctaves="3" seed="11" stitchTiles="stitch" result="warp"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.95 0.12" numOctaves="3" seed="29" stitchTiles="stitch" result="weft"/>
+      <feComposite in="warp" in2="weft" operator="arithmetic" k1="0" k2="0.5" k3="0.5" k4="0" result="weave"/>
+      <feColorMatrix in="weave" type="luminanceToAlpha" result="bump"/>
+      <feDiffuseLighting in="bump" surfaceScale="1.6" diffuseConstant="1.0" lighting-color="#ffffff" result="lit">
+        <feDistantLight azimuth="215" elevation="46"/>
+      </feDiffuseLighting>
+      <!-- The split point is sin(elevation), NOT mid-grey. `feDiffuseLighting`
+           returns diffuseConstant * (N·L), and over a shallow bump the normal
+           is near vertical, so a flat area returns sin(46°) = 0.719 — not 0.5.
+           Splitting at mid-grey puts the entire tile above the line: the
+           highlight ramp fires everywhere at ~0.41 and the shadow ramp never
+           fires at all, which is a 41% white veil wearing a relief costume.
+           0.719 * 3 channels = 2.158 is the sum a flat area actually produces,
+           so that is where the two ramps cross and both reach zero.
+
+           The slopes are deliberately unequal. Over a ground this dark white
+           has ~248 of headroom and black has ~7, so equal ramps still net a
+           lift. Shadow is weighted heavier than highlight for the same reason
+           the flat layers below run 0.30 black against 0.16 + 0.12 white. -->
+      <feColorMatrix in="lit" type="matrix" values="
+        0 0 0 0 1
+        0 0 0 0 1
+        0 0 0 0 1
+        0.45 0.45 0.45 0 -0.971" result="hi"/>
+      <feColorMatrix in="lit" type="matrix" values="
+        0 0 0 0 0
+        0 0 0 0 0
+        0 0 0 0 0
+        -0.75 -0.75 -0.75 0 1.619" result="lo"/>
+      <feMerge>
+        <feMergeNode in="lo"/>
+        <feMergeNode in="hi"/>
+      </feMerge>
+    </filter>
   </defs>
 
   <rect width="180" height="180" filter="url(#warpDark)" opacity="0.30"/>
   <rect width="180" height="180" filter="url(#warpLit)" opacity="0.16"/>
   <rect width="180" height="180" filter="url(#weftLit)" opacity="0.12"/>
+  <rect width="180" height="180" filter="url(#weaveRelief)" opacity="0.30"/>
 </svg>

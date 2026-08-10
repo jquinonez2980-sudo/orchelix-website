@@ -80,21 +80,27 @@ export default function Footer({
       className="lg-field lg-cloth"
       style={{ borderTop: "1px solid var(--lg-hair)" }}
     >
+      {/* Brand flourish — the logo's helix motif repeated as a thin band,
+          cropped down from the wide source image rather than stretched. */}
+      <div style={{ width: "100%", height: 96, overflow: "hidden" }}>
+        <img
+          src="/helix-pattern.png"
+          alt=""
+          aria-hidden="true"
+          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
+        />
+      </div>
+
       <div className="mx-auto max-w-[1320px] px-5 py-16 sm:px-8 lg:px-10 lg:py-20">
         <div className="grid gap-x-12 gap-y-12 lg:grid-cols-[minmax(0,1.25fr)_repeat(3,minmax(0,1fr))]">
           <div>
             <a href={L("/")} aria-label={t.nav.home} style={{ display: "inline-flex" }}>
-              <span
-                aria-hidden="true"
-                className="lg-foil-mark"
-                style={
-                  {
-                    "--lg-mark": "url(/orchelix-lockup-horizontal.png)",
-                    display: "block",
-                    width: 91,
-                    height: 32,
-                  } as React.CSSProperties
-                }
+              <img
+                src="/orchelix-logo-full-color.png"
+                alt={t.nav.home}
+                width={128}
+                height={45}
+                style={{ display: "block", height: 32, width: "auto" }}
               />
             </a>
 

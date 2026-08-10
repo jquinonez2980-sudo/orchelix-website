@@ -38,10 +38,13 @@ const ENTRIES: Entry[] = [
 
 const DISPOSITION_ORDER: Disposition[] = ["BOOKED", "ROUTED", "ANSWERED", "CLOSED"];
 
-/* The -text steps, not the base marks: these values are read as words, and
-   `--lg-rule` / `--lg-tick` measure 2.73:1 and 4.40:1 as text on the field.
-   The small swatches in the legend use the same values for consistency —
-   they sit beside the label they key. */
+/* 2026-08-10 rebrand: the register used to code each disposition in its own
+   hue (gold/red/green). The new brand has exactly one accent and reserves
+   it for the outcome that should read as the "AI moment" — a booked
+   appointment — everything else stays structural Graphite/ink, distinguished
+   by the label itself rather than a colour per status. `--lg-rule-text` and
+   `--lg-tick-text` both resolve to the same ink colour now; the separate
+   names are kept only so this map doesn't need to change shape. */
 const DISPOSITION_COLOR: Record<Disposition, string> = {
   BOOKED: "var(--lg-foil)",
   ROUTED: "var(--lg-rule-text)",
@@ -111,9 +114,31 @@ export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
             <QuietAction href="/try-esmi">{t.common.hearRealCall}</QuietAction>
           </div>
 
+          {/* The number itself — a visible way to reach a person right now,
+              not buried in the meta line it used to share with EN · ES and
+              the countries served. Someone ready to call shouldn't have to
+              find it in a caption. */}
+          <a
+            href="tel:+15615661066"
+            className="lg-quiet"
+            style={{
+              display: "inline-block",
+              fontFamily: "var(--font-display)",
+              fontStretch: "88%",
+              fontWeight: 600,
+              fontSize: "1.0625rem",
+              letterSpacing: "0.01em",
+              color: "var(--lg-ink)",
+              textDecoration: "none",
+              marginTop: "1.6rem",
+            }}
+          >
+            {t.common.phone}
+          </a>
+
           {/* Drawn rules, not glyphs. */}
           <div
-            className="lg-fig mt-9 flex flex-wrap items-center gap-y-2"
+            className="lg-fig mt-3 flex flex-wrap items-center gap-y-2"
             style={{
               fontSize: "0.6875rem",
               letterSpacing: "0.1em",
@@ -121,10 +146,6 @@ export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
               color: "var(--lg-ink-2)",
             }}
           >
-            <a href="tel:+15615661066" style={{ color: "inherit", textDecoration: "none" }}>
-              {t.common.phone}
-            </a>
-            <Sep />
             <span>EN · ES</span>
             <Sep />
             <span>{t.common.countries}</span>

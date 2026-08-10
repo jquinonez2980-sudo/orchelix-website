@@ -233,7 +233,7 @@ export function Stamp({
         fontSize: size,
         letterSpacing: "0.08em",
         textTransform: "uppercase",
-        color: "#2A1D02",
+        color: "#FFFFFF",
         padding: "0.95rem 1.7rem",
         textDecoration: "none",
       }}

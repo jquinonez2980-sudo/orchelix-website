@@ -38,8 +38,8 @@ const TONES: Record<BadgeTone, ToneStyle> = {
   },
   warning: {
     color: "var(--lg-foil)",
-    background: "rgba(217, 162, 27, 0.10)",
-    borderColor: "rgba(217, 162, 27, 0.34)",
+    background: "rgba(183, 19, 90, 0.10)",
+    borderColor: "rgba(183, 19, 90, 0.34)",
   },
   negative: {
     color: "var(--lg-rule-text)",

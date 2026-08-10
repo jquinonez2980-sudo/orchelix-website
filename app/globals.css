@@ -141,66 +141,59 @@
    teal/gold scales above still serve /dashboard and /try-esmi untouched.   */
 
 :root {
-  /* Buckram — the binding cloth. The dominant field.
+  /* 2026-08-10: full rebrand from the dark navy "Ruled Record" ledger to
+     Orchelix's new light brand system — Graphite structure/type, a single
+     Magenta accent used sparingly, white/light-grey surfaces. The token
+     NAMES stay (`--lg-field`, `--lg-foil`, `--lg-rule`...) so every
+     component built against them keeps working; only what they point to
+     changes. Comments below describe the new mapping, not the old one.
 
-     2026-08-10: recoloured from a desaturated steel-navy to a saturated
-     teal-to-indigo family ("deep lagoon") at matching lightness steps — the
-     hue moved, the tonal ladder (and therefore ink contrast against it)
-     did not. --lg-field-vivid is new: a fourth, brighter stop reserved for
-     gradient treatments (currently just Hero) that need a lit highlight —
-     it is too light to use as a flat section field.
+     Field is now the light surface ladder, lightest to a light-medium grey
+     — used for section-to-section alternation on an otherwise white page.
+     Nothing here is "vivid" anymore: the brand doc is explicit that colour
+     is not a background move (magenta backgrounds "lose impact when
+     overused"), so the old bright fourth field-vivid stop is retired to a
+     light neutral rather than a saturated highlight. */
+  --lg-field:      #FFFFFF;
+  --lg-field-2:    #F1F3F5;
+  --lg-field-3:    #E4E7EB;
+  --lg-field-vivid: #E4E7EB;
 
-     Pushed further the same day: the first pass still read as dull once the
-     buckram weave's dark threads sat on top of it (that overlay was tuned
-     against the old dull navy, and knocks more brightness off a saturated
-     colour than it did off a desaturated one). Raised saturation and
-     widened the lightness range so the colour survives the weave — field
-     stays a rich dark anchor, vivid becomes genuinely bright rather than a
-     slightly-lighter dark. See .lg-cloth-vivid for the other half of this
-     fix: soft-light blending so the weave models light instead of just
-     subtracting it. */
-  --lg-field:      #0A121A;
-  --lg-field-2:    #121F2B;
-  --lg-field-3:    #1C2F3F;
-  --lg-field-vivid: #274D68;
+  /* Ledger stock — previously the one light surface against a dark field;
+     now just another light neutral in the same family, kept distinct from
+     `field`/`field-2` only where a page needs a third alternation step. */
+  --lg-stock:      #F1F3F5;
+  --lg-stock-2:    #E4E7EB;
 
-  /* Ledger stock — the ruled writing surface, for regions that must read. */
-  --lg-stock:      #EDE9DC;
-  --lg-stock-2:    #E2DDCB;
+  /* The single sharp accent. Named `foil` for the stamp it used to be;
+     it is Magenta now — reserved for CTAs, links, and the one outcome
+     per view that should read as the "AI moment," never a fill. */
+  --lg-foil:       #B7135A;
+  --lg-foil-lift:  #D42670;
 
-  /* Foil stamp. The single sharp accent. */
-  --lg-foil:       #D9A21B;
-  --lg-foil-lift:  #EFBB3C;
+  /* Structural ruling. The brand has one accent colour, and it is not
+     spent on dividers — rules are Graphite at low opacity, not a second
+     hue. `--lg-rule-text` keeps its own name for compatibility but is now
+     the same Graphite family, just a readable step for status words. */
+  --lg-rule:       rgba(46, 50, 62, 0.55);
+  --lg-rule-quiet: rgba(46, 50, 62, 0.18);
+  --lg-rule-text:  #2E323E;
+  --lg-tick-text:  #2E323E;
 
-  /* Column ruling. Red is the rule; it is not an alert colour here. */
-  --lg-rule:       #B4342A;
-  --lg-rule-quiet: rgba(180, 52, 42, 0.34);
+  /* Ink on the field. Graphite is the brand's primary colour for exactly
+     this — body copy and headlines on a light ground. */
+  --lg-ink:        #2E323E;
+  --lg-ink-2:      rgba(46, 50, 62, 0.68);
+  --lg-ink-3:      rgba(46, 50, 62, 0.48);
+  --lg-hair:       rgba(46, 50, 62, 0.14);
+  --lg-hair-2:     rgba(46, 50, 62, 0.08);
 
-  /* Text-safe steps of the two status hues.
+  /* Ink on stock — stock is light now too, so this converges with `ink`
+     rather than needing its own darker/lighter pair. */
+  --lg-ink-on-stock:   #2E323E;
+  --lg-ink-on-stock-2: rgba(46, 50, 62, 0.68);
 
-     `--lg-rule` and `--lg-tick` were specified as marks — rules, borders, and
-     the small drawn swatches — where contrast is not a text requirement. Used
-     as TEXT on the field they measure 2.73:1 and 4.40:1, both under the
-     4.5:1 floor. These lighter steps measure 5.28:1 and 5.91:1.
-
-     Rule: the base value draws, the -text value is read. Any status word,
-     disposition label, or inline message uses the -text step. This is the
-     same relationship `--lg-foil-lift` has to `--lg-foil`, not a new hue. */
-  --lg-rule-text:  #DE6A5C;
-  --lg-tick-text:  #37A87E;
-
-  /* Ink on the field. Tinted from the field's own hue — never gray. */
-  --lg-ink:        #F4F1E8;
-  --lg-ink-2:      rgba(238, 240, 245, 0.72);
-  --lg-ink-3:      rgba(226, 232, 242, 0.52);
-  --lg-hair:       rgba(226, 232, 242, 0.16);
-  --lg-hair-2:     rgba(226, 232, 242, 0.09);
-
-  /* Ink on stock. */
-  --lg-ink-on-stock:   #10243A;
-  --lg-ink-on-stock-2: #4A5A6E;
-
-  --lg-tick:       #2F8F6B;
+  --lg-tick:       #ADB5BD;
 
   /* ── Motion: The Record Being Written ──────────────────────────────────
      Motion in this world is inscription. A ledger's things get ruled,
@@ -259,7 +252,7 @@
   --color-line-strong: var(--lg-rule-quiet);
 
   /* The accent collapses to foil. Teal has no role in this world. */
-  --color-teal-50:     rgba(217, 162, 27, 0.10);
+  --color-teal-50:     rgba(183, 19, 90, 0.10);
   --color-teal-200:    var(--lg-rule-quiet);
   --color-teal-300:    var(--lg-foil-lift);
   --color-teal-500:    var(--lg-foil);
@@ -316,7 +309,7 @@
   --line:        var(--lg-hair);
   --line-strong: var(--lg-rule-quiet);
 
-  --teal-50:     rgba(217, 162, 27, 0.10);
+  --teal-50:     rgba(183, 19, 90, 0.10);
   --teal-200:    var(--lg-rule-quiet);
   --teal-300:    var(--lg-foil-lift);
   --teal-500:    var(--lg-foil);
@@ -331,7 +324,7 @@
   /* Gold was AcumenAI's own accent on a light ground. On the field it is the
      same metal as the foil, so it collapses into it rather than running a
      second warm scale beside it. */
-  --gold-50:     rgba(217, 162, 27, 0.10);
+  --gold-50:     rgba(183, 19, 90, 0.10);
   --gold-100:    var(--lg-rule-quiet);
   --gold-500:    var(--lg-foil);
   --gold-600:    var(--lg-foil);
@@ -435,15 +428,15 @@
 .lg-app .text-amber-900,
 .lg-app .text-amber-950 { color: var(--lg-foil); }
 .lg-app .bg-amber-400,
-.lg-app .bg-amber-500 { background-color: var(--lg-foil); color: #2A1D02; }
-.lg-app .bg-amber-50 { background-color: rgba(217, 162, 27, 0.10); }
+.lg-app .bg-amber-500 { background-color: var(--lg-foil); color: #FFFFFF; }
+.lg-app .bg-amber-50 { background-color: rgba(183, 19, 90, 0.10); }
 .lg-app .border-amber-200,
-.lg-app .border-amber-300 { border-color: rgba(217, 162, 27, 0.34); }
+.lg-app .border-amber-300 { border-color: rgba(183, 19, 90, 0.34); }
 
 /* Violet had no semantic role — it was decoration on an informational
    panel. It collapses to the inert tier. */
 .lg-app .text-violet-700 { color: var(--lg-ink-2); }
-.lg-app .bg-violet-50 { background-color: rgba(226, 232, 242, 0.05); }
+.lg-app .bg-violet-50 { background-color: rgba(46, 50, 62, 0.04); }
 .lg-app .border-violet-200 { border-color: var(--lg-hair); }
 
 /* Tailwind built-ins used as surfaces inside panels. */
@@ -454,11 +447,11 @@
 /* Themed browser surfaces inside the app shell. */
 .lg-app {
   scrollbar-width: thin;
-  scrollbar-color: rgba(217, 162, 27, 0.38) transparent;
+  scrollbar-color: rgba(183, 19, 90, 0.38) transparent;
 }
 .lg-app ::-webkit-scrollbar { width: 10px; height: 10px; }
 .lg-app ::-webkit-scrollbar-thumb {
-  background: rgba(217, 162, 27, 0.32);
+  background: rgba(183, 19, 90, 0.32);
   border: 3px solid transparent;
   background-clip: content-box;
 }
@@ -515,18 +508,18 @@ body {
 
 .lg-field {
   scrollbar-width: thin;
-  scrollbar-color: rgba(217, 162, 27, 0.38) transparent;
+  scrollbar-color: rgba(183, 19, 90, 0.38) transparent;
 }
 .lg-field ::-webkit-scrollbar { width: 10px; height: 10px; }
 .lg-field ::-webkit-scrollbar-thumb {
-  background: rgba(217, 162, 27, 0.32);
+  background: rgba(183, 19, 90, 0.32);
   border: 3px solid transparent;
   background-clip: content-box;
   /* Square, like everything else in this world — a rounded thumb was the
      one leftover soft corner on the field. */
   border-radius: 0;
 }
-.lg-field ::-webkit-scrollbar-thumb:hover { background-clip: content-box; background-color: rgba(217, 162, 27, 0.55); }
+.lg-field ::-webkit-scrollbar-thumb:hover { background-clip: content-box; background-color: rgba(183, 19, 90, 0.55); }
 
 /* Links inside prose sit on the baseline rule, not a browser underline. */
 .lg-prose a {
@@ -632,7 +625,7 @@ body {
    record stops reading as continuous. */
 @media (min-width: 901px) {
   .lg-register .lg-row:nth-child(odd) {
-    background: rgba(226, 232, 242, 0.028);
+    background: rgba(46, 50, 62, 0.028);
   }
 }
 
@@ -853,50 +846,22 @@ body {
    merely name them. The cloth is a shipped raster-equivalent tile; the foil
    is a metallic ramp with an impressed edge that catches light.            */
 
-/* The cloth is two layers because real cloth has two distances: the thread
-   grain you read at arm's length, and the slow swell of the bolt underneath
-   it. One tile could only ever carry one of those. The fine weave sits on
-   top; the bolt undulation reads beneath it at three times the repeat, so the
-   two come back into phase every third tile rather than beating against each
-   other. Both are lit from the upper left, the same source as the foil ramp. */
-.lg-cloth {
-  background-color: var(--lg-field);
-  background-image:
-    url("/textures/buckram.svg"),
-    url("/textures/buckram-bolt.svg");
-  /* soft-light, not the texture's own alpha compositing: on a base this
-     dark, a flat alpha wash from the lit threads reads as a grey cloud
-     sitting on top of the colour instead of grain within it. soft-light
-     lets the dark field stay dark and only nudges it lighter/darker where
-     the weave actually catches light — see .lg-cloth-vivid below, which
-     already relied on this; the plain variant needs it just as much now
-     that the field tones sit this low. */
-  background-blend-mode: soft-light, soft-light;
-  background-repeat: repeat, repeat;
-  background-size: 180px 180px, 540px 540px;
-}
+/* 2026-08-10 rebrand: the buckram weave was cloth-specific to the dark
+   ledger world and was tuned entirely against dark fields — the same
+   alpha-composited threads that read as grain on navy read as a dirty grey
+   smudge on white. The new brand's own language is "breathing room and
+   clarity," which is a vote for flat, clean light surfaces, not a lighter
+   cloth texture. Class names are kept (many components reference them) but
+   they are now flat fills only. */
+.lg-cloth { background-color: var(--lg-field); }
 .lg-cloth-2 { background-color: var(--lg-field-2); }
 .lg-cloth-3 { background-color: var(--lg-field-3); }
 
-/* Vivid variant of the cloth, for the one section that should read as lit
-   rather than flat: a lagoon gradient sits under the same two weave layers
-   above, so it still reads as the same material, just catching light across
-   it. Angle runs upper-left to lower-right, matching the material's own
-   light source. Reserved for Hero — everywhere else stays flat field. */
-.lg-cloth-vivid {
-  background-color: var(--lg-field);
-  background-image:
-    url("/textures/buckram.svg"),
-    url("/textures/buckram-bolt.svg"),
-    linear-gradient(135deg, var(--lg-field) 0%, var(--lg-field-3) 55%, var(--lg-field-vivid) 100%);
-  /* soft-light instead of the weave's own alpha compositing: the tile's
-     lit/dark threads push the gradient's own tone lighter/darker rather
-     than laying a flat white/black wash over it, so the saturated colour
-     underneath still reads as saturated instead of being muddied. */
-  background-blend-mode: soft-light, soft-light, normal;
-  background-repeat: repeat, repeat, no-repeat;
-  background-size: 180px 180px, 540px 540px, 100% 100%;
-}
+/* Hero no longer gets a distinct "lit" material — the brand doc is explicit
+   that colour is not a background move, so the one-section-reads-as-lit
+   idea is retired along with the gradient it relied on. Kept as an alias of
+   the flat field so existing markup referencing it still resolves. */
+.lg-cloth-vivid { background-color: var(--lg-field); }
 
 /* ─── The recess ──────────────────────────────────────────────────────────
    Depth in this world goes inward. Nothing lifts off the cover — the No Float
@@ -921,21 +886,25 @@ body {
    recess fill and below the content, without it needing to know anything
    about what it is holding. Padding is the caller's business, not the
    material's. */
+/* 2026-08-10 rebrand: recesses were dark-on-dark (a near-black fill and
+   near-black top/left walls cut into a navy field). On a light field the
+   same recipe just paints a grey box, so the whole recipe inverts — a
+   faint graphite fill, and the "cut" reads from a soft graphite shadow
+   hugging the top/left edges instead of a heavy dark overlay. */
 .lg-inset {
   position: relative;
   z-index: 0;
-  background-color: rgba(2, 8, 18, 0.32);
-  border-top: 1px solid rgba(2, 8, 18, 0.9);
-  border-bottom: 1px solid rgba(226, 232, 242, 0.11);
-  border-right: 1px solid rgba(226, 232, 242, 0.06);
+  background-color: rgba(46, 50, 62, 0.035);
+  border-top: 1px solid rgba(46, 50, 62, 0.16);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+  border-right: 1px solid rgba(255, 255, 255, 0.5);
 }
 
-/* 2026-08-10: the hero register sits in front of the new WebGL layer, and
-   .lg-inset's normal 0.32-alpha fill let the wireframe bleed straight
-   through the call data. Scoped override, not a change to .lg-inset itself
-   — every other recess on the site still wants the thin translucent fill. */
+/* The hero register wants full opacity rather than the thin translucent
+   fill every other recess uses, so it reads as a distinct card against the
+   page instead of a faint tint of it. */
 .lg-hero-register-solid {
-  background-color: rgba(3, 17, 30, 0.95) !important;
+  background-color: var(--lg-field-2) !important;
 }
 .lg-inset::after {
   content: "";
@@ -944,23 +913,24 @@ body {
   z-index: -1;
   pointer-events: none;
   background-image:
-    linear-gradient(to right,  rgba(2, 8, 18, 0.5) 0, rgba(2, 8, 18, 0) 92px),
-    linear-gradient(to bottom, rgba(2, 8, 18, 0.4) 0, rgba(2, 8, 18, 0) 68px);
+    linear-gradient(to right,  rgba(46, 50, 62, 0.09) 0, rgba(46, 50, 62, 0) 92px),
+    linear-gradient(to bottom, rgba(46, 50, 62, 0.07) 0, rgba(46, 50, 62, 0) 68px);
 }
 
-/* Gold foil: a reflection ramp across the block, a bright top lip and a dark
-   bottom lip so the block reads as pressed into the surface. */
+/* The stamped CTA surface: a reflection ramp across the block, a bright top
+   lip and a dark bottom lip so it still reads as pressed rather than flat —
+   just in the brand's Magenta now instead of gold. */
 .lg-foil-surface {
   background-image: linear-gradient(
     100deg,
-    #8A6410 0%, #C08F18 14%, #F6DC8C 31%, #DFAE33 44%,
-    #B5820F 58%, #F0CE6A 74%, #CE9A1E 88%, #8F6A12 100%
+    #7C0C3C 0%, #A81050 14%, #E14A88 31%, #C81E63 44%,
+    #93104C 58%, #D6266F 74%, #A81050 88%, #7C0C3C 100%
   );
   box-shadow:
-    inset 0 1px 0 rgba(255, 244, 205, 0.85),
-    inset 0 -1px 0 rgba(74, 48, 4, 0.9),
-    0 1px 0 rgba(0, 0, 0, 0.5),
-    0 14px 26px -16px rgba(0, 0, 0, 0.75);
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(50, 4, 22, 0.6),
+    0 1px 0 rgba(0, 0, 0, 0.12),
+    0 14px 26px -16px rgba(183, 19, 90, 0.55);
 }
 
 /* The wordmark, stamped. The lockup art becomes a mask so the foil ramp
@@ -1193,19 +1163,19 @@ details[open] > .lg-summary::before {
    background shows through rather than being hidden behind a card. */
 .esmi-glass-panel {
   position: relative;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.65);
   backdrop-filter: blur(8px) saturate(150%);
   -webkit-backdrop-filter: blur(8px) saturate(150%);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(46, 50, 62, 0.10);
   border-radius: 18px;
   box-shadow:
-    0 8px 32px rgba(2, 8, 18, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+    0 8px 32px rgba(46, 50, 62, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
   overflow: hidden;
 }
 .esmi-glass-header {
-  background: rgba(255, 255, 255, 0.035);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.10) !important;
+  background: rgba(255, 255, 255, 0.4);
+  border-bottom: 1px solid rgba(46, 50, 62, 0.08) !important;
 }
 .esmi-glass-messages {
   background: transparent !important;
@@ -1255,7 +1225,7 @@ details[open] > .lg-summary::before {
 .epv-seg,
 .epv-pill:hover,
 .epv-seg:hover {
-  background-color: rgba(226, 232, 242, 0.07);
+  background-color: rgba(46, 50, 62, 0.06);
   color: var(--lg-ink);
 }
 .epv-pill:hover { border-color: var(--lg-ink-3); }
@@ -1339,8 +1309,8 @@ details[open] > .lg-summary::before {
 .vs-range:hover::-moz-range-thumb { transform: scale(1.12); }
 /* The global :focus-visible outline sits on the <input> box, not the thumb —
    ring the thumb too so keyboard users can see what they're dragging. */
-.vs-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px rgba(217, 162, 27, 0.45); }
-.vs-range:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px rgba(217, 162, 27, 0.45); }
+.vs-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px rgba(183, 19, 90, 0.45); }
+.vs-range:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 3px rgba(183, 19, 90, 0.45); }
 
 .vs-surface::placeholder { color: var(--lg-ink-3); }
 

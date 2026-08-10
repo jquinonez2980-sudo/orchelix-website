@@ -23,11 +23,14 @@
    `.lg-app .cl-` block there. Between the two, a Clerk node has to be both
    unnamed here and unmatched there to come out unstyled. */
 
-const INK = "#F4F1E8"; // --lg-ink,   15.54:1 on the field
-const INK_2 = "rgba(238, 240, 245, 0.72)"; // --lg-ink-2, 8.39:1 on the field
-const FIELD = "#071A2E"; // --lg-field
-const FIELD_2 = "#0B2338"; // --lg-field-2
-const FOIL = "#D9A21B"; // --lg-foil
+/* 2026-08-10 rebrand: field flipped from dark navy to white/light-grey and
+   ink flipped from a pale cream to Graphite to match. Ratios recomputed for
+   the new pairing, same convention as before (ink-on-field). */
+const INK = "#2E323E"; // --lg-ink,   ~12.8:1 on the field
+const INK_2 = "rgba(46, 50, 62, 0.68)"; // --lg-ink-2, ~4.7:1 on the field
+const FIELD = "#FFFFFF"; // --lg-field
+const FIELD_2 = "#F1F3F5"; // --lg-field-2
+const FOIL = "#B7135A"; // --lg-foil
 
 export const clerkWidgetAppearance = {
   variables: {

@@ -132,6 +132,24 @@ export default async function TryEsmiPage({
                 <Stamp href="/book">Book a pilot</Stamp>
                 <QuietAction href="/solutions">See the agent stack</QuietAction>
               </div>
+
+              {/* The whole page is "hear what calling sounds like" — the
+                  actual number to dial belongs near the recording, not
+                  buried in the close section at the bottom of the page. */}
+              <a
+                href="tel:+15615661066"
+                className="lg-fig lg-quiet"
+                style={{
+                  display: "inline-block",
+                  marginTop: "1.6rem",
+                  fontSize: "0.8125rem",
+                  letterSpacing: "0.05em",
+                  color: "var(--lg-ink-2)",
+                  textDecoration: "none",
+                }}
+              >
+                Or call it yourself — +1 561 566 1066
+              </a>
             </div>
 
             {/* The real artifact — a genuine recording, not a rendering of one. */}

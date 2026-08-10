@@ -84,7 +84,7 @@ export default async function PricingPage({ params }: PageProps<"/[locale]">) {
       <main id="main-content">
         {/* ── Opening ── */}
         <Section tone="field">
-          <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:items-end">
+          <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:items-start">
             <div>
               <PageTitle max="16ch">{p.heading}</PageTitle>
               <Prose size="1.0625rem" max="46ch" style={{ marginTop: "1.7rem" }}>
@@ -92,11 +92,19 @@ export default async function PricingPage({ params }: PageProps<"/[locale]">) {
               </Prose>
             </div>
 
-            <div className="flex flex-wrap items-center gap-x-7 gap-y-4 lg:justify-end">
-              <Stamp href={PILOT_HREF}>{p.startPilot}</Stamp>
-              <QuietAction href={`${localizedHref("/book", locale)}?intent=demo`}>
-                {p.bookWalkthrough}
-              </QuietAction>
+            <div className="flex flex-col items-end gap-8">
+              <img
+                src="/pricing-visual.png"
+                alt=""
+                aria-hidden="true"
+                style={{ width: "100%", maxWidth: 300, height: "auto" }}
+              />
+              <div className="flex flex-wrap items-center gap-x-7 gap-y-4 lg:justify-end">
+                <Stamp href={PILOT_HREF}>{p.startPilot}</Stamp>
+                <QuietAction href={`${localizedHref("/book", locale)}?intent=demo`}>
+                  {p.bookWalkthrough}
+                </QuietAction>
+              </div>
             </div>
           </div>
         </Section>
@@ -269,8 +277,21 @@ function RateSchedule({ t, locale }: { t: Messages; locale: Locale }) {
   ];
 
   return (
-    <div className="overflow-x-auto">
-      <table className="lg-fig w-full" style={{ borderCollapse: "collapse", minWidth: 720 }}>
+    <div>
+      <p
+        className="lg-fig lg:hidden"
+        style={{
+          fontSize: "0.6875rem",
+          letterSpacing: "0.08em",
+          textTransform: "uppercase",
+          color: "var(--lg-ink-3)",
+          margin: "0 0 0.75rem",
+        }}
+      >
+        {locale === "es" ? "Desliza para ver los tres planes →" : "Swipe to see all three plans →"}
+      </p>
+      <div className="overflow-x-auto">
+        <table className="lg-fig w-full" style={{ borderCollapse: "collapse", minWidth: 720 }}>
         <caption className="sr-only">{p.scheduleCaption}</caption>
         <thead>
           <tr>
@@ -369,6 +390,7 @@ function RateSchedule({ t, locale }: { t: Messages; locale: Locale }) {
           </tr>
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="540" height="540" viewBox="0 0 540 540">
+  <!--
+    Buckram binding cloth — bolt undulation.
+
+    The far half of the cloth. `buckram.svg` is the thread grain you read at
+    arm's length; this is the broad unevenness of the bolt itself — the slow
+    swell where the cloth was rolled, pressed, and glued down over board.
+
+    Why it is a second asset rather than the same tile at a second scale:
+    layering one tile at two sizes beats its own repeat against itself and
+    moirés. Two different noise fields at two frequencies do not. The tile is
+    540px — exactly three fine tiles — so the two layers come back into phase
+    every third repeat instead of drifting.
+
+    The frequency is very low (0.006) and the octave count is 2, so this
+    contributes no thread detail at all. It is a slow luminance drift, and it
+    is meant to be invisible as a texture and only felt as unevenness. Read on
+    its own it looks like almost nothing; that is correct.
+
+    Lit from the same upper-left source as the fine weave and the foil ramp.
+    The whole world has one light.
+  -->
+  <defs>
+    <!--
+      Signed around mid-grey, exactly as the fine weave is: the swell lifts
+      where it faces the light and darkens where it turns away, in equal
+      measure, so a flat area nets to nothing. A one-sided drift would read as
+      a stain across the cover and would lift the field colour — which is the
+      failure this layer is most able to cause, because it is the one spread
+      over 540px with nothing to break it up.
+    -->
+    <filter id="boltRelief" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <!-- Four octaves, not two. At two the height field is so smooth that
+           lighting it at this surfaceScale quantises the normals into visible
+           contour rings — the cover came out looking marbled rather than
+           bound. The upper octaves stay well below thread frequency, so they
+           break the banding without competing with the fine weave. -->
+      <feTurbulence type="fractalNoise" baseFrequency="0.006" numOctaves="4" seed="7" stitchTiles="stitch" result="swell"/>
+      <feColorMatrix in="swell" type="luminanceToAlpha" result="bump"/>
+      <!-- surfaceScale is large because the wavelength is: at baseFrequency
+           0.006 the swell turns over roughly every 166px, so the height field
+           is nearly flat in gradient terms and the surface normal barely
+           tilts. At the fine weave's surfaceScale this layer measured a mean
+           alpha of 0.002 — arithmetically present, visually absent, which is
+           the exact failure the cloth comment warns about. The height has to
+           be exaggerated hard for a slow swell to catch any light at all. -->
+      <feDiffuseLighting in="bump" surfaceScale="34" diffuseConstant="1.0" lighting-color="#ffffff" result="lit">
+        <feDistantLight azimuth="215" elevation="52"/>
+      </feDiffuseLighting>
+      <!-- Split at sin(52°) = 0.788 → 2.364 across three channels, for the
+           reason spelled out in buckram.svg: a flat area under diffuse
+           lighting returns sin(elevation), not mid-grey, and splitting at
+           mid-grey turns the whole layer into a one-sided veil. Shadow is
+           weighted heavier than highlight because the ground is very dark. -->
+      <feColorMatrix in="lit" type="matrix" values="
+        0 0 0 0 1
+        0 0 0 0 1
+        0 0 0 0 1
+        0.45 0.45 0.45 0 -1.064" result="hi"/>
+      <feColorMatrix in="lit" type="matrix" values="
+        0 0 0 0 0
+        0 0 0 0 0
+        0 0 0 0 0
+        -0.75 -0.75 -0.75 0 1.773" result="lo"/>
+      <feMerge>
+        <feMergeNode in="lo"/>
+        <feMergeNode in="hi"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="540" height="540" filter="url(#boltRelief)" opacity="0.42"/>
+</svg>

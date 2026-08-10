@@ -362,13 +362,13 @@ export default function EsmiChat({
             style={{
               width: 36,
               height: 36,
-              background: "#06122A",
+              background: "#2E323E",
               borderRadius: 0,
               padding: 6,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              border: "1px solid rgba(217,162,27,0.28)",
+              border: "1px solid rgba(183,19,90,0.28)",
               boxShadow: "none",
             }}
           >
@@ -402,7 +402,7 @@ export default function EsmiChat({
               fontFamily: "var(--font-display)",
               fontWeight: 600,
               fontSize: 14,
-              color: "#EAF2FF",
+              color: "var(--lg-ink)",
               lineHeight: 1.2,
             }}
           >
@@ -433,8 +433,8 @@ export default function EsmiChat({
                   textTransform: "uppercase",
                   padding: "2px 6px",
                   borderRadius: 0,
-                  border: locale === lang ? "1px solid rgba(217,162,27,0.5)" : "1px solid transparent",
-                  background: locale === lang ? "rgba(217,162,27,0.10)" : "transparent",
+                  border: locale === lang ? "1px solid rgba(183,19,90,0.5)" : "1px solid transparent",
+                  background: locale === lang ? "rgba(183,19,90,0.10)" : "transparent",
                   color: locale === lang ? FOIL : "var(--lg-ink-3)",
                   cursor: "pointer",
                   transition: "all 0.15s",
@@ -470,8 +470,8 @@ export default function EsmiChat({
             flexShrink: 0,
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.color = "#EAF2FF";
-            e.currentTarget.style.borderColor = "rgba(217,162,27,0.4)";
+            e.currentTarget.style.color = "var(--lg-ink)";
+            e.currentTarget.style.borderColor = "rgba(183,19,90,0.4)";
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.color = "var(--lg-ink-3)";
@@ -519,7 +519,7 @@ export default function EsmiChat({
           alignItems: "flex-end",
           gap: 8,
           padding: "12px 16px",
-          background: "rgba(226,232,242,0.04)",
+          background: "rgba(46,50,62,0.04)",
           borderTop: "1px solid var(--lg-hair-2)",
           flexShrink: 0,
         }}
@@ -542,10 +542,10 @@ export default function EsmiChat({
             resize: "none",
             borderRadius: 0,
             border: "1px solid var(--lg-hair)",
-            background: "rgba(226,232,242,0.05)",
+            background: "rgba(46,50,62,0.05)",
             padding: "10px 14px",
             fontSize: 14,
-            color: "#EAF2FF",
+            color: "var(--lg-ink)",
             lineHeight: 1.5,
             fontFamily: "inherit",
             outline: "none",
@@ -555,14 +555,14 @@ export default function EsmiChat({
             cursor: loading ? "not-allowed" : "text",
           }}
           onFocus={(e) => {
-            e.currentTarget.style.borderColor = "rgba(217,162,27,0.6)";
-            e.currentTarget.style.boxShadow = "0 0 0 2px rgba(217,162,27,0.30)";
-            e.currentTarget.style.background = "rgba(226,232,242,0.07)";
+            e.currentTarget.style.borderColor = "rgba(183,19,90,0.6)";
+            e.currentTarget.style.boxShadow = "0 0 0 2px rgba(183,19,90,0.30)";
+            e.currentTarget.style.background = "rgba(46,50,62,0.07)";
           }}
           onBlur={(e) => {
             e.currentTarget.style.borderColor = "var(--lg-hair)";
             e.currentTarget.style.boxShadow = "none";
-            e.currentTarget.style.background = "rgba(226,232,242,0.05)";
+            e.currentTarget.style.background = "rgba(46,50,62,0.05)";
           }}
         />
         <button
@@ -582,7 +582,7 @@ export default function EsmiChat({
               loading || !input.trim()
                 ? "var(--lg-hair-2)"
                 : FOIL,
-            color: loading || !input.trim() ? "var(--lg-ink-3)" : "#04121A",
+            color: loading || !input.trim() ? "var(--lg-ink-3)" : "#FFFFFF",
             boxShadow:
               loading || !input.trim()
                 ? "none"
@@ -636,7 +636,7 @@ function VoiceWave({ activity }: { activity: Activity }) {
             width: 3,
             height: 18,
             borderRadius: 0,
-            background: idle ? "rgba(217,162,27,0.45)" : FOIL,
+            background: idle ? "rgba(183,19,90,0.45)" : FOIL,
             transformOrigin: "center",
             transform: idle ? "scaleY(0.28)" : undefined,
             transition: `background-color var(--lg-dur-state) var(--ease-standard)`,
@@ -674,11 +674,11 @@ function MessageBubble({
             padding: "11px 16px",
             fontSize: 14,
             lineHeight: 1.6,
-            color: "#EAF2FF",
-            background: "linear-gradient(135deg, rgba(217,162,27,0.16) 0%, rgba(217,162,27,0.10) 100%)",
-            border: "1px solid rgba(217,162,27,0.28)",
+            color: "var(--lg-ink)",
+            background: "linear-gradient(135deg, rgba(183,19,90,0.16) 0%, rgba(183,19,90,0.10) 100%)",
+            border: "1px solid rgba(183,19,90,0.28)",
             borderRadius: 0,
-            boxShadow: "0 2px 16px rgba(217,162,27,0.10)",
+            boxShadow: "0 2px 16px rgba(183,19,90,0.10)",
             whiteSpace: "pre-wrap",
             wordBreak: "break-word",
           }}
@@ -700,7 +700,7 @@ function MessageBubble({
         style={{
           width: 26,
           height: 26,
-          background: "#06122A",
+          background: "#2E323E",
           borderRadius: 0,
           padding: 4,
           display: "flex",
@@ -708,7 +708,7 @@ function MessageBubble({
           justifyContent: "center",
           flexShrink: 0,
           marginTop: 2,
-          border: "1px solid rgba(217,162,27,0.22)",
+          border: "1px solid rgba(183,19,90,0.22)",
           boxShadow: "none",
         }}
       >
@@ -730,7 +730,7 @@ function MessageBubble({
             style={{
               display: "inline-flex",
               padding: "12px 16px",
-              background: "rgba(226,232,242,0.05)",
+              background: "rgba(46,50,62,0.05)",
               border: "1px solid var(--lg-hair-2)",
               borderRadius: 0,
               alignSelf: "flex-start",
@@ -748,7 +748,7 @@ function MessageBubble({
               display: "inline-flex",
               alignItems: "center",
               padding: "8px 12px",
-              background: "rgba(217,162,27,0.08)",
+              background: "rgba(183,19,90,0.08)",
               borderRadius: 0,
               alignSelf: "flex-start",
             }}
@@ -764,8 +764,8 @@ function MessageBubble({
               padding: "11px 16px",
               fontSize: 14,
               lineHeight: 1.65,
-              color: "#EAF2FF",
-              background: "rgba(226,232,242,0.05)",
+              color: "var(--lg-ink)",
+              background: "rgba(46,50,62,0.05)",
               border: "1px solid var(--lg-hair-2)",
               borderRadius: 0,
               boxShadow: "0 2px 16px rgba(10,15,28,0.4)",
@@ -837,9 +837,9 @@ function SlotPicker({
                 gap: 2,
                 padding: "9px 14px",
                 borderRadius: 0,
-                border: "1.5px solid rgba(217,162,27,0.30)",
-                background: "rgba(226,232,242,0.04)",
-                color: "#EAF2FF",
+                border: "1.5px solid rgba(183,19,90,0.30)",
+                background: "rgba(46,50,62,0.04)",
+                color: "var(--lg-ink)",
                 fontSize: 13,
                 fontWeight: 600,
                 lineHeight: 1.2,
@@ -850,12 +850,12 @@ function SlotPicker({
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = FOIL;
-                e.currentTarget.style.background = "rgba(217,162,27,0.12)";
+                e.currentTarget.style.background = "rgba(183,19,90,0.12)";
                 e.currentTarget.style.borderColor = "var(--lg-foil)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "rgba(217,162,27,0.30)";
-                e.currentTarget.style.background = "rgba(226,232,242,0.04)";
+                e.currentTarget.style.borderColor = "rgba(183,19,90,0.30)";
+                e.currentTarget.style.background = "rgba(46,50,62,0.04)";
                 e.currentTarget.style.boxShadow = "none";
               }}
             >
@@ -896,7 +896,7 @@ function QuickReplies({
             padding: "8px 14px",
             borderRadius: 0,
             border: "1px solid var(--lg-hair)",
-            background: "rgba(226,232,242,0.04)",
+            background: "rgba(46,50,62,0.04)",
             color: "var(--lg-ink-2)",
             fontSize: 13,
             fontWeight: 500,
@@ -905,13 +905,13 @@ function QuickReplies({
             transition: "all 0.15s",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = "rgba(217,162,27,0.5)";
-            e.currentTarget.style.background = "rgba(217,162,27,0.10)";
+            e.currentTarget.style.borderColor = "rgba(183,19,90,0.5)";
+            e.currentTarget.style.background = "rgba(183,19,90,0.10)";
             e.currentTarget.style.color = FOIL;
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.borderColor = "var(--lg-hair)";
-            e.currentTarget.style.background = "rgba(226,232,242,0.04)";
+            e.currentTarget.style.background = "rgba(46,50,62,0.04)";
             e.currentTarget.style.color = "var(--lg-ink-2)";
           }}
         >

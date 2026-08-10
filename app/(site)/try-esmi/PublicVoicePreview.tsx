@@ -237,7 +237,7 @@ export default function PublicVoicePreview() {
                     fontWeight: 500,
                     lineHeight: 1.1,
                     border: `1px solid ${active ? "var(--lg-ink-3)" : "var(--lg-hair)"}`,
-                    background: active ? "rgba(226,232,242,0.07)" : "transparent",
+                    background: active ? "rgba(46,50,62,0.06)" : "transparent",
                     color: active ? TEXT : MUTED,
                     cursor: "pointer",
                   }}
@@ -270,7 +270,7 @@ export default function PublicVoicePreview() {
                     letterSpacing: "0.10em",
                     lineHeight: 1.1,
                     border: "none",
-                    background: active ? "rgba(226,232,242,0.08)" : "transparent",
+                    background: active ? "rgba(46,50,62,0.07)" : "transparent",
                     color: active ? TEXT : FAINT,
                     cursor: "pointer",
                   }}
@@ -331,7 +331,7 @@ export default function PublicVoicePreview() {
                 border: status === "error" ? "1px solid var(--lg-ink-3)" : "none",
                 cursor: status === "loading" ? "wait" : "pointer",
                 background: status === "error" ? "transparent" : FOIL,
-                color: status === "error" ? "var(--lg-ink-3)" : "#2A1D02",
+                color: status === "error" ? "var(--lg-ink-3)" : "#FFFFFF",
               }}
             >
               {status === "loading" ? (
@@ -342,8 +342,8 @@ export default function PublicVoicePreview() {
                     width: 16,
                     height: 16,
                     borderRadius: 0,
-                    border: "2px solid rgba(4,18,26,0.28)",
-                    borderTopColor: "#04121A",
+                    border: "2px solid rgba(255,255,255,0.35)",
+                    borderTopColor: "#FFFFFF",
                     animation: "esmi-sheen 700ms linear infinite",
                   }}
                 />
