@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import {
   localizedHref,
   otherLocale,
@@ -142,12 +143,35 @@ export default function Nav({
               — graphite structure, magenta strand — and the field is light
               now, so it just renders directly rather than being masked
               behind a metallic ramp. */}
-          <img
+          {/* Sized at 50px rather than the 34px it shipped at. The binding
+              constraint is the "AI CONSULTING" tagline: it occupies 8.8% of
+              the lockup's height (a measured 50px band of 569), so 34px put
+              it at a 3px cap height — below the size where the letterforms
+              survive downscaling at all. 50px buys ~4.4px on a 1x screen and
+              ~8.8 device pixels on the 2x displays most visitors are on,
+              which is where the phrase actually resolves.
+
+              It also has to be a real <Image>, not a raw <img>. At 122 CSS px
+              the browser was downscaling the 1383px source in one step — an
+              11x reduction no browser resamples well, and the reason it read
+              as blurry. next/image serves a 128w/256w variant resampled by
+              sharp instead. `sizes` is what makes it pick from imageSizes
+              (32-384) rather than deviceSizes; drop it and the smallest
+              candidate becomes 640w, which puts us straight back to
+              downscaling a far-too-large bitmap in the browser. */}
+          <Image
             src="/orchelix-logo-full-color.png"
             alt={t.nav.home}
-            width={140}
-            height={49}
-            style={{ display: "block", height: 34, width: "auto" }}
+            /* Intrinsic dimensions, not display ones: the true 2.431 ratio
+               reserves the correct box before paint. The old 140x49 claimed
+               2.857 and would have squashed the lockup had the CSS below
+               ever failed to apply. */
+            width={1383}
+            height={569}
+            sizes="122px"
+            quality={90}
+            preload
+            style={{ display: "block", height: 50, width: "auto" }}
           />
         </a>
 
@@ -189,7 +213,7 @@ export default function Nav({
               fontSize: "0.75rem",
               letterSpacing: "0.08em",
               textTransform: "uppercase",
-              color: "#FFFFFF",
+              color: "var(--lg-foil-ink)",
               padding: "0.6rem 1.05rem",
               textDecoration: "none",
             }}
@@ -258,7 +282,7 @@ export default function Nav({
                   fontSize: "0.8125rem",
                   letterSpacing: "0.08em",
                   textTransform: "uppercase",
-                  color: "#FFFFFF",
+                  color: "var(--lg-foil-ink)",
                   padding: "0.8rem 1.35rem",
                   textDecoration: "none",
                 }}

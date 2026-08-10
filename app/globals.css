@@ -170,6 +170,12 @@
      per view that should read as the "AI moment," never a fill. */
   --lg-foil:       #B7135A;
   --lg-foil-lift:  #D42670;
+  /* Ink for text sitting ON the accent, not beside it — the CTA stamps.
+     White measures 6.42:1 on `--lg-foil`; `--lg-ink` would be 2.1:1 and
+     fail outright, so this cannot just inherit the body ink. It exists as
+     a token because the rebrand left the value hardcoded in both Nav CTAs,
+     which is how a palette quietly grows a second, unmanaged white. */
+  --lg-foil-ink:   #FFFFFF;
 
   /* Structural ruling. The brand has one accent colour, and it is not
      spent on dividers — rules are Graphite at low opacity, not a second

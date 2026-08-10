@@ -89,6 +89,13 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 2592000, // 30 days — avoid re-validating optimized images
     deviceSizes: [390, 750, 1080, 1200, 1920],
     imageSizes: [16, 32, 64, 96, 128, 256],
+    /* Next 16 requires every `quality` a component asks for to be allowlisted
+       here — the optimizer returns 400 for anything else, so this is not
+       optional decoration. 90 exists for the Nav lockup: its "AI CONSULTING"
+       tagline renders at roughly 4px on a 1x screen, and at the default q75
+       the ringing around those hairline letterforms is a large fraction of
+       the stroke itself. 75 stays first; everything else should use it. */
+    qualities: [75, 90],
   },
   async headers() {
     return [
