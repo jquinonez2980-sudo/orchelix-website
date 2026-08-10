@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-09T10:02:31.559Z",
+  "generatedAt": "2026-08-10T18:21:18.781780Z",
   "title": "Design System: Orchelix Marketing — The Ruled Record",
   "extensions": {
     "scope": {
@@ -50,276 +50,326 @@
     "colorMeta": {
       "field": {
         "role": "neutral",
-        "displayName": "Buckram Field",
-        "canonical": "#071A2E",
+        "displayName": "Field",
+        "canonical": "#FFFFFF",
         "tonalRamp": [
-          "#03101E",
-          "#071A2E",
-          "#0B2338",
-          "#102C44",
-          "#1B4368",
-          "#2E6396",
-          "#6699C8",
-          "#B9D2E8",
-          "#E6EFF7"
+          "#1F1F1F",
+          "#333333",
+          "#4C4C4C",
+          "#666666",
+          "#858585",
+          "#FFFFFF",
+          "#FCFCFC",
+          "#FCFCFC",
+          "#FCFCFC"
         ]
       },
       "field-2": {
         "role": "neutral",
-        "displayName": "Buckram Field 2",
-        "canonical": "#0B2338",
+        "displayName": "Field 2",
+        "canonical": "#F1F3F5",
         "tonalRamp": [
-          "#040F19",
-          "#0B2338",
-          "#102C44",
-          "#173C5C",
-          "#215479",
-          "#3B7CAC",
-          "#7BA8CE",
-          "#C2D8EB",
-          "#EBF2F9"
+          "#191F24",
+          "#2A333C",
+          "#404C59",
+          "#556677",
+          "#708599",
+          "#F1F3F5",
+          "#FCFCFD",
+          "#FCFCFD",
+          "#FCFCFD"
         ]
       },
       "field-3": {
         "role": "neutral",
-        "displayName": "Buckram Field 3",
-        "canonical": "#102C44",
+        "displayName": "Field 3",
+        "canonical": "#E4E7EB",
         "tonalRamp": [
-          "#061421",
-          "#0B2338",
-          "#102C44",
-          "#194264",
-          "#245C88",
-          "#3E85B8",
-          "#7FAFD5",
-          "#C6DCEE",
-          "#EDF4FA"
+          "#1A1E23",
+          "#2B323B",
+          "#414B58",
+          "#576475",
+          "#728297",
+          "#E4E7EB",
+          "#FCFCFD",
+          "#FCFCFD",
+          "#FCFCFD"
         ]
       },
       "stock": {
         "role": "neutral",
         "displayName": "Ledger Stock",
-        "canonical": "#EDE9DC",
+        "canonical": "#F1F3F5",
         "tonalRamp": [
-          "#2A2519",
-          "#453E2B",
-          "#615840",
-          "#7F7458",
-          "#9E9375",
-          "#BDB399",
-          "#D6CEBC",
-          "#EDE9DC",
-          "#F8F6EF"
+          "#191F24",
+          "#2A333C",
+          "#404C59",
+          "#556677",
+          "#708599",
+          "#F1F3F5",
+          "#FCFCFD",
+          "#FCFCFD",
+          "#FCFCFD"
         ]
       },
       "stock-2": {
         "role": "neutral",
         "displayName": "Ledger Stock 2",
-        "canonical": "#E2DDCB",
+        "canonical": "#E4E7EB",
         "tonalRamp": [
-          "#241F13",
-          "#3E3826",
-          "#59503A",
-          "#766C51",
-          "#95896C",
-          "#B4A98E",
-          "#CDC4AC",
-          "#E2DDCB",
-          "#F4F1E6"
+          "#1A1E23",
+          "#2B323B",
+          "#414B58",
+          "#576475",
+          "#728297",
+          "#E4E7EB",
+          "#FCFCFD",
+          "#FCFCFD",
+          "#FCFCFD"
         ]
       },
       "foil": {
         "role": "primary",
-        "displayName": "Foil Gold",
-        "canonical": "#D9A21B",
+        "displayName": "Stamp Magenta",
+        "canonical": "#B7135A",
         "tonalRamp": [
-          "#2E2003",
-          "#4A3306",
-          "#6B490B",
-          "#8F6210",
-          "#B47D15",
-          "#D9A21B",
-          "#EFBB3C",
-          "#F6DC8C",
-          "#FBF0CC"
+          "#37061B",
+          "#5C0A2D",
+          "#8B0E44",
+          "#B9135B",
+          "#E82177",
+          "#B7135A",
+          "#E9297C",
+          "#F17CAF",
+          "#FACFE2"
         ]
       },
       "foil-lift": {
         "role": "primary",
-        "displayName": "Foil Lift",
-        "canonical": "#EFBB3C",
+        "displayName": "Stamp Lift",
+        "canonical": "#D42670",
         "tonalRamp": [
-          "#33240A",
-          "#523A0F",
-          "#755315",
-          "#996E1B",
-          "#BE8B22",
-          "#DCA92F",
-          "#EFBB3C",
-          "#F7D888",
-          "#FCEFC9"
+          "#34091B",
+          "#56102E",
+          "#821745",
+          "#AD1F5B",
+          "#DA2F78",
+          "#D42670",
+          "#E25F97",
+          "#F0ADCA",
+          "#FEFBFC"
         ]
       },
       "foil-ink": {
         "role": "primary",
-        "displayName": "Foil Ink",
-        "canonical": "#2A1D02",
+        "displayName": "Stamp Ink",
+        "canonical": "#FFFFFF",
         "tonalRamp": [
-          "#150E01",
-          "#2A1D02",
-          "#443004",
-          "#604407",
-          "#7E5A0A",
-          "#9E720D",
-          "#C08F18",
-          "#E0B85C",
-          "#F3DFB2"
+          "#1F1F1F",
+          "#333333",
+          "#4C4C4C",
+          "#666666",
+          "#858585",
+          "#FFFFFF",
+          "#FCFCFC",
+          "#FCFCFC",
+          "#FCFCFC"
         ]
       },
       "rule": {
-        "role": "secondary",
-        "displayName": "Rule Red",
-        "canonical": "#B4342A",
+        "role": "neutral",
+        "displayName": "Rule",
+        "canonical": "rgba(46, 50, 62, 0.55)",
         "tonalRamp": [
-          "#2A0B08",
-          "#451310",
-          "#631C17",
-          "#84261F",
-          "#A63027",
-          "#B4342A",
-          "#D0584D",
-          "#E79A93",
-          "#F6D6D2"
+          "#1A1C23",
+          "#2B2F3B",
+          "#414758",
+          "#575E75",
+          "#727C97",
+          "#2E323E",
+          "#4C5367",
+          "#767F99",
+          "#ABB0C0"
         ]
       },
       "rule-quiet": {
-        "role": "secondary",
-        "displayName": "Rule Red, Quiet",
-        "canonical": "rgba(180, 52, 42, 0.34)",
-        "tonalRamp": []
+        "role": "neutral",
+        "displayName": "Rule Quiet",
+        "canonical": "rgba(46, 50, 62, 0.18)",
+        "tonalRamp": [
+          "#1A1C23",
+          "#2B2F3B",
+          "#414758",
+          "#575E75",
+          "#727C97",
+          "#2E323E",
+          "#4C5367",
+          "#767F99",
+          "#ABB0C0"
+        ]
       },
       "rule-text": {
-        "role": "secondary",
-        "displayName": "Rule Red, Text",
-        "canonical": "#DE6A5C",
+        "role": "neutral",
+        "displayName": "Rule Text (retired alias)",
+        "canonical": "#2E323E",
         "contrastOnField": "5.28:1",
         "purpose": "The readable step of rule red. Any status word, disposition label, or inline message — never a rule or border. Base #B4342A measures 2.90:1 as text on the field and is a mark only.",
         "tonalRamp": [
-          "#2E0D09",
-          "#4C1611",
-          "#6D211A",
-          "#8F2E25",
-          "#B4342A",
-          "#C94F43",
-          "#DE6A5C",
-          "#EE9E95",
-          "#F9D9D5"
+          "#1A1C23",
+          "#2B2F3B",
+          "#414758",
+          "#575E75",
+          "#727C97",
+          "#2E323E",
+          "#4C5367",
+          "#767F99",
+          "#ABB0C0"
         ]
       },
       "tick": {
-        "role": "tertiary",
-        "displayName": "Tick Green",
-        "canonical": "#2F8F6B",
+        "role": "neutral",
+        "displayName": "Tick",
+        "canonical": "#ADB5BD",
         "tonalRamp": [
-          "#082017",
-          "#0D3628",
-          "#134D3A",
-          "#1B664D",
-          "#247A5D",
-          "#2F8F6B",
-          "#4FB48D",
-          "#8FD5BA",
-          "#CDEDE0"
+          "#1B1F22",
+          "#2D3339",
+          "#444C55",
+          "#5B6671",
+          "#778592",
+          "#ADB5BD",
+          "#D5D9DD",
+          "#FCFCFD",
+          "#FCFCFD"
         ]
       },
       "tick-text": {
-        "role": "tertiary",
-        "displayName": "Tick Green, Text",
-        "canonical": "#37A87E",
+        "role": "neutral",
+        "displayName": "Tick Text (retired alias)",
+        "canonical": "#2E323E",
         "contrastOnField": "5.91:1",
         "purpose": "The readable step of tick green. The ANSWERED disposition label and any success word. Base #2F8F6B measures 4.40:1 as text and is a mark only.",
         "tonalRamp": [
-          "#08221A",
-          "#0D392B",
-          "#13503B",
-          "#1B684D",
-          "#2F8F6B",
-          "#37A87E",
-          "#57C29B",
-          "#95DCC0",
-          "#D0F0E3"
+          "#1A1C23",
+          "#2B2F3B",
+          "#414758",
+          "#575E75",
+          "#727C97",
+          "#2E323E",
+          "#4C5367",
+          "#767F99",
+          "#ABB0C0"
         ]
       },
       "ink": {
         "role": "neutral",
-        "displayName": "Ink",
-        "canonical": "#F4F1E8",
+        "displayName": "Graphite Ink",
+        "canonical": "#2E323E",
         "tonalRamp": [
-          "#2B2921",
-          "#454236",
-          "#615D4E",
-          "#7F7A69",
-          "#9F9A87",
-          "#BEBAA8",
-          "#D9D5C7",
-          "#F4F1E8",
-          "#FBFAF5"
+          "#1A1C23",
+          "#2B2F3B",
+          "#414758",
+          "#575E75",
+          "#727C97",
+          "#2E323E",
+          "#4C5367",
+          "#767F99",
+          "#ABB0C0"
         ]
       },
       "ink-2": {
         "role": "neutral",
         "displayName": "Ink 2",
-        "canonical": "rgba(238, 240, 245, 0.72)",
-        "tonalRamp": []
+        "canonical": "rgba(46, 50, 62, 0.68)",
+        "tonalRamp": [
+          "#1A1C23",
+          "#2B2F3B",
+          "#414758",
+          "#575E75",
+          "#727C97",
+          "#2E323E",
+          "#4C5367",
+          "#767F99",
+          "#ABB0C0"
+        ]
       },
       "ink-3": {
         "role": "neutral",
         "displayName": "Ink 3",
-        "canonical": "rgba(226, 232, 242, 0.52)",
-        "tonalRamp": []
+        "canonical": "rgba(46, 50, 62, 0.48)",
+        "tonalRamp": [
+          "#1A1C23",
+          "#2B2F3B",
+          "#414758",
+          "#575E75",
+          "#727C97",
+          "#2E323E",
+          "#4C5367",
+          "#767F99",
+          "#ABB0C0"
+        ]
       },
       "hair": {
         "role": "neutral",
         "displayName": "Hair",
-        "canonical": "rgba(226, 232, 242, 0.16)",
-        "tonalRamp": []
+        "canonical": "rgba(46, 50, 62, 0.14)",
+        "tonalRamp": [
+          "#1A1C23",
+          "#2B2F3B",
+          "#414758",
+          "#575E75",
+          "#727C97",
+          "#2E323E",
+          "#4C5367",
+          "#767F99",
+          "#ABB0C0"
+        ]
       },
       "hair-2": {
         "role": "neutral",
         "displayName": "Hair 2",
-        "canonical": "rgba(226, 232, 242, 0.09)",
-        "tonalRamp": []
+        "canonical": "rgba(46, 50, 62, 0.08)",
+        "tonalRamp": [
+          "#1A1C23",
+          "#2B2F3B",
+          "#414758",
+          "#575E75",
+          "#727C97",
+          "#2E323E",
+          "#4C5367",
+          "#767F99",
+          "#ABB0C0"
+        ]
       },
       "ink-on-stock": {
         "role": "neutral",
         "displayName": "Ink on Stock",
-        "canonical": "#10243A",
+        "canonical": "#2E323E",
         "tonalRamp": [
-          "#060E17",
-          "#0A1826",
-          "#10243A",
-          "#193857",
-          "#244E76",
-          "#356C9F",
-          "#6C9AC4",
-          "#B2CCE3",
-          "#E3EDF6"
+          "#1A1C23",
+          "#2B2F3B",
+          "#414758",
+          "#575E75",
+          "#727C97",
+          "#2E323E",
+          "#4C5367",
+          "#767F99",
+          "#ABB0C0"
         ]
       },
       "ink-on-stock-2": {
         "role": "neutral",
         "displayName": "Ink on Stock 2",
-        "canonical": "#4A5A6E",
+        "canonical": "rgba(46, 50, 62, 0.68)",
         "tonalRamp": [
-          "#111721",
-          "#1D2531",
-          "#2C3745",
-          "#3B4959",
-          "#4A5A6E",
-          "#68798E",
-          "#8E9CAE",
-          "#BCC5D0",
-          "#E5E9EE"
+          "#1A1C23",
+          "#2B2F3B",
+          "#414758",
+          "#575E75",
+          "#727C97",
+          "#2E323E",
+          "#4C5367",
+          "#767F99",
+          "#ABB0C0"
         ]
       }
     },
@@ -351,31 +401,26 @@
     },
     "materials": [
       {
-        "name": "buckram-cloth",
-        "value": "background-color: #071A2E; background-image: url(/textures/buckram.svg); background-repeat: repeat; background-size: 180px 180px;",
-        "purpose": "The binding cloth. A real tiled SVG carrying its own alpha — blend modes collapse over a ground this dark."
-      },
-      {
         "name": "foil-ramp",
-        "value": "linear-gradient(100deg, #8A6410 0%, #C08F18 14%, #F6DC8C 31%, #DFAE33 44%, #B5820F 58%, #F0CE6A 74%, #CE9A1E 88%, #8F6A12 100%)",
-        "purpose": "The gold stamp. Eight-stop metallic reflection ramp; only ever on the primary action and the wordmark."
+        "value": "linear-gradient(100deg, #7C0C3C 0%, #A81050 14%, #E14A88 31%, #C81E63 44%, #93104C 58%, #D6266F 74%, #A81050 88%, #7C0C3C 100%)",
+        "purpose": "The magenta stamp. Eight-stop metallic reflection ramp; only ever on the primary action. The buckram cloth that used to sit beside it was retired at the 2026-08-10 rebrand rather than recoloured — it was tuned against dark ground and read as a grey smudge on white."
       },
       {
         "name": "measure-ticks",
-        "value": "repeating-linear-gradient(to bottom, rgba(180,52,42,0.85) 0 1px, transparent 1px 70px), repeating-linear-gradient(to bottom, rgba(180,52,42,0.5) 0 1px, transparent 1px 14px)",
-        "purpose": "Graduated measure down the field edge — minor tick every 14px, major every fifth."
+        "value": "repeating-linear-gradient(to bottom, rgba(46,50,62,0.55) 0 1px, transparent 1px 70px), repeating-linear-gradient(to bottom, rgba(46,50,62,0.30) 0 1px, transparent 1px 14px)",
+        "purpose": "Graduated measure down the field edge — minor tick every 14px, major every fifth. DEFECT: the shipped CSS still draws these in retired ledger red (rgba(180,52,42,...)); the value here is the corrected one."
       }
     ],
     "shadows": [
       {
-        "name": "foil-relief",
-        "value": "inset 0 1px 0 rgba(255,244,205,0.85), inset 0 -1px 0 rgba(74,48,4,0.9), 0 1px 0 rgba(0,0,0,0.5), 0 14px 26px -16px rgba(0,0,0,0.75)",
-        "purpose": "The stamp at rest — bright top lip, dark bottom lip, contact shadow. The only shadow in the system."
+        "name": "stamp-relief",
+        "value": "inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(50,4,22,0.6), 0 1px 0 rgba(0,0,0,0.12), 0 14px 26px -16px rgba(183,19,90,0.55)",
+        "purpose": "The stamp at rest — bright top lip, dark bottom lip, contact shadow, accent-tinted drop. The only shadow in the system."
       },
       {
-        "name": "foil-impressed",
+        "name": "stamp-impressed",
         "value": "inset 0 1px 0 rgba(255,244,205,0.5), inset 0 -1px 0 rgba(74,48,4,0.95), inset 0 2px 6px rgba(58,38,2,0.5)",
-        "purpose": "The stamp on :active, paired with translateY(2px). Pressed into the cover."
+        "purpose": "The stamp on :active, paired with translateY(2px). DEFECT: these are the dark world's gold-brown lips, missed by the rebrand — pressing a stamp currently shades it brown."
       }
     ],
     "motion": [
@@ -554,7 +599,7 @@
       "refersTo": "stamp",
       "description": "The only filled control in the system. Reserved for the primary action; a screen gets one.",
       "html": "<a href=\"#\" class=\"ds-stamp\">Book a pilot</a>",
-      "css": ".ds-stamp { display: inline-flex; align-items: center; font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 88%; font-weight: 700; font-size: 0.9375rem; letter-spacing: 0.08em; text-transform: uppercase; color: #2A1D02; padding: 0.95rem 1.7rem; text-decoration: none; border: 0; border-radius: 0; cursor: pointer; background-image: linear-gradient(100deg, #8A6410 0%, #C08F18 14%, #F6DC8C 31%, #DFAE33 44%, #B5820F 58%, #F0CE6A 74%, #CE9A1E 88%, #8F6A12 100%); box-shadow: inset 0 1px 0 rgba(255,244,205,0.85), inset 0 -1px 0 rgba(74,48,4,0.9), 0 1px 0 rgba(0,0,0,0.5), 0 14px 26px -16px rgba(0,0,0,0.75); transition: transform 120ms cubic-bezier(0.2,0.6,0.2,1), box-shadow 120ms cubic-bezier(0.2,0.6,0.2,1), filter 120ms cubic-bezier(0.2,0.6,0.2,1); } .ds-stamp:hover { filter: brightness(1.07) saturate(1.04); } .ds-stamp:focus-visible { outline: 2px solid #D9A21B; outline-offset: 3px; border-radius: 0; } .ds-stamp:active { transform: translateY(2px); box-shadow: inset 0 1px 0 rgba(255,244,205,0.5), inset 0 -1px 0 rgba(74,48,4,0.95), inset 0 2px 6px rgba(58,38,2,0.5); }"
+      "css": ".ds-stamp { display: inline-flex; align-items: center; font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 88%; font-weight: 700; font-size: 0.9375rem; letter-spacing: 0.08em; text-transform: uppercase; color: #FFFFFF; padding: 0.95rem 1.7rem; text-decoration: none; border: 0; border-radius: 0; cursor: pointer; background-image: linear-gradient(100deg, #8A6410 0%, #C08F18 14%, #F6DC8C 31%, #DFAE33 44%, #B5820F 58%, #F0CE6A 74%, #CE9A1E 88%, #8F6A12 100%); box-shadow: inset 0 1px 0 rgba(255,244,205,0.85), inset 0 -1px 0 rgba(74,48,4,0.9), 0 1px 0 rgba(0,0,0,0.5), 0 14px 26px -16px rgba(0,0,0,0.75); transition: transform 120ms cubic-bezier(0.2,0.6,0.2,1), box-shadow 120ms cubic-bezier(0.2,0.6,0.2,1), filter 120ms cubic-bezier(0.2,0.6,0.2,1); } .ds-stamp:hover { filter: brightness(1.07) saturate(1.04); } .ds-stamp:focus-visible { outline: 2px solid #B7135A; outline-offset: 3px; border-radius: 0; } .ds-stamp:active { transform: translateY(2px); box-shadow: inset 0 1px 0 rgba(255,244,205,0.5), inset 0 -1px 0 rgba(74,48,4,0.95), inset 0 2px 6px rgba(58,38,2,0.5); }"
     },
     {
       "name": "Quiet Action (secondary)",
@@ -562,7 +607,7 @@
       "refersTo": "quiet-action",
       "description": "The secondary action. A foil rule draws in from the left on hover; no fill, ever.",
       "html": "<a href=\"#\" class=\"ds-quiet\">Hear a real call</a>",
-      "css": ".ds-quiet { position: relative; font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 88%; font-weight: 600; font-size: 0.9375rem; letter-spacing: 0.04em; color: #F4F1E8; text-decoration: none; } .ds-quiet::after { content: \"\"; position: absolute; left: 0; right: 0; bottom: -3px; height: 1px; background: #D9A21B; transform: scaleX(0); transform-origin: left; transition: transform 300ms cubic-bezier(0.16,1,0.3,1); } .ds-quiet:hover::after { transform: scaleX(1); } .ds-quiet:focus-visible { outline: 2px solid #D9A21B; outline-offset: 3px; border-radius: 0; }"
+      "css": ".ds-quiet { position: relative; font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 88%; font-weight: 600; font-size: 0.9375rem; letter-spacing: 0.04em; color: #2E323E; text-decoration: none; } .ds-quiet::after { content: \"\"; position: absolute; left: 0; right: 0; bottom: -3px; height: 1px; background: #B7135A; transform: scaleX(0); transform-origin: left; transition: transform 300ms cubic-bezier(0.16,1,0.3,1); } .ds-quiet:hover::after { transform: scaleX(1); } .ds-quiet:focus-visible { outline: 2px solid #B7135A; outline-offset: 3px; border-radius: 0; }"
     },
     {
       "name": "Status Key",
@@ -570,7 +615,7 @@
       "refersTo": "register-row",
       "description": "The system's only status marker — a drawn 14x2px swatch plus a mono label. Replaces every chip, pill, and badge.",
       "html": "<span class=\"ds-key\"><span class=\"ds-key-swatch\" aria-hidden=\"true\"></span><span class=\"ds-key-label\">Booked</span></span>",
-      "css": ".ds-key { display: inline-flex; align-items: baseline; gap: 8px; font-family: \"Azeret Mono\", ui-monospace, monospace; font-variant-numeric: tabular-nums; } .ds-key-swatch { width: 14px; height: 2px; background: #D9A21B; transform: translateY(-0.25em); } .ds-key-label { font-size: 0.625rem; letter-spacing: 0.14em; text-transform: uppercase; color: #D9A21B; }"
+      "css": ".ds-key { display: inline-flex; align-items: baseline; gap: 8px; font-family: \"Azeret Mono\", ui-monospace, monospace; font-variant-numeric: tabular-nums; } .ds-key-swatch { width: 14px; height: 2px; background: #B7135A; transform: translateY(-0.25em); } .ds-key-label { font-size: 0.625rem; letter-spacing: 0.14em; text-transform: uppercase; color: #B7135A; }"
     },
     {
       "name": "Call Register",
@@ -578,7 +623,7 @@
       "refersTo": "register-row",
       "description": "The signature artifact: a ruled record with red column verticals, tabular figures, and a derived foot tally.",
       "html": "<figure class=\"ds-reg\"><figcaption class=\"ds-reg-cap\"><span>Call register — one night, one line</span><span class=\"ds-reg-cap-2\">18:00 – 06:00</span></figcaption><div class=\"ds-reg-row ds-reg-head\"><span>Time</span><span>Lang</span><span>Reason</span><span>Disp.</span></div><div class=\"ds-reg-row\"><span class=\"ds-reg-t\">18:42</span><span class=\"ds-reg-l\">ES</span><span class=\"ds-reg-r\">Plantilla de encimera</span><span class=\"ds-reg-d\">BOOKED</span></div><div class=\"ds-reg-row\"><span class=\"ds-reg-t\">19:07</span><span class=\"ds-reg-l ds-quiet-ink\">EN</span><span class=\"ds-reg-r\">After-hours, no heat</span><span class=\"ds-reg-d ds-reg-d-routed\">ROUTED</span></div><div class=\"ds-reg-row\"><span class=\"ds-reg-t\">19:51</span><span class=\"ds-reg-l\">ES</span><span class=\"ds-reg-r\">Seguimiento de cotización</span><span class=\"ds-reg-d ds-reg-d-answered\">ANSWERED</span></div><div class=\"ds-reg-foot\"><span>3 calls</span></div></figure>",
-      "css": ".ds-reg { margin: 0; background-color: #071A2E; padding: 20px; font-family: \"Azeret Mono\", ui-monospace, monospace; font-variant-numeric: tabular-nums; } .ds-reg-cap { display: flex; justify-content: space-between; gap: 16px; font-size: 0.6875rem; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(238,240,245,0.72); padding-bottom: 0.8rem; border-bottom: 2px solid #B4342A; } .ds-reg-cap-2 { color: rgba(226,232,242,0.52); } .ds-reg-row { display: grid; grid-template-columns: 4.4rem 3rem minmax(0,1fr) 6.4rem; align-items: center; padding: 0.72rem 0; border-bottom: 1px solid rgba(226,232,242,0.09); } .ds-reg-row > * { padding-inline: 0.85rem; } .ds-reg-row > *:first-child { padding-inline-start: 0.6rem; } .ds-reg-row > * + * { border-left: 1px solid rgba(180,52,42,0.34); } .ds-reg-head { font-size: 0.625rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(226,232,242,0.52); border-bottom: 1px solid rgba(226,232,242,0.16); } .ds-reg-row:nth-child(odd) { background: rgba(226,232,242,0.028); } .ds-reg-t { font-size: 0.8125rem; color: rgba(238,240,245,0.72); } .ds-reg-l { font-size: 0.625rem; letter-spacing: 0.08em; color: #D9A21B; } .ds-quiet-ink { color: rgba(226,232,242,0.52); } .ds-reg-r { font-family: Literata, Georgia, serif; font-size: 0.9375rem; color: #F4F1E8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .ds-reg-d { font-size: 0.625rem; letter-spacing: 0.09em; text-align: right; color: #D9A21B; } .ds-reg-d-routed { color: #B4342A; } .ds-reg-d-answered { color: #2F8F6B; } .ds-reg-foot { border-top: 2px solid #B4342A; padding-top: 0.85rem; font-size: 0.625rem; letter-spacing: 0.11em; text-transform: uppercase; color: rgba(226,232,242,0.52); }"
+      "css": ".ds-reg { margin: 0; background-color: #FFFFFF; padding: 20px; font-family: \"Azeret Mono\", ui-monospace, monospace; font-variant-numeric: tabular-nums; } .ds-reg-cap { display: flex; justify-content: space-between; gap: 16px; font-size: 0.6875rem; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(46,50,62,0.68); padding-bottom: 0.8rem; border-bottom: 2px solid rgba(46,50,62,0.55); } .ds-reg-cap-2 { color: rgba(46,50,62,0.48); } .ds-reg-row { display: grid; grid-template-columns: 4.4rem 3rem minmax(0,1fr) 6.4rem; align-items: center; padding: 0.72rem 0; border-bottom: 1px solid rgba(46,50,62,0.08); } .ds-reg-row > * { padding-inline: 0.85rem; } .ds-reg-row > *:first-child { padding-inline-start: 0.6rem; } .ds-reg-row > * + * { border-left: 1px solid rgba(46,50,62,0.18); } .ds-reg-head { font-size: 0.625rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(46,50,62,0.48); border-bottom: 1px solid rgba(46,50,62,0.14); } .ds-reg-row:nth-child(odd) { background: rgba(46,50,62,0.028); } .ds-reg-t { font-size: 0.8125rem; color: rgba(46,50,62,0.68); } .ds-reg-l { font-size: 0.625rem; letter-spacing: 0.08em; color: #B7135A; } .ds-quiet-ink { color: rgba(46,50,62,0.48); } .ds-reg-r { font-family: Literata, Georgia, serif; font-size: 0.9375rem; color: #2E323E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .ds-reg-d { font-size: 0.625rem; letter-spacing: 0.09em; text-align: right; color: #B7135A; } .ds-reg-d-routed { color: rgba(46,50,62,0.55); } .ds-reg-d-answered { color: #ADB5BD; } .ds-reg-foot { border-top: 2px solid rgba(46,50,62,0.55); padding-top: 0.85rem; font-size: 0.625rem; letter-spacing: 0.11em; text-transform: uppercase; color: rgba(46,50,62,0.48); }"
     },
     {
       "name": "Ruled List",
@@ -586,7 +631,7 @@
       "refersTo": "register-row",
       "description": "Reads DOWN the page: mono label left, serif value right, hairline per row under a red top rule.",
       "html": "<dl class=\"ds-rlist\"><div class=\"ds-rlist-row\"><dt>Languages</dt><dd>English and Spanish, same number</dd></div><div class=\"ds-rlist-row\"><dt>Deployment</dt><dd>14 days, senior consultant led</dd></div><div class=\"ds-rlist-row\"><dt>Coverage</dt><dd>24/7, including after hours</dd></div></dl>",
-      "css": ".ds-rlist { margin: 0; background-color: #071A2E; padding: 20px; border-top: 1px solid #B4342A; font-family: \"Azeret Mono\", ui-monospace, monospace; font-variant-numeric: tabular-nums; } .ds-rlist-row { display: grid; grid-template-columns: 9rem minmax(0,1fr); align-items: center; padding: 0.8rem 0; border-bottom: 1px solid rgba(226,232,242,0.09); } .ds-rlist-row:last-child { border-bottom: 0; } .ds-rlist dt { font-size: 0.625rem; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(226,232,242,0.52); } .ds-rlist dd { margin: 0; font-family: Literata, Georgia, serif; font-size: 0.9375rem; color: #F4F1E8; }"
+      "css": ".ds-rlist { margin: 0; background-color: #FFFFFF; padding: 20px; border-top: 1px solid rgba(46,50,62,0.55); font-family: \"Azeret Mono\", ui-monospace, monospace; font-variant-numeric: tabular-nums; } .ds-rlist-row { display: grid; grid-template-columns: 9rem minmax(0,1fr); align-items: center; padding: 0.8rem 0; border-bottom: 1px solid rgba(46,50,62,0.08); } .ds-rlist-row:last-child { border-bottom: 0; } .ds-rlist dt { font-size: 0.625rem; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(46,50,62,0.48); } .ds-rlist dd { margin: 0; font-family: Literata, Georgia, serif; font-size: 0.9375rem; color: #2E323E; }"
     },
     {
       "name": "Band",
@@ -594,7 +639,7 @@
       "refersTo": "register-row",
       "description": "Reads ACROSS the page: label stacked above value, quiet-red verticals between columns only. The formal opposite of Ruled List.",
       "html": "<dl class=\"ds-band\"><div><dt>Answered</dt><dd>Every call, in under two rings</dd></div><div><dt>Logged</dt><dd>Transcript, reason, disposition</dd></div><div><dt>Overridable</dt><dd>Any row, by any operator</dd></div></dl>",
-      "css": ".ds-band { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); margin: 0; background-color: #071A2E; padding: 20px 20px 0; border-top: 1px solid #B4342A; font-family: \"Azeret Mono\", ui-monospace, monospace; } .ds-band > * { padding: 1.1rem 1.1rem 1.2rem; border-left: 1px solid rgba(180,52,42,0.34); } .ds-band > *:first-child { border-left: 0; padding-left: 0; } .ds-band dt { font-size: 0.5875rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(226,232,242,0.52); margin-bottom: 0.5rem; } .ds-band dd { margin: 0; font-family: Literata, Georgia, serif; font-size: 0.875rem; line-height: 1.45; color: rgba(238,240,245,0.72); }"
+      "css": ".ds-band { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); margin: 0; background-color: #FFFFFF; padding: 20px 20px 0; border-top: 1px solid rgba(46,50,62,0.55); font-family: \"Azeret Mono\", ui-monospace, monospace; } .ds-band > * { padding: 1.1rem 1.1rem 1.2rem; border-left: 1px solid rgba(46,50,62,0.18); } .ds-band > *:first-child { border-left: 0; padding-left: 0; } .ds-band dt { font-size: 0.5875rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(46,50,62,0.48); margin-bottom: 0.5rem; } .ds-band dd { margin: 0; font-family: Literata, Georgia, serif; font-size: 0.875rem; line-height: 1.45; color: rgba(46,50,62,0.68); }"
     },
     {
       "name": "Navigation",
@@ -602,7 +647,7 @@
       "refersTo": "nav-link",
       "description": "Sticky cloth header: foil-masked wordmark, tracked caps links with a foil underline on hover, and the stamp visible at every width.",
       "html": "<header class=\"ds-nav\"><span class=\"ds-nav-mark\">ORCHELIX</span><nav class=\"ds-nav-links\"><a href=\"#\" class=\"ds-nav-a\">Products</a><a href=\"#\" class=\"ds-nav-a\">How it works</a><a href=\"#\" class=\"ds-nav-a\">Pricing</a></nav><a href=\"#\" class=\"ds-nav-stamp\">Book a pilot</a></header>",
-      "css": ".ds-nav { display: flex; align-items: center; gap: 32px; background-color: #071A2E; padding: 16px 20px; border-bottom: 1px solid rgba(226,232,242,0.16); } .ds-nav-mark { font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 82%; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.02em; background-image: linear-gradient(100deg, #9A7314 0%, #D3A021 16%, #F8E29B 34%, #E2B33A 47%, #BC8912 61%, #F3D276 77%, #C8941B 100%); -webkit-background-clip: text; background-clip: text; color: transparent; } .ds-nav-links { margin-left: auto; display: flex; gap: 32px; } .ds-nav-a { position: relative; font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 88%; font-weight: 500; font-size: 0.8125rem; letter-spacing: 0.075em; text-transform: uppercase; color: rgba(238,240,245,0.72); text-decoration: none; } .ds-nav-a::after { content: \"\"; position: absolute; left: 0; right: 0; bottom: -3px; height: 1px; background: #D9A21B; transform: scaleX(0); transform-origin: left; transition: transform 300ms cubic-bezier(0.16,1,0.3,1); } .ds-nav-a:hover::after { transform: scaleX(1); } .ds-nav-a:focus-visible { outline: 2px solid #D9A21B; outline-offset: 3px; border-radius: 0; } .ds-nav-stamp { font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 88%; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: #2A1D02; padding: 0.6rem 1.05rem; text-decoration: none; border-radius: 0; background-image: linear-gradient(100deg, #8A6410 0%, #C08F18 14%, #F6DC8C 31%, #DFAE33 44%, #B5820F 58%, #F0CE6A 74%, #CE9A1E 88%, #8F6A12 100%); box-shadow: inset 0 1px 0 rgba(255,244,205,0.85), inset 0 -1px 0 rgba(74,48,4,0.9), 0 1px 0 rgba(0,0,0,0.5); transition: filter 120ms cubic-bezier(0.2,0.6,0.2,1); } .ds-nav-stamp:hover { filter: brightness(1.07) saturate(1.04); }"
+      "css": ".ds-nav { display: flex; align-items: center; gap: 32px; background-color: #FFFFFF; padding: 16px 20px; border-bottom: 1px solid rgba(46,50,62,0.14); } .ds-nav-mark { font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 82%; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.02em; background-image: linear-gradient(100deg, #9A7314 0%, #D3A021 16%, #F8E29B 34%, #E2B33A 47%, #BC8912 61%, #F3D276 77%, #C8941B 100%); -webkit-background-clip: text; background-clip: text; color: transparent; } .ds-nav-links { margin-left: auto; display: flex; gap: 32px; } .ds-nav-a { position: relative; font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 88%; font-weight: 500; font-size: 0.8125rem; letter-spacing: 0.075em; text-transform: uppercase; color: rgba(46,50,62,0.68); text-decoration: none; } .ds-nav-a::after { content: \"\"; position: absolute; left: 0; right: 0; bottom: -3px; height: 1px; background: #B7135A; transform: scaleX(0); transform-origin: left; transition: transform 300ms cubic-bezier(0.16,1,0.3,1); } .ds-nav-a:hover::after { transform: scaleX(1); } .ds-nav-a:focus-visible { outline: 2px solid #B7135A; outline-offset: 3px; border-radius: 0; } .ds-nav-stamp { font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 88%; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: #FFFFFF; padding: 0.6rem 1.05rem; text-decoration: none; border-radius: 0; background-image: linear-gradient(100deg, #8A6410 0%, #C08F18 14%, #F6DC8C 31%, #DFAE33 44%, #B5820F 58%, #F0CE6A 74%, #CE9A1E 88%, #8F6A12 100%); box-shadow: inset 0 1px 0 rgba(255,244,205,0.85), inset 0 -1px 0 rgba(74,48,4,0.9), 0 1px 0 rgba(0,0,0,0.5); transition: filter 120ms cubic-bezier(0.2,0.6,0.2,1); } .ds-nav-stamp:hover { filter: brightness(1.07) saturate(1.04); }"
     },
     {
       "name": "Disclosure Row",
@@ -610,7 +655,7 @@
       "refersTo": "register-row",
       "description": "A question that opens. The native marker is removed and drawn instead: a foil rule that extends from 12px to 26px when the row opens. Shared primitive as of 2026-08-08 — /pricing, /ai-receptionist, and every sector page render through it.",
       "html": "<details class=\"ds-disc\" open><summary class=\"ds-disc-s\">What happens in the first fourteen days?</summary><p class=\"ds-disc-p\">A senior consultant configures the line, the knowledge base, and the escalation rules, then runs Esmi on your real number.</p></details>",
-      "css": ".ds-disc { background-color: #071A2E; border-top: 2px solid #B4342A; border-bottom: 1px solid rgba(226,232,242,0.09); padding: 1.1rem 20px; } .ds-disc-s { list-style: none; display: flex; align-items: baseline; gap: 0.9rem; cursor: pointer; font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 86%; font-weight: 600; font-size: 1.0625rem; letter-spacing: -0.008em; text-transform: uppercase; color: #F4F1E8; } .ds-disc-s::-webkit-details-marker { display: none; } .ds-disc-s::before { content: \"\"; flex: 0 0 auto; width: 12px; height: 1px; background: #D9A21B; transform: translateY(-0.3em); transition: width 220ms cubic-bezier(0.16,1,0.3,1); } .ds-disc[open] > .ds-disc-s::before { width: 26px; } .ds-disc-s:focus-visible { outline: 2px solid #D9A21B; outline-offset: 3px; } .ds-disc-p { font-family: Literata, Georgia, serif; font-size: 0.9375rem; line-height: 1.62; color: rgba(238,240,245,0.72); max-width: 58ch; margin: 0.9rem 0 0; }"
+      "css": ".ds-disc { background-color: #FFFFFF; border-top: 2px solid rgba(46,50,62,0.55); border-bottom: 1px solid rgba(46,50,62,0.08); padding: 1.1rem 20px; } .ds-disc-s { list-style: none; display: flex; align-items: baseline; gap: 0.9rem; cursor: pointer; font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 86%; font-weight: 600; font-size: 1.0625rem; letter-spacing: -0.008em; text-transform: uppercase; color: #2E323E; } .ds-disc-s::-webkit-details-marker { display: none; } .ds-disc-s::before { content: \"\"; flex: 0 0 auto; width: 12px; height: 1px; background: #B7135A; transform: translateY(-0.3em); transition: width 220ms cubic-bezier(0.16,1,0.3,1); } .ds-disc[open] > .ds-disc-s::before { width: 26px; } .ds-disc-s:focus-visible { outline: 2px solid #B7135A; outline-offset: 3px; } .ds-disc-p { font-family: Literata, Georgia, serif; font-size: 0.9375rem; line-height: 1.62; color: rgba(46,50,62,0.68); max-width: 58ch; margin: 0.9rem 0 0; }"
     },
     {
       "name": "Rate Schedule Table",
@@ -618,7 +663,7 @@
       "refersTo": "register-row",
       "description": "A real semantic table: red head rule, quiet-red column verticals, right-aligned tabular figures, one foil headline figure per column.",
       "html": "<table class=\"ds-rate\"><caption class=\"ds-rate-cap\">Plan rate schedule</caption><thead><tr><th scope=\"col\"></th><th scope=\"col\">Starter</th><th scope=\"col\">Growth</th><th scope=\"col\">Scale</th></tr></thead><tbody><tr><th scope=\"row\">Monthly</th><td class=\"ds-rate-strong\">$490</td><td class=\"ds-rate-strong\">$1,180</td><td class=\"ds-rate-strong\">Custom</td></tr><tr><th scope=\"row\">Calls included</th><td>400</td><td>1,200</td><td>Unmetered</td></tr><tr><th scope=\"row\">Languages</th><td>EN · ES</td><td>EN · ES</td><td>EN · ES</td></tr></tbody></table>",
-      "css": ".ds-rate { width: 100%; border-collapse: collapse; background-color: #071A2E; padding: 20px; font-family: \"Azeret Mono\", ui-monospace, monospace; font-variant-numeric: tabular-nums; } .ds-rate-cap { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); } .ds-rate thead th { text-align: right; font-size: 0.625rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: #F4F1E8; padding: 0 0.9rem 0.8rem; border-bottom: 2px solid #B4342A; border-left: 1px solid rgba(180,52,42,0.34); } .ds-rate thead th:first-child { text-align: left; border-left: 0; padding-left: 0; color: rgba(226,232,242,0.52); width: 22%; } .ds-rate tbody th { text-align: left; font-size: 0.625rem; font-weight: 500; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(226,232,242,0.52); padding: 0.85rem 0.9rem 0.85rem 0; border-bottom: 1px solid rgba(226,232,242,0.09); vertical-align: top; } .ds-rate td { text-align: right; font-size: 0.8125rem; letter-spacing: 0.02em; color: #F4F1E8; padding: 0.85rem 0.9rem; border-bottom: 1px solid rgba(226,232,242,0.09); border-left: 1px solid rgba(180,52,42,0.34); vertical-align: top; } .ds-rate .ds-rate-strong { font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 86%; font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; color: #D9A21B; }"
+      "css": ".ds-rate { width: 100%; border-collapse: collapse; background-color: #FFFFFF; padding: 20px; font-family: \"Azeret Mono\", ui-monospace, monospace; font-variant-numeric: tabular-nums; } .ds-rate-cap { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); } .ds-rate thead th { text-align: right; font-size: 0.625rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: #2E323E; padding: 0 0.9rem 0.8rem; border-bottom: 2px solid rgba(46,50,62,0.55); border-left: 1px solid rgba(46,50,62,0.18); } .ds-rate thead th:first-child { text-align: left; border-left: 0; padding-left: 0; color: rgba(46,50,62,0.48); width: 22%; } .ds-rate tbody th { text-align: left; font-size: 0.625rem; font-weight: 500; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(46,50,62,0.48); padding: 0.85rem 0.9rem 0.85rem 0; border-bottom: 1px solid rgba(46,50,62,0.08); vertical-align: top; } .ds-rate td { text-align: right; font-size: 0.8125rem; letter-spacing: 0.02em; color: #2E323E; padding: 0.85rem 0.9rem; border-bottom: 1px solid rgba(46,50,62,0.08); border-left: 1px solid rgba(46,50,62,0.18); vertical-align: top; } .ds-rate .ds-rate-strong { font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 86%; font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; color: #B7135A; }"
     },
     {
       "name": "Section (tone bands)",
@@ -626,7 +671,7 @@
       "refersTo": "section-field",
       "description": "The page unit. Full-bleed band in one of five tones; tone change is the only section divider.",
       "html": "<section class=\"ds-sec\"><div class=\"ds-sec-in\"><h2 class=\"ds-sec-h\">The rate schedule</h2><p class=\"ds-sec-p\">Pick a starting point by call volume. Every tier includes the full dashboard — the difference is capacity, not capability.</p></div></section><section class=\"ds-sec ds-sec-stock\"><div class=\"ds-sec-in\"><h2 class=\"ds-sec-h ds-sec-h-stock\">Try Esmi on your real line</h2><p class=\"ds-sec-p ds-sec-p-stock\">Fourteen days, your own number, every call on the record.</p></div></section>",
-      "css": ".ds-sec { display: block; background-color: #0B2338; background-image: url(/textures/buckram.svg); background-repeat: repeat; background-size: 180px 180px; } .ds-sec-stock { background-color: #EDE9DC; background-image: none; } .ds-sec-in { max-width: 1320px; margin: 0 auto; padding: 5rem 1.25rem; } .ds-sec-h { font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 82%; font-weight: 700; font-size: clamp(1.85rem, 3.2vw, 2.9rem); line-height: 1.02; letter-spacing: -0.022em; text-transform: uppercase; color: #F4F1E8; max-width: 20ch; margin: 0; } .ds-sec-h-stock { color: #10243A; } .ds-sec-p { font-family: Literata, Georgia, serif; font-size: 1.0625rem; line-height: 1.62; color: rgba(238,240,245,0.72); max-width: 52ch; margin: 1.3rem 0 0; } .ds-sec-p-stock { color: #4A5A6E; }"
+      "css": ".ds-sec { display: block; background-color: #F1F3F5; background-image: url(/textures/buckram.svg); background-repeat: repeat; background-size: 180px 180px; } .ds-sec-stock { background-color: #F1F3F5; background-image: none; } .ds-sec-in { max-width: 1320px; margin: 0 auto; padding: 5rem 1.25rem; } .ds-sec-h { font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 82%; font-weight: 700; font-size: clamp(1.85rem, 3.2vw, 2.9rem); line-height: 1.02; letter-spacing: -0.022em; text-transform: uppercase; color: #2E323E; max-width: 20ch; margin: 0; } .ds-sec-h-stock { color: #2E323E; } .ds-sec-p { font-family: Literata, Georgia, serif; font-size: 1.0625rem; line-height: 1.62; color: rgba(46,50,62,0.68); max-width: 52ch; margin: 1.3rem 0 0; } .ds-sec-p-stock { color: rgba(46,50,62,0.68); }"
     },
     {
       "name": "Anchor Rule",
@@ -634,153 +679,154 @@
       "refersTo": "register-row",
       "description": "The red top rule every data block hangs from, drawn as a pseudo-element so it can be scaled. On first viewport entry it draws in from the left in 260ms; at rest it is simply present at full width.",
       "html": "<dl class=\"ds-anchor\"><div class=\"ds-anchor-row\"><dt>Languages</dt><dd>English and Spanish, natively</dd></div><div class=\"ds-anchor-row\"><dt>Hours</dt><dd>24/7, nights and weekends included</dd></div></dl>",
-      "css": ".ds-anchor { position: relative; margin: 0; font-family: 'Azeret Mono', ui-monospace, monospace; } .ds-anchor::before { content: \"\"; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--lg-rule, #B4342A); transform-origin: left center; animation: ds-rule-draw 260ms cubic-bezier(0.16,1,0.3,1) both; } .ds-anchor-row { display: grid; grid-template-columns: 9rem minmax(0,1fr); padding: 0.8rem 0; border-bottom: 1px solid var(--lg-hair-2, rgba(226,232,242,0.09)); } .ds-anchor-row dt { font-size: 0.625rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--lg-ink-3, rgba(226,232,242,0.52)); } .ds-anchor-row dd { margin: 0; font-family: Literata, Georgia, serif; font-size: 0.9375rem; color: var(--lg-ink, #F4F1E8); } @keyframes ds-rule-draw { from { transform: scaleX(0) } to { transform: scaleX(1) } } @media (prefers-reduced-motion: reduce) { .ds-anchor::before { animation: none } }"
+      "css": ".ds-anchor { position: relative; margin: 0; font-family: 'Azeret Mono', ui-monospace, monospace; } .ds-anchor::before { content: \"\"; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--lg-rule, rgba(46,50,62,0.55)); transform-origin: left center; animation: ds-rule-draw 260ms cubic-bezier(0.16,1,0.3,1) both; } .ds-anchor-row { display: grid; grid-template-columns: 9rem minmax(0,1fr); padding: 0.8rem 0; border-bottom: 1px solid var(--lg-hair-2, rgba(46,50,62,0.08)); } .ds-anchor-row dt { font-size: 0.625rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--lg-ink-3, rgba(46,50,62,0.48)); } .ds-anchor-row dd { margin: 0; font-family: Literata, Georgia, serif; font-size: 0.9375rem; color: var(--lg-ink, #2E323E); } @keyframes ds-rule-draw { from { transform: scaleX(0) } to { transform: scaleX(1) } } @media (prefers-reduced-motion: reduce) { .ds-anchor::before { animation: none } }"
     }
   ],
   "narrative": {
     "northStar": "The Ruled Record",
-    "overview": "The interface is the audit trail. The world is a bound ledger: a navy buckram field carrying a real cloth weave, ruled off in red, stamped once in gold foil, and filled with rows of tabular figures. Nothing decorative is added on top of the record — the record itself is the composition. The first viewport does not introduce the product with a centered headline and three identical cards; it puts the call register on the page at full scale, with its own column heads, its own notation legend, and a foot rule tallied from the rows above it.\n\nDensity is high and deliberate. Rows are close-set, labels are small caps in mono, and the space between sections is generous so that each ruled block reads as a page in a book rather than a card in a feed. The palette is almost entirely one dark field with three tonal steps, plus two pale ledger-stock tones that let a section flip to a paper surface when the content wants to be read rather than scanned. Colour appears in exactly two places: the red column rule, which is structure and never an alert, and the gold foil, which is scarce enough that its appearance means \"this is the action.\"\n\nThe build refuses two specific things, and the refusal is durable: the category's centered hero with three identical product cards, and its opposite, the cream editorial broadsheet. Neither one puts the artifact on the page.",
+    "overview": "The interface *is* the audit trail. The world is a ruled record: a white field, ruled off in graphite, stamped once in magenta, and filled with rows of tabular figures. Nothing decorative is added on top of the record — the record itself is the composition. The first viewport does not introduce the product with a centered headline and three identical cards; it puts the call register on the page at full scale, with its own column heads, its own notation legend, and a foot rule tallied from the rows above it.\n\nDensity is high and deliberate. Rows are close-set, labels are small caps in mono, and the space between sections is generous so that each ruled block reads as a page in a book rather than a card in a feed. The palette is one white field with two barely-separated tonal steps and a single accent. Structure is drawn entirely in graphite at varying alpha — the ruling that used to be red is now the ink's own colour, held back — so colour appears in exactly one place: the magenta stamp, scarce enough that its appearance means \"this is the action.\"\n\n**The 2026-08-10 rebrand inverted this world and the inversion is load-bearing.** It ran dark for its first life: a navy buckram field carrying a shipped SVG cloth weave, red column ruling, and a gold foil stamp. All three are gone. The weave was tuned against dark grounds and read as a grey smudge on white, so `.lg-cloth` and its `-2` / `-3` variants are now flat fills that keep their names only because components reference them. Red retired because the brand has one accent and does not spend it on dividers. What survived is the *structure* — the ruling, the density, the registers, the closed ramps — which is the evidence that this world was never really about being dark.\n\nThe build refuses two specific things, and the refusal is durable: the category's centered hero with three identical product cards, and its opposite, the cream editorial broadsheet. Neither one puts the artifact on the page. Note that going light did **not** license the second one; a white field ruled in graphite is not a broadsheet.",
     "keyCharacteristics": [
-      "Navy buckram field with a shipped SVG cloth tile carrying its own alpha — dominant across every page.",
-      "Red vertical column ruling as the primary structural device; it is a rule, not a warning.",
-      "Gold foil reserved for the primary action and the wordmark, and for nothing else.",
+      "Flat white field in three near-adjacent tonal steps — no texture, no gradient, no material tile.",
+      "Graphite ruling at low alpha as the primary structural device; it is a rule, not a warning.",
+      "Magenta reserved for the primary action, and for nothing else.",
       "Zero corner radius everywhere; every edge is a ruled edge.",
       "Archivo condensed caps / Literata / Azeret Mono tabular figures.",
       "Registers, bands, and rate schedules built as real ruled tables and definition lists."
     ],
     "rules": [
       {
-        "name": "The Foil Scarcity Rule",
-        "body": "The gold foil surface (.lg-foil-surface) marks the primary action and the wordmark. Nothing else. In the current build that is three \"Book a pilot\" stamps and one masked lockup. A finish review found foil on five elements — including a 10px chip — and the verdict was that the stamp had stopped meaning anything. Status and disposition markers use StatusKey, a keyed foil-or-tick swatch; secondary actions use QuietAction or an outline. If a new surface needs a second gold thing, the answer is a keyed swatch, not a second stamp.",
+        "name": "The Stamp Scarcity Rule",
+        "body": "The stamp surface (`.lg-foil-surface`) marks the primary action. Nothing else. A finish review in the dark world found the accent on five elements — including a 10px chip — and the verdict was that the stamp had stopped meaning anything; the rebrand to a single-accent palette makes that failure cheaper to repeat, not harder. Status and disposition markers use `StatusKey`; secondary actions use `QuietAction` or an outline. If a new surface needs a second magenta thing, the answer is a keyed swatch, not a second stamp. (The class keeps the `foil` name from the dark world. The material is a magenta ramp now; only the token name is inherited.)",
         "section": "colors"
       },
       {
         "name": "The Marks-vs-Text Rule",
-        "body": "rule and tick are marks — rules, borders, and the small drawn swatches — where contrast is not a text requirement. Measured as text on the field they are 2.90:1 and 4.40:1, both under the floor, so any status word uses the lighter rule-text (5.28:1) or tick-text (5.91:1) step instead. The base value draws; the -text value is read. This is the same relationship foil-lift has to foil, not a new hue.",
+        "body": "`rule`, `rule-quiet`, `hair`, `hair-2`, and `tick` are *marks* — rules, borders, and the small drawn swatches — where contrast is not a text requirement. Measured as text they run 1.29:1 to 3.27:1, all under the floor, and none of them may carry a word. In the dark world this rule was paired with lighter `-text` steps of the same hues; that pairing is gone, because status words are now simply set in `ink`. The base value draws; ink is read.",
+        "section": "colors"
+      },
+      {
+        "name": "The Ink Floor Rule",
+        "body": "Every ink that carries a word must clear 4.5:1 on the tone it sits on. Two shipped values do not, and both are inherited from an alpha ladder that was calibrated against a dark ground where the same alphas landed much brighter:",
         "section": "colors"
       },
       {
         "name": "The Status Scale (product surface)",
-        "body": "/dashboard carries real state that has to be readable at a glance in a table, so it uses the four values the call register already ships: tick-text for success, foil for attention or pending, rule-text for failure or destructive, ink-3 for inert. Badge.tsx is the single place these semantics are defined — the blanket colour mappings in globals.css cannot distinguish success from warning on their own, and collapsing both to foil would destroy the distinction. Note this narrows the six-tone source scale to four hues; info and voicemail are held apart by ink tier and border weight rather than colour.",
+        "body": "`/dashboard` carries real state that has to be readable at a glance in a table. With the palette down to one hue, colour alone can no longer separate four states: `foil` marks attention or pending, and everything else is held apart by ink tier, border weight, and the label itself. `Badge.tsx` is the single place these semantics are defined. Do not reintroduce a green or a red to the product surface to recover the old four-hue scale — that is a design-system change, and it would contradict the single-accent decision the rebrand was for.",
         "section": "colors"
       },
       {
-        "name": "The Red Is Structure Rule",
-        "body": "Rule red is a ruling colour. It draws column verticals, section top rules, ticks, and separators. It never carries error, danger, destructive, or \"urgent\" meaning on this surface. On the marketing surface an error is drawn with a device — a margin annotation of a heavy ink rule and a mono label — not by borrowing the rule; /book and /try-esmi both do this. The product surface is the documented exception: see The Status Scale above.",
+        "name": "The Ruling Is Structure Rule",
+        "body": "The ruling is a structural colour. It draws column verticals, section top rules, ticks, and separators. It never carries error, danger, destructive, or \"urgent\" meaning on this surface. This survived the rebrand intact and got stronger: the ruling is now the ink's own colour at low alpha, so there is no longer even a distinct hue that could be mistaken for an alert. On the marketing surface an error is drawn with a device — a margin annotation of a heavy ink rule and a mono label — not by borrowing the rule; `/book` and `/try-esmi` both do this.",
+        "section": "colors"
+      },
+      {
+        "name": "The Foreign Mark Rule",
+        "body": "A third party's brand is not ours to restyle, and the conversion stops at its edge. `/app`'s \"Sign in with Google\" buttons carry Google's own dark button spec — ground `#131314`, border `#8E918F`, label `#E3E3E3` — because Google's branding guidelines permit only light (`#FFFFFF`), neutral (`#F2F2F2`), or dark (`#131314`) grounds beneath the multicolour mark. The four logo colours (`#4285F4`, `#34A853`, `#FBBC05`, `#EA4335`) are likewise fixed. These seven values are the only colours on a converted surface that are outside this palette on purpose; the detector is right to flag them and this note is the answer. Any future third-party mark gets the same treatment: use their sanctioned form, document it here, and change nothing else.",
         "section": "colors"
       },
       {
         "name": "The Tinted Ink Rule",
-        "body": "No neutral gray text. Every ink on the field is pulled toward the field's blue-white; every ink on stock is pulled toward the field's navy. Measured contrast on the field runs 4.68–8.41:1 alpha-composited; a new ink value has to land inside that band.",
+        "body": "No neutral gray text. Every ink is Graphite `#2E323E` or an alpha of it — a blue-leaning near-black, never a true neutral. This rule outlived the field it was written for: it used to mean \"tint toward the field's blue-white,\" and now means \"one graphite, composited.\" A new ink value is an alpha of `ink`, not a new hex.",
         "section": "colors"
       },
       {
         "name": "The Tabular Figures Rule",
-        "body": "Any number that is a quantity, a time, a count, or a price gets .lg-fig — Azeret Mono with tabular-nums and \"tnum\" 1, \"zero\" 1. A number set in the body serif is a word, not a figure. Columns of numbers must align on the digit.",
-        "section": "typography"
-      },
-      {
-        "name": "The Condensed Caps Rule",
-        "body": "Display, headline, title, and action are all uppercase Archivo on the wdth axis between 82% and 88% — tighter as the type gets bigger. Body copy is never uppercase and never condensed. There is no sentence-case display size in this system.",
-        "section": "typography"
-      },
-      {
-        "name": "The No Kicker Rule",
-        "body": "Headings stand alone. No eyebrow, no kicker, no small-caps label above a heading, no 01 / 02 / 03 section numbering. If a section needs context before the heading, it belongs in the prose after it.",
+        "body": "Any number that is a quantity, a time, a count, or a price gets `.lg-fig` — Azeret Mono with `tabular-nums` and `\"tnum\" 1, \"zero\" 1`. A number set in the body serif is a word, not a figure. Columns of numbers must align on the digit.",
         "section": "typography"
       },
       {
         "name": "The Closed Ramp Rule",
-        "body": "The type ramp is closed: eleven fixed steps and two clamps, enumerated in typography.scale and in \"The ramp\" section. Above 1.5rem type is fluid and comes from PageTitle or SectionTitle — a heading is never hand-set with a new clamp, because that is how six near-duplicate headline sizes got into a build that has two headline roles.",
+        "body": "The type ramp is closed: eleven fixed steps and two clamps, enumerated in `typography.scale` and in \"The ramp\" above. Above `1.5rem` type is fluid and comes from `PageTitle` or `SectionTitle` — a heading is never hand-set with a new clamp, because that is how six near-duplicate headline sizes got into a build that has two headline roles.",
+        "section": "typography"
+      },
+      {
+        "name": "The Condensed Caps Rule",
+        "body": "Display, headline, title, and action are all uppercase Archivo on the `wdth` axis between 82% and 88% — tighter as the type gets bigger. Body copy is never uppercase and never condensed. There is no sentence-case display size in this system.",
+        "section": "typography"
+      },
+      {
+        "name": "The No Kicker Rule",
+        "body": "Headings stand alone. No eyebrow, no kicker, no small-caps label above a heading, no `01 / 02 / 03` section numbering. If a section needs context before the heading, it belongs in the prose after it.",
         "section": "typography"
       },
       {
         "name": "The Register Degradation Rule",
-        "body": "The call register has three states and they are not interchangeable. Above 900px: five ruled columns with red verticals and a desktop-only alternating band (min-width: 901px, rgba(226,232,242,0.028)). Between 641 and 900px: verticals retire, each entry becomes two lines (reason on the first; outcome and disposition sharing the second), and the outcome/disposition column heads hide. At 640px and below: one ruled line per entry, and the outcome column is dropped entirely so the reason and disposition survive. The reason at every step is that the record must read as a continuously ruled run, not as a stack of blocks — which is also why the alternating band never ships below 901px.",
+        "body": "The call register has three states and they are not interchangeable. Above 900px: five ruled columns with `rule-quiet` verticals and a desktop-only alternating band (`min-width: 901px`, `rgba(46,50,62,0.028)`). Between 641 and 900px: verticals retire, each entry becomes two lines (reason on the first; outcome and disposition sharing the second), and the outcome/disposition column heads hide. At 640px and below: one ruled line per entry, and the outcome column is dropped entirely so the reason and disposition survive. The reason at every step is that the record must read as a continuously ruled run, not as a stack of blocks — which is also why the alternating band never ships below 901px.",
         "section": "layout"
       },
       {
         "name": "The Register Leads Rule",
-        "body": "Below 1024px the hero grid flattens to a column and the register is ordered first (.lg-hero-register { order: -1 }). The opening screen is the artifact at every width; the offer copy follows it.",
+        "body": "Below 1024px the hero grid flattens to a column and the register is ordered *first* (`.lg-hero-register { order: -1 }`). The opening screen is the artifact at every width; the offer copy follows it.",
         "section": "layout"
       },
       {
         "name": "The Two Devices Rule",
-        "body": "RuledList reads DOWN the page — label left, value right, one entry per hairline-separated row. Band reads ACROSS it — label stacked above value, verticals between columns only, no horizontal separators. They are formally distinct and must stay that way. Stacking two RuledLists in sequence flattens their meaning into one undifferentiated run; if a second data block follows a RuledList, it changes axis.",
+        "body": "`RuledList` reads DOWN the page — label left, value right, one entry per hairline-separated row. `Band` reads ACROSS it — label stacked above value, verticals between columns only, no horizontal separators. They are formally distinct and must stay that way. Stacking two `RuledList`s in sequence flattens their meaning into one undifferentiated run; if a second data block follows a `RuledList`, it changes axis.",
         "section": "layout"
       },
       {
         "name": "The Produced Materials Rule",
-        "body": "A material must be manufactured, not named. The cloth is a real tiled SVG carrying its own alpha, because blend modes collapse to nothing over a ground this dark. The foil is an eight-stop metallic ramp at 100° with lit and shadowed lips. An earlier pass used a 1.8%-alpha gradient and a flat gold rectangle and it was rejected as a compliance token rather than a shipped material. If a new material is introduced, it ships as a produced asset or it does not ship.",
+        "body": "A material must be manufactured, not named. The stamp is an eight-stop metallic ramp at 100° with lit and shadowed lips. An earlier pass used a flat rectangle and it was rejected as a compliance token rather than a shipped material; that judgment stands for any future material. What changed at the rebrand is that this rule now governs exactly one material instead of two. The cloth tile was the other — a real tiled SVG carrying its own alpha — and it was retired rather than recoloured, because the same alpha-composited threads that read as grain on navy read as a grey smudge on white. **Retiring a material is in-rule; faking one is not.** The honest move when a produced material stops working on a new ground is to remove it, not to ship a washed-out version that satisfies the vocabulary without doing the work.",
         "section": "elevation"
       },
       {
         "name": "The No Float Rule",
-        "body": "Surfaces do not lift. There is no ambient shadow, no hover elevation, no card. Hover changes a rule, a brightness, or a fill — never a translateY on a container.",
+        "body": "Surfaces do not lift. There is no ambient shadow, no hover elevation, no card. Hover changes a rule, a brightness, or a fill — never a `translateY` on a container.",
         "section": "elevation"
       },
       {
         "name": "The Closed Vocabulary Rule",
-        "section": "motion",
-        "body": "Four verbs, three durations, one stagger, two curves — closed the same way the type ramp is closed. A motion value that is not in the table is drift, not a decision. There is no third easing curve, and `ease-in` is never used on this surface."
+        "body": "Four verbs, three durations, one stagger, two curves — closed the same way the type ramp is closed. A motion value that is not in the table above is drift, not a decision. In particular there is **no new easing curve**: `--ease-emphasized` (`0.16, 1, 0.3, 1`) is within a rounding error of the canonical strong ease-out, and a second scale beside it would be a defect. `ease-in` is never used on this surface — it starts slow and delays the exact moment the user is watching.",
+        "section": "motion"
       },
       {
         "name": "The Nothing Loops Rule",
-        "section": "motion",
-        "body": "No animation repeats. `infinite` does not appear on this surface. A state that persists is drawn as a held mark, not a breathing one. Three loops were removed on 2026-08-08: a three-dot \"AI thinking\" indicator with a blinking caret, a waveform breathing on an untouched page, and a tool spinner repeating a label written beside it."
+        "body": "No animation repeats. `infinite` does not appear on this surface. A state that persists is drawn as a held mark, not as a breathing one: the chat's pending state is a foil rule that draws once in 260ms and holds, because a line held open in a ledger is a real thing and a pulsing dot is not. Three loops were removed on 2026-08-08 — `lg-typing` (a three-dot \"AI thinking\" indicator and a blinking caret), `esmi-wave-idle` (a waveform breathing on an untouched page), and `esmi-spin` (a tool spinner that repeated a label already written beside it). The waveform's remaining animation is gated on a request actually being in flight.",
+        "section": "motion"
       },
       {
         "name": "The Legible Default Rule",
-        "section": "motion",
-        "body": "Every verb animates to the resting state, never from invisibility. Remove the animation — by reduced motion, by JS being off, by an observer that never fires — and the final state is what is already on the page. A page whose content is gated behind an animation is broken, not animated."
+        "body": "Every verb animates *to* the resting state, never *from* invisibility. Remove the animation — by reduced motion, by JS being off, by an observer that never fires — and the final state is what's already on the page. A page whose content is gated behind an animation is broken, not animated.",
+        "section": "motion"
       },
       {
         "name": "The Reduced Motion Rule",
-        "section": "motion",
-        "body": "Fewer and gentler, not zero. Transform- and clip-based movement is dropped so nothing travels or wipes; colour and opacity transitions that aid comprehension stay. Every verb ships its `prefers-reduced-motion` path in the same commit as the verb."
+        "body": "Fewer and gentler, not zero. Transform- and clip-based movement is dropped so nothing travels or wipes; colour and opacity transitions that aid comprehension stay. Every verb ships its `prefers-reduced-motion` path in the same commit as the verb.",
+        "section": "motion"
       },
       {
         "name": "The Real Cadence Rule",
-        "section": "motion",
-        "body": "Where motion represents something happening, it is driven by the real event and not by a timer imitating one. /try-esmi strikes each word group as the backend's SSE stream delivers it, so the pace on screen is the model's pace — which is also why there is no skip control: there is no artificial queue to skip past. A simulated typing cadence would be a fabrication in motion, and the honesty standard does not stop at copy."
-      },
-      {
-        "name": "The Foreign Mark Rule",
-        "section": "colors",
-        "body": "A third party's brand is not ours to restyle, and the conversion stops at its edge. /app's 'Sign in with Google' buttons carry Google's own dark button spec — ground #131314, border #8E918F, label #E3E3E3 — because Google's branding guidelines permit only light (#FFFFFF), neutral (#F2F2F2), or dark (#131314) grounds beneath the multicolour mark, and a house navy is none of them. The four logo colours (#4285F4, #34A853, #FBBC05, #EA4335) are likewise fixed. These seven values are the only colours on a converted surface that are outside this palette on purpose. Any future third-party mark gets the same treatment: use their sanctioned form, document it, and change nothing else."
+        "body": "Where motion represents something happening, it is driven by the real event and not by a timer that imitates one. `/try-esmi` strikes each word group as the backend's SSE stream delivers it, so the pace on screen *is* the model's pace — which is also why there is no \"skip\" control: there is no artificial queue to skip past. A simulated typing cadence would be a fabrication in motion, and the honesty standard does not stop at copy.",
+        "section": "motion"
       }
     ],
     "dos": [
-      "Do put the artifact in the first viewport. The register, the schedule, the record — at full scale, with its own notation, before any explanatory copy.",
-      "Do reserve .lg-foil-surface for the primary action and the wordmark. Everything else that needs to read as marked uses StatusKey or a QuietAction.",
-      "Do build data blocks from the shared primitives in app/components/ledger/index.tsx. Every marketing page composes from them; per-page inline restyling is exactly how the site drifted before.",
-      "Do let the section tone choose the inks. Use inkFor / ink2For / hairFor rather than hand-picking a colour for a stock section.",
-      "Do use the -text step (rule-text, tick-text) for any status word, disposition label, or inline message; the base rule and tick values are marks and draw only.",
-      "Do set every quantity, time, count, and price in .lg-fig tabular figures.",
-      "Do anchor a block with a red top rule (2px primary, 1px nested) and separate its rows with Hair 2 hairlines.",
-      "Do change axis when two data blocks sit in sequence — a RuledList followed by a Band, never a RuledList followed by a RuledList.",
-      "Do ship materials as produced assets: a real tile, a real ramp with lit and shadowed lips.",
-      "Do use real semantic tables and definition lists for tabular content, with a caption and scoped headers.",
-      "Do provide a reduced-motion path for every animation, and make the default state the legible one.",
-      "Do let the shared RevealObserver gate below-the-fold motion. It is the site's only scroll-driven code; a per-page observer is how a codebase ends up with five slightly different reveal thresholds."
+      "**Do** put the artifact in the first viewport. The register, the schedule, the record — at full scale, with its own notation, before any explanatory copy.",
+      "**Do** reserve `.lg-foil-surface` for the primary action and the wordmark. Everything else that needs to read as marked uses `StatusKey` or a `QuietAction`.",
+      "**Do** build data blocks from the shared primitives in `app/components/ledger/index.tsx`. Every marketing page composes from them; per-page inline restyling is exactly how the site drifted before.",
+      "**Do** let the section `tone` choose the inks. Use `inkFor` / `ink2For` / `hairFor` rather than hand-picking a colour for a stock section.",
+      "**Do** set every quantity, time, count, and price in `.lg-fig` tabular figures.",
+      "**Do** anchor a block with a graphite top rule (`2px` primary, `1px` nested) and separate its rows with Hair 2 hairlines.",
+      "**Do** change axis when two data blocks sit in sequence — a `RuledList` followed by a `Band`, never a `RuledList` followed by a `RuledList`.",
+      "**Do** ship materials as produced assets: a real tile, a real ramp with lit and shadowed lips.",
+      "**Do** use real semantic tables and definition lists for tabular content, with a caption and scoped headers.",
+      "**Do** provide a reduced-motion path for every animation, and make the default state the legible one."
     ],
     "donts": [
-      "Don't add a second foil element to a screen that already has a stamp. Foil on five elements is what destroyed the stamp's meaning once already.",
-      "Don't set a status word in rule (#B4342A) or tick (#2F8F6B) — as text on the field they fall under the 4.5:1 floor.",
-      "Don't use rule red as an error, alert, or destructive colour on this surface. It is ruling.",
-      "Don't round a corner. Radius is 0, including the focus ring on the field.",
-      "Don't add a shadow to anything but the foil. No card elevation, no hover lift, no ambient glow.",
-      "Don't put an eyebrow, kicker, or 01/02/03 numbering above a heading.",
-      "Don't ship a row of same-size icon + heading + text cards, or gradient text, or a sparkline standing in for content.",
-      "Don't use a Unicode glyph as a rule, bullet, arrow, or separator. Rules are drawn; icons are inline SVG paths.",
-      "Don't introduce a font-size that is not in typography.scale, and don't hand-write a clamp() for a heading — use PageTitle or SectionTitle.",
-      "Don't set body copy in uppercase or in the condensed display face, and don't set a figure in the body serif.",
-      "Don't show the alternating register band below 901px, or let a register entry occupy more than one line below 640px.",
-      "Don't merge the --lg-* block with the navy/teal/gold @theme scales in app/globals.css. They serve different surfaces and the split is intentional.",
-      "Don't write `infinite`, a pulsing dot, a blinking caret, or a spinner. A persistent state is a held mark, not a breathing one.",
-      "Don't invent a duration or an easing curve. Four verbs, three durations, one stagger, two curves — the vocabulary is closed.",
-      "Don't animate anything but `transform`, `opacity`, and `clip-path`, and don't gate content behind an animation.",
-      "Don't restyle a third party's brand mark to fit the world. Use their sanctioned form and document the exception."
+      "**Don't** add a second foil element to a screen that already has a stamp. Foil on five elements is what destroyed the stamp's meaning once already.",
+      "**Don't** use the ruling as an error, alert, or destructive colour on this surface. It is structure.",
+      "**Don't** round a corner. Radius is 0, including the focus ring on the field.",
+      "**Don't** add a shadow to anything but the foil. No card elevation, no hover lift, no ambient glow.",
+      "**Don't** put an eyebrow, kicker, or `01/02/03` numbering above a heading.",
+      "**Don't** ship a row of same-size icon + heading + text cards, or gradient text, or a sparkline standing in for content.",
+      "**Don't** use a Unicode glyph as a rule, bullet, arrow, or separator. Rules are drawn; icons are inline SVG paths.",
+      "**Don't** write `infinite`, a pulsing dot, a blinking caret, or a spinner. A persistent state is a held mark, not a breathing one.",
+      "**Don't** invent a duration or an easing curve. Four verbs, three durations, one stagger, two curves — the vocabulary is closed.",
+      "**Don't** animate anything but `transform`, `opacity`, and `clip-path`, and don't gate content behind an animation.",
+      "**Don't** introduce a font-size that is not in `typography.scale`, and don't hand-write a `clamp()` for a heading — use `PageTitle` or `SectionTitle`.",
+      "**Don't** set body copy in uppercase or in the condensed display face, and don't set a figure in the body serif.",
+      "**Don't** show the alternating register band below 901px, or let a register entry occupy more than one line below 640px.",
+      "**Don't** merge the `--lg-*` block with the navy/teal/gold `@theme` scales in `app/globals.css`. They serve different surfaces and the split is intentional."
     ]
   }
 }

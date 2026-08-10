@@ -1,27 +1,27 @@
 ---
 name: Orchelix Marketing — The Ruled Record
-description: A bound-ledger world for the marketing site — navy buckram field, gold foil stamp, red column ruling, tabular registers.
+description: A ruled-record world for the marketing site — white field, graphite ruling, one magenta stamp, tabular registers.
 colors:
-  field: "#071A2E"
-  field-2: "#0B2338"
-  field-3: "#102C44"
-  stock: "#EDE9DC"
-  stock-2: "#E2DDCB"
-  foil: "#D9A21B"
-  foil-lift: "#EFBB3C"
-  foil-ink: "#2A1D02"
-  rule: "#B4342A"
-  rule-quiet: "rgba(180, 52, 42, 0.34)"
-  rule-text: "#DE6A5C"
-  tick-text: "#37A87E"
-  tick: "#2F8F6B"
-  ink: "#F4F1E8"
-  ink-2: "rgba(238, 240, 245, 0.72)"
-  ink-3: "rgba(226, 232, 242, 0.52)"
-  hair: "rgba(226, 232, 242, 0.16)"
-  hair-2: "rgba(226, 232, 242, 0.09)"
-  ink-on-stock: "#10243A"
-  ink-on-stock-2: "#4A5A6E"
+  field: "#FFFFFF"
+  field-2: "#F1F3F5"
+  field-3: "#E4E7EB"
+  stock: "#F1F3F5"
+  stock-2: "#E4E7EB"
+  foil: "#B7135A"
+  foil-lift: "#D42670"
+  foil-ink: "#FFFFFF"
+  rule: "rgba(46, 50, 62, 0.55)"
+  rule-quiet: "rgba(46, 50, 62, 0.18)"
+  rule-text: "#2E323E"
+  tick-text: "#2E323E"
+  tick: "#ADB5BD"
+  ink: "#2E323E"
+  ink-2: "rgba(46, 50, 62, 0.68)"
+  ink-3: "rgba(46, 50, 62, 0.48)"
+  hair: "rgba(46, 50, 62, 0.14)"
+  hair-2: "rgba(46, 50, 62, 0.08)"
+  ink-on-stock: "#2E323E"
+  ink-on-stock-2: "rgba(46, 50, 62, 0.68)"
 typography:
   scale:
     micro: "0.625rem"
@@ -151,58 +151,83 @@ components:
 
 **Creative North Star: "The Ruled Record"**
 
-The interface *is* the audit trail. The world is a bound ledger: a navy buckram field carrying a real cloth weave, ruled off in red, stamped once in gold foil, and filled with rows of tabular figures. Nothing decorative is added on top of the record — the record itself is the composition. The first viewport does not introduce the product with a centered headline and three identical cards; it puts the call register on the page at full scale, with its own column heads, its own notation legend, and a foot rule tallied from the rows above it.
+The interface *is* the audit trail. The world is a ruled record: a white field, ruled off in graphite, stamped once in magenta, and filled with rows of tabular figures. Nothing decorative is added on top of the record — the record itself is the composition. The first viewport does not introduce the product with a centered headline and three identical cards; it puts the call register on the page at full scale, with its own column heads, its own notation legend, and a foot rule tallied from the rows above it.
 
-Density is high and deliberate. Rows are close-set, labels are small caps in mono, and the space between sections is generous so that each ruled block reads as a page in a book rather than a card in a feed. The palette is almost entirely one dark field with three tonal steps, plus two pale ledger-stock tones that let a section flip to a paper surface when the content wants to be read rather than scanned. Colour appears in exactly two places: the red column rule, which is structure and never an alert, and the gold foil, which is scarce enough that its appearance means "this is the action."
+Density is high and deliberate. Rows are close-set, labels are small caps in mono, and the space between sections is generous so that each ruled block reads as a page in a book rather than a card in a feed. The palette is one white field with two barely-separated tonal steps and a single accent. Structure is drawn entirely in graphite at varying alpha — the ruling that used to be red is now the ink's own colour, held back — so colour appears in exactly one place: the magenta stamp, scarce enough that its appearance means "this is the action."
 
-The build refuses two specific things, and the refusal is durable: the category's centered hero with three identical product cards, and its opposite, the cream editorial broadsheet. Neither one puts the artifact on the page.
+**The 2026-08-10 rebrand inverted this world and the inversion is load-bearing.** It ran dark for its first life: a navy buckram field carrying a shipped SVG cloth weave, red column ruling, and a gold foil stamp. All three are gone. The weave was tuned against dark grounds and read as a grey smudge on white, so `.lg-cloth` and its `-2` / `-3` variants are now flat fills that keep their names only because components reference them. Red retired because the brand has one accent and does not spend it on dividers. What survived is the *structure* — the ruling, the density, the registers, the closed ramps — which is the evidence that this world was never really about being dark.
+
+The build refuses two specific things, and the refusal is durable: the category's centered hero with three identical product cards, and its opposite, the cream editorial broadsheet. Neither one puts the artifact on the page. Note that going light did **not** license the second one; a white field ruled in graphite is not a broadsheet.
 
 **Key Characteristics:**
-- Navy buckram field with a shipped SVG cloth tile carrying its own alpha — dominant across every page.
-- Red vertical column ruling as the primary structural device; it is a rule, not a warning.
-- Gold foil reserved for the primary action and the wordmark, and for nothing else.
+- Flat white field in three near-adjacent tonal steps — no texture, no gradient, no material tile.
+- Graphite ruling at low alpha as the primary structural device; it is a rule, not a warning.
+- Magenta reserved for the primary action, and for nothing else.
 - Zero corner radius everywhere; every edge is a ruled edge.
 - Archivo condensed caps / Literata / Azeret Mono tabular figures.
 - Registers, bands, and rate schedules built as real ruled tables and definition lists.
 
 ## Colors
 
-A single dark cloth field in three tonal steps, two pale ledger-stock inversions, and two colours of consequence: a red structural rule and a gold foil stamp.
+One white field in three near-adjacent tonal steps, a graphite ink that also draws every rule, and exactly one colour of consequence: the magenta stamp.
 
 ### Primary
-- **Foil Gold** (`#D9A21B`): The stamp. It marks the primary action ("Book a pilot") and the masked wordmark, plus the three system-level accents that read as notation rather than decoration: the `BOOKED` disposition, the `ES` language marker, and the headline price in the rate schedule. It also carries every browser surface — selection background, caret, scrollbar thumb, focus ring.
-- **Foil Lift** (`#EFBB3C`): The lit step of the foil, used inside the metallic ramp and for hover brightening. Never used as a flat fill.
-- **Foil Ink** (`#2A1D02`): The near-black brown that sits *on* foil. The stamp's label colour; it is the only text colour permitted on a foil surface.
-
-### Secondary
-- **Rule Red** (`#B4342A`): The ledger's ruling. Full strength for section top-rules, the margin rule down the register, the measure ticks at the field edge, and inline separators. This colour never signals error or danger anywhere in this world.
-- **Rule Red, Quiet** (`rgba(180, 52, 42, 0.34)`): The vertical ruling between columns — register columns, `Band` columns, rate-schedule cells. The quiet step is what makes a table read as a ledger instead of a grid.
-
-### Tertiary
-- **Tick Green** (`#2F8F6B`): One job only — the `ANSWERED` disposition in the register legend and its keyed swatch. It exists so the disposition key has four distinguishable states without stretching the foil.
+- **Stamp Magenta** (`#B7135A`): The single accent. It marks the primary action ("Book a pilot"), plus the system-level accents that read as notation rather than decoration: the `BOOKED` disposition, the `ES` language marker, and the headline price in the rate schedule. It also carries every browser surface — selection background, caret, scrollbar thumb, focus ring. Measures 6.45:1 on the field, so it is safe as text as well as as a fill.
+- **Stamp Lift** (`#D42670`): The lit step, used inside the metallic ramp and for hover brightening. Never used as a flat fill.
+- **Stamp Ink** (`#FFFFFF`): The white that sits *on* the stamp. 6.45:1 against the magenta; the body ink would be 2.10:1 and fail outright, which is why this is a token and not an inherited value. It is the only text colour permitted on a stamp surface.
 
 ### Neutral
-- **Buckram Field** (`#071A2E`): The dominant ground. Always paired with the cloth tile (`/textures/buckram.svg`, 180×180 repeat).
-- **Buckram Field 2** (`#0B2338`) / **Buckram Field 3** (`#102C44`): Adjacent sections step up one tone to separate without a divider. Field 3 is the closing tone.
-- **Ledger Stock** (`#EDE9DC`) / **Ledger Stock 2** (`#E2DDCB`): The pale writing surface. Used for whole sections that are meant to be read at length, as a page turn inside the dark run.
-- **Ink** (`#F4F1E8`): Warm-white primary text on the field. Never pure white and never gray — it is tinted from the field's own hue.
-- **Ink 2** (`rgba(238, 240, 245, 0.72)`) / **Ink 3** (`rgba(226, 232, 242, 0.52)`): Body copy and label/meta text respectively.
-- **Hair** (`rgba(226, 232, 242, 0.16)`) / **Hair 2** (`rgba(226, 232, 242, 0.09)`): Horizontal row separators. Hair for chrome edges (nav bottom, column-head rule), Hair 2 for entry rows.
-- **Ink on Stock** (`#10243A`) / **Ink on Stock 2** (`#4A5A6E`): The inverse ink pair for stock-tone sections. Section tone selects them automatically via `inkFor` / `ink2For` / `hairFor`; never hand-pick an ink for a stock section.
+- **Field** (`#FFFFFF`): The dominant ground. Flat — no tile, no gradient, no texture.
+- **Field 2** (`#F1F3F5`) / **Field 3** (`#E4E7EB`): Adjacent sections step up one tone to separate without a divider. Field 3 is the closing tone. The steps are deliberately narrow; separation here is a whisper, and the ruling does the rest.
+- **Ledger Stock** (`#F1F3F5`) / **Ledger Stock 2** (`#E4E7EB`): Retained as names for sections meant to be read at length. In the light world they resolve to the same values as Field 2 and Field 3 — the dark world's dramatic paper-inversion no longer exists, because the whole surface is already paper.
+- **Ink** (`#2E323E`): Graphite. Primary text, and the source of every rule in the system. 12.79:1 on the field.
+- **Ink 2** (`rgba(46, 50, 62, 0.68)`) / **Ink 3** (`rgba(46, 50, 62, 0.48)`): Body copy and label/meta text respectively. See the Ink Floor Rule — Ink 3 does not currently clear the text floor.
+- **Rule** (`rgba(46, 50, 62, 0.55)`) / **Rule Quiet** (`rgba(46, 50, 62, 0.18)`): The ledger's ruling, at full and quiet strength. Full for section top-rules and the margin rule down the register; quiet for the verticals between columns. The quiet step is what makes a table read as a ledger instead of a grid.
+- **Hair** (`rgba(46, 50, 62, 0.14)`) / **Hair 2** (`rgba(46, 50, 62, 0.08)`): Horizontal row separators. Hair for chrome edges (nav bottom, column-head rule), Hair 2 for entry rows.
+- **Tick** (`#ADB5BD`): The inert mark. One job — the disposition swatch that is not `BOOKED`. A mark, never text (2.07:1).
+- **Ink on Stock** (`#2E323E`) / **Ink on Stock 2** (`rgba(46, 50, 62, 0.68)`): The ink pair for stock-tone sections. Now identical to Ink and Ink 2, because the stock tones are no longer an inversion. Section tone still selects them automatically via `inkFor` / `ink2For` / `hairFor`; never hand-pick an ink for a stock section.
+
+> **Retired tokens.** `--lg-field-vivid` still exists in `:root` but resolves to Field 3 and is a dead alias — the "one section reads as lit" idea depended on a gradient the rebrand removed. `rule-text` and `tick-text` still exist and both resolve to `#2E323E`; they are kept so the disposition map does not have to change shape, not because they are two colours. None of the three is a palette entry. Do not reach for them in new work.
 
 ### Named Rules
 
-**The Foil Scarcity Rule.** The gold foil *surface* (`.lg-foil-surface`) marks the primary action and the wordmark. Nothing else. In the current build that is three "Book a pilot" stamps and one masked lockup. A finish review found foil on five elements — including a 10px chip — and the verdict was that the stamp had stopped meaning anything. Status and disposition markers use `StatusKey`, a keyed foil-or-tick swatch; secondary actions use `QuietAction` or an outline. If a new surface needs a second gold thing, the answer is a keyed swatch, not a second stamp.
+**The Stamp Scarcity Rule.** The stamp surface (`.lg-foil-surface`) marks the primary action. Nothing else. A finish review in the dark world found the accent on five elements — including a 10px chip — and the verdict was that the stamp had stopped meaning anything; the rebrand to a single-accent palette makes that failure cheaper to repeat, not harder. Status and disposition markers use `StatusKey`; secondary actions use `QuietAction` or an outline. If a new surface needs a second magenta thing, the answer is a keyed swatch, not a second stamp. (The class keeps the `foil` name from the dark world. The material is a magenta ramp now; only the token name is inherited.)
 
-**The Marks-vs-Text Rule.** `rule` and `tick` are *marks* — rules, borders, and the small drawn swatches — where contrast is not a text requirement. Measured as text on the field they are 2.90:1 and 4.40:1, both under the floor, so any status **word** uses the lighter `rule-text` (5.28:1) or `tick-text` (5.91:1) step instead. The base value draws; the `-text` value is read. This is the same relationship `foil-lift` has to `foil`, not a new hue.
+**The Marks-vs-Text Rule.** `rule`, `rule-quiet`, `hair`, `hair-2`, and `tick` are *marks* — rules, borders, and the small drawn swatches — where contrast is not a text requirement. Measured as text they run 1.29:1 to 3.27:1, all under the floor, and none of them may carry a word. In the dark world this rule was paired with lighter `-text` steps of the same hues; that pairing is gone, because status words are now simply set in `ink`. The base value draws; ink is read.
 
-**The Status Scale (product surface).** `/dashboard` carries real state that has to be readable at a glance in a table, so it uses the four values the call register already ships: `tick-text` for success, `foil` for attention or pending, `rule-text` for failure or destructive, `ink-3` for inert. `Badge.tsx` is the single place these semantics are defined — the blanket colour mappings in `globals.css` cannot distinguish success from warning on their own, and collapsing both to foil would destroy the distinction. Note this narrows the six-tone source scale to four hues; `info` and voicemail are held apart by ink tier and border weight rather than colour.
+**The Ink Floor Rule.** Every ink that carries a word must clear 4.5:1 on the tone it sits on. Two shipped values do not, and both are inherited from an alpha ladder that was calibrated against a dark ground where the same alphas landed much brighter:
 
-**The Red Is Structure Rule.** Rule red is a ruling colour. It draws column verticals, section top rules, ticks, and separators. It never carries error, danger, destructive, or "urgent" meaning on this surface. On the marketing surface an error is drawn with a device — a margin annotation of a heavy ink rule and a mono label — not by borrowing the rule; `/book` and `/try-esmi` both do this. The product surface is the documented exception: see The Status Scale above.
+| Value | Where | Measured | Needs |
+| --- | --- | --- | --- |
+| `ink-3` (`rgba(46,50,62,0.48)`) | label / meta text | **2.71:1** on field | ≈0.72 alpha |
+| `ink-2` (`rgba(46,50,62,0.68)`) | body copy on `field-3` | **4.24:1** | ≈0.72 alpha |
 
-**The Foreign Mark Rule.** A third party's brand is not ours to restyle, and the conversion stops at its edge. `/app`'s "Sign in with Google" buttons carry Google's own dark button spec — ground `#131314`, border `#8E918F`, label `#E3E3E3` — because Google's branding guidelines permit only light (`#FFFFFF`), neutral (`#F2F2F2`), or dark (`#131314`) grounds beneath the multicolour mark, and a house navy is none of them. The four logo colours (`#4285F4`, `#34A853`, `#FBBC05`, `#EA4335`) are likewise fixed. These seven values are the only colours on a converted surface that are outside this palette on purpose; the detector is right to flag them and this note is the answer. Any future third-party mark gets the same treatment: use their sanctioned form, document it here, and change nothing else.
+`ink-2` on the white field is 4.68:1 and passes. These are recorded as defects, not as steps — the detector is right to keep flagging any new ink below the floor, and the fix is to raise the two alphas rather than to widen the rule.
 
-**The Tinted Ink Rule.** No neutral gray text. Every ink on the field is pulled toward the field's blue-white; every ink on stock is pulled toward the field's navy. Measured contrast on the field runs 4.68–8.41:1 alpha-composited; a new ink value has to land inside that band.
+**The Status Scale (product surface).** `/dashboard` carries real state that has to be readable at a glance in a table. With the palette down to one hue, colour alone can no longer separate four states: `foil` marks attention or pending, and everything else is held apart by ink tier, border weight, and the label itself. `Badge.tsx` is the single place these semantics are defined. Do not reintroduce a green or a red to the product surface to recover the old four-hue scale — that is a design-system change, and it would contradict the single-accent decision the rebrand was for.
+
+**The Ruling Is Structure Rule.** The ruling is a structural colour. It draws column verticals, section top rules, ticks, and separators. It never carries error, danger, destructive, or "urgent" meaning on this surface. This survived the rebrand intact and got stronger: the ruling is now the ink's own colour at low alpha, so there is no longer even a distinct hue that could be mistaken for an alert. On the marketing surface an error is drawn with a device — a margin annotation of a heavy ink rule and a mono label — not by borrowing the rule; `/book` and `/try-esmi` both do this.
+
+**The Foreign Mark Rule.** A third party's brand is not ours to restyle, and the conversion stops at its edge. `/app`'s "Sign in with Google" buttons carry Google's own dark button spec — ground `#131314`, border `#8E918F`, label `#E3E3E3` — because Google's branding guidelines permit only light (`#FFFFFF`), neutral (`#F2F2F2`), or dark (`#131314`) grounds beneath the multicolour mark. The four logo colours (`#4285F4`, `#34A853`, `#FBBC05`, `#EA4335`) are likewise fixed. These seven values are the only colours on a converted surface that are outside this palette on purpose; the detector is right to flag them and this note is the answer. Any future third-party mark gets the same treatment: use their sanctioned form, document it here, and change nothing else.
+
+**The Tinted Ink Rule.** No neutral gray text. Every ink is Graphite `#2E323E` or an alpha of it — a blue-leaning near-black, never a true neutral. This rule outlived the field it was written for: it used to mean "tint toward the field's blue-white," and now means "one graphite, composited." A new ink value is an alpha of `ink`, not a new hex.
+
+### Orphaned colour (recorded defects)
+
+Six shipped values are still the dark world's, missed when the rebrand swept the palette. All are live and all are recorded here rather than quietly fixed, because a documentation pass records what ships. These are the detector's entire remaining colour output on `globals.css` — every one is a real orphan, not a baseline problem:
+
+| Where | Shipped value | Measured | Should be |
+| --- | --- | --- | --- |
+| **Skip link** (`globals.css:557`) — `background: var(--lg-foil); color: #2A1D02` | old gold-brown foil-ink on magenta | **2.55:1** | `--lg-foil-ink` (6.45:1) |
+| `/app` primary buttons (`globals.css:354`) — `.lg-app .bg-teal-500 { color: #2A1D02 }` | same pairing | **2.55:1** | `--lg-foil-ink` |
+| `.lg-ticks` (`globals.css:1003–4`) — measure ticks beside the register | `rgba(180,52,42,0.85)` / `0.5` — **retired ledger red** | — | An alpha of `ink` |
+| `.lg-app .bg-rose-50` (`globals.css:428`) | `rgba(180, 52, 42, 0.12)` — retired red | — | An alpha of `ink`, or delete with the legacy scale |
+| `.lg-stamp:active` — the pressed lips of the stamp | `rgba(255,244,205,0.5)`, `rgba(74,48,4,0.95)`, `rgba(58,38,2,0.5)` — gold-brown | — | The accent's own shadow family |
+| `:focus-visible` (`globals.css:581`) | `border-radius: 4px` | — | `0` — the world has one radius and it is none |
+
+**The skip link is the serious one.** It is an accessibility control, PRODUCT.md names it as a baseline to preserve, and it currently fails WCAG AA at 2.55:1 — the rebrand recoloured the ground under it from gold to magenta and left the brown label behind. The ticks are the most *visible*: a third hue on a surface whose whole premise is one accent, in the one colour this world explicitly retired.
+
+None of these six is a palette entry. Do not add any of them to the frontmatter to quiet the detector; the detector is correct and the code is what should move.
 
 ## Typography
 
@@ -268,13 +293,13 @@ it. The detector is correct to keep flagging them.
 
 Every page is a stack of full-bleed `Section` bands, each in one of five tones (`field`, `field-2`, `field-3`, `stock`, `stock-2`). Tone changes are the only section divider; there is no horizontal rule between sections. Inside a section the content sits in a `1320px` max-width container with `20px / 32px / 40px` responsive gutters (`px-5 sm:px-8 lg:px-10`) and vertical padding of `80px` rising to `112px` at `lg` (`py-20 lg:py-28`), or `56px / 80px` in `tight` mode.
 
-Column grids are asymmetric on purpose — the home hero runs `0.72fr / 1.28fr` so the register is wider than the offer copy, and pricing runs `1fr / 0.85fr`. Column gap is a constant `3.5rem` (`gap-x-14`); row gap runs `2.5rem`–`3.5rem`. Content blocks are anchored to a top rule (`2px solid` rule red for a section-level register, `1px` for a sub-list) and separated internally by `1px` hairlines. Nothing is boxed.
+Column grids are asymmetric on purpose — the home hero runs `0.72fr / 1.28fr` so the register is wider than the offer copy, and pricing runs `1fr / 0.85fr`. Column gap is a constant `3.5rem` (`gap-x-14`); row gap runs `2.5rem`–`3.5rem`. Content blocks are anchored to a top rule (`2px solid` `rule` graphite for a section-level register, `1px` for a sub-list) and separated internally by `1px` hairlines. Nothing is boxed.
 
 Breakpoints observed in the build: `640px`, `900px`/`901px`, `1023px`/`1024px`, and Tailwind's `sm`/`lg`. Zero horizontal overflow at 375px and 1905px.
 
 ### Named Rules
 
-**The Register Degradation Rule.** The call register has three states and they are not interchangeable. Above 900px: five ruled columns with red verticals and a desktop-only alternating band (`min-width: 901px`, `rgba(226,232,242,0.028)`). Between 641 and 900px: verticals retire, each entry becomes two lines (reason on the first; outcome and disposition sharing the second), and the outcome/disposition column heads hide. At 640px and below: one ruled line per entry, and the outcome column is dropped entirely so the reason and disposition survive. The reason at every step is that the record must read as a continuously ruled run, not as a stack of blocks — which is also why the alternating band never ships below 901px.
+**The Register Degradation Rule.** The call register has three states and they are not interchangeable. Above 900px: five ruled columns with `rule-quiet` verticals and a desktop-only alternating band (`min-width: 901px`, `rgba(46,50,62,0.028)`). Between 641 and 900px: verticals retire, each entry becomes two lines (reason on the first; outcome and disposition sharing the second), and the outcome/disposition column heads hide. At 640px and below: one ruled line per entry, and the outcome column is dropped entirely so the reason and disposition survive. The reason at every step is that the record must read as a continuously ruled run, not as a stack of blocks — which is also why the alternating band never ships below 901px.
 
 **The Register Leads Rule.** Below 1024px the hero grid flattens to a column and the register is ordered *first* (`.lg-hero-register { order: -1 }`). The opening screen is the artifact at every width; the offer copy follows it.
 
@@ -282,15 +307,15 @@ Breakpoints observed in the build: `640px`, `900px`/`901px`, `1023px`/`1024px`, 
 
 ## Elevation & Depth
 
-There are no elevation shadows in this system. Nothing floats, nothing is lifted, and there are no cards. Depth comes from three places: the tonal step between adjacent field tones, the physical weave of the cloth tile, and the pressed edges of the foil stamp. The only `box-shadow` in the world is on the foil, and it is describing a physical stamping — a bright top lip, a dark bottom lip, a hairline of contact shadow, and a tight drop that reads as the block sitting *in* the cover rather than above it. On `:active` the whole shadow inverts to an impressed state and the block translates down 2px.
+There are no elevation shadows in this system. Nothing floats, nothing is lifted, and there are no cards. Depth comes from two places: the tonal step between adjacent field tones, and the pressed edges of the stamp. (It used to come from three — the cloth tile's physical weave was the middle term, and the rebrand removed it.) The only `box-shadow` in the world is on the stamp, and it is describing a physical stamping — a bright top lip, a dark bottom lip, a hairline of contact shadow, and a tight drop that reads as the block sitting *in* the surface rather than above it. On `:active` the whole shadow inverts to an impressed state and the block translates down 2px.
 
 ### Shadow Vocabulary
-- **Foil relief** (`box-shadow: inset 0 1px 0 rgba(255,244,205,0.85), inset 0 -1px 0 rgba(74,48,4,0.9), 0 1px 0 rgba(0,0,0,0.5), 0 14px 26px -16px rgba(0,0,0,0.75)`): The stamp at rest. Only ever on `.lg-foil-surface`.
-- **Foil impressed** (`box-shadow: inset 0 1px 0 rgba(255,244,205,0.5), inset 0 -1px 0 rgba(74,48,4,0.95), inset 0 2px 6px rgba(58,38,2,0.5)`): The stamp on `:active`, paired with `translateY(2px)`.
+- **Stamp relief** (`box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(50,4,22,0.6), 0 1px 0 rgba(0,0,0,0.12), 0 14px 26px -16px rgba(183,19,90,0.55)`): The stamp at rest. Only ever on `.lg-foil-surface`. The drop is tinted with the accent itself rather than black — on a white field an untinted drop reads as dirt.
+- **Stamp impressed** (`box-shadow: inset 0 1px 0 rgba(255,244,205,0.5), inset 0 -1px 0 rgba(74,48,4,0.95), inset 0 2px 6px rgba(58,38,2,0.5)`): The stamp on `:active`, paired with `translateY(2px)`. **These three values are stale and are recorded as a defect.** They are the dark world's gold-brown lips (`rgba(74,48,4,…)`, `rgba(58,38,2,…)`) still sitting under a magenta ramp: the rebrand updated the rest state and missed the pressed state, so pressing a stamp currently shades it brown. The fix is to restate them in the accent's own shadow family, as the rest state already does.
 
 ### Named Rules
 
-**The Produced Materials Rule.** A material must be manufactured, not named. The cloth is a real tiled SVG carrying its own alpha, because blend modes collapse to nothing over a ground this dark. The foil is an eight-stop metallic ramp at 100° with lit and shadowed lips. An earlier pass used a 1.8%-alpha gradient and a flat gold rectangle and it was rejected as a compliance token rather than a shipped material. If a new material is introduced, it ships as a produced asset or it does not ship.
+**The Produced Materials Rule.** A material must be manufactured, not named. The stamp is an eight-stop metallic ramp at 100° with lit and shadowed lips. An earlier pass used a flat rectangle and it was rejected as a compliance token rather than a shipped material; that judgment stands for any future material. What changed at the rebrand is that this rule now governs exactly one material instead of two. The cloth tile was the other — a real tiled SVG carrying its own alpha — and it was retired rather than recoloured, because the same alpha-composited threads that read as grain on navy read as a grey smudge on white. **Retiring a material is in-rule; faking one is not.** The honest move when a produced material stops working on a new ground is to remove it, not to ship a washed-out version that satisfies the vocabulary without doing the work.
 
 **The No Float Rule.** Surfaces do not lift. There is no ambient shadow, no hover elevation, no card. Hover changes a rule, a brightness, or a fill — never a `translateY` on a container.
 
@@ -333,7 +358,7 @@ Keyframes: `lg-settle`, `lg-strike`, `lg-rule-draw`. Utility classes: `.lg-strik
 
 Zero radius, everywhere. Corners are square on the stamp, on the mobile menu button, on section edges, on table cells, and on the focus ring — `.lg-field :focus-visible` explicitly resets `border-radius: 0` so the ring squares off against the register's ruling instead of rounding over it. There is no rounded corner anywhere on the field — the last one, an 8px scrollbar thumb, was removed. Radius 0 is literal, not approximate.
 
-The recurring silhouette is the ruled block: a heavy top rule in red (`2px` for a primary register, `1px` for a nested one), a run of rows separated by hairlines, and — where it is a real tally — a second heavy red rule closing the foot. Verticals are `1px` quiet red between columns. Every rule in this world is a drawn CSS border, gradient, or element; Unicode box-drawing characters, bullets, and glyph separators are not used. Icons are inline SVG paths (the nav toggle is the only one).
+The recurring silhouette is the ruled block: a heavy top rule in `rule` graphite (`2px` for a primary register, `1px` for a nested one), a run of rows separated by hairlines, and — where it is a real tally — a second heavy rule closing the foot. Verticals are `1px` `rule-quiet` between columns. Every rule in this world is a drawn CSS border, gradient, or element; Unicode box-drawing characters, bullets, and glyph separators are not used. Icons are inline SVG paths (the nav toggle is the only one).
 
 ## Components
 
@@ -348,26 +373,26 @@ The recurring silhouette is the ruled block: a heavy top rule in red (`2px` for 
 - **Reduced motion:** All stamp and quiet-action transitions are suppressed under `prefers-reduced-motion: reduce`.
 
 ### Navigation
-- Sticky header on the cloth field with a `1px` hair bottom border, `1320px` container, `16px` vertical padding.
+- Sticky header on the flat field with a `1px` hair bottom border, `1320px` container, `16px` vertical padding.
 - Wordmark is the horizontal lockup used as a `mask-image` over the foil ramp (`.lg-foil-mark`), so the metal shows through the letterforms rather than knocking out flat white.
 - Links: Archivo 500 at `wdth` 88%, `0.8125rem`, tracking `0.075em`, uppercase, in Ink 2, with the `QuietAction` foil underline on hover. The language toggle is a mono label in Ink 3.
 - The stamp is visible at every width, because on mobile the register leads and the stamp is the only action above the fold.
 - Mobile: an outlined square toggle drawing an inline SVG (three rules / an X), opening a Field-2 panel of full-width links separated by Hair 2 hairlines.
 
 ### Lists and Data Blocks
-- **RuledList** (`<dl>`): red top rule, rows of label-left (mono label, Ink 3) and value-right (Literata, ink), `0.8rem` vertical padding, hairline between rows. Reads down the page.
-- **Band** (`<dl>`): red top rule, 2 → 3 → 5 responsive columns, label stacked above value, quiet-red verticals *between* columns only (the first cell of every wrapped row is never ruled off from nothing). Reads across the page.
-- **EntryList**: a `2px` red top rule over stacked `<article>` rows, each an uppercase entry title with optional mono meta right-aligned on the same baseline, and a 60ch prose paragraph beneath.
-- **StatusKey**: a 14×2px drawn swatch in foil, rule red, tick green, or Ink 3, followed by a 10px mono uppercase label. This is the system's status marker — it replaces every chip, pill, and badge.
+- **RuledList** (`<dl>`): graphite top rule, rows of label-left (mono label, Ink 3) and value-right (Literata, ink), `0.8rem` vertical padding, hairline between rows. Reads down the page.
+- **Band** (`<dl>`): graphite top rule, 2 → 3 → 5 responsive columns, label stacked above value, `rule-quiet` verticals *between* columns only (the first cell of every wrapped row is never ruled off from nothing). Reads across the page.
+- **EntryList**: a `2px` graphite top rule over stacked `<article>` rows, each an uppercase entry title with optional mono meta right-aligned on the same baseline, and a 60ch prose paragraph beneath.
+- **StatusKey**: a 14×2px drawn swatch in foil or ink, followed by a 10px mono uppercase label in the same colour. With one accent left, the key distinguishes states by the label, not by four hues. This is the system's status marker — it replaces every chip, pill, and badge.
 
 ### Disclosure Rows
-`<details>` with the native marker removed. The summary carries a drawn 12px foil rule that grows to 26px when open (220ms, emphasized ease). Rows are separated by Hair 2 hairlines under a `2px` red top rule.
+`<details>` with the native marker removed. The summary carries a drawn 12px foil rule that grows to 26px when open (220ms, emphasized ease). Rows are separated by Hair 2 hairlines under a `2px` graphite top rule.
 
 ### Tables (Rate Schedule)
-A real `<table>` with `border-collapse: collapse`, a screen-reader caption, `scope`-ed headers, `min-width: 720px` inside an `overflow-x-auto` wrapper. Column heads sit on a `2px` red rule; every column after the first is ruled off with a quiet-red `border-left`; body rows close with a Hair 2 hairline. Values are right-aligned mono; the one headline figure per column steps up to Archivo 700 at `1.5rem` in foil.
+A real `<table>` with `border-collapse: collapse`, a screen-reader caption, `scope`-ed headers, `min-width: 720px` inside an `overflow-x-auto` wrapper. Column heads sit on a `2px` graphite rule; every column after the first is ruled off with a `rule-quiet` `border-left`; body rows close with a Hair 2 hairline. Values are right-aligned mono; the one headline figure per column steps up to Archivo 700 at `1.5rem` in foil.
 
 ### The Call Register (signature component)
-The system's defining artifact and the hero of the home page. A `<figure>` with a mono caption on a `2px` red rule, a mono column-head row, ten ruled entries, and a foot rule whose tally is *derived from the rendered rows, never typed*. Each entry carries a tabular time, a language marker (foil when `ES`), a serif reason, a mono outcome, and a mono disposition coloured by its key. A `lg-margin-rule` red vertical runs down its left edge and `lg-ticks` graduated measure ticks (minor every 14px, major every 70px) run down the field edge beside it.
+The system's defining artifact and the hero of the home page. A `<figure>` with a mono caption on a `2px` graphite rule, a mono column-head row, ten ruled entries, and a foot rule whose tally is *derived from the rendered rows, never typed*. Each entry carries a tabular time, a language marker (foil when `ES`), a serif reason, a mono outcome, and a mono disposition coloured by its key. A `lg-margin-rule` graphite vertical runs down its left edge and `lg-ticks` graduated measure ticks (minor every 14px, major every 70px) run down the field edge beside it.
 
 Motion: Settle, then Strike. Rows land in sequence (`--lg-dur-settle`, `--lg-stagger` per row), and each disposition is struck in via `clip-path` 180ms behind its own row, so the mark lands as the row does. Retimed 2026-08-08 from 620ms/90ms, where ten rows took 1.43s and read as slow rather than precise; the same picture now lands in 785ms. Both animate from an already-legible default, so the register reads with JS off, and both are disabled under `prefers-reduced-motion`.
 
@@ -382,7 +407,7 @@ Not optional, and not left to the browser: selection is foil-on-field, `accent-c
 - **Do** build data blocks from the shared primitives in `app/components/ledger/index.tsx`. Every marketing page composes from them; per-page inline restyling is exactly how the site drifted before.
 - **Do** let the section `tone` choose the inks. Use `inkFor` / `ink2For` / `hairFor` rather than hand-picking a colour for a stock section.
 - **Do** set every quantity, time, count, and price in `.lg-fig` tabular figures.
-- **Do** anchor a block with a red top rule (`2px` primary, `1px` nested) and separate its rows with Hair 2 hairlines.
+- **Do** anchor a block with a graphite top rule (`2px` primary, `1px` nested) and separate its rows with Hair 2 hairlines.
 - **Do** change axis when two data blocks sit in sequence — a `RuledList` followed by a `Band`, never a `RuledList` followed by a `RuledList`.
 - **Do** ship materials as produced assets: a real tile, a real ramp with lit and shadowed lips.
 - **Do** use real semantic tables and definition lists for tabular content, with a caption and scoped headers.
@@ -390,7 +415,7 @@ Not optional, and not left to the browser: selection is foil-on-field, `accent-c
 
 ### Don't:
 - **Don't** add a second foil element to a screen that already has a stamp. Foil on five elements is what destroyed the stamp's meaning once already.
-- **Don't** use rule red as an error, alert, or destructive colour on this surface. It is ruling.
+- **Don't** use the ruling as an error, alert, or destructive colour on this surface. It is structure.
 - **Don't** round a corner. Radius is 0, including the focus ring on the field.
 - **Don't** add a shadow to anything but the foil. No card elevation, no hover lift, no ambient glow.
 - **Don't** put an eyebrow, kicker, or `01/02/03` numbering above a heading.
