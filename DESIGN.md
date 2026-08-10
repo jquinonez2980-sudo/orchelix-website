@@ -212,22 +212,22 @@ One white field in three near-adjacent tonal steps, a graphite ink that also dra
 
 **The Tinted Ink Rule.** No neutral gray text. Every ink is Graphite `#2E323E` or an alpha of it — a blue-leaning near-black, never a true neutral. This rule outlived the field it was written for: it used to mean "tint toward the field's blue-white," and now means "one graphite, composited." A new ink value is an alpha of `ink`, not a new hex.
 
-### Orphaned colour (recorded defects)
+### Orphaned colour (closed)
 
-Six shipped values are still the dark world's, missed when the rebrand swept the palette. All are live and all are recorded here rather than quietly fixed, because a documentation pass records what ships. These are the detector's entire remaining colour output on `globals.css` — every one is a real orphan, not a baseline problem:
+The rebrand swept the palette but left six values behind in the dark world's gold and red. All six were closed on 2026-08-10, in the commit after the one that recorded them. They are kept here as the worked example of how this class of bug is fixed, because the palette will move again someday:
 
-| Where | Shipped value | Measured | Should be |
-| --- | --- | --- | --- |
-| **Skip link** (`globals.css:557`) — `background: var(--lg-foil); color: #2A1D02` | old gold-brown foil-ink on magenta | **2.55:1** | `--lg-foil-ink` (6.45:1) |
-| `/app` primary buttons (`globals.css:354`) — `.lg-app .bg-teal-500 { color: #2A1D02 }` | same pairing | **2.55:1** | `--lg-foil-ink` |
-| `.lg-ticks` (`globals.css:1003–4`) — measure ticks beside the register | `rgba(180,52,42,0.85)` / `0.5` — **retired ledger red** | — | An alpha of `ink` |
-| `.lg-app .bg-rose-50` (`globals.css:428`) | `rgba(180, 52, 42, 0.12)` — retired red | — | An alpha of `ink`, or delete with the legacy scale |
-| `.lg-stamp:active` — the pressed lips of the stamp | `rgba(255,244,205,0.5)`, `rgba(74,48,4,0.95)`, `rgba(58,38,2,0.5)` — gold-brown | — | The accent's own shadow family |
-| `:focus-visible` (`globals.css:581`) | `border-radius: 4px` | — | `0` — the world has one radius and it is none |
+| Where | Was | Now |
+| --- | --- | --- |
+| **Skip link** (`.lg-skip`) | `#2A1D02` on `--lg-foil` — **2.55:1** | `--lg-foil-ink` — **6.45:1** |
+| `/app` primary buttons (`.lg-app .bg-teal-500`) | same pairing, **2.55:1** | `--lg-foil-ink` |
+| `.lg-ticks` — measure ticks beside the register | retired red at `0.85` / `0.5` | `--lg-rule` / `--lg-rule-quiet` |
+| `.lg-app .bg-rose-50` | `rgba(180, 52, 42, 0.12)` | `--lg-hair` |
+| `.lg-stamp:active` — the pressed lips | gold-brown `rgba(74,48,4)` / `rgba(58,38,2)` | the accent's own `rgba(50,4,22)` family |
+| `:focus-visible` | `border-radius: 4px` | `0` |
 
-**The skip link is the serious one.** It is an accessibility control, PRODUCT.md names it as a baseline to preserve, and it currently fails WCAG AA at 2.55:1 — the rebrand recoloured the ground under it from gold to magenta and left the brown label behind. The ticks are the most *visible*: a third hue on a surface whose whole premise is one accent, in the one colour this world explicitly retired.
+**The skip link was the serious one** — an accessibility control that PRODUCT.md names as a baseline, failing WCAG AA at 2.55:1 because the ground under it was recoloured gold → magenta and the brown label was left behind. **The lesson is that recolouring a ground is never a one-line change:** every value that was chosen *against* that ground has to move with it, and the ones that hurt most are the ones nobody looks at — a skip link is invisible until someone tabs into it.
 
-None of these six is a palette entry. Do not add any of them to the frontmatter to quiet the detector; the detector is correct and the code is what should move.
+Two rules for the next palette move. Every replacement above resolves to a **documented token**, not a fresh alpha picked to match the old value — that is what keeps a fix from becoming the next generation of drift. And nothing here was ever added to the frontmatter to quiet the detector; the detector was correct at every step and the code is what moved.
 
 ## Typography
 
@@ -311,7 +311,7 @@ There are no elevation shadows in this system. Nothing floats, nothing is lifted
 
 ### Shadow Vocabulary
 - **Stamp relief** (`box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(50,4,22,0.6), 0 1px 0 rgba(0,0,0,0.12), 0 14px 26px -16px rgba(183,19,90,0.55)`): The stamp at rest. Only ever on `.lg-foil-surface`. The drop is tinted with the accent itself rather than black — on a white field an untinted drop reads as dirt.
-- **Stamp impressed** (`box-shadow: inset 0 1px 0 rgba(255,244,205,0.5), inset 0 -1px 0 rgba(74,48,4,0.95), inset 0 2px 6px rgba(58,38,2,0.5)`): The stamp on `:active`, paired with `translateY(2px)`. **These three values are stale and are recorded as a defect.** They are the dark world's gold-brown lips (`rgba(74,48,4,…)`, `rgba(58,38,2,…)`) still sitting under a magenta ramp: the rebrand updated the rest state and missed the pressed state, so pressing a stamp currently shades it brown. The fix is to restate them in the accent's own shadow family, as the rest state already does.
+- **Stamp impressed** (`box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -1px 0 rgba(50,4,22,0.75), inset 0 2px 6px rgba(50,4,22,0.45)`): The stamp on `:active`, paired with `translateY(2px)`. Same two-colour family as the relief — white highlight, `rgba(50,4,22)` shadow — with the highlight pulled back and the lower lip deepened so the block reads pressed into the surface rather than raised off it.
 
 ### Named Rules
 

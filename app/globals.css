@@ -351,7 +351,10 @@
 .lg-app .bg-teal-500.text-white,
 .lg-app .bg-navy-600,
 .lg-app .bg-teal-500 {
-  color: #2A1D02;
+  /* These legacy scales alias to `--lg-foil`, so this is text on the accent.
+     It held the dark world's gold-brown foil-ink, which measured 2.55:1 once
+     the ground under it went magenta. `--lg-foil-ink` is 6.45:1. */
+  color: var(--lg-foil-ink);
 }
 
 /* Tailwind's `shadow-*` utilities compile to `--tw-shadow`, not to the
@@ -425,7 +428,10 @@
 .lg-app .text-rose-700,
 .lg-app .text-red-700 { color: var(--lg-rule-text); }
 .lg-app .bg-rose-600 { background-color: var(--lg-rule); color: var(--lg-ink); }
-.lg-app .bg-rose-50 { background-color: rgba(180, 52, 42, 0.12); }
+/* Was rgba(180, 52, 42, 0.12) — retired red. Its neighbours in this block
+   already resolve to ruling tokens; `--lg-hair` (0.14) is the documented
+   step nearest the tint it was carrying. */
+.lg-app .bg-rose-50 { background-color: var(--lg-hair); }
 .lg-app .border-rose-200 { border-color: var(--lg-rule-quiet); }
 
 .lg-app .text-amber-600,
@@ -554,7 +560,10 @@ body {
   top: 8px;
   padding: 0.7rem 1.1rem;
   background: var(--lg-foil);
-  color: #2A1D02;
+  /* The skip link is an accessibility control and is held to the text floor
+     like any other. The rebrand recoloured this ground gold -> magenta and
+     left the brown label behind at 2.55:1; `--lg-foil-ink` is 6.45:1. */
+  color: var(--lg-foil-ink);
   font-family: var(--font-mono), ui-monospace, monospace;
   font-size: 0.625rem;
   font-weight: 500;
@@ -578,7 +587,9 @@ body {
 :focus-visible {
   outline: 2px solid var(--teal-500);
   outline-offset: 2px;
-  border-radius: 4px;
+  /* The world has one radius and it is none — every edge is a ruled edge.
+     A 4px ring was the only rounded thing on the marketing surface. */
+  border-radius: 0;
 }
 
 /* Everywhere in the ledger world the ring is foil, and it squares off to
@@ -999,9 +1010,13 @@ body {
    ticks every 14px, a major tick every fifth, so it reads as a graduated
    measure rather than a dotted line. */
 .lg-ticks {
+  /* Was retired ledger red at 0.85 / 0.5 — a third hue on a one-accent
+     surface, and the one colour this world explicitly gave up. Restated in
+     the ruling's own two documented steps so the major/minor relationship
+     survives without inventing a pair of undocumented alphas. */
   background-image:
-    repeating-linear-gradient(to bottom, rgba(180, 52, 42, 0.85) 0 1px, transparent 1px 70px),
-    repeating-linear-gradient(to bottom, rgba(180, 52, 42, 0.5) 0 1px, transparent 1px 14px);
+    repeating-linear-gradient(to bottom, var(--lg-rule) 0 1px, transparent 1px 70px),
+    repeating-linear-gradient(to bottom, var(--lg-rule-quiet) 0 1px, transparent 1px 14px);
   background-size: 100% 100%, 55% 100%;
   background-position: left top, left top;
   background-repeat: repeat-y, repeat-y;
@@ -1014,10 +1029,16 @@ body {
 .lg-stamp:hover { filter: brightness(1.07) saturate(1.04); }
 .lg-stamp:active {
   transform: translateY(2px);
+  /* The pressed state kept the dark world's gold-brown lips (rgba(74,48,4)
+     and rgba(58,38,2)) after the rest state moved to magenta, so pressing a
+     stamp shaded it brown. Restated in the accent's own shadow family — the
+     same white highlight and rgba(50,4,22) shadow the rest state uses, with
+     the highlight pulled back and the lower lip deepened to read impressed
+     rather than raised. */
   box-shadow:
-    inset 0 1px 0 rgba(255, 244, 205, 0.5),
-    inset 0 -1px 0 rgba(74, 48, 4, 0.95),
-    inset 0 2px 6px rgba(58, 38, 2, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -1px 0 rgba(50, 4, 22, 0.75),
+    inset 0 2px 6px rgba(50, 4, 22, 0.45),
     0 0 0 rgba(0, 0, 0, 0);
 }
 

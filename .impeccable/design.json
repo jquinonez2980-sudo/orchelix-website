@@ -407,8 +407,8 @@
       },
       {
         "name": "measure-ticks",
-        "value": "repeating-linear-gradient(to bottom, rgba(46,50,62,0.55) 0 1px, transparent 1px 70px), repeating-linear-gradient(to bottom, rgba(46,50,62,0.30) 0 1px, transparent 1px 14px)",
-        "purpose": "Graduated measure down the field edge — minor tick every 14px, major every fifth. DEFECT: the shipped CSS still draws these in retired ledger red (rgba(180,52,42,...)); the value here is the corrected one."
+        "value": "repeating-linear-gradient(to bottom, rgba(46,50,62,0.55) 0 1px, transparent 1px 70px), repeating-linear-gradient(to bottom, rgba(46,50,62,0.18) 0 1px, transparent 1px 14px)",
+        "purpose": "Graduated measure ticks down the field edge beside the register — minor every 14px, major every fifth. Drawn in the ruling's two documented steps."
       }
     ],
     "shadows": [
@@ -419,8 +419,8 @@
       },
       {
         "name": "stamp-impressed",
-        "value": "inset 0 1px 0 rgba(255,244,205,0.5), inset 0 -1px 0 rgba(74,48,4,0.95), inset 0 2px 6px rgba(58,38,2,0.5)",
-        "purpose": "The stamp on :active, paired with translateY(2px). DEFECT: these are the dark world's gold-brown lips, missed by the rebrand — pressing a stamp currently shades it brown."
+        "value": "inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -1px 0 rgba(50,4,22,0.75), inset 0 2px 6px rgba(50,4,22,0.45)",
+        "purpose": "The stamp on :active, paired with translateY(2px). Same family as the relief, highlight pulled back and lower lip deepened so it reads pressed in."
       }
     ],
     "motion": [
