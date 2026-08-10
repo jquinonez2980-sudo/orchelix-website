@@ -141,10 +141,28 @@
    teal/gold scales above still serve /dashboard and /try-esmi untouched.   */
 
 :root {
-  /* Buckram — the binding cloth. The dominant field. */
-  --lg-field:      #071A2E;
-  --lg-field-2:    #0B2338;
-  --lg-field-3:    #102C44;
+  /* Buckram — the binding cloth. The dominant field.
+
+     2026-08-10: recoloured from a desaturated steel-navy to a saturated
+     teal-to-indigo family ("deep lagoon") at matching lightness steps — the
+     hue moved, the tonal ladder (and therefore ink contrast against it)
+     did not. --lg-field-vivid is new: a fourth, brighter stop reserved for
+     gradient treatments (currently just Hero) that need a lit highlight —
+     it is too light to use as a flat section field.
+
+     Pushed further the same day: the first pass still read as dull once the
+     buckram weave's dark threads sat on top of it (that overlay was tuned
+     against the old dull navy, and knocks more brightness off a saturated
+     colour than it did off a desaturated one). Raised saturation and
+     widened the lightness range so the colour survives the weave — field
+     stays a rich dark anchor, vivid becomes genuinely bright rather than a
+     slightly-lighter dark. See .lg-cloth-vivid for the other half of this
+     fix: soft-light blending so the weave models light instead of just
+     subtracting it. */
+  --lg-field:      #0A121A;
+  --lg-field-2:    #121F2B;
+  --lg-field-3:    #1C2F3F;
+  --lg-field-vivid: #274D68;
 
   /* Ledger stock — the ruled writing surface, for regions that must read. */
   --lg-stock:      #EDE9DC;
@@ -682,6 +700,19 @@ body {
 @media (max-width: 1023px) {
   .lg-hero-grid { display: flex; flex-direction: column; }
   .lg-hero-register { order: -1; }
+
+  /* The recess retires with the two-column grid. Below 1024px the register
+     runs to both gutters, and a recess that touches the edges of the viewport
+     is not a recess — it is just a darker page. Worse, the walls would cost
+     horizontal space the Register Degradation Rule has already spent: at
+     375px every character of the reason column is accounted for. The register
+     goes back to being printed directly on the cloth, which is what it was
+     before there was room to cut it in. */
+  .lg-hero-register.lg-inset {
+    background-color: transparent;
+    border: 0;
+  }
+  .lg-hero-register.lg-inset::after { display: none; }
 }
 
 /* Vertical column ruling — the red rule that makes it a ledger, not a table. */
@@ -802,7 +833,12 @@ body {
 /* The call register's authored moment: rows settle in sequence and each
    disposition is struck as its row lands. Retimed 2026-08-08 from
    620ms/90ms — ten rows took 1.43s, which read as slow rather than
-   precise. The same picture now lands in 785ms. */
+   precise. The same picture now lands in 785ms.
+
+   The register stays flat/static after that one settle-in — no ongoing
+   tilt or depth animation. Tried a mouse-tilt panel and a per-row 3D
+   "coming at you" loop here across several rounds; both were explicitly
+   rejected. The box reads as a plain, still ledger panel now. */
 .lg-register .lg-row {
   animation: lg-settle var(--lg-dur-settle) var(--ease-emphasized) both;
   animation-delay: calc(var(--i, 0) * var(--lg-stagger));
@@ -817,14 +853,100 @@ body {
    merely name them. The cloth is a shipped raster-equivalent tile; the foil
    is a metallic ramp with an impressed edge that catches light.            */
 
+/* The cloth is two layers because real cloth has two distances: the thread
+   grain you read at arm's length, and the slow swell of the bolt underneath
+   it. One tile could only ever carry one of those. The fine weave sits on
+   top; the bolt undulation reads beneath it at three times the repeat, so the
+   two come back into phase every third tile rather than beating against each
+   other. Both are lit from the upper left, the same source as the foil ramp. */
 .lg-cloth {
   background-color: var(--lg-field);
-  background-image: url("/textures/buckram.svg");
-  background-repeat: repeat;
-  background-size: 180px 180px;
+  background-image:
+    url("/textures/buckram.svg"),
+    url("/textures/buckram-bolt.svg");
+  /* soft-light, not the texture's own alpha compositing: on a base this
+     dark, a flat alpha wash from the lit threads reads as a grey cloud
+     sitting on top of the colour instead of grain within it. soft-light
+     lets the dark field stay dark and only nudges it lighter/darker where
+     the weave actually catches light — see .lg-cloth-vivid below, which
+     already relied on this; the plain variant needs it just as much now
+     that the field tones sit this low. */
+  background-blend-mode: soft-light, soft-light;
+  background-repeat: repeat, repeat;
+  background-size: 180px 180px, 540px 540px;
 }
 .lg-cloth-2 { background-color: var(--lg-field-2); }
 .lg-cloth-3 { background-color: var(--lg-field-3); }
+
+/* Vivid variant of the cloth, for the one section that should read as lit
+   rather than flat: a lagoon gradient sits under the same two weave layers
+   above, so it still reads as the same material, just catching light across
+   it. Angle runs upper-left to lower-right, matching the material's own
+   light source. Reserved for Hero — everywhere else stays flat field. */
+.lg-cloth-vivid {
+  background-color: var(--lg-field);
+  background-image:
+    url("/textures/buckram.svg"),
+    url("/textures/buckram-bolt.svg"),
+    linear-gradient(135deg, var(--lg-field) 0%, var(--lg-field-3) 55%, var(--lg-field-vivid) 100%);
+  /* soft-light instead of the weave's own alpha compositing: the tile's
+     lit/dark threads push the gradient's own tone lighter/darker rather
+     than laying a flat white/black wash over it, so the saturated colour
+     underneath still reads as saturated instead of being muddied. */
+  background-blend-mode: soft-light, soft-light, normal;
+  background-repeat: repeat, repeat, no-repeat;
+  background-size: 180px 180px, 540px 540px, 100% 100%;
+}
+
+/* ─── The recess ──────────────────────────────────────────────────────────
+   Depth in this world goes inward. Nothing lifts off the cover — the No Float
+   Rule is absolute — so the things that matter are pressed into it instead,
+   the same direction DESIGN.md already describes the foil reading: sitting
+   *in* the cover rather than above it. An inset is the only elevation this
+   system has, and it points down.
+
+   A recess is drawn, never shadowed. `box-shadow` belongs to the foil alone,
+   so the walls are real hairlines and a real gradient. With the light in the
+   upper left — the cloth's source and the foil ramp's — a cut into the surface
+   is dark along its top and left walls, which turn away from the light, and
+   catches a thin lift along the bottom and right, which face it. That is the
+   exact inverse of a raised block, and it is the whole reason the register
+   reads as cut into the cloth rather than printed on top of it.
+
+   The left wall is deliberately not bordered: on the register that edge is
+   already the red margin rule, and two 1px verticals side by side read as a
+   mistake. The wall falloff below supplies the shadow that edge would carry.
+
+   `z-index: 0` on the box and `-1` on the wall keep the falloff above the
+   recess fill and below the content, without it needing to know anything
+   about what it is holding. Padding is the caller's business, not the
+   material's. */
+.lg-inset {
+  position: relative;
+  z-index: 0;
+  background-color: rgba(2, 8, 18, 0.32);
+  border-top: 1px solid rgba(2, 8, 18, 0.9);
+  border-bottom: 1px solid rgba(226, 232, 242, 0.11);
+  border-right: 1px solid rgba(226, 232, 242, 0.06);
+}
+
+/* 2026-08-10: the hero register sits in front of the new WebGL layer, and
+   .lg-inset's normal 0.32-alpha fill let the wireframe bleed straight
+   through the call data. Scoped override, not a change to .lg-inset itself
+   — every other recess on the site still wants the thin translucent fill. */
+.lg-hero-register-solid {
+  background-color: rgba(3, 17, 30, 0.95) !important;
+}
+.lg-inset::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right,  rgba(2, 8, 18, 0.5) 0, rgba(2, 8, 18, 0) 92px),
+    linear-gradient(to bottom, rgba(2, 8, 18, 0.4) 0, rgba(2, 8, 18, 0) 68px);
+}
 
 /* Gold foil: a reflection ramp across the block, a bright top lip and a dark
    bottom lip so the block reads as pressed into the surface. */
@@ -1059,6 +1181,41 @@ details[open] > .lg-summary::before {
 
 @media (prefers-reduced-motion: reduce) {
   .esmi-dark [data-esmi-motion] { animation: none !important; }
+}
+
+/* ─── Esmi clear-glass panel (2026-08-10) ─────────────────────────────────
+   Reintroduces glass to /try-esmi only, at the user's explicit request,
+   after the 2026-08-08 conversion removed it site-wide. Deliberately NOT
+   the old frosted `.esmi-dark` treatment above (heavy blur, near-opaque
+   fill, cyan glow) — this is closer to actual glass: mostly transparent,
+   light blur just enough to read as a distinct pane, no glow. Sits over
+   whatever field tone the surrounding Section carries, so the vivid
+   background shows through rather than being hidden behind a card. */
+.esmi-glass-panel {
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px) saturate(150%);
+  -webkit-backdrop-filter: blur(8px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 18px;
+  box-shadow:
+    0 8px 32px rgba(2, 8, 18, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  overflow: hidden;
+}
+.esmi-glass-header {
+  background: rgba(255, 255, 255, 0.035);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10) !important;
+}
+.esmi-glass-messages {
+  background: transparent !important;
+}
+@media (prefers-reduced-transparency: reduce) {
+  .esmi-glass-panel {
+    background: var(--lg-field-2);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
 }
 
 /* Placeholder for the Esmi chat input. The cyan scrollbar that sat here was

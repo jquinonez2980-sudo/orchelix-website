@@ -58,14 +58,18 @@ const TALLY = DISPOSITION_ORDER.map((d) => ({
 
 export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
   return (
-    <section id="top" className="lg-world lg-field lg-cloth relative">
+    <section id="top" className="lg-world lg-field lg-cloth-vivid relative">
       {/* Measure ticks down the field edge — the ruled page's own scale. */}
       <div
         aria-hidden="true"
         className="lg-ticks pointer-events-none absolute inset-y-0 left-0 hidden w-[7px] lg:block"
+        style={{ zIndex: 1 }}
       />
 
-      <div className="lg-hero-grid relative mx-auto grid max-w-[1320px] gap-y-14 px-5 pt-16 pb-16 sm:px-8 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-x-14 lg:px-10 lg:pt-24 lg:pb-24">
+      <div
+        className="lg-hero-grid relative mx-auto grid max-w-[1320px] gap-y-14 px-5 pt-16 pb-16 sm:px-8 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-x-14 lg:px-10 lg:pt-24 lg:pb-24"
+        style={{ zIndex: 1 }}
+      >
         {/* ── Offer column ── */}
         <div className="max-w-[34rem] self-center">
           <h1
@@ -127,8 +131,15 @@ export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
           </div>
         </div>
 
-        {/* ── The register ── */}
-        <div className="lg-hero-register lg-margin-rule self-center lg:pl-8">
+        {/* ── The register ──
+            Cut into the cloth rather than printed on it. `lg-inset` draws the
+            recess; the red margin rule is its left wall, which is why the
+            recess carries no left border of its own. The padding is the depth
+            of the cut and only exists at lg, where the two-column grid does —
+            below that the recess retires and the register runs to the gutters.
+            The section's own `pt` already spaces this from the nav, so the cut
+            only needs its inner margin. */}
+        <div className="lg-hero-register lg-inset lg-hero-register-solid lg-margin-rule self-center lg:py-8 lg:pr-7 lg:pl-8">
           <Register t={t} />
         </div>
       </div>

@@ -344,25 +344,16 @@ export default function EsmiChat({
 
   return (
     <div
-      className="flex flex-col h-full"
+      className="esmi-glass-panel flex flex-col h-full"
       style={{
         fontFamily: "var(--font-display), ui-sans-serif, system-ui, sans-serif",
-        /* The console is ruled onto the field, not floated above it: a red top
-           rule anchors it the way every other block in this world is anchored,
-           and the surrounding Section supplies the ground. The old gradient
-           painted its own darker panel, which read as a card. */
-        borderTop: "2px solid var(--lg-rule)",
-        borderBottom: "1px solid var(--lg-hair)",
-        background: "transparent",
       }}
     >
       {/* ── Header ──────────────────────────────────────────────────────── */}
       <div
-        className="flex items-center gap-3 flex-shrink-0"
+        className="esmi-glass-header flex items-center gap-3 flex-shrink-0"
         style={{
           padding: "13px 18px",
-          background: "rgba(226,232,242,0.04)",
-          borderBottom: "1px solid var(--lg-hair-2)",
         }}
       >
         {/* Avatar with online dot */}
@@ -497,7 +488,7 @@ export default function EsmiChat({
       {/* ── Messages ────────────────────────────────────────────────────── */}
       <div
         ref={scrollRef}
-        className="lg-field flex-1 overflow-y-auto"
+        className="esmi-glass-messages flex-1 overflow-y-auto"
         style={{
           padding: "20px 18px 12px",
           display: "flex",
