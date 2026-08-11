@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Nav from "@/app/components/sections/Nav";
 import Footer from "@/app/components/sections/Footer";
+import IndustriesPulseOverlay from "@/app/components/sections/IndustriesPulseOverlay";
 import { isLocale, localesFor, localizedHref } from "@/app/i18n/config";
 import { getDictionary } from "@/app/i18n/dictionaries";
 import {
@@ -53,7 +54,10 @@ export default async function IndustriesPage({ params }: PageProps<"/[locale]">)
               </Prose>
             </div>
             <div className="flex flex-col items-end gap-8">
-              <PageVisual src={industriesVisual} max={340} />
+              <div style={{ position: "relative", width: "100%", maxWidth: 340, lineHeight: 0 }}>
+                <PageVisual src={industriesVisual} max={340} />
+                <IndustriesPulseOverlay />
+              </div>
               <div className="flex flex-wrap items-center gap-x-7 gap-y-4 lg:justify-end">
                 <Stamp href={localizedHref("/book", locale)}>{t.common.bookPilot}</Stamp>
                 <QuietAction href="/try-esmi">{t.common.hearRealCall}</QuietAction>

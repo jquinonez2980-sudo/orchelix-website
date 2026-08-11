@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Nav from "@/app/components/sections/Nav";
 import Footer from "@/app/components/sections/Footer";
+import ConstellationCanvas from "@/app/components/sections/ConstellationCanvas";
 import JsonLd from "@/app/components/JsonLd";
 import { isLocale, localesFor, localizedHref } from "@/app/i18n/config";
 import { getDictionary } from "@/app/i18n/dictionaries";
@@ -16,9 +17,7 @@ import {
   StatusKey,
   RuledList,
   Band,
-  PageVisual,
 } from "@/app/components/ledger";
-import solutionsVisual from "@/public/solutions-visual.png";
 
 const SITE_URL = "https://www.orchelix.com";
 
@@ -93,7 +92,7 @@ export default async function SolutionsPage({ params }: PageProps<"/[locale]">) 
               </Prose>
             </div>
             <div className="flex flex-col items-end gap-8">
-              <PageVisual src={solutionsVisual} max={320} />
+              <ConstellationCanvas max={320} />
               <div className="flex flex-wrap items-center gap-x-7 gap-y-4 lg:justify-end">
                 <Stamp href={localizedHref("/book", locale)}>{t.common.bookPilot}</Stamp>
                 <QuietAction href="/try-esmi">{t.common.hearRealCall}</QuietAction>

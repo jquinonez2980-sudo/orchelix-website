@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import JsonLd from "@/app/components/JsonLd";
 import Nav from "@/app/components/sections/Nav";
 import Footer from "@/app/components/sections/Footer";
+import PricingGrowthChart from "@/app/components/sections/PricingGrowthChart";
 import { ESMI_PILOT_PAYMENT_LINK } from "@/app/lib/pilotPayment";
 import { isLocale, localesFor, localizedHref, type Locale } from "@/app/i18n/config";
 import { getDictionary } from "@/app/i18n/dictionaries";
@@ -16,7 +17,6 @@ import {
   QuietAction,
   Band,
   Disclosure,
-  PageVisual,
 } from "@/app/components/ledger";
 import pricingVisual from "@/public/pricing-visual.png";
 
@@ -95,7 +95,7 @@ export default async function PricingPage({ params }: PageProps<"/[locale]">) {
             </div>
 
             <div className="flex flex-col items-end gap-8">
-              <PageVisual src={pricingVisual} max={300} />
+              <PricingGrowthChart src={pricingVisual} max={300} />
               <div className="flex flex-wrap items-center gap-x-7 gap-y-4 lg:justify-end">
                 <Stamp href={PILOT_HREF}>{p.startPilot}</Stamp>
                 <QuietAction href={`${localizedHref("/book", locale)}?intent=demo`}>

@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Nav from "@/app/components/sections/Nav";
 import Footer from "@/app/components/sections/Footer";
+import AboutCubePulse from "@/app/components/sections/AboutCubePulse";
 import { isLocale, localesFor, localizedHref } from "@/app/i18n/config";
 import { getDictionary } from "@/app/i18n/dictionaries";
 import {
@@ -13,7 +14,6 @@ import {
   QuietAction,
   RuledList,
   EntryList,
-  PageVisual,
 } from "@/app/components/ledger";
 import aboutVisual from "@/public/about-visual.png";
 
@@ -55,9 +55,10 @@ export default async function AboutPage({ params }: PageProps<"/[locale]">) {
               </Prose>
             </div>
             <div className="flex flex-col items-end gap-8">
-              {/* Brand accent filling what was previously dead white space in
-                  this column — the logo's own helix motif, decorative only. */}
-              <PageVisual src={aboutVisual} max={320} />
+              {/* The original artwork, untouched — one real piece of it (the
+                  magenta cube, cut out of the actual PNG) breathes in and
+                  out over its own position. */}
+              <AboutCubePulse src={aboutVisual} max={320} />
               <div className="flex flex-wrap items-center gap-x-7 gap-y-4 lg:justify-end">
                 <Stamp href={localizedHref("/book", locale)}>{t.common.talkToConsultant}</Stamp>
                 <QuietAction href={localizedHref("/how-it-works", locale)}>
