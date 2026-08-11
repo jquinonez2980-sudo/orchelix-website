@@ -71,9 +71,25 @@ export type CallDetailResponse = {
 /* Web chat sessions (chat_sessions table) — metadata only, no transcript.
    The LangGraph Postgres checkpointer stays the transcript source of truth;
    see platform_api/chat_log.py. */
-export const CHAT_OUTCOMES = ["booked", "escalated"] as const;
+// "closed" is terminal-but-uneventful: the thread went idle without booking or
+// escalating. Written by scripts/close_chat_sessions.py, never by a live turn.
+// Must stay in step with CHAT_OUTCOMES in platform_api/chat_log.py.
+export const CHAT_OUTCOMES = ["booked", "escalated", "closed"] as const;
 
 export type ChatOutcome = (typeof CHAT_OUTCOMES)[number];
+
+/* Where a web chat came from (alembic 0011). ip_address and user_agent are the
+   two most sensitive fields and appear ONLY on the detail endpoint — the list
+   payload deliberately omits them. */
+export type ChatAttribution = {
+  ip_address: string | null;
+  user_agent: string | null;
+  referrer: string | null;
+  landing_path: string | null;
+  utm_source: string | null;
+  utm_medium: string | null;
+  utm_campaign: string | null;
+};
 
 export type PlatformChat = {
   id: string;
@@ -84,6 +100,12 @@ export type PlatformChat = {
   message_count: number;
   outcome: ChatOutcome | null;
   summary: string | null;
+  // Flat on the list endpoint (no ip_address / user_agent — see ChatAttribution).
+  referrer: string | null;
+  landing_path: string | null;
+  utm_source: string | null;
+  utm_medium: string | null;
+  utm_campaign: string | null;
 };
 
 export type ChatsResponse = {
@@ -127,6 +149,8 @@ export type ChatDetail = {
   message_count: number;
   outcome: ChatOutcome | null;
   summary: string | null;
+  // Nested here (unlike the flat list fields) and includes ip_address/user_agent.
+  attribution: ChatAttribution;
   messages: ChatMessage[];
 };
 

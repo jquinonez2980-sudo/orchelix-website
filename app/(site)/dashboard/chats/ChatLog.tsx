@@ -5,6 +5,7 @@ import {
   CHAT_OUTCOMES,
   fetchChatDetail,
   fetchChats,
+  type ChatAttribution,
   type ChatDetail,
   type ChatOutcome,
   type ChatsResponse,
@@ -41,11 +42,16 @@ function fmtWhen(iso: string | null): { date: string; time: string } {
 const OUTCOME_STYLE: Record<string, { label: string; tone: BadgeTone }> = {
   booked: { label: "Booked", tone: "positive" },
   escalated: { label: "Escalated", tone: "warning" },
+  // Idle thread aged out by scripts/close_chat_sessions.py — a real ending, but
+  // an uneventful one, so it stays neutral rather than reading as a failure.
+  closed: { label: "Closed", tone: "neutral" },
 };
 
 function OutcomeBadge({ outcome }: { outcome: ChatOutcome | null }) {
   if (!outcome) return <Badge tone="neutral">In progress</Badge>;
-  const s = OUTCOME_STYLE[outcome];
+  // Fall back to the raw value rather than crashing if the backend ships an
+  // outcome this build has no style for yet.
+  const s = OUTCOME_STYLE[outcome] ?? { label: outcome, tone: "neutral" as BadgeTone };
   return <Badge tone={s.tone}>{s.label}</Badge>;
 }
 
@@ -97,6 +103,61 @@ function TranscriptView({ detail }: { detail: ChatDetail }) {
   );
 }
 
+/* ── attribution ─────────────────────────────────────────────────────────── */
+
+/** Bare hostname for display — a full referrer URL is too long for the grid. */
+function hostOf(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+}
+
+/**
+ * Where this visitor came from. Rows stay blank for conversations that started
+ * before attribution capture shipped, so say that explicitly rather than
+ * rendering a grid of dashes that looks like a bug.
+ */
+function AttributionView({ a }: { a: ChatAttribution }) {
+  const campaign =
+    [a.utm_source, a.utm_medium, a.utm_campaign].filter(Boolean).join(" · ") || null;
+  const hasAny = Boolean(
+    a.referrer || campaign || a.landing_path || a.user_agent || a.ip_address,
+  );
+
+  if (!hasAny) {
+    return (
+      <p className="text-sm text-ink-3">
+        No source recorded — this conversation started before attribution tracking.
+      </p>
+    );
+  }
+
+  // A recorded chat with no referrer arrived without one: typed the URL, a
+  // bookmark, or a stripped referer. That is "Direct", not missing data.
+  const rows: Array<[string, string | null]> = [
+    ["Source", a.referrer ? hostOf(a.referrer) : "Direct"],
+    ["Campaign", campaign],
+    ["Landing page", a.landing_path],
+    ["Device", a.user_agent],
+    ["IP", a.ip_address],
+  ];
+
+  return (
+    <dl className="grid grid-cols-1 gap-x-6 gap-y-1.5 sm:grid-cols-2">
+      {rows.map(([label, value]) => (
+        <div key={label} className="flex min-w-0 items-baseline gap-2 text-sm">
+          <dt className="shrink-0 text-ink-3">{label}</dt>
+          <dd className="min-w-0 truncate text-ink" title={value ?? undefined}>
+            {value ?? "—"}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
 function ChatDetailPanel({ chatId }: { chatId: string }) {
   const [detail, setDetail] = useState<ChatDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -125,6 +186,14 @@ function ChatDetailPanel({ chatId }: { chatId: string }) {
 
   return (
     <div className="space-y-4 border-t border-line bg-surface-2 px-4 py-4 sm:px-6">
+      {detail && !loading && !error && (
+        <div>
+          <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-ink-3">
+            Where this chat came from
+          </p>
+          <AttributionView a={detail.attribution} />
+        </div>
+      )}
       <div>
         <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-ink-3">
           Transcript

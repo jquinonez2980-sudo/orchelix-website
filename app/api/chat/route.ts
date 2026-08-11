@@ -17,6 +17,13 @@ export async function POST(req: NextRequest) {
   const clientIp =
     req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
 
+  // Attribution (chat_sessions.user_agent / .referrer) describes the visitor,
+  // but this is a server-to-server fetch: without forwarding, Railway would see
+  // Node's own fetch user-agent and no referer at all. Both are echoes of the
+  // browser's request and carry no secret.
+  const userAgent = req.headers.get("user-agent") ?? "";
+  const referer = req.headers.get("referer") ?? "";
+
   let upstream: Response;
   try {
     upstream = await fetch(`${RAILWAY_URL}/chat`, {
@@ -25,6 +32,8 @@ export async function POST(req: NextRequest) {
         "Content-Type": "application/json",
         "X-Chat-Secret": process.env.CHAT_PROXY_SECRET ?? "",
         "X-Client-IP": clientIp,
+        ...(userAgent ? { "User-Agent": userAgent } : {}),
+        ...(referer ? { Referer: referer } : {}),
       },
       body: JSON.stringify(body),
       // @ts-expect-error — Node 18 fetch supports duplex but types lag

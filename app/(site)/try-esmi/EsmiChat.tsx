@@ -117,6 +117,35 @@ function getOrCreateThreadId(tenantKey: string): string {
   }
 }
 
+/**
+ * The external page that sent this visitor, captured once per browser session.
+ *
+ * document.referrer is only the *outside* source on the first page of a visit —
+ * after one internal navigation it becomes our own URL. Latching it in
+ * sessionStorage on first load preserves the real channel (an ad, a search, a
+ * social post) even when the visitor browses a while before opening the chat.
+ * Same-origin values are stored as "" so a landing→chat hop is not reported as
+ * a referral from ourselves.
+ */
+function getSessionReferrer(): string {
+  const storeKey = "esmi-referrer";
+  try {
+    const stored = sessionStorage.getItem(storeKey);
+    if (stored !== null) return stored;
+    const raw = document.referrer || "";
+    let external = raw;
+    try {
+      if (raw && new URL(raw).origin === window.location.origin) external = "";
+    } catch {
+      external = "";
+    }
+    sessionStorage.setItem(storeKey, external);
+    return external;
+  } catch {
+    return "";
+  }
+}
+
 function parseSlot(slot: string): { start: string; end: string } {
   const parts = slot.split(/\s*[–\-]\s*/);
   return { start: parts[0]?.trim() ?? slot, end: parts[1]?.trim() ?? "" };
@@ -150,6 +179,8 @@ export default function EsmiChat({
   const [threadId, setThreadId] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  // Latched on mount (client-only: sessionStorage/document are unavailable during SSR).
+  const sessionReferrerRef = useRef<string>("");
 
   const switchLocale = useCallback((next: "en" | "es") => {
     if (next === locale) return;
@@ -157,6 +188,10 @@ export default function EsmiChat({
     setMessages([{ id: uid(), role: "assistant", content: next === "es" ? welcomeEs(companyName) : welcomeEn(companyName) }]);
     setInput("");
   }, [locale, companyName]);
+
+  useEffect(() => {
+    sessionReferrerRef.current = getSessionReferrer();
+  }, []);
 
   useEffect(() => {
     const id = getOrCreateThreadId(tenantKey);
@@ -216,6 +251,11 @@ export default function EsmiChat({
             thread_id: threadId,
             // Routes the backend to this tenant's KB/pricing/persona (omitted → "default").
             ...(tenantId ? { tenant_id: tenantId } : {}),
+            // Attribution: which page the chat started on (and its ?utm_* params)
+            // plus the external source that sent the visitor here. The backend
+            // keeps first-write-wins, so resending each turn is harmless.
+            page_url: window.location.href,
+            ...(sessionReferrerRef.current ? { referrer: sessionReferrerRef.current } : {}),
           }),
         });
 
