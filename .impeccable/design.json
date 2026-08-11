@@ -787,7 +787,7 @@
       },
       {
         "name": "The Nothing Loops Rule",
-        "body": "No animation repeats. `infinite` does not appear on this surface. A state that persists is drawn as a held mark, not as a breathing one: the chat's pending state is a foil rule that draws once in 260ms and holds, because a line held open in a ledger is a real thing and a pulsing dot is not. Three loops were removed on 2026-08-08 — `lg-typing` (a three-dot \"AI thinking\" indicator and a blinking caret), `esmi-wave-idle` (a waveform breathing on an untouched page), and `esmi-spin` (a tool spinner that repeated a label already written beside it). The waveform's remaining animation is gated on a request actually being in flight.",
+        "body": "No animation on a functional element repeats forever to assert a system state. `infinite` on a state indicator — \"the AI is thinking,\" \"it's listening,\" \"it's loading\" — is a claim that stays on screen after it stops being true, which is a lie in motion the same way a fabricated typing cadence is a lie in copy. A state that persists is drawn as a held mark, not as a breathing one: the chat's pending state is a foil rule that draws once in 260ms and holds, because a line held open in a ledger is a real thing and a pulsing dot is not. Three loops were removed on 2026-08-08 — `lg-typing` (a three-dot \"AI thinking\" indicator and a blinking caret), `esmi-wave-idle` (a waveform breathing on an untouched page), and `esmi-spin` (a tool spinner that repeated a label already written beside it). The waveform's remaining animation is gated on a request actually being in flight.",
         "section": "motion"
       },
       {
@@ -826,7 +826,7 @@
       "**Don't** put an eyebrow, kicker, or `01/02/03` numbering above a heading.",
       "**Don't** ship a row of same-size icon + heading + text cards, or gradient text, or a sparkline standing in for content.",
       "**Don't** use a Unicode glyph as a rule, bullet, arrow, or separator. Rules are drawn; icons are inline SVG paths.",
-      "**Don't** write `infinite`, a pulsing dot, a blinking caret, or a spinner. A persistent state is a held mark, not a breathing one.",
+      "**Don't** write `infinite` on anything that asserts a system state — a pulsing dot, a blinking caret, a spinner. A persistent state is a held mark, not a breathing one. Decorative motion on a marketing illustration that asserts no state is the one exemption — see the Nothing Loops Rule.",
       "**Don't** invent a duration or an easing curve. Four verbs, three durations, one stagger, two curves — the vocabulary is closed.",
       "**Don't** animate anything but `transform`, `opacity`, and `clip-path`, and don't gate content behind an animation.",
       "**Don't** introduce a font-size that is not in `typography.scale`, and don't hand-write a `clamp()` for a heading — use `PageTitle` or `SectionTitle`.",
