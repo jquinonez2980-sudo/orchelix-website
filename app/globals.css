@@ -883,6 +883,194 @@ body {
   animation-delay: calc(var(--i, 0) * var(--lg-stagger) + 180ms);
 }
 
+/* The how-it-works opening diagram (FlowPulseOverlay.tsx) — a transparent
+   SVG laid over the ORIGINAL how-it-works-diagram.png at its own pixel
+   coordinates (viewBox 0 0 1331 409, matching the file 1:1). The artwork is
+   untouched; only the two travelling pulses and the AI node's glow are
+   live on top of it.
+
+   Deliberately not a continuous line: pulse A fades out as it reaches the
+   AI node (input absorbed), the node's own glow flashes (processing), then
+   pulse B fades in and travels out to the table (structured output
+   emitted). Three keyframe sets sharing one 3.4s cycle so the sequence
+   reads as receive → process → emit rather than one dot sliding across.
+
+   Same principle as the constellation (ConstellationCanvas.tsx) applied to
+   a line instead of a network: the diagram already argues "input becomes
+   structured output through the agent," this animates that claim instead of
+   decorating the page with unrelated motion.
+
+   The glow follows the same one-accent rule the call register uses: pulse A
+   (input) carries only a faint ink-toned halo — it hasn't been through the
+   agent yet, so it doesn't earn the brand colour. The AI node glows magenta
+   at the moment it "processes," and pulse B (output) glows magenta the
+   whole way out — the emitted result is the thing worth lighting up, not
+   the raw input. */
+.lg-flow-pulse-a,
+.lg-flow-pulse-b,
+.lg-flow-ai-glow {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.lg-flow-pulse-a { filter: none; animation: lg-flow-a 3.4s ease-in-out infinite; }
+.lg-flow-pulse-b { filter: none; animation: lg-flow-b 3.4s ease-in-out infinite; }
+.lg-flow-ai-glow {
+  filter: blur(30px);
+  opacity: 0;
+  animation: lg-flow-ai-glow 3.4s ease-in-out infinite;
+}
+
+/* Distances and blur radii are in the source PNG's own pixel space (1331
+   wide), not the smaller hand-drawn viewBox an earlier pass used — 107px and
+   106px are the measured document→AI and AI→table gap widths themselves. */
+@keyframes lg-flow-a {
+  0%, 100% { opacity: 0; transform: translateX(0); filter: drop-shadow(0 0 0 transparent); }
+  4% { opacity: 1; filter: drop-shadow(0 0 9px var(--lg-ink-2)); }
+  26% { opacity: 1; transform: translateX(107px); filter: drop-shadow(0 0 9px var(--lg-ink-2)); }
+  30% { opacity: 0; transform: translateX(107px); filter: drop-shadow(0 0 0 transparent); }
+}
+@keyframes lg-flow-b {
+  0%, 34% { opacity: 0; transform: translateX(0); filter: drop-shadow(0 0 0 transparent); }
+  38% { opacity: 1; filter: drop-shadow(0 0 16px var(--lg-foil)); }
+  50% { filter: drop-shadow(0 0 22px var(--lg-foil)); }
+  62% { opacity: 1; transform: translateX(106px); filter: drop-shadow(0 0 16px var(--lg-foil)); }
+  66%, 100% { opacity: 0; transform: translateX(106px); filter: drop-shadow(0 0 0 transparent); }
+}
+@keyframes lg-flow-ai-glow {
+  0%, 27% { opacity: 0; }
+  32% { opacity: 0.4; }
+  38%, 100% { opacity: 0; }
+}
+
+/* The industries opening diagram (IndustriesPulseOverlay.tsx) — house, gear,
+   factory, shield, connected by the artwork's own line. Not a processing
+   pipeline like how-it-works, so no receive/emit colour split: a single
+   accent pulse travels the full chain in one pass, flashing each icon
+   magenta as it arrives, pauses, then loops. Distances (280px/231px/227px)
+   are the measured gaps between each icon's own column bounds in the source
+   PNG (1641×287), not eyeballed. */
+.lg-ind-pulse-1, .lg-ind-pulse-2, .lg-ind-pulse-3,
+.lg-ind-glow-2, .lg-ind-glow-3, .lg-ind-glow-4 {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.lg-ind-pulse-1 { filter: none; animation: lg-ind-p1 5.6s ease-in-out infinite; }
+.lg-ind-pulse-2 { filter: none; animation: lg-ind-p2 5.6s ease-in-out infinite; }
+.lg-ind-pulse-3 { filter: none; animation: lg-ind-p3 5.6s ease-in-out infinite; }
+.lg-ind-glow-2 { filter: blur(24px); opacity: 0; animation: lg-ind-g2 5.6s ease-in-out infinite; }
+.lg-ind-glow-3 { filter: blur(24px); opacity: 0; animation: lg-ind-g3 5.6s ease-in-out infinite; }
+.lg-ind-glow-4 { filter: blur(24px); opacity: 0; animation: lg-ind-g4 5.6s ease-in-out infinite; }
+
+@keyframes lg-ind-p1 {
+  0%, 100% { opacity: 0; transform: translateX(0); filter: drop-shadow(0 0 0 transparent); }
+  2% { opacity: 1; filter: drop-shadow(0 0 10px var(--lg-foil)); }
+  18% { opacity: 1; transform: translateX(280px); filter: drop-shadow(0 0 10px var(--lg-foil)); }
+  20% { opacity: 0; transform: translateX(280px); filter: drop-shadow(0 0 0 transparent); }
+}
+@keyframes lg-ind-g2 {
+  0%, 18% { opacity: 0; }
+  22% { opacity: 0.5; }
+  28%, 100% { opacity: 0; }
+}
+@keyframes lg-ind-p2 {
+  0%, 26% { opacity: 0; transform: translateX(0); filter: drop-shadow(0 0 0 transparent); }
+  28% { opacity: 1; filter: drop-shadow(0 0 10px var(--lg-foil)); }
+  44% { opacity: 1; transform: translateX(231px); filter: drop-shadow(0 0 10px var(--lg-foil)); }
+  46%, 100% { opacity: 0; transform: translateX(231px); filter: drop-shadow(0 0 0 transparent); }
+}
+@keyframes lg-ind-g3 {
+  0%, 44% { opacity: 0; }
+  48% { opacity: 0.5; }
+  54%, 100% { opacity: 0; }
+}
+@keyframes lg-ind-p3 {
+  0%, 52% { opacity: 0; transform: translateX(0); filter: drop-shadow(0 0 0 transparent); }
+  54% { opacity: 1; filter: drop-shadow(0 0 10px var(--lg-foil)); }
+  70% { opacity: 1; transform: translateX(227px); filter: drop-shadow(0 0 10px var(--lg-foil)); }
+  72%, 100% { opacity: 0; transform: translateX(227px); filter: drop-shadow(0 0 0 transparent); }
+}
+@keyframes lg-ind-g4 {
+  0%, 70% { opacity: 0; }
+  74% { opacity: 0.5; }
+  80%, 100% { opacity: 0; }
+}
+
+/* The pricing opening chart (PricingGrowthChart.tsx) — three stacked copies
+   of the same source image, each clipped to one bar's own column, with only
+   the bottom inset animated so that bar rises from the baseline once on
+   load. Not a loop: a chart's honest motion is growing into place and
+   holding, same principle as the call register's one-time Settle. Column
+   bounds were measured directly off `pricing-visual.png` (990×808) by
+   scanning each bar's own x-range and top edge.
+
+   `animation-fill-mode: both` matters here specifically: it holds the 100%
+   state (the real bar, fully grown) after the animation ends, the same way
+   Settle already relies on `both` elsewhere in this file. Without it the
+   browser would snap the bar back to its zero-height starting clip the
+   instant the animation completes. */
+/* Duration is scaled to each bar's actual rise distance (202px / 448px /
+   763px in the source art), not a flat 900ms for all three. A flat duration
+   made the short Starter bar crawl through its small range at a fraction of
+   bar3's pixel speed, so it read as a weak fade instead of a rise. Scaling
+   duration by height keeps all three bars moving at the same px/ms — bar3's
+   speed (763px in 900ms) — so bar1 now snaps up fast and bar2 lands in
+   between, matching the punch of the tallest bar instead of lagging behind it. */
+.lg-grow-bar-1, .lg-grow-bar-2, .lg-grow-bar-3 {
+  animation-timing-function: var(--ease-emphasized);
+  animation-fill-mode: both;
+}
+.lg-grow-bar-1 { animation-name: lg-grow-bar-1; animation-duration: 240ms; animation-delay: 150ms; }
+.lg-grow-bar-2 { animation-name: lg-grow-bar-2; animation-duration: 530ms; animation-delay: 380ms; }
+.lg-grow-bar-3 { animation-name: lg-grow-bar-3; animation-duration: 900ms; animation-delay: 610ms; }
+
+@keyframes lg-grow-bar-1 {
+  0% { clip-path: inset(71.91% 74.75% 28.09% 2.53%); }
+  100% { clip-path: inset(71.91% 74.75% 3.09% 2.53%); }
+}
+@keyframes lg-grow-bar-2 {
+  0% { clip-path: inset(41.46% 42.22% 58.54% 25.76%); }
+  100% { clip-path: inset(41.46% 42.22% 3.09% 25.76%); }
+}
+@keyframes lg-grow-bar-3 {
+  0% { clip-path: inset(2.97% 2.63% 97.03% 57.88%); }
+  100% { clip-path: inset(2.97% 2.63% 2.60% 57.88%); }
+}
+
+/* The About opening visual (AboutCubePulse.tsx) — five cubes cut straight
+   out of the source PNG, each layered back over its own position and
+   breathing: a slow scale-up-and-back with a matching drop-shadow so each
+   reads as lifting toward the viewer and settling again, not just growing.
+   Continuous, not a one-time settle — "the blocks go in and out" is a
+   repeating motion, the same register the AI node's glow already uses for
+   an ongoing pulse rather than an on-load reveal.
+
+   Every piece shares the base `lg-cube-pulse` rule (transform-origin,
+   filter reset) and picks up its own animation via a numbered modifier
+   class — different delay and a slightly different duration per cube, so
+   five pieces breathing at once reads as a scattered living structure
+   instead of one shape flexing in unison. The element's own box IS the
+   cutout (positioned via left/top/width/height in AboutCubePulse.tsx), so
+   `transform-origin: center` scales each from its own middle correctly. */
+.lg-cube-pulse {
+  transform-origin: center;
+}
+.lg-cube-pulse-1 { animation: lg-cube-pulse 3.2s ease-in-out infinite; }
+.lg-cube-pulse-2 { animation: lg-cube-pulse 3.6s ease-in-out infinite; animation-delay: 0.5s; }
+.lg-cube-pulse-3 { animation: lg-cube-pulse 2.9s ease-in-out infinite; animation-delay: 1.1s; }
+.lg-cube-pulse-4 { animation: lg-cube-pulse 3.4s ease-in-out infinite; animation-delay: 1.7s; }
+.lg-cube-pulse-5 { animation: lg-cube-pulse 3.1s ease-in-out infinite; animation-delay: 0.85s; }
+
+@keyframes lg-cube-pulse {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+    filter: drop-shadow(0 0 0 transparent);
+  }
+  50% {
+    transform: scale(1.045) translateY(-2%);
+    filter: drop-shadow(0 10px 18px rgba(46, 50, 62, 0.32));
+  }
+}
+
 /* ─── Materials ───────────────────────────────────────────────────────────
    Buckram cloth and gold foil are produced as materials, not as tokens that
    merely name them. The cloth is a shipped raster-equivalent tile; the foil
@@ -1102,6 +1290,16 @@ details[open] > .lg-summary::before {
   [data-lg-in="true"] .lg-anchor::before,
   [data-lg-in="true"] .lg-settle-item { animation: none; }
   .lg-stamp, .lg-quiet::after { transition: none; }
+  .lg-flow-pulse-a, .lg-flow-pulse-b, .lg-flow-ai-glow { animation: none; }
+  .lg-flow-pulse-a, .lg-flow-pulse-b { opacity: 0; }
+  .lg-ind-pulse-1, .lg-ind-pulse-2, .lg-ind-pulse-3,
+  .lg-ind-glow-2, .lg-ind-glow-3, .lg-ind-glow-4 { animation: none; }
+  .lg-ind-pulse-1, .lg-ind-pulse-2, .lg-ind-pulse-3 { opacity: 0; }
+  /* Bars: reduced motion drops the growth animation but must still land on
+     the fully-grown state, not the zero-height start — falling back to no
+     clip-path at all shows the complete original image, which is correct. */
+  .lg-grow-bar-1, .lg-grow-bar-2, .lg-grow-bar-3 { animation: none; clip-path: none; }
+  .lg-cube-pulse { animation: none; }
 }
 
 /* Anchors sit under a sticky header, so a jump has to clear it or the
