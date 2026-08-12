@@ -78,11 +78,14 @@ export default function PublicVoicePreview({
   compact = false,
   initialLang = "en",
   id = "voice-preview",
+  onLanguageChange,
 }: {
   /** Hero / inline strip: fewer samples, no large section title. */
   compact?: boolean;
   initialLang?: Lang;
   id?: string;
+  /** Fired when the EN/ES chips change so parents (e.g. hero transcript) can match. */
+  onLanguageChange?: (lang: Lang) => void;
 } = {}) {
   const [sampleId, setSampleId] = useState("general");
   const [language, setLanguage] = useState<Lang>(initialLang);
@@ -96,6 +99,11 @@ export default function PublicVoicePreview({
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const scrubRef = useRef<HTMLDivElement | null>(null);
+
+  const setLang = (lang: Lang) => {
+    setLanguage(lang);
+    onLanguageChange?.(lang);
+  };
 
   const sample = SAMPLES.find((s) => s.id === sampleId) ?? SAMPLES[0];
   const paramsKey = `${sampleId}:${language}`;
@@ -296,7 +304,7 @@ export default function PublicVoicePreview({
                 <button
                   key={l}
                   type="button"
-                  onClick={() => setLanguage(l)}
+                  onClick={() => setLang(l)}
                   aria-pressed={active}
                   className="epv-seg px-3 py-2 sm:py-1.5"
                   style={{
@@ -528,7 +536,7 @@ export default function PublicVoicePreview({
           </div>
         </div>
 
-        {/* ── CTAs
+        {/* ── CTAs (full try-esmi page only — hero has its own path under the transcript)
 
             Both are quiet. The page's foil stamp ("Book a pilot") sits in the
             offer column immediately beside this player, and foil marks the
@@ -538,38 +546,40 @@ export default function PublicVoicePreview({
             `#demo` was a dead anchor after the ledger conversion; the chat
             section is `#chat`. /get-started is the real self-serve signup and
             is preserved as a destination. */}
-        <div className="mt-7 flex flex-col gap-x-7 gap-y-3 sm:flex-row sm:items-center">
-          <a
-            href="#chat"
-            className="lg-quiet"
-            style={{
-              fontFamily: "var(--font-display)",
-              fontStretch: "88%",
-              fontWeight: 600,
-              fontSize: "0.875rem",
-              letterSpacing: "0.04em",
-              color: "var(--lg-ink)",
-              textDecoration: "none",
-            }}
-          >
-            {isEs ? "Probar el chat en vivo" : "Try the live chat"}
-          </a>
-          <a
-            href="/get-started"
-            className="lg-quiet"
-            style={{
-              fontFamily: "var(--font-display)",
-              fontStretch: "88%",
-              fontWeight: 600,
-              fontSize: "0.875rem",
-              letterSpacing: "0.04em",
-              color: "var(--lg-ink-2)",
-              textDecoration: "none",
-            }}
-          >
-            {isEs ? "Empezar por tu cuenta" : "Start on your own"}
-          </a>
-        </div>
+        {!compact && (
+          <div className="mt-7 flex flex-col gap-x-7 gap-y-3 sm:flex-row sm:items-center">
+            <a
+              href="#chat"
+              className="lg-quiet"
+              style={{
+                fontFamily: "var(--font-display)",
+                fontStretch: "88%",
+                fontWeight: 600,
+                fontSize: "0.875rem",
+                letterSpacing: "0.04em",
+                color: "var(--lg-ink)",
+                textDecoration: "none",
+              }}
+            >
+              {isEs ? "Probar el chat en vivo" : "Try the live chat"}
+            </a>
+            <a
+              href="/get-started"
+              className="lg-quiet"
+              style={{
+                fontFamily: "var(--font-display)",
+                fontStretch: "88%",
+                fontWeight: 600,
+                fontSize: "0.875rem",
+                letterSpacing: "0.04em",
+                color: "var(--lg-ink-2)",
+                textDecoration: "none",
+              }}
+            >
+              {isEs ? "Empezar por tu cuenta" : "Start on your own"}
+            </a>
+          </div>
+        )}
       </div>
     </section>
   );
