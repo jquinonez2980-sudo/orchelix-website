@@ -9,16 +9,18 @@ import type { Locale } from "@/app/i18n/config";
 import { track } from "@/app/lib/analytics";
 import { useEffect } from "react";
 
+/* Transcript mirrors a real flow: Esmi matches the language the caller used.
+   Do not offer "English or Spanish" after they already spoke one language. */
 const SAMPLE_LINES_EN = [
   { who: "Caller", text: "Hi — do you have anything tomorrow morning for a kitchen template?" },
-  { who: "Esmi", text: "I can check. English or Spanish is fine. What time works best for you?" },
+  { who: "Esmi", text: "I can check that for you. What time works best?" },
   { who: "Caller", text: "Around nine if you have it." },
   { who: "Esmi", text: "Thursday at 9:00 is open. I'll book that and send a confirmation." },
 ];
 
 const SAMPLE_LINES_ES = [
   { who: "Caller", text: "Hola — ¿tienen algo mañana en la mañana para plantilla de cocina?" },
-  { who: "Esmi", text: "Puedo revisar. ¿Qué horario le conviene?" },
+  { who: "Esmi", text: "Claro, lo reviso. ¿Qué horario le conviene?" },
   { who: "Caller", text: "Como a las nueve, si hay." },
   { who: "Esmi", text: "Jueves a las 9:00 está libre. Lo agendo y le mando confirmación." },
 ];
