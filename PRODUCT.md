@@ -14,7 +14,8 @@ technical buyers. They evaluate in gaps between real work, often on a phone, and
 have usually been sold automation before and been disappointed.
 
 Confirmed verticals: Architecture & Design, Stone & Fabrication, Field Service,
-Manufacturing, Healthcare, Legal.
+Manufacturing, Healthcare, Legal, Professional services (e.g. accounting),
+Hospitality / local multi-location (e.g. barbershop), Property / condo associations.
 
 A significant share of their own customers are Spanish-speaking; the operator may be
 bilingual, or may be losing calls because nobody in the office is.
@@ -38,7 +39,8 @@ action is logged to an audit trail with human approve/override/coach controls. C
 sell either software without the consultant, or consulting without the product.
 
 Bilingual EN/ES is native to every agent rather than a translation layer — a real
-differentiator in the confirmed verticals and geographies.
+differentiator in the confirmed verticals and geographies. **French is a confirmed
+add-on language** (not native default).
 
 ## Operating Context
 
@@ -55,28 +57,35 @@ once the first has earned it.
 
 | Product | Status |
 |---|---|
-| **Esmi** — Virtual Receptionist & call automation | **Live in production.** 24/7 answering, qualification, booking, smart routing, EN/ES, transcript + reason on every call. |
+| **Esmi** — Virtual Receptionist & call automation | **Live in production.** 24/7 answering, qualification, booking, smart routing, EN/ES native, FR as add-on, transcript + reason on every call. |
 | **Revenue-Ops Agents** — lead qualification, follow-up, pipeline | **In development.** |
 | **AcumenAI** — Accounting & Finance OS, close and bookkeeping | **In development.** |
 
 The site must not present all three as equally shipped. Esmi carries the proof; the other
 two are roadmap and must read as such.
 
-**Jurisdiction:** genuinely cross-border, US and Canada. PIPEDA alignment is real and
-applies to Canadian operations; the West Palm Beach, FL presence and South Florida service
-area are also real. Because both are true, the site must state the cross-border position
-explicitly rather than mixing a Canadian privacy claim with US-only location signals — the
-current metadata does the latter and reads as an error.
+**Jurisdiction:** genuinely cross-border, US and Canada.
+
+| | |
+|---|---|
+| **Canada** | Orchelix AI Consulting Inc. — Canadian legal presence (Ontario). PIPEDA applies to Canadian operations. |
+| **United States** | Principal place of business / service: West Palm Beach, Florida; South Florida service area. |
+
+Both are real and must be stated as a dual-jurisdiction position — never US-only metadata with a Canadian privacy claim, or the reverse.
 
 **Commercial:** tiers Starter $299 / Growth $599 / Scale $999, plus add-ons.
 Contact: (561) 566-1066.
 
-**Open / unverified — do not restate as fact without confirmation:**
-- "SOC 2 in progress" — claimed on the current site; status not independently confirmed here.
-- Registered legal entity address for each jurisdiction (still outstanding from the
-  pre-launch audit, needed for privacy and terms pages).
-- Named Privacy Officer for the privacy page.
-- French as an add-on language — claimed on the current site; availability unconfirmed.
+**Confirmed (2026-08-12 founder):**
+
+- **Privacy Officer:** Jorge Quinonez — privacy@orchelix.com  
+- **French:** available as an add-on language  
+- **Legal presence:** Canada and United States (see Jurisdiction above). Street-level registered addresses: add to privacy/terms when formal registry strings are pasted in; city/jurisdiction level is approved for public pages until then.
+
+**Still open / do not invent:**
+
+- "SOC 2 in progress" or any certification timeline — not confirmed for public claims. Prefer “ask for the control pack” / technical measures language.
+- Full registered street addresses for each jurisdiction (to be added when provided as exact registry text).
 
 ## Brand Commitments
 
@@ -84,25 +93,31 @@ Contact: (561) 566-1066.
   **AcumenAI** for the finance OS.
 - Voice: senior, competent, calm confidence. No hype, no exclamation, no AI-vendor
   breathlessness. Copy states specifics and consequences, not adjectives.
-- Bilingual EN/ES is an identity commitment, not a feature bullet.
+- Bilingual EN/ES is an identity commitment, not a feature bullet. French is an add-on.
 - Existing copy is confirmed good and is preserved by default; factual claims are not
   altered or added without approval.
 
 ## Evidence on Hand
 
-**Real and usable:** Esmi call recordings and working product demonstrations. This is the
-single strongest asset — it is a live product doing the thing, and it should carry the
-proof burden across the site.
+**Real and usable:**
 
-**Explicitly absent — must never be fabricated:**
-- No named client references or public testimonials.
-- No client logos.
-- No outcome metrics, conversion rates, latency figures, or benchmark numbers.
+- Esmi call recordings and working product demonstrations.
+- **Named operators in production (founder-confirmed, 2026-08-12):**
+  - **Otro Nivel Barbershop** — two locations  
+  - **Coastline Condos** — https://coastlinecondos.vip  
+  - **JQ Accounting**
 
-Fabricated proof previously present on the site (named testimonials for "Marisol
-Santiago / Riverstone Clinic" and "Javier Cárdenas / Northstar Accounting"; logos for
-Northstar, Bloom & Co., Maplewood HVAC, Iglesia Pueblo, Riverstone Clinic; invented stat
-bands) is being removed, not restyled. Decision confirmed 2026-08-08.
+These names may appear as **operators / clients using Esmi**, without invented quotes,
+logos (unless asset files exist), conversion rates, or outcome metrics.
+
+**Still never fabricate:**
+
+- Quotes, faces, or logos without assets/permission  
+- Outcome metrics, latency figures, or benchmark numbers  
+
+Fabricated proof previously removed (Marisol Santiago / Riverstone Clinic, Javier
+Cárdenas / Northstar Accounting, invented logo strip, invented stat bands) stays removed.
+Do not reintroduce fictional names.
 
 ## Product Principles
 
@@ -119,9 +134,7 @@ bands) is being removed, not restyled. Decision confirmed 2026-08-08.
 
 ## Accessibility & Inclusion
 
-- Full EN/ES parity is a product-truth requirement, not a nice-to-have. The current `/es`
-  tree is a hand-duplicated partial (3 of ~12 marketing pages, no i18n system), which
-  actively contradicts the positioning above.
+- Full EN/ES parity is a product-truth requirement, not a nice-to-have.
 - Audience skews non-technical and mobile; interfaces must survive being read quickly on a
   phone in a noisy environment.
 - Existing baseline to preserve: skip link, `:focus-visible` ring, `prefers-reduced-motion`

@@ -164,11 +164,11 @@ const es: Messages = {
       },
       {
         title: "Bilingüe desde la primera llamada",
-        desc: "Esmi habla inglés y español de forma nativa — no es una capa de traducción encima de un agente en inglés. Los idiomas que tus clientes realmente usan.",
+        desc: "Esmi habla inglés y español de forma nativa — no es una capa de traducción encima de un agente en inglés. El francés está disponible como complemento cuando tu línea lo necesita.",
       },
       {
         title: "Un registro que resiste una auditoría",
-        desc: "Controles de nivel operativo, reglas de retención y un historial que los auditores de tus clientes van a aceptar. Alineado con PIPEDA para operaciones en Canadá. Residencia de datos a solicitud.",
+        desc: "Controles de nivel operativo, reglas de retención y un historial que un auditor acepta. Alineado con PIPEDA en Canadá; presencia real en Canadá y Estados Unidos. Residencia de datos a solicitud.",
       },
       {
         title: "Siempre con una persona en el circuito",
@@ -201,6 +201,26 @@ const es: Messages = {
     privacyShort: "Privacidad",
     termsShort: "Términos",
     rights: "Orchelix AI Consulting Inc.",
+  },
+
+  operators: {
+    title: "En líneas reales hoy",
+    lede: "Esmi está en producción con operadores de barberías, asociaciones y firmas profesionales — no es una demo que nunca salió del laboratorio.",
+    items: [
+      {
+        name: "Otro Nivel Barbershop",
+        detail: "Dos ubicaciones — mostrador y fuera de horario en el mismo registro",
+      },
+      {
+        name: "Coastline Condos",
+        detail: "Línea de la asociación — propietarios y proveedores, inglés y español",
+        href: "https://coastlinecondos.vip",
+      },
+      {
+        name: "JQ Accounting",
+        detail: "Firma profesional — recepción y agenda sin perder el timbrazo",
+      },
+    ],
   },
 
   /* Copy por página. Los precios, nombres de plan, teléfonos y nombres de

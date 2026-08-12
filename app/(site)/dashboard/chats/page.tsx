@@ -1,22 +1,17 @@
-import type { Metadata } from "next";
+"use client";
+
 import ChatLog from "./ChatLog";
-
-export const dynamic = "force-dynamic";
-
-export const metadata: Metadata = {
-  title: "Chats | Esmi Dashboard",
-  robots: { index: false, follow: false },
-};
+import { useDashI18n } from "../i18n";
 
 export default function ChatsPage() {
+  const { t } = useDashI18n();
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
       <div className="mb-6">
-        <h1 className="font-display text-2xl font-semibold text-ink">Chats</h1>
-        <p className="mt-1 text-sm text-ink-2">
-          Every web chat conversation Esmi has had with a visitor — with
-          outcome and message count.
-        </p>
+        <h1 className="font-display text-2xl font-semibold uppercase tracking-tight text-ink">
+          {t.pages.chatsTitle}
+        </h1>
+        <p className="mt-1 max-w-2xl text-sm leading-6 text-ink-2">{t.pages.chatsLede}</p>
       </div>
       <ChatLog />
     </main>

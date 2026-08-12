@@ -66,6 +66,20 @@ type DashMessages = {
   byOrchelix: string;
   openMenu: string;
   closeMenu: string;
+  pages: {
+    leadsTitle: string;
+    leadsLede: string;
+    chatsTitle: string;
+    chatsLede: string;
+    appointmentsTitle: string;
+    appointmentsLede: string;
+    knowledgeTitle: string;
+    knowledgeLede: string;
+    settingsTitle: string;
+    settingsLede: string;
+    voiceTitle: string;
+    voiceLede: string;
+  };
 };
 
 const en: DashMessages = {
@@ -140,6 +154,24 @@ const en: DashMessages = {
   byOrchelix: "by Orchelix",
   openMenu: "Open menu",
   closeMenu: "Close menu",
+  pages: {
+    leadsTitle: "Leads",
+    leadsLede:
+      "Callers Esmi flagged for human follow-up — budget, timeline, or urgency. Mark one contacted once you've reached out.",
+    chatsTitle: "Chats",
+    chatsLede:
+      "Every web chat conversation Esmi has had with a visitor — with outcome and message count.",
+    appointmentsTitle: "Appointments",
+    appointmentsLede:
+      "Every appointment on your calendar — booked by Esmi over the phone, through your website, or added by hand.",
+    knowledgeTitle: "Knowledge base",
+    knowledgeLede:
+      "FAQs and short notes Esmi can pull from when answering questions. Changes are searchable within about a minute of saving.",
+    settingsTitle: "Settings",
+    settingsLede: "Hours, routing, and business facts Esmi uses on every call.",
+    voiceTitle: "Voice",
+    voiceLede: "Preview greetings, coach tone, and quality checks for your line.",
+  },
 };
 
 const es: DashMessages = {
@@ -214,6 +246,24 @@ const es: DashMessages = {
   byOrchelix: "por Orchelix",
   openMenu: "Abrir menú",
   closeMenu: "Cerrar menú",
+  pages: {
+    leadsTitle: "Prospectos",
+    leadsLede:
+      "Llamadas que Esmi marcó para seguimiento humano — presupuesto, plazo o urgencia. Márcalo contactado cuando hayas llamado.",
+    chatsTitle: "Chats",
+    chatsLede:
+      "Cada conversación de chat web que Esmi tuvo con un visitante — con resultado y conteo de mensajes.",
+    appointmentsTitle: "Citas",
+    appointmentsLede:
+      "Cada cita en tu calendario — agendada por Esmi por teléfono, en tu web o a mano.",
+    knowledgeTitle: "Base de conocimiento",
+    knowledgeLede:
+      "Preguntas frecuentes y notas cortas que Esmi puede usar al responder. Los cambios son buscables en un minuto.",
+    settingsTitle: "Ajustes",
+    settingsLede: "Horarios, ruteo y datos del negocio que Esmi usa en cada llamada.",
+    voiceTitle: "Voz",
+    voiceLede: "Vista previa del saludo, tono y controles de calidad de tu línea.",
+  },
 };
 
 const catalogs: Record<DashLocale, DashMessages> = { en, es };

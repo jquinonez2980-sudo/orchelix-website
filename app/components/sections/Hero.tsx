@@ -151,7 +151,7 @@ export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
               color: "var(--lg-ink-2)",
             }}
           >
-            <span>EN · ES</span>
+            <span>EN · ES · FR+</span>
             <Sep />
             <span>{t.common.countries}</span>
           </div>

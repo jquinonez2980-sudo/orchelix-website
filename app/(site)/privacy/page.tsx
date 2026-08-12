@@ -47,7 +47,7 @@ export default function PrivacyPage() {
               color: "var(--lg-ink-3)",
             }}
           >
-            Effective June 1, 2026 · Updated August 12, 2026
+            Effective June 1, 2026 · Updated August 12, 2026 · Dual jurisdiction: CA &amp; US
           </p>
 
           <nav aria-label="On this page" className="mt-10">
@@ -90,7 +90,12 @@ export default function PrivacyPage() {
               tone="stock"
               labelWidth="9rem"
               items={[
-                ["Who we are", "Orchelix AI Consulting Inc. — West Palm Beach, FL; serving Canada & the US"],
+                [
+                  "Who we are",
+                  "Orchelix AI Consulting Inc. — Canadian entity; principal US service presence in West Palm Beach, FL",
+                ],
+                ["Canada", "Ontario — PIPEDA applies to Canadian operations"],
+                ["United States", "West Palm Beach, Florida — South Florida service area"],
                 ["Privacy Officer", "Jorge Quinonez — privacy@orchelix.com"],
                 ["We do not sell", "Personal information is never sold to third parties"],
                 ["Default residency", "Processing may occur in the US or Canada; Canadian residency on request"],
@@ -239,7 +244,7 @@ export default function PrivacyPage() {
 
         <Section tone="field-3" id="contact" style={{ scrollMarginTop: "5.5rem" }}>
           <SectionTitle max="16ch">Contact the Privacy Officer</SectionTitle>
-          <Prose size="1.0625rem" max="42ch" style={{ marginTop: "1.5rem" }}>
+          <Prose size="1.0625rem" max="48ch" style={{ marginTop: "1.5rem" }}>
             Orchelix AI Consulting Inc.
             <br />
             Privacy Officer: Jorge Quinonez
@@ -248,7 +253,12 @@ export default function PrivacyPage() {
               privacy@orchelix.com
             </a>
             <br />
-            West Palm Beach, FL · Serving South Florida, GTA Ontario &amp; North America
+            <br />
+            Canada — Ontario (legal entity / PIPEDA)
+            <br />
+            United States — West Palm Beach, FL (principal service presence)
+            <br />
+            Serving South Florida, Ontario, and North America
           </Prose>
           <Prose size="0.9375rem" max="48ch" style={{ marginTop: "1.25rem" }}>
             Office of the Privacy Commissioner of Canada:{" "}

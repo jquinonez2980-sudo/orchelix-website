@@ -1,12 +1,12 @@
 /* English message catalogue — the source of truth.
 
    Copy rules that apply to every string in here and in es.ts:
-   - No unverified claims. Pickup latency, SOC 2 status, and French-language
-     availability are all listed as unconfirmed in PRODUCT.md and must not
-     reappear.
-   - No fabricated proof. No named clients, no logos, no outcome metrics.
-   - Esmi is in production; Revenue-Ops and AcumenAI are in development. That
-     distinction is load-bearing and must survive translation. */
+   - No unverified claims (e.g. SOC 2 timelines, latency figures) unless
+     PRODUCT.md confirms them.
+   - French is a confirmed *add-on* language (not native default).
+   - Named operators only from PRODUCT.md evidence list — no invented quotes
+     or outcome metrics.
+   - Esmi is in production; Revenue-Ops and AcumenAI are in development. */
 
 const en = {
   meta: {
@@ -155,11 +155,11 @@ const en = {
       },
       {
         title: "Bilingual from the first call",
-        desc: "Esmi speaks English and Spanish natively — not a translation layer bolted onto an English agent. The languages your customers actually use.",
+        desc: "Esmi speaks English and Spanish natively — not a translation layer bolted onto an English agent. French is available as an add-on when your line needs it.",
       },
       {
         title: "An audit trail that survives review",
-        desc: "Operator-grade controls, retention rules, and a record your clients' auditors will accept. PIPEDA-aligned for Canadian operations. Data residency by request.",
+        desc: "Operator-grade controls, retention rules, and a record auditors will accept. PIPEDA-aligned for Canadian operations; US and Canadian presence both real. Data residency by request.",
       },
       {
         title: "Human-in-the-loop, always",
@@ -194,6 +194,28 @@ const en = {
     rights: "Orchelix AI Consulting Inc.",
   },
 
+  /* Named operators confirmed in PRODUCT.md — names only, no invented quotes
+     or metrics. */
+  operators: {
+    title: "On real lines today",
+    lede: "Esmi is live with operators who answer for barbershops, property associations, and professional firms — not a demo that never left the lab.",
+    items: [
+      {
+        name: "Otro Nivel Barbershop",
+        detail: "Two locations — front desk and after-hours on the same record",
+      },
+      {
+        name: "Coastline Condos",
+        detail: "Association line — owners and vendors, English and Spanish",
+        href: "https://coastlinecondos.vip",
+      },
+      {
+        name: "JQ Accounting",
+        detail: "Professional firm — intake and scheduling without a missed ring",
+      },
+    ],
+  },
+
   /* Per-page copy. Prices, plan names, phone numbers and product names are
      NOT translated — they are the same commercial facts in both languages. */
   pages: {
@@ -205,7 +227,7 @@ const en = {
       lede: "One is answering calls in production today. Two are being built on the same console and the same record. We would rather tell you which is which than let a feature list imply otherwise.",
       esmiCapabilities: [
         ["Availability", "Nights, weekends, and holidays — the line is never unattended"],
-        ["Languages", "English and Spanish natively, switching mid-call if the caller does"],
+        ["Languages", "English and Spanish natively; French as an add-on; switches mid-call"],
         ["Booking", "Google, Microsoft 365, Calendly, and Acuity, confirmed with an SMS reminder"],
         ["Routing", "After-hours emergencies go to the on-call person instead of a voicemail box"],
         ["Record", "Every call ends with a transcript, a reason, and a disposition"],
@@ -525,7 +547,7 @@ const en = {
       ],
       whereHeading: "Where we operate",
       whereLede:
-        "Orchelix works across both sides of the border. That is also why bilingual capability is native rather than an add-on — it is how our clients' customers actually speak.",
+        "Orchelix works across both sides of the border. English and Spanish are native on every line; French is available as an add-on when your market needs it.",
       reach: [
         ["Operating", "Canada and the United States"],
         ["On-site", "South Florida"],
@@ -773,7 +795,7 @@ const en = {
         },
         {
           q: "Does Esmi speak Spanish?",
-          a: "Yes. Esmi is bilingual (English and Spanish) and can switch language mid-call, which matters for serving South Florida and bilingual markets.",
+          a: "Yes. Esmi is bilingual (English and Spanish) and can switch language mid-call. French is available as an add-on. That matters for South Florida, Ontario, and other bilingual markets.",
         },
         {
           q: "What happens when a call needs a human?",

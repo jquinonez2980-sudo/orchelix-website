@@ -47,6 +47,8 @@ export default function TermsPage() {
               labelWidth="9rem"
               items={[
                 ["Entity", "Orchelix AI Consulting Inc."],
+                ["Canada", "Ontario — legal entity"],
+                ["United States", "West Palm Beach, FL — service presence"],
                 ["Contact", "legal@orchelix.com"],
                 ["Law", "Province of Ontario & federal laws of Canada"],
                 ["Venue", "Courts of Ontario"],

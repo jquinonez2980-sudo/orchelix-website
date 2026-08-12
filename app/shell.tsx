@@ -68,17 +68,40 @@ export const orgJsonLd = {
         "Multi-agent systems for revenue operations, deployed by senior consultants. Bilingual English and Spanish call handling with a reviewable audit trail. Operating in Canada and the United States.",
       telephone: "+15615661066",
       priceRange: "$$",
-      knowsLanguage: ["en", "es"],
+      knowsLanguage: ["en", "es", "fr"],
       address: {
         "@type": "PostalAddress",
         addressLocality: "West Palm Beach",
         addressRegion: "FL",
         addressCountry: "US",
       },
+      /* Dual jurisdiction: US principal service presence + Canadian entity. */
+      location: [
+        {
+          "@type": "Place",
+          name: "United States",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "West Palm Beach",
+            addressRegion: "FL",
+            addressCountry: "US",
+          },
+        },
+        {
+          "@type": "Place",
+          name: "Canada",
+          address: {
+            "@type": "PostalAddress",
+            addressRegion: "ON",
+            addressCountry: "CA",
+          },
+        },
+      ],
       areaServed: [
         { "@type": "Country", name: "Canada" },
         { "@type": "Country", name: "United States" },
         { "@type": "AdministrativeArea", name: "South Florida" },
+        { "@type": "AdministrativeArea", name: "Ontario" },
       ],
     },
     {

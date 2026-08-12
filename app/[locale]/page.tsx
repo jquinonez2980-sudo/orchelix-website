@@ -6,6 +6,7 @@ import Problem from "@/app/components/sections/Problem";
 import Solutions from "@/app/components/sections/Solutions";
 import HowItWorks from "@/app/components/sections/HowItWorks";
 import Why from "@/app/components/sections/Why";
+import Operators from "@/app/components/sections/Operators";
 import FinalCTA from "@/app/components/sections/FinalCTA";
 import Footer from "@/app/components/sections/Footer";
 import { isLocale, localizedHref } from "@/app/i18n/config";
@@ -38,6 +39,7 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
         <Solutions locale={locale} t={t} />
         <HowItWorks t={t} />
         <Why t={t} />
+        <Operators t={t} />
         <FinalCTA locale={locale} t={t} />
       </main>
       <Footer locale={locale} t={t} />

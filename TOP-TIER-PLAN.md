@@ -5,7 +5,7 @@
 > **North star.** An owner-operator opens Esmi on Monday morning (often on a phone), reviews last night’s work in **English or Spanish**, coaches the agent once, and trusts every row like a ledger. The marketing site and the console feel like **one company**.
 >
 > **Status baseline (2026-08-12).** Marketing Ruled Record is largely converted. Dashboard has grouped IA, night-register Overview, coach-to-knowledge, EN/ES shell chrome, and visible sign-in.  
-> **Execution progress:** Phase A largely implemented in-repo (call reviews via Clerk org metadata, Tonight’s work, deep links, coach → review). Phase B hero sample transcript + try-esmi CTAs. Remaining: full ES catalogs, SEO product-tree redirects (founder/SEO gate), Railway-native review schema when available.
+> **Execution progress (updated):** Phase A shipped. Phase B proof path + real operators (Otro Nivel, Coastline Condos, JQ Accounting). French confirmed as add-on. Dual CA/US jurisdiction + Privacy Officer Jorge Quinonez locked in PRODUCT.md. Dashboard ES chrome on Work pages expanded. Remaining: SEO product-tree redirects, Railway-native reviews, full field-level ES in every form, street addresses when registry text is provided.
 
 ---
 
