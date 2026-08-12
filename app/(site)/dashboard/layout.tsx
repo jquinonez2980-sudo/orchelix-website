@@ -26,8 +26,17 @@ export const metadata: Metadata = {
 function OrgGate() {
   return (
     <main className="lg-app mx-auto flex min-h-screen max-w-lg flex-col items-center gap-6 px-6 py-24 text-center">
-      <div>
-        <h1 className="font-display text-2xl font-semibold text-ink">
+      <div
+        className="w-full border border-line bg-surface px-6 py-8"
+        style={{ borderTop: "2px solid var(--lg-rule)" }}
+      >
+        <p
+          className="lg-fig text-xs uppercase tracking-wide text-ink-3"
+          style={{ letterSpacing: "0.12em" }}
+        >
+          Operator console
+        </p>
+        <h1 className="mt-2 font-display text-2xl font-semibold uppercase tracking-tight text-ink">
           Choose your business
         </h1>
         <p className="mt-2 text-sm leading-6 text-ink-2">
@@ -35,27 +44,27 @@ function OrgGate() {
           if you don&apos;t see your business, ask your Orchelix contact for an
           invitation.
         </p>
+        {/* "Create organization" routes to our wizard, not Clerk's dialog —
+            see the fuller note at the switcher in DashboardShell. */}
+        <div className="mt-6 flex justify-center">
+          <OrganizationSwitcher
+            hidePersonal
+            createOrganizationMode="navigation"
+            createOrganizationUrl="/get-started"
+            afterSelectOrganizationUrl="/dashboard"
+            appearance={clerkWidgetAppearance}
+          />
+        </div>
+        <p className="mt-6 text-sm text-ink-2">
+          New to Esmi?{" "}
+          <a
+            href="/get-started"
+            className="font-medium text-navy-600 underline hover:text-navy-700"
+          >
+            Apply to get set up
+          </a>
+        </p>
       </div>
-      {/* "Create organization" routes to our wizard, not Clerk's dialog —
-          see the fuller note at the switcher in DashboardShell. Short version:
-          a self-named org slug matches no Esmi tenant and 400s every
-          /platform call, whereas /get-started reserves the slug first. */}
-      <OrganizationSwitcher
-        hidePersonal
-        createOrganizationMode="navigation"
-        createOrganizationUrl="/get-started"
-        afterSelectOrganizationUrl="/dashboard"
-        appearance={clerkWidgetAppearance}
-      />
-      <p className="text-sm text-ink-2">
-        New to Esmi?{" "}
-        <a
-          href="/get-started"
-          className="font-medium text-navy-600 underline hover:text-navy-700"
-        >
-          Apply to get set up
-        </a>
-      </p>
     </main>
   );
 }

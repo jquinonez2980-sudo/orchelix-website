@@ -12,9 +12,18 @@ export default function OverviewPage() {
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
       <div className="mb-6">
-        <h1 className="font-display text-2xl font-semibold text-ink">Overview</h1>
-        <p className="mt-1 text-sm text-ink-2">
-          What Esmi handled for your business this week.
+        <p
+          className="lg-fig text-xs uppercase tracking-wide text-ink-3"
+          style={{ letterSpacing: "0.12em" }}
+        >
+          Operator console
+        </p>
+        <h1 className="mt-1 font-display text-2xl font-semibold uppercase tracking-tight text-ink">
+          Night register
+        </h1>
+        <p className="mt-1 max-w-xl text-sm leading-6 text-ink-2">
+          What Esmi handled while you were busy — after-hours first, then the
+          full activity register. Open any row to listen, read, and coach.
         </p>
       </div>
       <Overview />

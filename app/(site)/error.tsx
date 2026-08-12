@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+
 export default function Error({
   error,
   reset,
@@ -7,73 +9,106 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  useEffect(() => {
+    /* Surface digests in the console for support; never flash stack to the user. */
+    console.error(error);
+  }, [error]);
+
   return (
     <main
+      id="main-content"
+      className="lg-world lg-field"
       style={{
         minHeight: "60vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: "80px 24px",
-        fontFamily: "var(--font-display), ui-sans-serif, system-ui, sans-serif",
+        padding: "5rem 1.5rem",
       }}
     >
-      <div style={{ textAlign: "center", maxWidth: 480 }}>
-        <span
+      <div style={{ textAlign: "center", maxWidth: 28 * 16 }}>
+        <p
+          className="lg-fig"
           style={{
-            display: "inline-block",
-            fontFamily: "var(--font-mono)",
-            fontSize: 11,
-            letterSpacing: "0.18em",
+            fontSize: "0.6875rem",
+            letterSpacing: "0.13em",
             textTransform: "uppercase",
-            color: "var(--teal-500, #14B8A6)",
-            marginBottom: 16,
+            color: "var(--lg-ink-3)",
+            marginBottom: "1rem",
           }}
         >
           Something went wrong
-        </span>
+        </p>
         <h1
           style={{
-            fontSize: 36,
-            fontWeight: 600,
-            letterSpacing: "-0.026em",
-            lineHeight: 1.1,
-            margin: "0 0 12px",
-            color: "var(--ink, #0A2540)",
+            fontFamily: "var(--font-display)",
+            fontStretch: "82%",
+            fontWeight: 700,
+            fontSize: "clamp(1.85rem, 3.2vw, 2.5rem)",
+            lineHeight: 1.02,
+            letterSpacing: "-0.022em",
+            textTransform: "uppercase",
+            color: "var(--lg-ink)",
+            margin: "0 0 1rem",
           }}
         >
           We hit an unexpected error.
         </h1>
-        <p style={{ color: "var(--ink-2, #3F5570)", fontSize: 16, lineHeight: 1.6, marginBottom: 32 }}>
-          Our team has been notified. You can try again or go back to the homepage.
+        <p
+          style={{
+            fontFamily: "var(--font-body)",
+            fontSize: "1rem",
+            lineHeight: 1.62,
+            color: "var(--lg-ink-2)",
+            marginBottom: "2rem",
+          }}
+        >
+          Try again, or return home. If it keeps happening, call{" "}
+          <a href="tel:+15615661066" style={{ color: "var(--lg-ink)" }}>
+            +1 561 566 1066
+          </a>
+          .
         </p>
-        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "1.5rem",
+            justifyContent: "center",
+            flexWrap: "wrap",
+            alignItems: "center",
+          }}
+        >
           <button
+            type="button"
             onClick={reset}
+            className="lg-stamp lg-foil-surface"
             style={{
-              padding: "13px 24px",
-              background: "var(--navy-600, #0A2540)",
-              color: "#fff",
-              borderRadius: 12,
-              border: "none",
-              fontWeight: 500,
-              fontSize: 15,
+              fontFamily: "var(--font-display)",
+              fontStretch: "88%",
+              fontWeight: 700,
+              fontSize: "0.9375rem",
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              padding: "0.95rem 1.7rem",
+              border: 0,
               cursor: "pointer",
-              fontFamily: "inherit",
+              color: "var(--lg-foil-ink)",
             }}
           >
             Try again
           </button>
           <a
             href="/"
+            className="lg-quiet"
             style={{
-              padding: "13px 24px",
-              border: "1.5px solid var(--line-strong, #C9D1DC)",
-              borderRadius: 12,
+              fontFamily: "var(--font-display)",
+              fontStretch: "88%",
+              fontWeight: 600,
+              fontSize: "0.9375rem",
+              letterSpacing: "0.04em",
+              textTransform: "uppercase",
+              color: "var(--lg-ink)",
               textDecoration: "none",
-              fontWeight: 500,
-              fontSize: 15,
-              color: "var(--ink-2, #3F5570)",
             }}
           >
             Go home

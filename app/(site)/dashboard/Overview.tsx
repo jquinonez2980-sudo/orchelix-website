@@ -110,13 +110,33 @@ function ChecklistRow({ done, label }: { done: boolean; label: string }) {
 function SetupChecklistSection({ checklist }: { checklist: OverviewResponse["setup_checklist"] }) {
   if (!checklist) return null;
   return (
-    <section className="rounded-lg border border-line bg-surface p-5 shadow-sm">
-      <h2 className="font-display text-base font-semibold text-ink">Finish setting up Esmi</h2>
+    <section
+      className="border border-line bg-surface p-5"
+      style={{ borderLeft: "2px solid var(--lg-foil)" }}
+    >
+      <h2 className="font-display text-base font-semibold uppercase tracking-tight text-ink">
+        Finish setting up Esmi
+      </h2>
+      <p className="mt-1 text-xs text-ink-3">
+        Same 14-day pilot path you saw on the marketing site — map, configure,
+        then go live with a consultant.
+      </p>
       <ul className="mt-3 space-y-2.5">
         {checklist.items.map((item) => (
           <ChecklistRow key={item.key} done={item.done} label={item.label} />
         ))}
       </ul>
+      <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm font-medium">
+        <Link href="/dashboard/knowledge" className="text-navy-600 hover:underline">
+          Knowledge →
+        </Link>
+        <Link href="/dashboard/onboarding/voice" className="text-navy-600 hover:underline">
+          Voice preview →
+        </Link>
+        <Link href="/dashboard/settings" className="text-navy-600 hover:underline">
+          Hours &amp; routing →
+        </Link>
+      </div>
     </section>
   );
 }

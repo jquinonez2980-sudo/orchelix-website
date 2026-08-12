@@ -83,15 +83,16 @@ function SidebarNav({
   pathname: string;
   onNavigate?: () => void;
 }) {
+  /* Work stays always open. Configure / Account / Internal collapse when
+     none of their items is active — progressive disclosure for owner operators. */
   return (
     <nav aria-label="Primary" className="flex flex-1 flex-col overflow-y-auto p-3">
-      {groups.map((group, index) => (
-        <div key={group.id} className={index === 0 ? "" : "mt-4"}>
-          {group.label && (
-            <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-wide text-ink-4">
-              {group.label}
-            </p>
-          )}
+      {groups.map((group, index) => {
+        const hasActive = group.items.some((item) =>
+          isNavItemActive(pathname, item.href),
+        );
+        const alwaysOpen = group.id === "work";
+        const links = (
           <div className="flex flex-col gap-0.5">
             {group.items.map((item) => (
               <NavLink
@@ -102,8 +103,39 @@ function SidebarNav({
               />
             ))}
           </div>
-        </div>
-      ))}
+        );
+
+        if (alwaysOpen || !group.label) {
+          return (
+            <div key={group.id} className={index === 0 ? "" : "mt-4"}>
+              {group.label && (
+                <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-wide text-ink-4">
+                  {group.label}
+                </p>
+              )}
+              {links}
+            </div>
+          );
+        }
+
+        return (
+          <details
+            key={group.id}
+            className={index === 0 ? "" : "mt-3"}
+            open={hasActive || undefined}
+          >
+            <summary className="cursor-pointer list-none px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-ink-4 hover:text-ink marker:content-none [&::-webkit-details-marker]:hidden">
+              <span className="flex items-center justify-between gap-2">
+                {group.label}
+                <span aria-hidden className="text-ink-4">
+                  ▾
+                </span>
+              </span>
+            </summary>
+            <div className="mt-0.5">{links}</div>
+          </details>
+        );
+      })}
     </nav>
   );
 }

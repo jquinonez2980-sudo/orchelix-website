@@ -216,7 +216,9 @@ export default function PublicVoicePreview({
   else if (status === "error") statusWord = isEs ? "Error" : "Error";
   else statusWord = isEs ? "Listo" : "Ready";
 
-  const samples = compact ? SAMPLES.slice(0, 3) : SAMPLES;
+  /* Compact hero still offers the full industry set — wrapping chips, not a
+     truncated product story. Layout, not assortment, is what stays compact. */
+  const samples = SAMPLES;
 
   return (
     <section id={id}>

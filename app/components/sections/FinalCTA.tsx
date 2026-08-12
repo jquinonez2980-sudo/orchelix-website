@@ -30,9 +30,66 @@ export default function FinalCTA({
           <Stamp href={localizedHref("/book", locale)} size="1rem">
             {t.common.bookPilot}
           </Stamp>
+          <QuietAction href={locale === "es" ? "/try-esmi?lang=es" : "/try-esmi"}>
+            {t.common.hearRealCall}
+          </QuietAction>
           <QuietAction href={localizedHref("/pricing", locale)}>{t.common.seePricing}</QuietAction>
         </div>
       </div>
+
+      {/* Journey continuum: persuade → experience → commit → operate */}
+      <ol
+        className="mt-14 grid gap-6 border-t sm:grid-cols-2 lg:grid-cols-4"
+        style={{
+          borderColor: "var(--lg-hair)",
+          paddingTop: "2rem",
+          listStyle: "none",
+          margin: "2.5rem 0 0",
+          paddingLeft: 0,
+        }}
+      >
+        {(
+          locale === "es"
+            ? [
+                ["01", "Escucha", "Una grabación real de Esmi"],
+                ["02", "Agenda", "Piloto de 14 días con un consultor"],
+                ["03", "Mapa", "Un flujo de trabajo, tu número real"],
+                ["04", "Registro", "Cada acción en la consola de operador"],
+              ]
+            : [
+                ["01", "Hear", "A real Esmi call on this site"],
+                ["02", "Book", "A 14-day pilot with a senior consultant"],
+                ["03", "Map", "One workflow on your real line"],
+                ["04", "Operate", "Every action on the operator register"],
+              ]
+        ).map(([n, title, body]) => (
+          <li key={n}>
+            <p
+              className="lg-fig"
+              style={{
+                fontSize: "0.625rem",
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                color: "var(--lg-ink-3)",
+                margin: "0 0 0.5rem",
+              }}
+            >
+              {n} · {title}
+            </p>
+            <p
+              style={{
+                fontFamily: "var(--font-body)",
+                fontSize: "0.9375rem",
+                lineHeight: 1.5,
+                color: "var(--lg-ink-2)",
+                margin: 0,
+              }}
+            >
+              {body}
+            </p>
+          </li>
+        ))}
+      </ol>
     </Section>
   );
 }
