@@ -10,6 +10,7 @@ import {
   type LeadStatus,
 } from "@/app/lib/esmiPlatform";
 import { Badge, type BadgeTone } from "../Badge";
+import { useDashI18n } from "../i18n";
 import { useActiveOrgSlug } from "../useActiveOrgSlug";
 
 const PAGE_SIZE = 25;
@@ -37,16 +38,26 @@ function fmtWhen(iso: string | null): { date: string; time: string } {
 
 // contacted was gold (AcumenAI's reserved accent, not Esmi/Orchelix) — same
 // branding leak fixed on Team's "Pending" and Calls' "Escalated" badges.
-const STATUS_STYLE: Record<LeadStatus, { label: string; tone: BadgeTone }> = {
-  new: { label: "New", tone: "info" },
-  contacted: { label: "Contacted", tone: "warning" },
-  won: { label: "Won", tone: "positive" },
-  lost: { label: "Lost", tone: "neutral" },
+const STATUS_TONE: Record<LeadStatus, BadgeTone> = {
+  new: "info",
+  contacted: "warning",
+  won: "positive",
+  lost: "neutral",
 };
 
+function useLeadStatusLabels() {
+  const { t } = useDashI18n();
+  return {
+    new: t.ui.leadStatusNew,
+    contacted: t.ui.leadStatusContacted,
+    won: t.ui.leadStatusWon,
+    lost: t.ui.leadStatusLost,
+  } as Record<LeadStatus, string>;
+}
+
 function StatusBadge({ status }: { status: LeadStatus }) {
-  const s = STATUS_STYLE[status];
-  return <Badge tone={s.tone}>{s.label}</Badge>;
+  const labels = useLeadStatusLabels();
+  return <Badge tone={STATUS_TONE[status]}>{labels[status]}</Badge>;
 }
 
 const OUTCOME_LABEL: Record<string, string> = {
@@ -59,8 +70,13 @@ const OUTCOME_LABEL: Record<string, string> = {
 };
 
 function SourceChip({ lead }: { lead: Lead }) {
+  const { t } = useDashI18n();
   const voice = Boolean(lead.call);
-  return <Badge tone={voice ? "positive" : "info"}>{voice ? "Phone" : "Web chat"}</Badge>;
+  return (
+    <Badge tone={voice ? "positive" : "info"}>
+      {voice ? t.ui.phone : t.ui.webChat}
+    </Badge>
+  );
 }
 
 function LeadScore({ score }: { score: number | null }) {
@@ -95,6 +111,8 @@ function StatusPicker({
   lead: Lead;
   onChange: (status: LeadStatus) => void;
 }) {
+  const { t } = useDashI18n();
+  const labels = useLeadStatusLabels();
   const [saving, setSaving] = useState(false);
   const [failed, setFailed] = useState(false);
 
@@ -120,12 +138,12 @@ function StatusPicker({
       >
         {LEAD_STATUSES.map((s) => (
           <option key={s} value={s}>
-            {STATUS_STYLE[s].label}
+            {labels[s]}
           </option>
         ))}
       </select>
-      {saving && <span className="text-xs text-ink-4">Saving…</span>}
-      {failed && <span className="text-xs text-rose-600">Failed — try again</span>}
+      {saving && <span className="text-xs text-ink-4">{t.ui.saving}</span>}
+      {failed && <span className="text-xs text-rose-600">{t.ui.failedRetry}</span>}
     </div>
   );
 }
@@ -160,7 +178,7 @@ function LeadRow({
             <SourceChip lead={lead} />
           </td>
           <td className="max-w-[10rem] px-4 py-3 text-sm text-ink-2">
-            <span className="truncate font-mono">{lead.contact || "No contact on file"}</span>
+            <NoContactOr contact={lead.contact} />
           </td>
           <td className="max-w-xs px-4 py-3 text-sm text-ink-2">
             <span className="line-clamp-2">{lead.summary || "—"}</span>
@@ -185,7 +203,7 @@ function LeadRow({
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="truncate font-mono text-sm font-medium text-ink">
-                    {lead.contact || "No contact on file"}
+                    <NoContactText contact={lead.contact} />
                   </span>
                   <StatusBadge status={lead.status} />
                 </div>
@@ -238,19 +256,30 @@ function SkeletonRows() {
   );
 }
 
+function NoContactOr({ contact }: { contact: string | null }) {
+  const { t } = useDashI18n();
+  return (
+    <span className="truncate font-mono">{contact || t.ui.noContact}</span>
+  );
+}
+
+function NoContactText({ contact }: { contact: string | null }) {
+  const { t } = useDashI18n();
+  return <>{contact || t.ui.noContact}</>;
+}
+
 function EmptyState({ filtered }: { filtered: boolean }) {
+  const { t } = useDashI18n();
   return (
     <tbody>
       <tr className="border-t border-line">
         <td colSpan={7}>
           <div className="flex flex-col items-center gap-2 px-6 py-16 text-center">
             <p className="font-display text-base font-semibold text-ink">
-              {filtered ? "No leads match these filters" : "No leads yet"}
+              {filtered ? t.ui.noLeadsFilter : t.ui.noLeads}
             </p>
             <p className="max-w-sm text-sm text-ink-3">
-              {filtered
-                ? "Try a different search or switch the status filter back to All."
-                : "When Esmi qualifies a web chat, or flags a phone caller for follow-up, they show up here."}
+              {filtered ? t.ui.noLeadsFilterHint : t.ui.noLeadsHint}
             </p>
           </div>
         </td>
@@ -260,13 +289,14 @@ function EmptyState({ filtered }: { filtered: boolean }) {
 }
 
 function ErrorState({ message, onRetry }: { message: string; onRetry: () => void }) {
+  const { t } = useDashI18n();
   return (
     <tbody>
       <tr className="border-t border-line">
         <td colSpan={7}>
           <div className="flex flex-col items-center gap-3 px-6 py-16 text-center">
             <p className="font-display text-base font-semibold text-ink">
-              Couldn&apos;t load leads
+              {t.ui.loadLeadsFail}
             </p>
             <p className="max-w-sm text-sm text-ink-3">{message}</p>
             <button
@@ -274,7 +304,7 @@ function ErrorState({ message, onRetry }: { message: string; onRetry: () => void
               onClick={onRetry}
               className="rounded-md bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-500"
             >
-              Try again
+              {t.ui.tryAgain}
             </button>
           </div>
         </td>
@@ -377,12 +407,15 @@ export default function LeadsInbox() {
     "h-9 rounded-md border border-line bg-surface px-2.5 text-sm text-ink " +
     "focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500";
 
+  const { t } = useDashI18n();
+  const statusLabels = useLeadStatusLabels();
+
   return (
     <div className="overflow-hidden rounded-lg border border-line bg-surface shadow-sm">
       {/* Filters */}
       <div className="flex flex-wrap items-end gap-3 border-b border-line bg-surface px-4 py-3 sm:px-6">
         <label className="flex flex-col gap-1 text-xs font-medium text-ink-3">
-          Status
+          {t.ui.status}
           <select
             value={status}
             onChange={(e) => {
@@ -391,21 +424,21 @@ export default function LeadsInbox() {
             }}
             className={inputCls}
           >
-            <option value="">All statuses</option>
+            <option value="">{t.ui.allStatuses}</option>
             {LEAD_STATUSES.map((s) => (
               <option key={s} value={s}>
-                {STATUS_STYLE[s].label}
+                {statusLabels[s]}
               </option>
             ))}
           </select>
         </label>
         <label className="flex flex-1 flex-col gap-1 text-xs font-medium text-ink-3">
-          Search
+          {t.ui.search}
           <input
             type="search"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search contact or summary…"
+            placeholder={t.ui.searchContact}
             className={`${inputCls} w-full max-w-xs`}
           />
         </label>
@@ -420,7 +453,7 @@ export default function LeadsInbox() {
             }}
             className="h-9 rounded-md px-3 text-sm font-medium text-teal-700 hover:bg-teal-50"
           >
-            Clear filters
+            {t.ui.clearFilters}
           </button>
         )}
       </div>
@@ -430,13 +463,13 @@ export default function LeadsInbox() {
         <table className="w-full border-collapse">
           <thead className="hidden md:table-header-group">
             <tr className="text-left text-xs font-semibold uppercase tracking-wide text-ink-3">
-              <th className="px-4 py-3 sm:px-6">Updated</th>
-              <th className="px-4 py-3">Source</th>
-              <th className="px-4 py-3">Contact</th>
-              <th className="px-4 py-3">Summary</th>
-              <th className="px-4 py-3">Lead score (0–100)</th>
-              <th className="px-4 py-3">Call</th>
-              <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3 sm:px-6">{t.ui.updated}</th>
+              <th className="px-4 py-3">{t.ui.source}</th>
+              <th className="px-4 py-3">{t.ui.contact}</th>
+              <th className="px-4 py-3">{t.ui.summary}</th>
+              <th className="px-4 py-3">{t.ui.leadScore}</th>
+              <th className="px-4 py-3">{t.ui.call}</th>
+              <th className="px-4 py-3">{t.ui.status}</th>
             </tr>
           </thead>
           {loading ? (
@@ -461,8 +494,8 @@ export default function LeadsInbox() {
       {data && !error && data.total > 0 && (
         <div className="flex items-center justify-between border-t border-line px-4 py-3 text-sm text-ink-2 sm:px-6">
           <span className="tabular-nums">
-            {data.offset + 1}–{Math.min(data.offset + PAGE_SIZE, data.total)} of{" "}
-            {data.total}
+            {data.offset + 1}–{Math.min(data.offset + PAGE_SIZE, data.total)}{" "}
+            {t.ui.of} {data.total}
           </span>
           <div className="flex items-center gap-2">
             <button
@@ -471,7 +504,7 @@ export default function LeadsInbox() {
               onClick={() => setPage((p) => Math.max(0, p - 1))}
               className="rounded-md border border-line px-3 py-1.5 font-medium text-ink enabled:hover:bg-surface-2 disabled:opacity-40"
             >
-              Previous
+              {t.ui.previous}
             </button>
             <span className="tabular-nums text-ink-3">
               {page + 1} / {totalPages}
@@ -482,7 +515,7 @@ export default function LeadsInbox() {
               onClick={() => setPage((p) => p + 1)}
               className="rounded-md border border-line px-3 py-1.5 font-medium text-ink enabled:hover:bg-surface-2 disabled:opacity-40"
             >
-              Next
+              {t.ui.next}
             </button>
           </div>
         </div>

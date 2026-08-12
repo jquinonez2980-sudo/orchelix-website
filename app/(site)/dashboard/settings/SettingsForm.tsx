@@ -10,9 +10,11 @@ import {
   type PlatformConfig,
   type ServiceSettings,
 } from "@/app/lib/esmiPlatform";
+import { useDashI18n } from "../i18n";
 import { useActiveOrgSlug } from "../useActiveOrgSlug";
 
-const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const WEEKDAYS_EN = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const WEEKDAYS_ES = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
 
 const inputCls =
   "h-9 w-full rounded-md border border-line bg-surface px-2.5 text-sm text-ink " +
@@ -107,10 +109,11 @@ function HoursRange({
   value: [number, number];
   onChange: (v: [number, number]) => void;
 }) {
+  const { t } = useDashI18n();
   return (
     <div className="flex items-center gap-2">
       <label className={labelCls}>
-        Open
+        {t.ui.open}
         <input
           type="number"
           min={0}
@@ -122,7 +125,7 @@ function HoursRange({
       </label>
       <span className="mt-4 text-ink-4">–</span>
       <label className={labelCls}>
-        Close
+        {t.ui.close}
         <input
           type="number"
           min={0}
@@ -143,6 +146,8 @@ function WeekdayPicker({
   value: number[];
   onChange: (v: number[]) => void;
 }) {
+  const { locale } = useDashI18n();
+  const WEEKDAYS = locale === "es" ? WEEKDAYS_ES : WEEKDAYS_EN;
   const set = new Set(value);
   return (
     <div className="flex flex-wrap gap-1.5">
@@ -334,6 +339,7 @@ function ServiceRow({
 /* ── main form ──────────────────────────────────────────────────────────── */
 
 export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {}) {
+  const { t } = useDashI18n();
   const [data, setData] = useState<ConfigResponse | null>(null);
   const [form, setForm] = useState<PlatformConfig | null>(null);
   const [loading, setLoading] = useState(true);
@@ -480,9 +486,9 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
 
   return (
     <div className="overflow-hidden rounded-lg border border-line bg-surface shadow-sm">
-      <Section title="Business profile">
+      <Section title={t.ui.businessProfile}>
         <label className={labelCls}>
-          Business name
+          {t.ui.businessName}
           <input
             className={inputCls}
             value={form.company_name}
@@ -494,7 +500,7 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
             dropdown, and this gives native type-to-filter with no dependency
             and no custom combobox to keep accessible. */}
         <label className={`${labelCls} mt-4`}>
-          Timezone
+          {t.ui.timezone}
           <input
             className={inputCls}
             list="tz-options"
@@ -509,9 +515,7 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
             ))}
           </datalist>
         </label>
-        <p className="mt-1 text-xs text-ink-3">
-          Used to interpret your opening hours and to schedule appointments.
-        </p>
+        <p className="mt-1 text-xs text-ink-3">{t.ui.timezoneHint}</p>
 
         {tzChanged && (
           <TimezoneConfirm
@@ -523,27 +527,21 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
         )}
       </Section>
 
-      <Section
-        title="Greeting"
-        description="Esmi opens with this line on the first reply of a new conversation. Leave it blank to use the default opening."
-      >
+      <Section title={t.ui.greeting} description={t.ui.greetingDesc}>
         <textarea
           rows={3}
           maxLength={500}
           className={`${inputCls} h-auto`}
           value={form.greeting}
           onChange={(e) => setForm({ ...form, greeting: e.target.value })}
-          placeholder="Thanks for calling — how can I help today?"
+          placeholder={t.ui.greetingPlaceholder}
         />
       </Section>
 
-      <Section
-        title="Escalation"
-        description="What happens when Esmi hands a caller off to your team instead of handling it alone."
-      >
+      <Section title={t.ui.escalation} description={t.ui.escalationDesc}>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <label className={labelCls}>
-            Transfer phone number
+            {t.ui.transferPhone}
             <input
               className={inputCls}
               value={form.transfer_phone}
@@ -552,7 +550,7 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
             />
           </label>
           <label className={labelCls}>
-            Escalation email
+            {t.ui.escalationEmail}
             <input
               type="email"
               className={inputCls}
@@ -586,9 +584,9 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
         </div>
       </Section>
 
-      <Section title="Booking notifications">
+      <Section title={t.ui.bookingNotifications}>
         <label className={labelCls}>
-          Booking confirmations to
+          {t.ui.bookingTo}
           <input
             type="email"
             className={inputCls}
@@ -601,7 +599,7 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
       </Section>
 
       {form.has_locations ? (
-        <Section title="Locations & hours">
+        <Section title={t.ui.locationsHours}>
           <div className="space-y-4">
             {Object.entries(form.locations).map(([id, loc]) => (
               <LocationCard key={id} id={id} loc={loc} onChange={(next) => setLocation(id, next)} />
@@ -609,17 +607,17 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
           </div>
         </Section>
       ) : (
-        <Section title="Hours">
+        <Section title={t.ui.hours}>
           <div className="flex flex-wrap items-end gap-6">
             <div>
-              <span className="mb-1 block text-xs font-medium text-ink-3">Hours</span>
+              <span className="mb-1 block text-xs font-medium text-ink-3">{t.ui.hours}</span>
               <HoursRange
                 value={form.business_hours}
                 onChange={(v) => setForm({ ...form, business_hours: v })}
               />
             </div>
             <div>
-              <span className="mb-1 block text-xs font-medium text-ink-3">Open days</span>
+              <span className="mb-1 block text-xs font-medium text-ink-3">{t.ui.openDays}</span>
               <WeekdayPicker
                 value={form.business_days}
                 onChange={(v) => setForm({ ...form, business_days: v })}
@@ -629,7 +627,7 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
         </Section>
       )}
 
-      <Section title="Services">
+      <Section title={t.ui.services}>
         <div className="space-y-4">
           {Object.entries(form.services).map(([id, svc]) => (
             <ServiceRow
@@ -641,14 +639,14 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
             />
           ))}
           {Object.keys(form.services).length === 0 && (
-            <p className="text-sm text-ink-3">No services yet.</p>
+            <p className="text-sm text-ink-3">{t.ui.noServices}</p>
           )}
           <button
             type="button"
             onClick={addService}
             className="rounded-md px-3 py-1.5 text-sm font-medium text-teal-700 hover:bg-teal-50"
           >
-            + Add service
+            {t.ui.addService}
           </button>
         </div>
       </Section>
@@ -660,18 +658,16 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
           onClick={handleSave}
           className="rounded-md bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-500 disabled:opacity-50"
         >
-          {saving ? "Saving…" : "Save changes"}
+          {saving ? t.ui.saving : t.ui.saveChanges}
         </button>
         {tzBlocked && (
-          <span className="text-sm text-amber-800">
-            Confirm the timezone change above to save.
-          </span>
+          <span className="text-sm text-amber-800">{t.ui.confirmTz}</span>
         )}
         {saveError && <span className="text-sm text-rose-600">{saveError}</span>}
         {!saveError && savedAt && !dirty && (
-          <span className="text-sm text-teal-700">Saved — live within a minute.</span>
+          <span className="text-sm text-teal-700">{t.ui.saved}</span>
         )}
-        {dirty && !saving && <span className="text-sm text-ink-4">Unsaved changes</span>}
+        {dirty && !saving && <span className="text-sm text-ink-4">{t.ui.unsaved}</span>}
       </div>
     </div>
   );

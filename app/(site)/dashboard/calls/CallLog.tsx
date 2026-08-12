@@ -16,6 +16,7 @@ import {
 import { Badge, type BadgeTone } from "../Badge";
 import CallReviewControls from "../CallReviewControls";
 import CoachFromCall from "../CoachFromCall";
+import { useDashI18n } from "../i18n";
 import { useActiveOrgSlug } from "../useActiveOrgSlug";
 
 const PAGE_SIZE = 25;
@@ -437,18 +438,17 @@ function SkeletonRows() {
 }
 
 function EmptyState({ filtered }: { filtered: boolean }) {
+  const { t } = useDashI18n();
   return (
     <tbody>
       <tr className="border-t border-line">
         <td colSpan={7}>
           <div className="flex flex-col items-center gap-2 px-6 py-16 text-center">
             <p className="font-display text-base font-semibold text-ink">
-              {filtered ? "No calls match these filters" : "No calls yet"}
+              {filtered ? t.ui.noCallsFilter : t.ui.noCalls}
             </p>
             <p className="max-w-sm text-sm text-ink-3">
-              {filtered
-                ? "Try widening the date range or clearing a filter."
-                : "When Esmi answers your phone line, every call will show up here with its outcome, summary, and recording."}
+              {filtered ? t.ui.noLeadsFilterHint : t.ui.noLeadsHint}
             </p>
           </div>
         </td>
@@ -458,13 +458,14 @@ function EmptyState({ filtered }: { filtered: boolean }) {
 }
 
 function ErrorState({ message, onRetry }: { message: string; onRetry: () => void }) {
+  const { t } = useDashI18n();
   return (
     <tbody>
       <tr className="border-t border-line">
         <td colSpan={7}>
           <div className="flex flex-col items-center gap-3 px-6 py-16 text-center">
             <p className="font-display text-base font-semibold text-ink">
-              Couldn&apos;t load calls
+              {t.ui.loadCallsFail}
             </p>
             <p className="max-w-sm text-sm text-ink-3">{message}</p>
             <button
@@ -472,7 +473,7 @@ function ErrorState({ message, onRetry }: { message: string; onRetry: () => void
               onClick={onRetry}
               className="rounded-md bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-500"
             >
-              Try again
+              {t.ui.tryAgain}
             </button>
           </div>
         </td>
@@ -612,6 +613,7 @@ export default function CallLog() {
     setPage(0);
   }, []);
 
+  const { t } = useDashI18n();
   const inputCls =
     "h-9 rounded-md border border-line bg-surface px-2.5 text-sm text-ink " +
     "focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500";
@@ -621,7 +623,7 @@ export default function CallLog() {
       {/* Filters */}
       <div className="flex flex-wrap items-end gap-3 border-b border-line bg-surface px-4 py-3 sm:px-6">
         <label className="flex flex-col gap-1 text-xs font-medium text-ink-3">
-          Outcome
+          {t.ui.outcome}
           <select
             value={outcome}
             onChange={(e) => {
@@ -630,7 +632,7 @@ export default function CallLog() {
             }}
             className={inputCls}
           >
-            <option value="">All outcomes</option>
+            <option value="">{t.ui.allOutcomes}</option>
             {CALL_OUTCOMES.map((o) => (
               <option key={o} value={o}>
                 {OUTCOME_STYLE[o].label}
@@ -639,7 +641,7 @@ export default function CallLog() {
           </select>
         </label>
         <label className="flex flex-col gap-1 text-xs font-medium text-ink-3">
-          From
+          {t.ui.from}
           <input
             type="date"
             value={fromDate}
@@ -652,7 +654,7 @@ export default function CallLog() {
           />
         </label>
         <label className="flex flex-col gap-1 text-xs font-medium text-ink-3">
-          To
+          {t.ui.to}
           <input
             type="date"
             value={toDate}
@@ -665,7 +667,7 @@ export default function CallLog() {
           />
         </label>
         <label className="flex flex-col gap-1 text-xs font-medium text-ink-3">
-          Language
+          {t.ui.language}
           <select
             value={language}
             onChange={(e) => {
@@ -674,13 +676,13 @@ export default function CallLog() {
             }}
             className={inputCls}
           >
-            <option value="">All languages</option>
-            <option value="en">English</option>
-            <option value="es">Spanish</option>
+            <option value="">{t.ui.allLanguages}</option>
+            <option value="en">{t.ui.english}</option>
+            <option value="es">{t.ui.spanish}</option>
           </select>
         </label>
         <label className="flex flex-col gap-1 text-xs font-medium text-ink-3">
-          Recording
+          {t.ui.recording}
           <select
             value={hasRecording}
             onChange={(e) => {
@@ -689,13 +691,13 @@ export default function CallLog() {
             }}
             className={inputCls}
           >
-            <option value="">Any</option>
-            <option value="true">Has recording</option>
-            <option value="false">No recording</option>
+            <option value="">{t.ui.any}</option>
+            <option value="true">{t.ui.hasRecording}</option>
+            <option value="false">{t.ui.noRecording}</option>
           </select>
         </label>
         <label className="flex flex-col gap-1 text-xs font-medium text-ink-3">
-          Review
+          {t.ui.review}
           <select
             value={reviewFilter}
             onChange={(e) => {
@@ -706,10 +708,10 @@ export default function CallLog() {
             }}
             className={inputCls}
           >
-            <option value="">All reviews</option>
-            <option value="open">Needs review</option>
-            <option value="needs_followup">Needs follow-up</option>
-            <option value="reviewed">Reviewed</option>
+            <option value="">{t.ui.allReviews}</option>
+            <option value="open">{t.ui.needsReview}</option>
+            <option value="needs_followup">{t.ui.needsFollowup}</option>
+            <option value="reviewed">{t.ui.reviewed}</option>
           </select>
         </label>
         {filtered && (
@@ -718,7 +720,7 @@ export default function CallLog() {
             onClick={resetFilters}
             className="h-9 rounded-md px-3 text-sm font-medium text-teal-700 hover:bg-teal-50"
           >
-            Clear filters
+            {t.ui.clearFilters}
           </button>
         )}
       </div>
@@ -728,12 +730,12 @@ export default function CallLog() {
         <table className="w-full border-collapse">
           <thead className="hidden md:table-header-group">
             <tr className="text-left text-xs font-semibold uppercase tracking-wide text-ink-3">
-              <th className="px-4 py-3 sm:px-6">Time</th>
-              <th className="px-4 py-3">Caller</th>
-              <th className="px-4 py-3">Duration</th>
-              <th className="px-4 py-3">Language</th>
-              <th className="px-4 py-3">Outcome</th>
-              <th className="px-4 py-3">Summary</th>
+              <th className="px-4 py-3 sm:px-6">{t.ui.time}</th>
+              <th className="px-4 py-3">{t.ui.caller}</th>
+              <th className="px-4 py-3">{t.ui.duration}</th>
+              <th className="px-4 py-3">{t.ui.language}</th>
+              <th className="px-4 py-3">{t.ui.outcome}</th>
+              <th className="px-4 py-3">{t.ui.summary}</th>
               <th className="px-4 py-3" />
             </tr>
           </thead>
@@ -771,7 +773,7 @@ export default function CallLog() {
               onClick={() => setPage((p) => Math.max(0, p - 1))}
               className="rounded-md border border-line px-3 py-1.5 font-medium text-ink enabled:hover:bg-surface-2 disabled:opacity-40"
             >
-              Previous
+              {t.ui.previous}
             </button>
             <span className="tabular-nums text-ink-3">
               {page + 1} / {totalPages}
@@ -782,7 +784,7 @@ export default function CallLog() {
               onClick={() => setPage((p) => p + 1)}
               className="rounded-md border border-line px-3 py-1.5 font-medium text-ink enabled:hover:bg-surface-2 disabled:opacity-40"
             >
-              Next
+              {t.ui.next}
             </button>
           </div>
         </div>

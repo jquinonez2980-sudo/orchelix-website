@@ -80,6 +80,113 @@ type DashMessages = {
     voiceTitle: string;
     voiceLede: string;
   };
+  /** Shared list/filter/form chrome for Work surfaces */
+  ui: {
+    status: string;
+    search: string;
+    clearFilters: string;
+    previous: string;
+    next: string;
+    of: string;
+    tryAgain: string;
+    saving: string;
+    save: string;
+    saveChanges: string;
+    saved: string;
+    failedRetry: string;
+    unsaved: string;
+    noContact: string;
+    phone: string;
+    webChat: string;
+    allStatuses: string;
+    searchContact: string;
+    searchNamePhone: string;
+    updated: string;
+    source: string;
+    contact: string;
+    summary: string;
+    leadScore: string;
+    call: string;
+    leadStatusNew: string;
+    leadStatusContacted: string;
+    leadStatusWon: string;
+    leadStatusLost: string;
+    noLeads: string;
+    noLeadsFilter: string;
+    noLeadsHint: string;
+    noLeadsFilterHint: string;
+    loadLeadsFail: string;
+    outcome: string;
+    allOutcomes: string;
+    from: string;
+    to: string;
+    language: string;
+    allLanguages: string;
+    english: string;
+    spanish: string;
+    recording: string;
+    any: string;
+    hasRecording: string;
+    noRecording: string;
+    review: string;
+    allReviews: string;
+    needsReview: string;
+    needsFollowup: string;
+    reviewed: string;
+    time: string;
+    caller: string;
+    duration: string;
+    loadCallsFail: string;
+    noCalls: string;
+    noCallsFilter: string;
+    all: string;
+    upcoming: string;
+    past: string;
+    loadApptsFail: string;
+    noAppts: string;
+    noApptsFilter: string;
+    noApptsHint: string;
+    noApptsFilterHint: string;
+    questionOptional: string;
+    answerNote: string;
+    addEntry: string;
+    adding: string;
+    addedOk: string;
+    delete: string;
+    deleting: string;
+    currentEntries: string;
+    noEntries: string;
+    uploadedPdfs: string;
+    businessProfile: string;
+    businessName: string;
+    timezone: string;
+    timezoneHint: string;
+    greeting: string;
+    greetingDesc: string;
+    greetingPlaceholder: string;
+    escalation: string;
+    escalationDesc: string;
+    transferPhone: string;
+    escalationEmail: string;
+    bookingNotifications: string;
+    bookingTo: string;
+    locationsHours: string;
+    hours: string;
+    openDays: string;
+    services: string;
+    noServices: string;
+    addService: string;
+    confirmTz: string;
+    open: string;
+    close: string;
+    transcript: string;
+    visitor: string;
+    loadChatsFail: string;
+    noChats: string;
+    noChatsFilter: string;
+    inProgress: string;
+    closed: string;
+  };
 };
 
 const en: DashMessages = {
@@ -172,6 +279,116 @@ const en: DashMessages = {
     voiceTitle: "Voice",
     voiceLede: "Preview greetings, coach tone, and quality checks for your line.",
   },
+  ui: {
+    status: "Status",
+    search: "Search",
+    clearFilters: "Clear filters",
+    previous: "Previous",
+    next: "Next",
+    of: "of",
+    tryAgain: "Try again",
+    saving: "Saving…",
+    save: "Save",
+    saveChanges: "Save changes",
+    saved: "Saved — live within a minute.",
+    failedRetry: "Failed — try again",
+    unsaved: "Unsaved changes",
+    noContact: "No contact on file",
+    phone: "Phone",
+    webChat: "Web chat",
+    allStatuses: "All statuses",
+    searchContact: "Search contact or summary…",
+    searchNamePhone: "Search name or phone…",
+    updated: "Updated",
+    source: "Source",
+    contact: "Contact",
+    summary: "Summary",
+    leadScore: "Lead score (0–100)",
+    call: "Call",
+    leadStatusNew: "New",
+    leadStatusContacted: "Contacted",
+    leadStatusWon: "Won",
+    leadStatusLost: "Lost",
+    noLeads: "No leads yet",
+    noLeadsFilter: "No leads match these filters",
+    noLeadsHint:
+      "When Esmi qualifies a web chat, or flags a phone caller for follow-up, they show up here.",
+    noLeadsFilterHint: "Try a different search or switch the status filter back to All.",
+    loadLeadsFail: "Couldn't load leads",
+    outcome: "Outcome",
+    allOutcomes: "All outcomes",
+    from: "From",
+    to: "To",
+    language: "Language",
+    allLanguages: "All languages",
+    english: "English",
+    spanish: "Spanish",
+    recording: "Recording",
+    any: "Any",
+    hasRecording: "Has recording",
+    noRecording: "No recording",
+    review: "Review",
+    allReviews: "All reviews",
+    needsReview: "Needs review",
+    needsFollowup: "Needs follow-up",
+    reviewed: "Reviewed",
+    time: "Time",
+    caller: "Caller",
+    duration: "Duration",
+    loadCallsFail: "Couldn't load calls",
+    noCalls: "No calls yet",
+    noCallsFilter: "No calls match these filters",
+    all: "All",
+    upcoming: "Upcoming",
+    past: "Past",
+    loadApptsFail: "Couldn't load appointments",
+    noAppts: "No appointments booked yet",
+    noApptsFilter: "No appointments match",
+    noApptsHint:
+      "The first time Esmi books a customer in — by phone or from your website — it appears right here.",
+    noApptsFilterHint: "Try a different search or switch the filter back to All.",
+    questionOptional: "Question (optional)",
+    answerNote: "Answer / note",
+    addEntry: "Add entry",
+    adding: "Adding…",
+    addedOk: "Added — Esmi can use this right away.",
+    delete: "Delete",
+    deleting: "Deleting…",
+    currentEntries: "Current entries",
+    noEntries: "No entries yet. Add a quick FAQ above and Esmi can start using it right away.",
+    uploadedPdfs: "Uploaded PDFs",
+    businessProfile: "Business profile",
+    businessName: "Business name",
+    timezone: "Timezone",
+    timezoneHint: "Used to interpret your opening hours and to schedule appointments.",
+    greeting: "Greeting",
+    greetingDesc:
+      "Esmi opens with this line on the first reply of a new conversation. Leave it blank to use the default opening.",
+    greetingPlaceholder: "Thanks for calling — how can I help today?",
+    escalation: "Escalation",
+    escalationDesc:
+      "What happens when Esmi hands a caller off to your team instead of handling it alone.",
+    transferPhone: "Transfer phone number",
+    escalationEmail: "Escalation email",
+    bookingNotifications: "Booking notifications",
+    bookingTo: "Booking confirmations to",
+    locationsHours: "Locations & hours",
+    hours: "Hours",
+    openDays: "Open days",
+    services: "Services",
+    noServices: "No services yet.",
+    addService: "+ Add service",
+    confirmTz: "Confirm the timezone change above to save.",
+    open: "Open",
+    close: "Close",
+    transcript: "Transcript",
+    visitor: "Visitor",
+    loadChatsFail: "Couldn't load chats",
+    noChats: "No chats yet",
+    noChatsFilter: "No chats match these filters",
+    inProgress: "In progress",
+    closed: "Closed",
+  },
 };
 
 const es: DashMessages = {
@@ -263,6 +480,117 @@ const es: DashMessages = {
     settingsLede: "Horarios, ruteo y datos del negocio que Esmi usa en cada llamada.",
     voiceTitle: "Voz",
     voiceLede: "Vista previa del saludo, tono y controles de calidad de tu línea.",
+  },
+  ui: {
+    status: "Estado",
+    search: "Buscar",
+    clearFilters: "Limpiar filtros",
+    previous: "Anterior",
+    next: "Siguiente",
+    of: "de",
+    tryAgain: "Reintentar",
+    saving: "Guardando…",
+    save: "Guardar",
+    saveChanges: "Guardar cambios",
+    saved: "Guardado — en vivo en un minuto.",
+    failedRetry: "Falló — reintenta",
+    unsaved: "Cambios sin guardar",
+    noContact: "Sin contacto",
+    phone: "Teléfono",
+    webChat: "Chat web",
+    allStatuses: "Todos los estados",
+    searchContact: "Buscar contacto o resumen…",
+    searchNamePhone: "Buscar nombre o teléfono…",
+    updated: "Actualizado",
+    source: "Origen",
+    contact: "Contacto",
+    summary: "Resumen",
+    leadScore: "Puntaje (0–100)",
+    call: "Llamada",
+    leadStatusNew: "Nuevo",
+    leadStatusContacted: "Contactado",
+    leadStatusWon: "Ganado",
+    leadStatusLost: "Perdido",
+    noLeads: "Aún no hay prospectos",
+    noLeadsFilter: "Ningún prospecto coincide con estos filtros",
+    noLeadsHint:
+      "Cuando Esmi califica un chat web o marca una llamada para seguimiento, aparecen aquí.",
+    noLeadsFilterHint: "Prueba otra búsqueda o vuelve el filtro de estado a Todos.",
+    loadLeadsFail: "No se pudieron cargar los prospectos",
+    outcome: "Resultado",
+    allOutcomes: "Todos los resultados",
+    from: "Desde",
+    to: "Hasta",
+    language: "Idioma",
+    allLanguages: "Todos los idiomas",
+    english: "Inglés",
+    spanish: "Español",
+    recording: "Grabación",
+    any: "Cualquiera",
+    hasRecording: "Con grabación",
+    noRecording: "Sin grabación",
+    review: "Revisión",
+    allReviews: "Todas las revisiones",
+    needsReview: "Necesitan revisión",
+    needsFollowup: "Requiere seguimiento",
+    reviewed: "Revisada",
+    time: "Hora",
+    caller: "Llamante",
+    duration: "Duración",
+    loadCallsFail: "No se pudieron cargar las llamadas",
+    noCalls: "Aún no hay llamadas",
+    noCallsFilter: "Ninguna llamada coincide con estos filtros",
+    all: "Todas",
+    upcoming: "Próximas",
+    past: "Pasadas",
+    loadApptsFail: "No se pudieron cargar las citas",
+    noAppts: "Aún no hay citas agendadas",
+    noApptsFilter: "Ninguna cita coincide",
+    noApptsHint:
+      "La primera vez que Esmi agenda un cliente — por teléfono o en la web — aparece aquí.",
+    noApptsFilterHint: "Prueba otra búsqueda o vuelve el filtro a Todas.",
+    questionOptional: "Pregunta (opcional)",
+    answerNote: "Respuesta / nota",
+    addEntry: "Agregar entrada",
+    adding: "Agregando…",
+    addedOk: "Agregada — Esmi puede usarla de inmediato.",
+    delete: "Eliminar",
+    deleting: "Eliminando…",
+    currentEntries: "Entradas actuales",
+    noEntries:
+      "Aún no hay entradas. Agrega un FAQ arriba y Esmi puede usarlo de inmediato.",
+    uploadedPdfs: "PDFs subidos",
+    businessProfile: "Perfil del negocio",
+    businessName: "Nombre del negocio",
+    timezone: "Zona horaria",
+    timezoneHint: "Se usa para interpretar horarios y agendar citas.",
+    greeting: "Saludo",
+    greetingDesc:
+      "Esmi abre con esta frase en la primera respuesta de una conversación nueva. Déjalo en blanco para el saludo predeterminado.",
+    greetingPlaceholder: "Gracias por llamar — ¿en qué puedo ayudarle?",
+    escalation: "Escalamiento",
+    escalationDesc:
+      "Qué pasa cuando Esmi pasa una llamada a tu equipo en lugar de resolverla sola.",
+    transferPhone: "Teléfono de transferencia",
+    escalationEmail: "Correo de escalamiento",
+    bookingNotifications: "Avisos de reserva",
+    bookingTo: "Confirmaciones de reserva a",
+    locationsHours: "Ubicaciones y horarios",
+    hours: "Horario",
+    openDays: "Días abiertos",
+    services: "Servicios",
+    noServices: "Aún no hay servicios.",
+    addService: "+ Agregar servicio",
+    confirmTz: "Confirma el cambio de zona horaria arriba para guardar.",
+    open: "Abre",
+    close: "Cierra",
+    transcript: "Transcripción",
+    visitor: "Visitante",
+    loadChatsFail: "No se pudieron cargar los chats",
+    noChats: "Aún no hay chats",
+    noChatsFilter: "Ningún chat coincide con estos filtros",
+    inProgress: "En curso",
+    closed: "Cerrado",
   },
 };
 

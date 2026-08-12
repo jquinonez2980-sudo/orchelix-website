@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useDashI18n } from "../i18n";
 import {
   addKnowledgeEntry,
   deleteKnowledgeEntry,
@@ -130,6 +131,7 @@ function SubLabel({ children }: { children: React.ReactNode }) {
 /* ── add-entry form ─────────────────────────────────────────────────────── */
 
 function AddEntryForm({ onAdded }: { onAdded: (entry: KnowledgeEntry) => void }) {
+  const { t } = useDashI18n();
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [language, setLanguage] = useState<KnowledgeLanguage>("auto");
@@ -167,7 +169,7 @@ function AddEntryForm({ onAdded }: { onAdded: (entry: KnowledgeEntry) => void })
     <div className="p-4 sm:p-6">
       <div className="space-y-3">
         <label className={labelCls}>
-          Question (optional)
+          {t.ui.questionOptional}
           <input
             className={inputCls}
             value={question}
@@ -181,7 +183,7 @@ function AddEntryForm({ onAdded }: { onAdded: (entry: KnowledgeEntry) => void })
           <span className="self-end text-xs text-ink-4">{question.length}/300</span>
         </label>
         <label className={labelCls}>
-          Answer / note
+          {t.ui.answerNote}
           <textarea
             rows={3}
             className={inputCls}
@@ -196,7 +198,7 @@ function AddEntryForm({ onAdded }: { onAdded: (entry: KnowledgeEntry) => void })
           <span className="self-end text-xs text-ink-4">{answer.length}/4000</span>
         </label>
         <label className={labelCls}>
-          Language
+          {t.ui.language}
           <LanguageSelect
             value={language}
             onChange={(v) => {
@@ -213,11 +215,11 @@ function AddEntryForm({ onAdded }: { onAdded: (entry: KnowledgeEntry) => void })
           onClick={submit}
           className="rounded-md bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-500 disabled:opacity-50"
         >
-          {saving ? "Adding…" : "Add entry"}
+          {saving ? t.ui.adding : t.ui.addEntry}
         </button>
         {error && <span className="text-sm text-rose-600">{error}</span>}
         {!error && justAdded && (
-          <span className="text-sm text-teal-700">Added — Esmi can use this right away.</span>
+          <span className="text-sm text-teal-700">{t.ui.addedOk}</span>
         )}
       </div>
     </div>

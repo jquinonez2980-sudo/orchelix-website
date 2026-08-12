@@ -7,6 +7,7 @@ import {
   type AppointmentsResponse,
 } from "@/app/lib/esmiPlatform";
 import { Badge, type BadgeTone } from "../Badge";
+import { useDashI18n } from "../i18n";
 import { useActiveOrgSlug } from "../useActiveOrgSlug";
 
 const PAGE_SIZE = 25;
@@ -207,6 +208,10 @@ export default function Appointments() {
 
   const filtered = Boolean(search || status !== "all");
 
+  const { t } = useDashI18n();
+  const statusLabel = (s: "all" | "upcoming" | "past") =>
+    s === "all" ? t.ui.all : s === "upcoming" ? t.ui.upcoming : t.ui.past;
+
   return (
     <div className="overflow-hidden rounded-lg border border-line bg-surface shadow-sm">
       {/* Filter bar */}
@@ -220,11 +225,11 @@ export default function Appointments() {
                 setStatus(s);
                 setPage(0);
               }}
-              className={`rounded px-3 py-1.5 text-sm font-medium capitalize transition-colors ${
+              className={`rounded px-3 py-1.5 text-sm font-medium transition-colors ${
                 status === s ? "bg-navy-600 text-white" : "text-ink-2 hover:bg-surface-2"
               }`}
             >
-              {s}
+              {statusLabel(s)}
             </button>
           ))}
         </div>
@@ -232,7 +237,7 @@ export default function Appointments() {
           type="search"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          placeholder="Search name or phone…"
+          placeholder={t.ui.searchNamePhone}
           className="h-9 w-full max-w-xs rounded-md border border-line bg-surface px-3 text-sm text-ink placeholder:text-ink-4 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
         />
       </div>
@@ -243,7 +248,7 @@ export default function Appointments() {
       ) : error ? (
         <div className="flex flex-col items-center gap-3 px-6 py-16 text-center">
           <p className="font-display text-base font-semibold text-ink">
-            Couldn&apos;t load appointments
+            {t.ui.loadApptsFail}
           </p>
           <p className="max-w-sm text-sm text-ink-3">{error}</p>
           <button
@@ -251,18 +256,16 @@ export default function Appointments() {
             onClick={() => setReloadKey((k) => k + 1)}
             className="rounded-md bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-500"
           >
-            Try again
+            {t.ui.tryAgain}
           </button>
         </div>
       ) : !data || data.appointments.length === 0 ? (
         <div className="flex flex-col items-center gap-2 px-6 py-16 text-center">
           <p className="font-display text-base font-semibold text-ink">
-            {filtered ? "No appointments match" : "No appointments booked yet"}
+            {filtered ? t.ui.noApptsFilter : t.ui.noAppts}
           </p>
           <p className="max-w-sm text-sm text-ink-3">
-            {filtered
-              ? "Try a different search or switch the filter back to All."
-              : "The first time Esmi books a customer in — by phone or from your website — it appears right here."}
+            {filtered ? t.ui.noApptsFilterHint : t.ui.noApptsHint}
           </p>
         </div>
       ) : (
@@ -271,12 +274,12 @@ export default function Appointments() {
             <Fragment key={a.id}>
               {status === "all" && i === 0 && a.status === "upcoming" && (
                 <li className="pb-0.5 text-xs font-semibold uppercase tracking-wide text-teal-700">
-                  Upcoming
+                  {t.ui.upcoming}
                 </li>
               )}
               {status === "all" && i === firstPastIdx && (
                 <li className="pb-0.5 text-xs font-semibold uppercase tracking-wide text-ink-4">
-                  Past
+                  {t.ui.past}
                 </li>
               )}
               <AppointmentCard appt={a} />
