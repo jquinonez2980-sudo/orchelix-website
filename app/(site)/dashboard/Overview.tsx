@@ -9,6 +9,7 @@ import {
   type UsageResponse,
 } from "@/app/lib/esmiPlatform";
 import NightRegister from "./NightRegister";
+import TonightWork from "./TonightWork";
 import { LimitBanner, MinutesProgress, Tile } from "./PlanUsageWidgets";
 import { useActiveOrgSlug } from "./useActiveOrgSlug";
 import { useDashI18n } from "./i18n";
@@ -314,6 +315,11 @@ export default function Overview() {
         value={cur.after_hours_calls}
         prev={prev.after_hours_calls}
         quiet={quiet}
+      />
+
+      <TonightWork
+        afterHours={cur.after_hours_calls}
+        leadsEscalated={cur.leads_escalated}
       />
 
       {/* Primary surface: dense live register from calls + chats APIs */}

@@ -1005,6 +1005,48 @@ export async function fetchCallRecordingExport(
   return res.json();
 }
 
+/* Call reviews (operator HITL) — stored in Clerk org privateMetadata via
+   Next API until Railway exposes native review fields. */
+
+export const REVIEW_STATUSES = ["open", "reviewed", "needs_followup"] as const;
+export type ReviewStatus = (typeof REVIEW_STATUSES)[number];
+
+export type CallReview = {
+  status: ReviewStatus;
+  note: string | null;
+  reviewed_at: string | null;
+  reviewed_by: string | null;
+  updated_at: string;
+};
+
+export type CallReviewsResponse = {
+  tenant_id: string;
+  reviews: Record<string, CallReview>;
+};
+
+export async function fetchCallReviews(): Promise<CallReviewsResponse> {
+  const res = await fetch("/api/platform/calls/reviews", { cache: "no-store" });
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  return res.json();
+}
+
+export async function updateCallReview(
+  callId: string,
+  update: { status: ReviewStatus; note?: string | null },
+): Promise<CallReview> {
+  const res = await fetch(
+    `/api/platform/calls/${encodeURIComponent(callId)}/review`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(update),
+    },
+  );
+  if (!res.ok) throw new Error(await readErrorDetail(res));
+  const data = await res.json();
+  return data.review as CallReview;
+}
+
 /* ── Phase 4 ticket 4.1: self-serve onboarding queue (admin-only) ──────────
    Mirrors platform_api/onboarding.py. Only ever called from the Orchelix
    staff Admin → Onboarding page; the proxy enforces both the staff org and

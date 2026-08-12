@@ -4,13 +4,17 @@ import { useCallback, useEffect, useMemo, useState, type MouseEvent } from "reac
 import {
   CALL_OUTCOMES,
   fetchCallRecordingExport,
+  fetchCallReviews,
   fetchCalls,
   type CallLanguage,
   type CallOutcome,
+  type CallReview,
   type CallsResponse,
   type PlatformCall,
+  type ReviewStatus,
 } from "@/app/lib/esmiPlatform";
 import { Badge, type BadgeTone } from "../Badge";
+import CallReviewControls from "../CallReviewControls";
 import CoachFromCall from "../CoachFromCall";
 import { useActiveOrgSlug } from "../useActiveOrgSlug";
 
@@ -209,10 +213,34 @@ function WhatsAppDownloadButton({ callId }: { callId: string }) {
   );
 }
 
-function CallDetail({ call }: { call: PlatformCall }) {
+function CallDetail({
+  call,
+  review,
+  onReviewChange,
+}: {
+  call: PlatformCall;
+  review?: CallReview | null;
+  onReviewChange?: (r: CallReview) => void;
+}) {
   return (
     <div className="space-y-4 border-t border-line bg-surface-2 px-4 py-4 sm:px-6">
-      <CoachFromCall call={call} />
+      <CallReviewControls
+        callId={call.id}
+        initial={review}
+        onChange={onReviewChange}
+      />
+      <CoachFromCall
+        call={call}
+        onCoached={() =>
+          onReviewChange?.({
+            status: "reviewed",
+            note: review?.note ?? null,
+            reviewed_at: new Date().toISOString(),
+            reviewed_by: null,
+            updated_at: new Date().toISOString(),
+          })
+        }
+      />
 
       {call.recording_url && (
         <div>
@@ -262,13 +290,24 @@ function Chevron({ open }: { open: boolean }) {
   );
 }
 
-function CallRow({ call }: { call: PlatformCall }) {
-  const [open, setOpen] = useState(false);
+function CallRow({
+  call,
+  review,
+  defaultOpen,
+  onReviewChange,
+}: {
+  call: PlatformCall;
+  review?: CallReview | null;
+  defaultOpen?: boolean;
+  onReviewChange?: (callId: string, r: CallReview) => void;
+}) {
+  const [open, setOpen] = useState(Boolean(defaultOpen));
   const when = fmtWhen(call.started_at);
+  const reviewStatus = review?.status;
   return (
     <>
       {/* Desktop row */}
-      <tbody className="hidden md:table-row-group">
+      <tbody className="hidden md:table-row-group" id={`call-${call.id}`}>
         <tr
           className="cursor-pointer border-t border-line transition-colors hover:bg-surface-2"
           onClick={() => setOpen((v) => !v)}
@@ -287,7 +326,14 @@ function CallRow({ call }: { call: PlatformCall }) {
             {fmtLanguage(call.language)}
           </td>
           <td className="whitespace-nowrap px-4 py-3">
-            <OutcomeBadge outcome={call.outcome} />
+            <div className="flex flex-wrap items-center gap-1.5">
+              <OutcomeBadge outcome={call.outcome} />
+              {reviewStatus && reviewStatus !== "reviewed" && (
+                <Badge tone={reviewStatus === "needs_followup" ? "warning" : "info"}>
+                  {reviewStatus === "needs_followup" ? "Follow-up" : "Open"}
+                </Badge>
+              )}
+            </div>
           </td>
           <td className="max-w-md px-4 py-3 text-sm text-ink-2">
             <span className="line-clamp-2">{call.summary || "—"}</span>
@@ -310,7 +356,11 @@ function CallRow({ call }: { call: PlatformCall }) {
         {open && (
           <tr className="hidden md:table-row">
             <td colSpan={7} className="p-0">
-              <CallDetail call={call} />
+              <CallDetail
+                call={call}
+                review={review}
+                onReviewChange={(r) => onReviewChange?.(call.id, r)}
+              />
             </td>
           </tr>
         )}
@@ -331,6 +381,11 @@ function CallRow({ call }: { call: PlatformCall }) {
                   <span className="text-sm font-medium text-ink">{when.date}</span>
                   <span className="text-sm text-ink-3">{when.time}</span>
                   <OutcomeBadge outcome={call.outcome} />
+                  {reviewStatus && reviewStatus !== "reviewed" && (
+                    <Badge tone={reviewStatus === "needs_followup" ? "warning" : "info"}>
+                      {reviewStatus === "needs_followup" ? "Follow-up" : "Open"}
+                    </Badge>
+                  )}
                 </div>
                 <div className="mt-1 flex items-center gap-3 text-sm text-ink-2">
                   <span className="font-mono">{fmtCaller(call.caller)}</span>
@@ -345,7 +400,13 @@ function CallRow({ call }: { call: PlatformCall }) {
                 <Chevron open={open} />
               </span>
             </button>
-            {open && <CallDetail call={call} />}
+            {open && (
+              <CallDetail
+                call={call}
+                review={review}
+                onReviewChange={(r) => onReviewChange?.(call.id, r)}
+              />
+            )}
           </td>
         </tr>
       </tbody>
@@ -422,39 +483,92 @@ function ErrorState({ message, onRetry }: { message: string; onRetry: () => void
 
 /* ── main component ──────────────────────────────────────────────────────── */
 
+function readSearchParam(key: string): string {
+  if (typeof window === "undefined") return "";
+  return new URLSearchParams(window.location.search).get(key) ?? "";
+}
+
 export default function CallLog() {
   const [outcome, setOutcome] = useState<CallOutcome | "">("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [language, setLanguage] = useState<CallLanguage | "">("");
   const [hasRecording, setHasRecording] = useState<"" | "true" | "false">("");
+  const [reviewFilter, setReviewFilter] = useState<"" | "open" | "reviewed" | "needs_followup">("");
+  const [deepCallId, setDeepCallId] = useState<string | null>(null);
   const [page, setPage] = useState(0);
 
   const [data, setData] = useState<CallsResponse | null>(null);
+  const [reviews, setReviews] = useState<Record<string, CallReview>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
   const orgSlug = useActiveOrgSlug();
 
-  const filtered = Boolean(outcome || fromDate || toDate || language || hasRecording);
+  /* Hydrate filters + deep link from URL (shareable consultant links). */
+  useEffect(() => {
+    const o = readSearchParam("outcome");
+    const lang = readSearchParam("language");
+    const rev = readSearchParam("review");
+    const call = readSearchParam("call");
+    if (o && CALL_OUTCOMES.includes(o as CallOutcome)) setOutcome(o as CallOutcome);
+    if (lang === "en" || lang === "es") setLanguage(lang);
+    if (rev === "open" || rev === "reviewed" || rev === "needs_followup") setReviewFilter(rev);
+    if (call) setDeepCallId(call);
+    const from = readSearchParam("from");
+    const to = readSearchParam("to");
+    if (from) setFromDate(from);
+    if (to) setToDate(to);
+  }, []);
+
+  /* Keep URL in sync for filters (not every keystroke on dates — on state). */
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams();
+    if (outcome) params.set("outcome", outcome);
+    if (language) params.set("language", language);
+    if (reviewFilter) params.set("review", reviewFilter);
+    if (fromDate) params.set("from", fromDate);
+    if (toDate) params.set("to", toDate);
+    if (deepCallId) params.set("call", deepCallId);
+    const qs = params.toString();
+    const next = qs ? `?${qs}` : window.location.pathname;
+    window.history.replaceState(null, "", next);
+  }, [outcome, language, reviewFilter, fromDate, toDate, deepCallId]);
+
+  const filtered = Boolean(
+    outcome || fromDate || toDate || language || hasRecording || reviewFilter,
+  );
 
   useEffect(() => {
     let active = true;
     setLoading(true);
     setError(null);
-    fetchCalls({
-      limit: PAGE_SIZE,
-      offset: page * PAGE_SIZE,
-      outcome,
-      from_date: fromDate,
-      to_date: toDate,
-      language,
-      has_recording: hasRecording === "" ? undefined : hasRecording === "true",
-    })
-      .then((d) => {
+    Promise.all([
+      fetchCalls({
+        limit: PAGE_SIZE,
+        offset: page * PAGE_SIZE,
+        outcome,
+        from_date: fromDate,
+        to_date: toDate,
+        language,
+        has_recording: hasRecording === "" ? undefined : hasRecording === "true",
+      }),
+      fetchCallReviews().catch(() => ({ tenant_id: "", reviews: {} as Record<string, CallReview> })),
+    ])
+      .then(([d, rev]) => {
         if (!active) return;
         setData(d);
+        setReviews(rev.reviews);
         setLoading(false);
+        if (deepCallId) {
+          requestAnimationFrame(() => {
+            document.getElementById(`call-${deepCallId}`)?.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            });
+          });
+        }
       })
       .catch((e: Error) => {
         if (!active) return;
@@ -464,12 +578,28 @@ export default function CallLog() {
     return () => {
       active = false;
     };
-  }, [orgSlug, outcome, fromDate, toDate, language, hasRecording, page, reloadKey]);
+  }, [orgSlug, outcome, fromDate, toDate, language, hasRecording, page, reloadKey, deepCallId]);
+
+  const visibleCalls = useMemo(() => {
+    if (!data) return [];
+    if (!reviewFilter) return data.calls;
+    return data.calls.filter((c) => {
+      const r = reviews[c.id];
+      if (reviewFilter === "open") {
+        return !r || r.status === "open" || r.status === "needs_followup";
+      }
+      return r?.status === reviewFilter;
+    });
+  }, [data, reviews, reviewFilter]);
 
   const totalPages = useMemo(
     () => (data ? Math.max(1, Math.ceil(data.total / PAGE_SIZE)) : 1),
     [data],
   );
+
+  const onReviewChange = useCallback((callId: string, r: CallReview) => {
+    setReviews((prev) => ({ ...prev, [callId]: r }));
+  }, []);
 
   const resetFilters = useCallback(() => {
     setOutcome("");
@@ -477,6 +607,8 @@ export default function CallLog() {
     setToDate("");
     setLanguage("");
     setHasRecording("");
+    setReviewFilter("");
+    setDeepCallId(null);
     setPage(0);
   }, []);
 
@@ -562,6 +694,24 @@ export default function CallLog() {
             <option value="false">No recording</option>
           </select>
         </label>
+        <label className="flex flex-col gap-1 text-xs font-medium text-ink-3">
+          Review
+          <select
+            value={reviewFilter}
+            onChange={(e) => {
+              setReviewFilter(
+                e.target.value as "" | "open" | "reviewed" | "needs_followup",
+              );
+              setPage(0);
+            }}
+            className={inputCls}
+          >
+            <option value="">All reviews</option>
+            <option value="open">Needs review</option>
+            <option value="needs_followup">Needs follow-up</option>
+            <option value="reviewed">Reviewed</option>
+          </select>
+        </label>
         {filtered && (
           <button
             type="button"
@@ -591,10 +741,18 @@ export default function CallLog() {
             <SkeletonRows />
           ) : error ? (
             <ErrorState message={error} onRetry={() => setReloadKey((k) => k + 1)} />
-          ) : !data || data.calls.length === 0 ? (
+          ) : !data || visibleCalls.length === 0 ? (
             <EmptyState filtered={filtered} />
           ) : (
-            data.calls.map((c) => <CallRow key={c.id} call={c} />)
+            visibleCalls.map((c) => (
+              <CallRow
+                key={c.id}
+                call={c}
+                review={reviews[c.id]}
+                defaultOpen={deepCallId === c.id}
+                onReviewChange={onReviewChange}
+              />
+            ))
           )}
         </table>
       </div>

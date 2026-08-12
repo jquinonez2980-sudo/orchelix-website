@@ -140,7 +140,9 @@ components:
 
 # Design System: Orchelix Marketing — The Ruled Record
 
-> **Scope.** This document records the marketing surface only: `/`, `/pricing`, `/solutions`, `/how-it-works`, `/industries`, `/about`, plus the shared `Nav` and `Footer`. It does **not** govern `/dashboard/*` or `/try-esmi`, which deliberately run separate, older token systems.
+> **Scope.** This document records the marketing surface: `/`, `/pricing`, `/solutions`, `/how-it-works`, `/industries`, `/about`, `/book`, `/try-esmi`, `/privacy`, `/terms`, plus shared `Nav` and `Footer`.  
+> **Operate:** `/dashboard/*` uses the same graphite/magenta tokens via `.lg-app` remaps and is an Operate surface (denser, review/coach verbs) — not a second brand.  
+> **Acumen `/app`:** remains a separate product shell (navy/gold finance language allowed for that product only). Do not force Ruled Record density onto Acumen until Acumen ships its own DESIGN.md; do not reintroduce gold into Esmi marketing.
 >
 > **The token file is deliberately split.** `app/globals.css` holds three unrelated systems in one file: the Tailwind `@theme` navy/teal/gold scales and their `:root` aliases (product surfaces — dashboard, forms, legacy marketing routes), the `--lg-*` block (this system), and the `.esmi-dark` block (`/try-esmi` only). Do not "unify" them. The `--lg-*` block is additive and is the only source of truth for anything documented here.
 >

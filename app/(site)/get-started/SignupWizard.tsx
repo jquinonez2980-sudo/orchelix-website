@@ -14,6 +14,7 @@ import StepBusiness, { initialBusiness, type BusinessValues } from "./StepBusine
 import StepContact, { initialContact, type ContactValues } from "./StepContact";
 import StepPlanReview from "./StepPlanReview";
 import Submitted from "./Submitted";
+import { track } from "@/app/lib/analytics";
 import { Card, ErrorNote, PrimaryButton, Stepper } from "./wizardUi";
 
 /* Submission is three network calls plus a client-side org switch:
@@ -136,6 +137,7 @@ export default function SignupWizard({
       // whenever a collision was resolved between the last check and submit.
       const tenantId = res.next?.slug || res.tenant_id;
       const enteredOrg = await finishOrgSetup(tenantId, business.company_name.trim());
+      track("get_started_submit");
       setPhase({ kind: "submitted", tenantId, enteredOrg });
     } catch (e) {
       setError((e as Error).message);

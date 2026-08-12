@@ -1,20 +1,26 @@
 "use client";
 
 /* Persisted HITL coach: saves a knowledge entry the platform will use on
-   future calls. Call disposition itself is not writable from the dashboard
-   API — knowledge is the supported override path. Review flags are local. */
+   future calls. Call disposition is not rewritten; knowledge is the override
+   path. Review status is saved via CallReviewControls / updateCallReview. */
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   addKnowledgeEntry,
+  updateCallReview,
   type PlatformCall,
 } from "@/app/lib/esmiPlatform";
+import { track } from "@/app/lib/analytics";
 import { useDashI18n } from "./i18n";
 import { OUTCOME_STYLE } from "./calls/CallLog";
 
-const reviewedKey = (id: string) => `esmi:call-reviewed:${id}`;
-
-export default function CoachFromCall({ call }: { call: PlatformCall }) {
+export default function CoachFromCall({
+  call,
+  onCoached,
+}: {
+  call: PlatformCall;
+  onCoached?: () => void;
+}) {
   const { t } = useDashI18n();
   const style = OUTCOME_STYLE[call.outcome ?? "other"] ?? OUTCOME_STYLE.other;
 
@@ -28,15 +34,6 @@ export default function CoachFromCall({ call }: { call: PlatformCall }) {
     "idle",
   );
   const [error, setError] = useState<string | null>(null);
-  const [reviewed, setReviewed] = useState(false);
-
-  useEffect(() => {
-    try {
-      setReviewed(Boolean(localStorage.getItem(reviewedKey(call.id))));
-    } catch {
-      setReviewed(false);
-    }
-  }, [call.id]);
 
   async function saveKnowledge() {
     const a = answer.trim();
@@ -54,26 +51,17 @@ export default function CoachFromCall({ call }: { call: PlatformCall }) {
         language:
           call.language === "es" ? "es" : call.language === "en" ? "en" : "auto",
       });
+      /* Coaching implies the operator handled the call — mark reviewed. */
+      await updateCallReview(call.id, { status: "reviewed" }).catch(() => {
+        /* knowledge still saved */
+      });
       setStatus("saved");
       setAnswer("");
-      try {
-        localStorage.setItem(reviewedKey(call.id), new Date().toISOString());
-        setReviewed(true);
-      } catch {
-        /* optional */
-      }
+      track("coach_save");
+      onCoached?.();
     } catch (e) {
       setStatus("error");
       setError(e instanceof Error ? e.message : "Could not save.");
-    }
-  }
-
-  function markReviewed() {
-    try {
-      localStorage.setItem(reviewedKey(call.id), new Date().toISOString());
-      setReviewed(true);
-    } catch {
-      /* ignore */
     }
   }
 
@@ -82,24 +70,12 @@ export default function CoachFromCall({ call }: { call: PlatformCall }) {
       className="border border-line bg-surface px-4 py-3"
       style={{ borderLeft: "2px solid var(--lg-foil)" }}
     >
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <p
-          className="lg-fig text-xs uppercase tracking-wide text-ink-3"
-          style={{ letterSpacing: "0.12em" }}
-        >
-          {t.calls.review} · {style.disposition}
-          {reviewed ? ` · ${t.calls.reviewed}` : ""}
-        </p>
-        {!reviewed && (
-          <button
-            type="button"
-            onClick={markReviewed}
-            className="text-xs font-medium text-navy-600 hover:underline"
-          >
-            {t.calls.markReviewed}
-          </button>
-        )}
-      </div>
+      <p
+        className="lg-fig text-xs uppercase tracking-wide text-ink-3"
+        style={{ letterSpacing: "0.12em" }}
+      >
+        {t.calls.coachTitle} · {style.disposition}
+      </p>
 
       <p className="mt-1 text-sm text-ink-2">{t.calls.coachLede}</p>
 

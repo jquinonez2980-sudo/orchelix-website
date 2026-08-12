@@ -207,6 +207,9 @@ export default async function TryEsmiPage({
               </Prose>
               <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">
                 <Stamp href={locale === "es" ? "/es/book" : "/book"}>{copy.book}</Stamp>
+                <QuietAction href="/get-started">
+                  {locale === "es" ? "Solicitar alta" : "Get started"}
+                </QuietAction>
                 <QuietAction href={locale === "es" ? "/es/solutions" : "/solutions"}>
                   {copy.stack}
                 </QuietAction>

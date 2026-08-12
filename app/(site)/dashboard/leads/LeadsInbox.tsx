@@ -299,6 +299,27 @@ export default function LeadsInbox() {
 
   const filtered = Boolean(status || search);
 
+  /* Deep link from Tonight's work: /dashboard/leads?status=new */
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const s = new URLSearchParams(window.location.search).get("status");
+    if (s && (LEAD_STATUSES as readonly string[]).includes(s)) {
+      setStatus(s as LeadStatus);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams();
+    if (status) params.set("status", status);
+    const qs = params.toString();
+    window.history.replaceState(
+      null,
+      "",
+      qs ? `?${qs}` : window.location.pathname,
+    );
+  }, [status]);
+
   // Debounce the search box → server-side search param.
   useEffect(() => {
     const t = setTimeout(() => {

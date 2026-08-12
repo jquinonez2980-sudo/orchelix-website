@@ -8,6 +8,7 @@ import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import { clerkWidgetAppearance } from "@/app/lib/clerkAppearance";
 import { Menu, X } from "lucide-react";
 import DraftModeBanner from "./DraftModeBanner";
+import { track } from "@/app/lib/analytics";
 import {
   groupLabel,
   navLabel,
@@ -202,7 +203,11 @@ export default function DashboardShell({
           <div className="ml-auto flex items-center gap-3">
             <button
               type="button"
-              onClick={() => setLocale(locale === "en" ? "es" : "en")}
+              onClick={() => {
+                const next = locale === "en" ? "es" : "en";
+                setLocale(next);
+                track("lang_switch_dash", { to: next });
+              }}
               className="lg-fig hidden text-xs font-medium uppercase tracking-wide text-ink-3 hover:text-ink sm:inline"
               style={{ letterSpacing: "0.1em" }}
               aria-label={t.switchTo}

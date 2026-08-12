@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { Messages } from "@/app/i18n/messages/en";
+import { track } from "@/app/lib/analytics";
 
 /* This form previously called `setSubmitted(true)` and nothing else — no
    network request at all — so every booking request was discarded while the
@@ -107,6 +108,7 @@ export default function BookForm({ t }: { t: BookFormCopy }) {
         const body = await res.json().catch(() => ({}));
         throw new Error(body.error || "");
       }
+      track("book_submit");
       setStatus("sent");
     } catch (err) {
       setStatus("error");

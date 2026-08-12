@@ -132,6 +132,11 @@ export default function PublicVoicePreview({
       setLoadedKey(paramsKey);
       setCurrentTime(0);
       setStatus("playing");
+      try {
+        window.dispatchEvent(new Event("esmi:hear_play"));
+      } catch {
+        /* ignore */
+      }
     } catch (e) {
       setStatus("error");
       setErrorMsg(e instanceof Error ? e.message : "Preview failed — try again.");
