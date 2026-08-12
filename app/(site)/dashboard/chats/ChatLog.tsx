@@ -12,6 +12,7 @@ import {
   type PlatformChat,
 } from "@/app/lib/esmiPlatform";
 import { Badge, type BadgeTone } from "../Badge";
+import { useDashI18n } from "../i18n";
 import { useActiveOrgSlug } from "../useActiveOrgSlug";
 
 const PAGE_SIZE = 25;
@@ -47,11 +48,15 @@ const OUTCOME_STYLE: Record<string, { label: string; tone: BadgeTone }> = {
 };
 
 function OutcomeBadge({ outcome }: { outcome: ChatOutcome | null }) {
-  if (!outcome) return <Badge tone="neutral">In progress</Badge>;
-  // Fall back to the raw value rather than crashing if the backend ships an
-  // outcome this build has no style for yet.
+  const { t } = useDashI18n();
+  if (!outcome) return <Badge tone="neutral">{t.ui.inProgress}</Badge>;
+  const labels: Record<string, string> = {
+    booked: OUTCOME_STYLE.booked.label,
+    escalated: OUTCOME_STYLE.escalated.label,
+    closed: t.ui.closed,
+  };
   const s = OUTCOME_STYLE[outcome] ?? { label: outcome, tone: "neutral" as BadgeTone };
-  return <Badge tone={s.tone}>{s.label}</Badge>;
+  return <Badge tone={s.tone}>{labels[outcome] ?? s.label}</Badge>;
 }
 
 /* ── transcript ──────────────────────────────────────────────────────────── */
@@ -74,8 +79,9 @@ function Chevron({ open }: { open: boolean }) {
 }
 
 function TranscriptView({ detail }: { detail: ChatDetail }) {
+  const { t } = useDashI18n();
   if (detail.messages.length === 0) {
-    return <p className="text-sm text-ink-3">No transcript was captured for this chat.</p>;
+    return <p className="text-sm text-ink-3">{t.ui.noTranscript}</p>;
   }
   return (
     <div className="max-h-80 space-y-2 overflow-y-auto pr-2 text-sm leading-6">
@@ -87,7 +93,7 @@ function TranscriptView({ detail }: { detail: ChatDetail }) {
             <span
               className={`mr-1.5 font-semibold ${isAgent ? "text-teal-700" : "text-navy-500"}`}
             >
-              {isAgent ? "Esmi" : "Visitor"}
+              {isAgent ? "Esmi" : t.ui.visitor}
             </span>
             {m.content}
             {when.date && (
@@ -119,6 +125,7 @@ function hostOf(url: string): string {
  * rendering a grid of dashes that looks like a bug.
  */
 function AttributionView({ a }: { a: ChatAttribution }) {
+  const { t, locale } = useDashI18n();
   const campaign =
     [a.utm_source, a.utm_medium, a.utm_campaign].filter(Boolean).join(" · ") || null;
   const hasAny = Boolean(
@@ -128,7 +135,9 @@ function AttributionView({ a }: { a: ChatAttribution }) {
   if (!hasAny) {
     return (
       <p className="text-sm text-ink-3">
-        No source recorded — this conversation started before attribution tracking.
+        {locale === "es"
+          ? "Sin origen registrado — esta conversación empezó antes del seguimiento de atribución."
+          : "No source recorded — this conversation started before attribution tracking."}
       </p>
     );
   }
@@ -136,10 +145,10 @@ function AttributionView({ a }: { a: ChatAttribution }) {
   // A recorded chat with no referrer arrived without one: typed the URL, a
   // bookmark, or a stripped referer. That is "Direct", not missing data.
   const rows: Array<[string, string | null]> = [
-    ["Source", a.referrer ? hostOf(a.referrer) : "Direct"],
-    ["Campaign", campaign],
-    ["Landing page", a.landing_path],
-    ["Device", a.user_agent],
+    [t.ui.source, a.referrer ? hostOf(a.referrer) : t.ui.direct],
+    [t.ui.campaign, campaign],
+    [t.ui.landingPage, a.landing_path],
+    [t.ui.device, a.user_agent],
     ["IP", a.ip_address],
   ];
 
@@ -158,6 +167,7 @@ function AttributionView({ a }: { a: ChatAttribution }) {
 }
 
 function ChatDetailPanel({ chatId }: { chatId: string }) {
+  const { t } = useDashI18n();
   const [detail, setDetail] = useState<ChatDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -188,14 +198,14 @@ function ChatDetailPanel({ chatId }: { chatId: string }) {
       {detail && !loading && !error && (
         <div>
           <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-ink-3">
-            Where this chat came from
+            {t.ui.attribution}
           </p>
           <AttributionView a={detail.attribution} />
         </div>
       )}
       <div>
         <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-ink-3">
-          Transcript
+          {t.ui.transcript}
         </p>
         {loading ? (
           <div className="animate-pulse space-y-2">
@@ -216,7 +226,7 @@ function ChatDetailPanel({ chatId }: { chatId: string }) {
               }}
               className="rounded-md border border-line px-3 py-1.5 text-sm font-medium text-ink hover:bg-surface-2"
             >
-              Try again
+              {t.ui.tryAgain}
             </button>
           </div>
         ) : detail ? (
@@ -230,6 +240,7 @@ function ChatDetailPanel({ chatId }: { chatId: string }) {
 /* ── rows / cards ────────────────────────────────────────────────────────── */
 
 function ChatRow({ chat }: { chat: PlatformChat }) {
+  const { t } = useDashI18n();
   const [open, setOpen] = useState(false);
   const started = fmtWhen(chat.started_at);
   const last = fmtWhen(chat.last_at);
@@ -261,7 +272,7 @@ function ChatRow({ chat }: { chat: PlatformChat }) {
           <button
             type="button"
             aria-expanded={open}
-            aria-label={open ? "Hide chat transcript" : "Show chat transcript"}
+            aria-label={open ? t.ui.hideTranscript : t.ui.showTranscript}
             onClick={(e) => {
               e.stopPropagation();
               setOpen((v) => !v);
@@ -337,18 +348,17 @@ function SkeletonRows() {
 }
 
 function EmptyState({ filtered }: { filtered: boolean }) {
+  const { t } = useDashI18n();
   return (
     <tbody>
       <tr className="border-t border-line">
         <td colSpan={6}>
           <div className="flex flex-col items-center gap-2 px-6 py-16 text-center">
             <p className="font-display text-base font-semibold text-ink">
-              {filtered ? "No chats match these filters" : "No chats yet"}
+              {filtered ? t.ui.noChatsFilter : t.ui.noChats}
             </p>
             <p className="max-w-sm text-sm text-ink-3">
-              {filtered
-                ? "Try widening the date range or clearing the outcome filter."
-                : "When a visitor chats with Esmi on your website, every conversation will show up here with its outcome and message count."}
+              {filtered ? t.ui.noLeadsFilterHint : t.ui.noLeadsHint}
             </p>
           </div>
         </td>
@@ -358,13 +368,14 @@ function EmptyState({ filtered }: { filtered: boolean }) {
 }
 
 function ErrorState({ message, onRetry }: { message: string; onRetry: () => void }) {
+  const { t } = useDashI18n();
   return (
     <tbody>
       <tr className="border-t border-line">
         <td colSpan={6}>
           <div className="flex flex-col items-center gap-3 px-6 py-16 text-center">
             <p className="font-display text-base font-semibold text-ink">
-              Couldn&apos;t load chats
+              {t.ui.loadChatsFail}
             </p>
             <p className="max-w-sm text-sm text-ink-3">{message}</p>
             <button
@@ -372,7 +383,7 @@ function ErrorState({ message, onRetry }: { message: string; onRetry: () => void
               onClick={onRetry}
               className="rounded-md bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-500"
             >
-              Try again
+              {t.ui.tryAgain}
             </button>
           </div>
         </td>
@@ -384,6 +395,7 @@ function ErrorState({ message, onRetry }: { message: string; onRetry: () => void
 /* ── main component ──────────────────────────────────────────────────────── */
 
 export default function ChatLog() {
+  const { t } = useDashI18n();
   const [outcome, setOutcome] = useState<ChatOutcome | "">("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -444,7 +456,7 @@ export default function ChatLog() {
       {/* Filters */}
       <div className="flex flex-wrap items-end gap-3 border-b border-line bg-surface px-4 py-3 sm:px-6">
         <label className="flex flex-col gap-1 text-xs font-medium text-ink-3">
-          Outcome
+          {t.ui.outcome}
           <select
             value={outcome}
             onChange={(e) => {
@@ -453,16 +465,16 @@ export default function ChatLog() {
             }}
             className={inputCls}
           >
-            <option value="">All outcomes</option>
+            <option value="">{t.ui.allOutcomes}</option>
             {CHAT_OUTCOMES.map((o) => (
               <option key={o} value={o}>
-                {OUTCOME_STYLE[o].label}
+                {o === "closed" ? t.ui.closed : OUTCOME_STYLE[o].label}
               </option>
             ))}
           </select>
         </label>
         <label className="flex flex-col gap-1 text-xs font-medium text-ink-3">
-          From
+          {t.ui.from}
           <input
             type="date"
             value={fromDate}
@@ -475,7 +487,7 @@ export default function ChatLog() {
           />
         </label>
         <label className="flex flex-col gap-1 text-xs font-medium text-ink-3">
-          To
+          {t.ui.to}
           <input
             type="date"
             value={toDate}
@@ -493,7 +505,7 @@ export default function ChatLog() {
             onClick={resetFilters}
             className="h-9 rounded-md px-3 text-sm font-medium text-teal-700 hover:bg-teal-50"
           >
-            Clear filters
+            {t.ui.clearFilters}
           </button>
         )}
       </div>
@@ -503,11 +515,11 @@ export default function ChatLog() {
         <table className="w-full border-collapse">
           <thead className="hidden md:table-header-group">
             <tr className="text-left text-xs font-semibold uppercase tracking-wide text-ink-3">
-              <th className="px-4 py-3 sm:px-6">Started</th>
-              <th className="px-4 py-3">Last active</th>
-              <th className="px-4 py-3">Messages</th>
-              <th className="px-4 py-3">Outcome</th>
-              <th className="px-4 py-3">Summary</th>
+              <th className="px-4 py-3 sm:px-6">{t.ui.started}</th>
+              <th className="px-4 py-3">{t.ui.lastActive}</th>
+              <th className="px-4 py-3">{t.ui.messages}</th>
+              <th className="px-4 py-3">{t.ui.outcome}</th>
+              <th className="px-4 py-3">{t.ui.summary}</th>
               <th className="px-4 py-3" />
             </tr>
           </thead>
@@ -541,7 +553,7 @@ export default function ChatLog() {
               onClick={() => setPage((p) => Math.max(0, p - 1))}
               className="rounded-md border border-line px-3 py-1.5 font-medium text-ink enabled:hover:bg-surface-2 disabled:opacity-40"
             >
-              Previous
+              {t.ui.previous}
             </button>
             <span className="tabular-nums text-ink-3">
               {page + 1} / {totalPages}
@@ -552,7 +564,7 @@ export default function ChatLog() {
               onClick={() => setPage((p) => p + 1)}
               className="rounded-md border border-line px-3 py-1.5 font-medium text-ink enabled:hover:bg-surface-2 disabled:opacity-40"
             >
-              Next
+              {t.ui.next}
             </button>
           </div>
         </div>

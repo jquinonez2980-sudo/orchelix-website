@@ -562,25 +562,13 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
           </label>
         </div>
         <div className="rounded-md bg-surface-2 p-3 text-sm">
-          <p className="font-medium text-ink-2">When does this happen?</p>
+          <p className="font-medium text-ink-2">{t.ui.whenEscalate}</p>
           <ul className="mt-1.5 list-disc space-y-1 pl-4 text-ink-3">
-            <li>
-              A caller asks to speak with a person, or sounds frustrated — Esmi offers to
-              transfer the live call to the phone number above.
-            </li>
-            <li>
-              A caller mentions budget, timeline, or urgency (&quot;ready to start&quot;,
-              &quot;ASAP&quot;) — Esmi emails the address above so your team can follow up.
-            </li>
-            <li>
-              A question comes up that Esmi&apos;s knowledge base can&apos;t answer — same
-              email follow-up.
-            </li>
+            <li>{t.ui.escBullet1}</li>
+            <li>{t.ui.escBullet2}</li>
+            <li>{t.ui.escBullet3}</li>
           </ul>
-          <p className="mt-2 text-xs text-ink-4">
-            These triggers live in Esmi&apos;s conversation instructions, not in this form —
-            this section only controls where the transfer and the email go.
-          </p>
+          <p className="mt-2 text-xs text-ink-4">{t.ui.escNote}</p>
         </div>
       </Section>
 

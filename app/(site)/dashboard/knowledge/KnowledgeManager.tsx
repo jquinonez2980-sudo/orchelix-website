@@ -18,11 +18,14 @@ import {
 } from "@/app/lib/esmiPlatform";
 import { Badge } from "../Badge";
 
-const LANGUAGE_LABEL: Record<KnowledgeLanguage, string> = {
-  en: "English",
-  es: "Spanish",
-  auto: "Auto",
-};
+function useLanguageLabels(): Record<KnowledgeLanguage, string> {
+  const { t } = useDashI18n();
+  return {
+    en: t.ui.english,
+    es: t.ui.spanish,
+    auto: t.ui.autoLang,
+  };
+}
 
 const selectCls =
   "h-9 rounded-md border border-line bg-surface px-2.5 text-sm text-ink " +
@@ -35,16 +38,18 @@ function LanguageSelect({
   value: KnowledgeLanguage;
   onChange: (v: KnowledgeLanguage) => void;
 }) {
+  const { t } = useDashI18n();
+  const labels = useLanguageLabels();
   return (
     <select
       className={selectCls}
       value={value}
       onChange={(e) => onChange(e.target.value as KnowledgeLanguage)}
-      aria-label="Language"
+      aria-label={t.ui.language}
     >
       {KNOWLEDGE_LANGUAGES.map((lang) => (
         <option key={lang} value={lang}>
-          {LANGUAGE_LABEL[lang]}
+          {labels[lang]}
         </option>
       ))}
     </select>
@@ -237,6 +242,8 @@ function EntryRow({
   onDeleted: (id: string) => void;
   onUpdated: (entry: KnowledgeEntry) => void;
 }) {
+  const { t } = useDashI18n();
+  const langLabels = useLanguageLabels();
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -322,7 +329,7 @@ function EntryRow({
               disabled={saving || !a.trim() || !dirty}
               className={primaryBtnCls}
             >
-              {saving ? "Saving…" : "Save"}
+              {saving ? t.ui.saving : t.ui.save}
             </button>
             <button
               type="button"
@@ -330,7 +337,7 @@ function EntryRow({
               disabled={saving}
               className={secondaryBtnCls}
             >
-              Cancel
+              {t.ui.cancel}
             </button>
           </div>
         </div>
@@ -341,10 +348,12 @@ function EntryRow({
               {entry.question && (
                 <p className="text-sm font-medium text-ink">{entry.question}</p>
               )}
-              {entry.language && <Badge tone="neutral">{LANGUAGE_LABEL[entry.language]}</Badge>}
+              {entry.language && (
+                <Badge tone="neutral">{langLabels[entry.language]}</Badge>
+              )}
             </div>
             <p className="mt-0.5 whitespace-pre-wrap text-sm text-ink-2">{entry.answer}</p>
-            <p className="mt-1 text-xs text-ink-4">Added {fmtDate(entry.created_at)}</p>
+            <p className="mt-1 text-xs text-ink-4">{fmtDate(entry.created_at)}</p>
           </div>
           <div className="flex shrink-0 items-center gap-1">
             <button
@@ -353,10 +362,10 @@ function EntryRow({
               disabled={deleting}
               className={secondaryBtnCls}
             >
-              Edit
+              {t.ui.edit}
             </button>
             <button type="button" disabled={deleting} onClick={remove} className={deleteBtnCls}>
-              {deleting ? "Deleting…" : "Delete"}
+              {deleting ? t.ui.deleting : t.ui.delete}
             </button>
           </div>
         </div>
@@ -399,9 +408,10 @@ function EntriesList({
   onUpdated: (entry: KnowledgeEntry) => void;
   onRetry: () => void;
 }) {
+  const { t } = useDashI18n();
   return (
     <>
-      <SubLabel>Current entries</SubLabel>
+      <SubLabel>{t.ui.currentEntries}</SubLabel>
       {otherDocsCount > 0 && (
         <p className="px-4 py-2 text-sm text-ink-3 sm:px-6">
           Esmi also draws on {otherDocsCount} other document
@@ -418,14 +428,12 @@ function EntriesList({
             onClick={onRetry}
             className="mt-3 rounded-md bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-500"
           >
-            Try again
+            {t.ui.tryAgain}
           </button>
         </div>
       )}
       {entries && entries.length === 0 && !loading && !error && (
-        <p className="px-4 py-6 text-sm text-ink-4 sm:px-6">
-          No entries yet. Add a quick FAQ above and Esmi can start using it right away.
-        </p>
+        <p className="px-4 py-6 text-sm text-ink-4 sm:px-6">{t.ui.noEntriesYet}</p>
       )}
       {entries && entries.length > 0 && !loading && (
         <div>
@@ -446,6 +454,7 @@ function EntriesList({
 /* ── PDF upload ─────────────────────────────────────────────────────────── */
 
 function PdfUploadForm({ onUploaded }: { onUploaded: (entry: KnowledgePdfEntry) => void }) {
+  const { t } = useDashI18n();
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploadedName, setUploadedName] = useState<string | null>(null);
@@ -489,12 +498,12 @@ function PdfUploadForm({ onUploaded }: { onUploaded: (entry: KnowledgePdfEntry) 
           }}
           className="block w-full text-sm text-ink-2 file:mr-3 file:rounded-md file:border-0 file:bg-navy-600 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-navy-500 disabled:opacity-50"
         />
-        {uploading && <span className="shrink-0 text-sm text-ink-4">Uploading…</span>}
+        {uploading && <span className="shrink-0 text-sm text-ink-4">{t.ui.uploading}</span>}
       </div>
       {error && <p className="mt-2 text-sm text-rose-600">{error}</p>}
       {!error && uploadedName && !uploading && (
         <p className="mt-2 text-sm text-teal-700">
-          &quot;{uploadedName}&quot; added — Esmi can use it right away.
+          &quot;{uploadedName}&quot; — {t.ui.addedOk}
         </p>
       )}
     </div>
@@ -508,6 +517,7 @@ function PdfRow({
   pdf: KnowledgePdfEntry;
   onDeleted: (id: string) => void;
 }) {
+  const { t } = useDashI18n();
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -529,16 +539,17 @@ function PdfRow({
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
             <p className="truncate text-sm font-medium text-ink">{pdf.filename}</p>
-            {pdf.truncated && <Badge tone="warning">Trimmed</Badge>}
+            {pdf.truncated && <Badge tone="warning">{t.ui.trimmed}</Badge>}
           </div>
           <p className="mt-0.5 text-xs text-ink-4">
             {fmtBytes(pdf.size_bytes)}
             {pdf.pages != null && ` · ${pdf.pages} page${pdf.pages === 1 ? "" : "s"}`}
-            {" · "}Added {fmtDate(pdf.created_at)}
+            {" · "}
+            {fmtDate(pdf.created_at)}
           </p>
         </div>
         <button type="button" disabled={deleting} onClick={remove} className={deleteBtnCls}>
-          {deleting ? "Deleting…" : "Delete"}
+          {deleting ? t.ui.deleting : t.ui.delete}
         </button>
       </div>
       {error && <p className="mt-1 text-xs text-rose-600">{error}</p>}
@@ -559,9 +570,10 @@ function PdfsList({
   onDeleted: (id: string) => void;
   onRetry: () => void;
 }) {
+  const { t } = useDashI18n();
   return (
     <>
-      <SubLabel>Uploaded PDFs</SubLabel>
+      <SubLabel>{t.ui.uploadedPdfs}</SubLabel>
       {loading && <SkeletonRows />}
       {error && (
         <div className="px-4 py-6 text-center sm:px-6">
@@ -571,14 +583,12 @@ function PdfsList({
             onClick={onRetry}
             className="mt-3 rounded-md bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-500"
           >
-            Try again
+            {t.ui.tryAgain}
           </button>
         </div>
       )}
       {pdfs && pdfs.length === 0 && !loading && !error && (
-        <p className="px-4 py-6 text-sm text-ink-4 sm:px-6">
-          No PDFs uploaded yet — add one above and Esmi can start using it right away.
-        </p>
+        <p className="px-4 py-6 text-sm text-ink-4 sm:px-6">{t.ui.noEntriesYet}</p>
       )}
       {pdfs && pdfs.length > 0 && !loading && (
         <div>

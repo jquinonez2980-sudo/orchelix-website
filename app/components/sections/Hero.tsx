@@ -2,10 +2,22 @@
    grid and notation, the way the craft bar puts the map itself in the first
    viewport. On mobile the register leads and the offer copy follows it. */
 
+import dynamic from "next/dynamic";
 import { Stamp, QuietAction } from "@/app/components/ledger";
 import { localizedHref, type Locale } from "@/app/i18n/config";
 import type { Messages } from "@/app/i18n/messages/en";
-import HeroProof from "./HeroProof";
+
+/* Defer the voice player + sample transcript so first paint stays light. */
+const HeroProof = dynamic(() => import("./HeroProof"), {
+  ssr: false,
+  loading: () => (
+    <div
+      className="mt-10 max-w-[34rem]"
+      style={{ minHeight: 120 }}
+      aria-hidden
+    />
+  ),
+});
 
 type Disposition = "BOOKED" | "ROUTED" | "ANSWERED" | "CLOSED";
 

@@ -186,6 +186,35 @@ type DashMessages = {
     noChatsFilter: string;
     inProgress: string;
     closed: string;
+    noTranscript: string;
+    attribution: string;
+    direct: string;
+    campaign: string;
+    landingPage: string;
+    device: string;
+    messages: string;
+    started: string;
+    lastActive: string;
+    hideTranscript: string;
+    showTranscript: string;
+    retry: string;
+    loadDetailFail: string;
+    autoLang: string;
+    noEntriesYet: string;
+    trimmed: string;
+    uploading: string;
+    uploadPdf: string;
+    testQuery: string;
+    testBtn: string;
+    testing: string;
+    deleteConfirm: string;
+    cancel: string;
+    edit: string;
+    whenEscalate: string;
+    escBullet1: string;
+    escBullet2: string;
+    escBullet3: string;
+    escNote: string;
   };
 };
 
@@ -388,6 +417,40 @@ const en: DashMessages = {
     noChatsFilter: "No chats match these filters",
     inProgress: "In progress",
     closed: "Closed",
+    noTranscript: "No transcript was captured for this chat.",
+    attribution: "Where they came from",
+    direct: "Direct",
+    campaign: "Campaign",
+    landingPage: "Landing page",
+    device: "Device",
+    messages: "Messages",
+    started: "Started",
+    lastActive: "Last active",
+    hideTranscript: "Hide chat transcript",
+    showTranscript: "Show chat transcript",
+    retry: "Retry",
+    loadDetailFail: "Couldn't load transcript",
+    autoLang: "Auto",
+    noEntriesYet:
+      "No entries yet. Add a quick FAQ above and Esmi can start using it right away.",
+    trimmed: "Trimmed",
+    uploading: "Uploading…",
+    uploadPdf: "Upload PDF",
+    testQuery: "Test a question",
+    testBtn: "Test",
+    testing: "Testing…",
+    deleteConfirm: "Delete this entry?",
+    cancel: "Cancel",
+    edit: "Edit",
+    whenEscalate: "When does this happen?",
+    escBullet1:
+      "A caller asks to speak with a person, or sounds frustrated — Esmi offers to transfer the live call to the phone number above.",
+    escBullet2:
+      'A caller mentions budget, timeline, or urgency ("ready to start", "ASAP") — Esmi emails the address above so your team can follow up.',
+    escBullet3:
+      "A question comes up that Esmi's knowledge base can't answer — same email follow-up.",
+    escNote:
+      "These triggers live in Esmi's conversation instructions, not in this form — this section only controls where the transfer and the email go.",
   },
 };
 
@@ -591,6 +654,40 @@ const es: DashMessages = {
     noChatsFilter: "Ningún chat coincide con estos filtros",
     inProgress: "En curso",
     closed: "Cerrado",
+    noTranscript: "No se capturó transcripción de este chat.",
+    attribution: "De dónde vinieron",
+    direct: "Directo",
+    campaign: "Campaña",
+    landingPage: "Página de llegada",
+    device: "Dispositivo",
+    messages: "Mensajes",
+    started: "Inicio",
+    lastActive: "Última actividad",
+    hideTranscript: "Ocultar transcripción",
+    showTranscript: "Mostrar transcripción",
+    retry: "Reintentar",
+    loadDetailFail: "No se pudo cargar la transcripción",
+    autoLang: "Auto",
+    noEntriesYet:
+      "Aún no hay entradas. Agrega un FAQ arriba y Esmi puede usarlo de inmediato.",
+    trimmed: "Recortado",
+    uploading: "Subiendo…",
+    uploadPdf: "Subir PDF",
+    testQuery: "Probar una pregunta",
+    testBtn: "Probar",
+    testing: "Probando…",
+    deleteConfirm: "¿Eliminar esta entrada?",
+    cancel: "Cancelar",
+    edit: "Editar",
+    whenEscalate: "¿Cuándo pasa esto?",
+    escBullet1:
+      "Un llamante pide hablar con una persona o suena frustrado — Esmi ofrece transferir la llamada al teléfono de arriba.",
+    escBullet2:
+      'Un llamante menciona presupuesto, plazos o urgencia ("listo para empezar", "ASAP") — Esmi envía un correo a la dirección de arriba para que tu equipo haga seguimiento.',
+    escBullet3:
+      "Sale una pregunta que la base de conocimiento no puede responder — el mismo seguimiento por correo.",
+    escNote:
+      "Estos disparadores viven en las instrucciones de conversación de Esmi, no en este formulario — esta sección solo controla a dónde van la transferencia y el correo.",
   },
 };
 
