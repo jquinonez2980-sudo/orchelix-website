@@ -2,22 +2,11 @@
    grid and notation, the way the craft bar puts the map itself in the first
    viewport. On mobile the register leads and the offer copy follows it. */
 
-import dynamic from "next/dynamic";
 import { Stamp, QuietAction } from "@/app/components/ledger";
 import { localizedHref, type Locale } from "@/app/i18n/config";
 import type { Messages } from "@/app/i18n/messages/en";
-
-/* Defer the voice player + sample transcript so first paint stays light. */
-const HeroProof = dynamic(() => import("./HeroProof"), {
-  ssr: false,
-  loading: () => (
-    <div
-      className="mt-10 max-w-[34rem]"
-      style={{ minHeight: 120 }}
-      aria-hidden
-    />
-  ),
-});
+/* Client wrapper: next/dynamic ssr:false is illegal in Server Components. */
+import HeroProof from "./HeroProofLazy";
 
 type Disposition = "BOOKED" | "ROUTED" | "ANSWERED" | "CLOSED";
 
@@ -129,7 +118,7 @@ export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
 
           {/* Real production sample in the first viewport — illustrate
               the register above; prove the voice here. */}
-          <HeroProof locale={locale} />
+          <HeroProof locale={locale ?? "en"} />
 
           {/* The number itself — a visible way to reach a person right now,
               not buried in the meta line it used to share with EN · ES and
