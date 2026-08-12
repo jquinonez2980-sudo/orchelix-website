@@ -11,8 +11,19 @@ export const dynamic = "force-dynamic";
 function SignInGate() {
   return (
     <main className="mx-auto flex max-w-md flex-col items-center px-6 py-24">
-      <div className="w-full rounded-2xl border border-line bg-surface p-8 text-center shadow-sm">
-        <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">
+      <div
+        className="w-full border border-line bg-surface p-8 text-center"
+        style={{ borderTop: "2px solid var(--lg-rule)" }}
+      >
+        <h1
+          className="text-2xl font-semibold tracking-tight text-ink"
+          style={{
+            fontFamily: "var(--font-display)",
+            fontStretch: "82%",
+            textTransform: "uppercase",
+            letterSpacing: "-0.02em",
+          }}
+        >
           Get started with Esmi
         </h1>
         <p className="mt-3 text-sm leading-6 text-ink-2">
@@ -21,13 +32,24 @@ function SignInGate() {
           before anything goes live.
         </p>
         <SignInButton mode="modal">
-          <button className="mt-6 w-full rounded-lg bg-navy-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-navy-700">
+          <button
+            type="button"
+            className="lg-stamp lg-foil-surface mt-6 w-full px-5 py-3 text-sm font-semibold transition hover:brightness-105"
+            style={{
+              fontFamily: "var(--font-display)",
+              fontStretch: "88%",
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              borderRadius: 0,
+              color: "var(--lg-foil-ink)",
+            }}
+          >
             Sign in to continue
           </button>
         </SignInButton>
         <p className="mt-4 text-xs text-ink-3">
           Already onboarded?{" "}
-          <a href="/dashboard" className="underline hover:text-ink-2">
+          <a href="/dashboard" className="text-ink underline hover:text-ink-2">
             Go to your dashboard
           </a>
         </p>

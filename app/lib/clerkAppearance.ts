@@ -27,10 +27,11 @@
    ink flipped from a pale cream to Graphite to match. Ratios recomputed for
    the new pairing, same convention as before (ink-on-field). */
 const INK = "#2E323E"; // --lg-ink,   ~12.8:1 on the field
-const INK_2 = "rgba(46, 50, 62, 0.68)"; // --lg-ink-2, ~4.7:1 on the field
+const INK_2 = "rgba(46, 50, 62, 0.80)"; // --lg-ink-2, AA on field
 const FIELD = "#FFFFFF"; // --lg-field
 const FIELD_2 = "#F1F3F5"; // --lg-field-2
 const FOIL = "#B7135A"; // --lg-foil
+const FOIL_INK = "#FFFFFF"; // --lg-foil-ink
 
 export const clerkWidgetAppearance = {
   variables: {
@@ -40,9 +41,39 @@ export const clerkWidgetAppearance = {
     colorPrimary: FOIL,
     colorInputBackground: FIELD_2,
     colorInputText: INK,
+    colorNeutral: INK,
     borderRadius: "0px",
   },
   elements: {
+    rootBox: { width: "100%" },
+    card: {
+      boxShadow: "none",
+      border: "none",
+      background: "transparent",
+    },
+    headerTitle: { color: INK, fontFamily: "inherit" },
+    headerSubtitle: { color: INK_2 },
+    socialButtonsBlockButton: {
+      border: `1px solid rgba(46, 50, 62, 0.14)`,
+      color: INK,
+      background: FIELD,
+    },
+    formButtonPrimary: {
+      background: FOIL,
+      color: FOIL_INK,
+      boxShadow: "none",
+      borderRadius: "0px",
+    },
+    formFieldInput: {
+      borderRadius: "0px",
+      color: INK,
+      background: FIELD_2,
+    },
+    footerActionLink: { color: FOIL },
+    identityPreviewText: { color: INK },
+    identityPreviewEditButton: { color: FOIL },
+    formFieldLabel: { color: INK_2 },
+    dividerText: { color: INK_2 },
     organizationSwitcherTrigger: "text-ink hover:bg-surface-2",
     /* The nodes that actually paint the company name and the user's name.
        Literal colours rather than utility classes: these render inside

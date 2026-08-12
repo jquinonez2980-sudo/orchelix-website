@@ -26,7 +26,7 @@ export default function Footer({
         { label: t.footer.links.esmi, href: "/ai-receptionist" },
         /* /try-esmi was absent from the nav and from here both — the live
            product demo had no route in from the chrome at all. */
-        { label: t.nav.tryEsmi, href: "/try-esmi" },
+        { label: t.nav.tryEsmi, href: locale === "es" ? "/try-esmi?lang=es" : "/try-esmi" },
         { label: t.footer.links.revops, href: `${L("/solutions")}#agent-revops` },
         { label: t.footer.links.acumen, href: "/acumen" },
         { label: t.footer.links.industries, href: L("/industries") },
@@ -45,10 +45,10 @@ export default function Footer({
     {
       head: t.footer.trust,
       links: [
-        { label: t.footer.links.privacy, href: "/privacy" },
+        { label: t.footer.links.privacy, href: "/privacy#privacy" },
         { label: t.footer.links.terms, href: "/terms" },
-        { label: t.footer.links.pipeda, href: "/privacy" },
-        { label: t.footer.links.security, href: "/privacy" },
+        { label: t.footer.links.pipeda, href: "/privacy#pipeda" },
+        { label: t.footer.links.security, href: "/privacy#security" },
       ],
     },
   ];

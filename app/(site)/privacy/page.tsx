@@ -1,238 +1,270 @@
 import type { Metadata } from "next";
 import Nav from "@/app/components/sections/Nav";
 import Footer from "@/app/components/sections/Footer";
+import {
+  Section,
+  PageTitle,
+  SectionTitle,
+  Prose,
+  RuledList,
+  Band,
+} from "@/app/components/ledger";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy",
-  description: "How Orchelix AI Consulting collects, uses, and protects your personal information in compliance with PIPEDA.",
+  title: "Privacy, PIPEDA & Security | Orchelix",
+  description:
+    "How Orchelix collects, uses, and protects personal information — PIPEDA alignment for Canadian operations, security practices, and your rights.",
   alternates: { canonical: "/privacy" },
 };
+
+const TOC = [
+  { href: "#privacy", label: "Privacy policy" },
+  { href: "#pipeda", label: "PIPEDA" },
+  { href: "#security", label: "Security" },
+  { href: "#rights", label: "Your rights" },
+  { href: "#contact", label: "Contact" },
+] as const;
 
 export default function PrivacyPage() {
   return (
     <>
       <Nav />
-      <main id="main-content" style={{ fontFamily: "var(--font-display), ui-sans-serif, system-ui, sans-serif" }}>
-        <section
-          style={{
-            background: "var(--surface-2)",
-            padding: "80px 24px 64px",
-            borderBottom: "1px solid var(--line)",
-          }}
-        >
-          <div style={{ maxWidth: 760, margin: "0 auto" }}>
-            <span
-              style={{
-                display: "inline-block",
-                fontFamily: "var(--font-mono)",
-                fontSize: 11,
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                color: "var(--teal-600)",
-                marginBottom: 16,
-              }}
-            >
-              Legal
-            </span>
-            <h1
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: "clamp(28px, 4vw, 44px)",
-                fontWeight: 600,
-                letterSpacing: "-0.03em",
-                lineHeight: 1.1,
-                margin: "0 0 16px",
-                color: "var(--ink)",
-              }}
-            >
-              Privacy Policy
-            </h1>
-            <p style={{ color: "var(--ink-2)", fontSize: 14 }}>
-              Effective date: June 1, 2026 · Last updated: June 1, 2026
-            </p>
-          </div>
-        </section>
+      <main id="main-content">
+        <Section tone="field" id="privacy" style={{ scrollMarginTop: "5.5rem" }}>
+          <PageTitle max="16ch">Privacy, PIPEDA &amp; security</PageTitle>
+          <Prose size="1.0625rem" max="48ch" style={{ marginTop: "1.5rem" }}>
+            Orchelix AI Consulting Inc. operates across Canada and the United
+            States. This page is the trust record: how we handle personal
+            information, how PIPEDA applies to Canadian operations, and how we
+            protect systems that answer your phones.
+          </Prose>
+          <p
+            className="lg-fig mt-4"
+            style={{
+              fontSize: "0.6875rem",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "var(--lg-ink-3)",
+            }}
+          >
+            Effective June 1, 2026 · Updated August 12, 2026
+          </p>
 
-        <section style={{ padding: "64px 24px 100px" }}>
-          <div style={{ maxWidth: 760, margin: "0 auto" }}>
-            <Prose>
-              <p>
-                Orchelix AI Consulting Inc. (&quot;Orchelix&quot;, &quot;we&quot;, &quot;us&quot;, or &quot;our&quot;) is committed to protecting your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard information when you visit our website or use our services, in accordance with the <em>Personal Information Protection and Electronic Documents Act</em> (PIPEDA) and applicable provincial privacy legislation.
-              </p>
-              <p>
-                By using our website or services, you consent to the practices described in this policy.
-              </p>
+          <nav aria-label="On this page" className="mt-10">
+            <ul className="flex flex-wrap gap-x-6 gap-y-2">
+              {TOC.map((item) => (
+                <li key={item.href}>
+                  <a
+                    href={item.href}
+                    className="lg-quiet"
+                    style={{
+                      fontFamily: "var(--font-display)",
+                      fontStretch: "88%",
+                      fontSize: "0.8125rem",
+                      letterSpacing: "0.06em",
+                      textTransform: "uppercase",
+                      color: "var(--lg-ink)",
+                      textDecoration: "none",
+                    }}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </Section>
 
-              <h2>1. Who We Are</h2>
-              <p>
-                Orchelix AI Consulting Inc. is incorporated in Ontario, Canada. Our principal place of business is in West Palm Beach, Florida, USA. We serve clients across South Florida, the Greater Toronto Area, and North America.
-              </p>
-              <p>
-                <strong>Privacy Officer:</strong> Jorge Quinonez<br />
-                <strong>Contact:</strong> <a href="mailto:privacy@orchelix.com">privacy@orchelix.com</a>
-              </p>
-
-              <h2>2. Information We Collect</h2>
-              <p>We collect information you provide directly, including:</p>
-              <ul>
-                <li><strong>Contact and booking information</strong> — name, email address, company name, phone number when you book a demo or contact us.</li>
-                <li><strong>Chat and conversation data</strong> — messages you send to Esmi, our AI receptionist, including appointment requests and service inquiries.</li>
-                <li><strong>Usage data</strong> — pages visited, referring URLs, browser type, IP address, and general geographic location (city/region level).</li>
-              </ul>
-              <p>We do not collect sensitive personal information (health data, financial account numbers, government IDs) unless explicitly required for a specific service and with your express consent.</p>
-
-              <h2>3. How We Use Your Information</h2>
-              <p>We use collected information to:</p>
-              <ul>
-                <li>Schedule and conduct sales demonstrations and consultations</li>
-                <li>Provide and improve our AI agent services</li>
-                <li>Send transactional communications (appointment confirmations, service updates)</li>
-                <li>Respond to inquiries and provide customer support</li>
-                <li>Analyze website usage to improve user experience</li>
-                <li>Comply with legal obligations</li>
-              </ul>
-              <p>We do not sell your personal information to third parties.</p>
-
-              <h2>4. Legal Basis for Processing</h2>
-              <p>
-                Under PIPEDA, we rely on your <strong>implied or express consent</strong> as our lawful basis for collecting and using personal information. You may withdraw consent at any time by contacting us, subject to legal and contractual restrictions.
-              </p>
-
-              <h2>5. Data Sharing and Disclosure</h2>
-              <p>We may share your information with:</p>
-              <ul>
-                <li><strong>Service providers</strong> — third-party tools used to operate our services (e.g., scheduling software, cloud infrastructure, AI model providers). These parties are contractually bound to protect your data.</li>
-                <li><strong>Legal requirements</strong> — when required by law, court order, or government authority.</li>
-              </ul>
-              <p>Our current sub-processors include:</p>
-              <ul>
-                <li><strong>Google LLC (Google Cloud Platform)</strong> — cloud infrastructure, BigQuery data warehouse, and Workspace API access (United States)</li>
-                <li><strong>Vercel Inc.</strong> — website hosting and edge functions (United States)</li>
-                <li><strong>OpenAI, LLC</strong> — AI language model inference (United States)</li>
-                <li><strong>Railway Corp.</strong> — backend API hosting (United States)</li>
-                <li><strong>Cal.com, Inc.</strong> — appointment scheduling (United States)</li>
-              </ul>
-              <p>Each sub-processor is bound by a data processing agreement and GDPR/PIPEDA-compatible contractual obligations. An updated list is available upon request.</p>
-
-              <h2>6. Data Retention</h2>
-              <p>
-                We retain personal information only as long as necessary for the purposes outlined in this policy, or as required by law. Chat conversation data is retained for 90 days by default. Client contract data is retained for 7 years per Canadian accounting regulations.
-              </p>
-
-              <h2>7. Data Residency</h2>
-              <p>
-                By default, data processed through our AI services may be processed on servers located in the United States or Canada. Canadian data residency is available upon request for enterprise clients. Please contact us to discuss your requirements.
-              </p>
-
-              <h2>8. Security</h2>
-              <p>
-                We implement industry-standard technical and organizational measures to protect your personal information, including encryption in transit (TLS), access controls, and regular security reviews. We are pursuing SOC 2 Type II certification, expected Q4 2026.
-              </p>
-
-              <h2>9. Your Rights</h2>
-              <p>Under PIPEDA, you have the right to:</p>
-              <ul>
-                <li>Access the personal information we hold about you</li>
-                <li>Request correction of inaccurate information</li>
-                <li>Withdraw consent for certain uses</li>
-                <li>File a complaint with the Office of the Privacy Commissioner of Canada</li>
-              </ul>
-              <p>
-                To exercise any of these rights, contact our Privacy Officer at <a href="mailto:privacy@orchelix.com">privacy@orchelix.com</a>.
-              </p>
-
-              <h2>10. Google Workspace API Data</h2>
-              <p>
-                AcumenAI, our accounting automation service, integrates with Google Workspace APIs to help clients automate their bookkeeping workflow. Specifically:
-              </p>
-              <ul>
-                <li><strong>Gmail (read &amp; modify)</strong> — AcumenAI reads emails in the client&apos;s inbox to detect bank statement PDF attachments, downloads those attachments for processing, and applies labels (e.g., <code>vtx-processed</code>) to processed messages. We do not read unrelated emails.</li>
-                <li><strong>Gmail (send)</strong> — Used to deliver bookkeeping summaries, approval-queue notifications, and client reports on the client&apos;s behalf.</li>
-                <li><strong>Google Drive (read)</strong> — Used to access statement files shared by clients when applicable.</li>
-              </ul>
-              <p>
-                <strong>Data use:</strong> Google user data accessed through these APIs is used exclusively to provide the accounting automation service. We do not use this data for advertising, profiling, or any purpose unrelated to the service the client has requested.
-              </p>
-              <p>
-                <strong>Data sharing:</strong> Google user data is never sold, transferred, or disclosed to third parties except as necessary to operate the service (e.g., cloud infrastructure listed in Section 5), or as required by law.
-              </p>
-              <p>
-                <strong>Retention:</strong> Extracted transaction data is retained in the client&apos;s BigQuery dataset for the duration of their engagement, plus the 7-year statutory minimum under Canadian accounting regulations. Raw email content is not stored — only the structured financial data extracted from attachments.
-              </p>
-              <p>
-                <strong>Revoking access:</strong> Clients may revoke Google Workspace access at any time via their Google Account at{" "}
-                <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener noreferrer">myaccount.google.com/permissions</a>. Revocation does not delete previously extracted data; contact us to request data deletion.
-              </p>
-              <p>
-                Our use and transfer of information received from Google APIs to any other app adheres to the{" "}
-                <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer">Google API Services User Data Policy</a>, including the Limited Use requirements.
-              </p>
-
-              <h2>11. Cookies and Tracking</h2>
-              <p>
-                We use essential cookies required for site functionality and, with your consent, analytics cookies to understand how visitors use our site. You may control cookie preferences through your browser settings.
-              </p>
-
-              <h2>12. Third-Party Links</h2>
-              <p>
-                Our website may contain links to third-party sites. We are not responsible for the privacy practices of those sites and encourage you to review their privacy policies.
-              </p>
-
-              <h2>13. Changes to This Policy</h2>
-              <p>
-                We may update this Privacy Policy periodically. Material changes will be communicated via email (for clients) or prominent notice on this page. Continued use of our services constitutes acceptance of the revised policy.
-              </p>
-
-              <h2>14. Contact Us</h2>
-              <p>
-                For privacy-related questions or to exercise your rights:<br />
-                <strong>Orchelix AI Consulting Inc.</strong><br />
-                Privacy Officer: Jorge Quinonez<br />
-                Email: <a href="mailto:privacy@orchelix.com">privacy@orchelix.com</a><br />
-                Address: West Palm Beach, FL, USA · Serving South Florida, GTA Ontario &amp; North America
-              </p>
-              <p>
-                You also have the right to contact the Office of the Privacy Commissioner of Canada at{" "}
-                <a href="https://www.priv.gc.ca" target="_blank" rel="noopener noreferrer">www.priv.gc.ca</a>.
-              </p>
+        <Section tone="stock">
+          <SectionTitle tone="stock" max="18ch">
+            Privacy policy
+          </SectionTitle>
+          <div className="mt-10 grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+            <Prose size="1rem" max="42ch" tone="stock">
+              Orchelix AI Consulting Inc. (&quot;Orchelix&quot;, &quot;we&quot;,
+              &quot;us&quot;) protects personal information when you visit our
+              website or use our services. By using our site or services, you
+              consent to the practices described here.
             </Prose>
+            <RuledList
+              tone="stock"
+              labelWidth="9rem"
+              items={[
+                ["Who we are", "Orchelix AI Consulting Inc. — West Palm Beach, FL; serving Canada & the US"],
+                ["Privacy Officer", "Jorge Quinonez — privacy@orchelix.com"],
+                ["We do not sell", "Personal information is never sold to third parties"],
+                ["Default residency", "Processing may occur in the US or Canada; Canadian residency on request"],
+              ]}
+            />
           </div>
-        </section>
+        </Section>
+
+        <Section tone="field">
+          <SectionTitle max="20ch">What we collect &amp; why</SectionTitle>
+          <div className="mt-10">
+            <Band
+              cols={3}
+              items={[
+                ["Contact", "Name, email, company, phone when you book or apply"],
+                ["Conversations", "Messages and calls handled by Esmi for your business"],
+                ["Usage", "Pages visited, referrer, browser, city-level location"],
+              ]}
+            />
+          </div>
+          <Prose size="1rem" max="56ch" style={{ marginTop: "2rem" }}>
+            We use this information to run demos and pilots, provide AI agent
+            services, send transactional notices, support clients, improve the
+            site, and meet legal obligations. We do not collect health data,
+            government IDs, or payment-card numbers unless a specific service
+            requires them with express consent.
+          </Prose>
+        </Section>
+
+        <Section tone="field-2" id="pipeda" style={{ scrollMarginTop: "5.5rem" }}>
+          <SectionTitle max="14ch">PIPEDA</SectionTitle>
+          <Prose size="1.0625rem" max="48ch" style={{ marginTop: "1.5rem" }}>
+            For Canadian operations and personal information of individuals in
+            Canada, we align with the{" "}
+            <em>Personal Information Protection and Electronic Documents Act</em>{" "}
+            (PIPEDA) and applicable provincial privacy legislation.
+          </Prose>
+          <div className="mt-10">
+            <RuledList
+              labelWidth="11rem"
+              items={[
+                ["Consent", "We rely on implied or express consent under PIPEDA; you may withdraw subject to legal limits"],
+                ["Accountability", "A named Privacy Officer is accountable for this policy"],
+                ["Purpose limit", "We collect only what the service needs and state those purposes"],
+                ["Access & correction", "You may request access or correction of your personal information"],
+                ["Complaints", "You may contact the Office of the Privacy Commissioner of Canada"],
+              ]}
+            />
+          </div>
+          <Prose size="0.9375rem" max="52ch" style={{ marginTop: "2rem" }}>
+            Cross-border operations are real: US presence and Canadian clients
+            both exist. We state that explicitly rather than mixing a Canadian
+            privacy claim with US-only location signals.
+          </Prose>
+        </Section>
+
+        <Section tone="stock" id="security" style={{ scrollMarginTop: "5.5rem" }}>
+          <SectionTitle tone="stock" max="12ch">
+            Security
+          </SectionTitle>
+          <Prose size="1.0625rem" max="48ch" tone="stock" style={{ marginTop: "1.5rem" }}>
+            The audit trail is only useful if the systems behind it are
+            protected. Controls in place today:
+          </Prose>
+          <div className="mt-10">
+            <RuledList
+              tone="stock"
+              labelWidth="10rem"
+              items={[
+                ["Transit", "TLS encryption for data in transit"],
+                ["Access", "Role-based access; tenant isolation by organization"],
+                ["Secrets", "Platform secrets never reach the browser"],
+                ["Review", "Regular security reviews of production systems"],
+                ["Retention", "Call and chat retention under your configured rules"],
+                ["Residency", "Canadian data residency available on request for enterprise"],
+              ]}
+            />
+          </div>
+          <Prose size="0.9375rem" max="52ch" tone="stock" style={{ marginTop: "2rem" }}>
+            Formal third-party certifications are not claimed here until they
+            are complete. Ask your consultant for the current control pack
+            during a pilot.
+          </Prose>
+        </Section>
+
+        <Section tone="field" id="rights" style={{ scrollMarginTop: "5.5rem" }}>
+          <SectionTitle max="14ch">Sharing, retention &amp; rights</SectionTitle>
+          <div className="mt-10 grid gap-x-14 gap-y-10 lg:grid-cols-2">
+            <div>
+              <p
+                className="lg-fig"
+                style={{
+                  fontSize: "0.6875rem",
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "var(--lg-ink-3)",
+                  marginBottom: "0.75rem",
+                }}
+              >
+                Sub-processors
+              </p>
+              <RuledList
+                labelWidth="8rem"
+                items={[
+                  ["Google Cloud", "Infrastructure & Workspace APIs (US)"],
+                  ["Vercel", "Website hosting (US)"],
+                  ["OpenAI", "Model inference (US)"],
+                  ["Railway", "Backend API hosting (US)"],
+                  ["Cal.com", "Scheduling where configured (US)"],
+                ]}
+              />
+            </div>
+            <div>
+              <p
+                className="lg-fig"
+                style={{
+                  fontSize: "0.6875rem",
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "var(--lg-ink-3)",
+                  marginBottom: "0.75rem",
+                }}
+              >
+                Your rights
+              </p>
+              <RuledList
+                labelWidth="8rem"
+                items={[
+                  ["Access", "Request the personal information we hold"],
+                  ["Correction", "Request fixes to inaccurate records"],
+                  ["Withdraw", "Withdraw consent for certain uses"],
+                  ["Delete", "Request deletion where law allows"],
+                  ["Complain", "File with the Privacy Commissioner of Canada"],
+                ]}
+              />
+            </div>
+          </div>
+          <Prose size="1rem" max="56ch" style={{ marginTop: "2rem" }}>
+            Chat data is retained 90 days by default. Client contract data is
+            retained 7 years where Canadian accounting rules require it.
+            Google Workspace API data used by AcumenAI (when engaged) follows
+            Google&apos;s Limited Use requirements and is never used for
+            advertising.
+          </Prose>
+        </Section>
+
+        <Section tone="field-3" id="contact" style={{ scrollMarginTop: "5.5rem" }}>
+          <SectionTitle max="16ch">Contact the Privacy Officer</SectionTitle>
+          <Prose size="1.0625rem" max="42ch" style={{ marginTop: "1.5rem" }}>
+            Orchelix AI Consulting Inc.
+            <br />
+            Privacy Officer: Jorge Quinonez
+            <br />
+            <a href="mailto:privacy@orchelix.com" className="lg-quiet" style={{ color: "var(--lg-ink)" }}>
+              privacy@orchelix.com
+            </a>
+            <br />
+            West Palm Beach, FL · Serving South Florida, GTA Ontario &amp; North America
+          </Prose>
+          <Prose size="0.9375rem" max="48ch" style={{ marginTop: "1.25rem" }}>
+            Office of the Privacy Commissioner of Canada:{" "}
+            <a
+              href="https://www.priv.gc.ca"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="lg-quiet"
+              style={{ color: "var(--lg-ink)" }}
+            >
+              priv.gc.ca
+            </a>
+          </Prose>
+        </Section>
       </main>
       <Footer />
     </>
-  );
-}
-
-function Prose({ children }: { children: React.ReactNode }) {
-  return (
-    <div
-      style={{
-        fontFamily: "var(--font-display)",
-        fontSize: 16,
-        lineHeight: 1.75,
-        color: "var(--ink-2)",
-      }}
-    >
-      <style>{`
-        .orchelix-prose h2 {
-          font-family: var(--font-display);
-          font-size: 22px;
-          font-weight: 600;
-          letter-spacing: -0.018em;
-          color: var(--ink);
-          margin: 48px 0 12px;
-          padding-top: 32px;
-          border-top: 1px solid var(--line);
-        }
-        .orchelix-prose h2:first-of-type { margin-top: 0; border-top: none; padding-top: 0; }
-        .orchelix-prose p { margin: 0 0 16px; }
-        .orchelix-prose ul { margin: 0 0 16px; padding-left: 20px; }
-        .orchelix-prose li { margin-bottom: 8px; }
-        .orchelix-prose a { color: var(--teal-700); }
-        .orchelix-prose strong { color: var(--ink); font-weight: 600; }
-      `}</style>
-      <div className="orchelix-prose">{children}</div>
-    </div>
   );
 }

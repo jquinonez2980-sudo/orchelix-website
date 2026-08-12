@@ -5,6 +5,7 @@
 import { Stamp, QuietAction } from "@/app/components/ledger";
 import { localizedHref, type Locale } from "@/app/i18n/config";
 import type { Messages } from "@/app/i18n/messages/en";
+import HeroProof from "./HeroProof";
 
 type Disposition = "BOOKED" | "ROUTED" | "ANSWERED" | "CLOSED";
 
@@ -111,8 +112,12 @@ export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
 
           <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">
             <Stamp href={localizedHref("/book", locale)}>{t.common.bookPilot}</Stamp>
-            <QuietAction href="/try-esmi">{t.common.hearRealCall}</QuietAction>
+            <QuietAction href="#hear-esmi">{t.common.hearRealCall}</QuietAction>
           </div>
+
+          {/* Real production sample in the first viewport — illustrate
+              the register above; prove the voice here. */}
+          <HeroProof locale={locale} />
 
           {/* The number itself — a visible way to reach a person right now,
               not buried in the meta line it used to share with EN · ES and

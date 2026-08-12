@@ -69,7 +69,7 @@ export default async function EsmiDashboardLayout({
   const isOrchelixStaff = orgSlug === ADMIN_ORG_SLUG;
 
   return (
-    <ClerkProvider afterSignOutUrl="/">
+    <ClerkProvider afterSignOutUrl="/" appearance={clerkWidgetAppearance}>
       <DashboardShell isOrchelixStaff={isOrchelixStaff}>
         {orgSlug ? children : <OrgGate />}
       </DashboardShell>

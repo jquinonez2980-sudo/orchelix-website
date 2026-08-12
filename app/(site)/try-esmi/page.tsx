@@ -15,21 +15,12 @@ import {
   Band,
   EntryList,
 } from "@/app/components/ledger";
+import { getDictionary } from "@/app/i18n/dictionaries";
+import type { Locale } from "@/app/i18n/config";
 
-/* Converted from the `.esmi-dark` glassmorphism world to the Ruled Record on
-   2026-08-08. Removed wholesale: aurora blobs, grid texture, ambient wave,
-   cyan #00F0FF / purple #A855F7, backdrop-filter glass panels, 16px radii,
-   glow shadows, and the `Eyebrow` helper (a craft-floor ban).
-
-   Claims removed as unverified — see PRODUCT.md "Open / unverified":
-   - "answers every call in under fifteen seconds" (pickup latency)
-   - "Pickup: 1st ring — answered instantly" (the same claim, restated)
-   - "<1m" from ring to CRM brief, and "pages ... in seconds"
-   - French as a supported language
-   - "SOC 2 in-progress"
-   - "Canadian data residency" stated flatly — it is available on request
-   The "Live signals" panel is gone too: it labelled four static capability
-   strings as though they were telemetry. What replaces it is checkable. */
+/* Ruled Record demo page. Supports ?lang=es for full Spanish chrome so the
+   bilingual product claim is demonstrated on the strongest proof surface,
+   not only on marketing body copy. */
 
 const SITE_URL = "https://www.orchelix.com";
 
@@ -40,47 +31,126 @@ export const metadata: Metadata = {
   alternates: { canonical: "/try-esmi" },
 };
 
-const breadcrumbJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-    {
-      "@type": "ListItem",
-      position: 2,
-      name: "Try Esmi — AI Receptionist Demo",
-      item: `${SITE_URL}/try-esmi`,
-    },
-  ],
+type Copy = {
+  title: string;
+  lede: string;
+  book: string;
+  stack: string;
+  orCall: string;
+  chatTitle: (company?: string) => string;
+  chatBody: (company?: string) => string;
+  producesTitle: string;
+  producesLede: string;
+  produces: [string, string][];
+  handlesTitle: string;
+  handles: { title: string; desc: string; meta: string }[];
+  opsTitle: string;
+  ops: [string, string][];
+  closeTitle: string;
+  closeLede: string;
 };
 
-/* What a call produces. Every line is an artifact you can open afterwards —
-   which is the point, and is checkable in a way "live signals" was not. */
-const PRODUCES: [string, string][] = [
-  ["Transcript", "Full text of both sides, in whichever language was spoken"],
-  ["Reason", "Why the caller rang, written in their own words"],
-  ["Disposition", "Booked, routed, answered, or closed — and by which rule"],
-  ["Recording", "Kept under your retention rule, deleted on your schedule"],
-  ["Handoff", "When a human takes over, they inherit the whole conversation"],
-];
+const EN: Copy = {
+  title: "Hear Esmi take a call",
+  lede: "Esmi is answering calls in production today. A real recording first, then the same agent live in a chat you can type into. No form, no scheduling — the product doing its job, and the record it leaves behind.",
+  book: "Book a pilot",
+  stack: "See the agent stack",
+  orCall: "Or call it yourself — +1 561 566 1066",
+  chatTitle: (c) => (c ? `Ask Esmi about ${c}` : "Now ask it yourself"),
+  chatBody: (c) =>
+    c
+      ? "This demo is configured with that business's hours, services, and booking rules — the same way a pilot would be."
+      : "This is the same agent that answers the phone, running against a sample business. Ask it for an appointment, in English or Spanish.",
+  producesTitle: "What every call leaves behind",
+  producesLede:
+    "The conversation is the visible part. The record is the part that matters at month-end, in a dispute, or when an auditor asks what happened.",
+  produces: [
+    ["Transcript", "Full text of both sides, in whichever language was spoken"],
+    ["Reason", "Why the caller rang, written in their own words"],
+    ["Disposition", "Booked, routed, answered, or closed — and by which rule"],
+    ["Recording", "Kept under your retention rule, deleted on your schedule"],
+    ["Handoff", "When a human takes over, they inherit the whole conversation"],
+  ],
+  handlesTitle: "What Esmi handles",
+  handles: [
+    {
+      title: "Books appointments end to end",
+      desc: "Esmi reads your live calendar, offers the slots you actually have, books the visit, and sends a bilingual SMS confirmation — on the same call, with no staff handoff.",
+      meta: "Calendar · SMS",
+    },
+    {
+      title: "Qualifies new leads",
+      desc: "It asks the questions your sales team would ask, scores the lead against your criteria, and writes a one-paragraph brief into your CRM before the caller hangs up.",
+      meta: "Scoring · CRM",
+    },
+    {
+      title: "Escalates urgency",
+      desc: "When a caller is hurt, angry, or in real distress, Esmi recognises the signal in both languages and pages the right on-call person instead of taking a message.",
+      meta: "Routing · On-call",
+    },
+  ],
+  opsTitle: "How Esmi is operated",
+  ops: [
+    ["Languages", "English and Spanish, natively"],
+    ["Privacy", "PIPEDA-aligned for Canadian operations"],
+    ["Residency", "Data residency available on request"],
+    ["Oversight", "Every action reversible by a person"],
+  ],
+  closeTitle: "Put it on your own line",
+  closeLede:
+    "Fourteen days, your real number, a senior consultant on the setup — and every call on the record from the first ring.",
+};
 
-const HANDLES = [
-  {
-    title: "Books appointments end to end",
-    desc: "Esmi reads your live calendar, offers the slots you actually have, books the visit, and sends a bilingual SMS confirmation — on the same call, with no staff handoff.",
-    meta: "Calendar · SMS",
-  },
-  {
-    title: "Qualifies new leads",
-    desc: "It asks the questions your sales team would ask, scores the lead against your criteria, and writes a one-paragraph brief into your CRM before the caller hangs up.",
-    meta: "Scoring · CRM",
-  },
-  {
-    title: "Escalates urgency",
-    desc: "When a caller is hurt, angry, or in real distress, Esmi recognises the signal in both languages and pages the right on-call person instead of taking a message.",
-    meta: "Routing · On-call",
-  },
-];
+const ES: Copy = {
+  title: "Escucha a Esmi contestar",
+  lede: "Esmi ya contesta llamadas en producción. Primero una grabación real; después el mismo agente en un chat donde puedes escribir. Sin formulario ni cita — el producto haciendo su trabajo, y el registro que deja.",
+  book: "Agenda un piloto",
+  stack: "Ver el stack de agentes",
+  orCall: "O llámalo tú — +1 561 566 1066",
+  chatTitle: (c) => (c ? `Pregúntale a Esmi sobre ${c}` : "Ahora pregúntale tú"),
+  chatBody: (c) =>
+    c
+      ? "Esta demo usa los horarios, servicios y reglas de reserva de ese negocio — igual que un piloto real."
+      : "Es el mismo agente del teléfono, con un negocio de muestra. Pide una cita en inglés o en español.",
+  producesTitle: "Lo que deja cada llamada",
+  producesLede:
+    "La conversación es la parte visible. El registro es lo que importa a fin de mes, en una disputa, o cuando un auditor pregunta qué pasó.",
+  produces: [
+    ["Transcripción", "Texto completo de ambos lados, en el idioma que se habló"],
+    ["Motivo", "Por qué llamó la persona, en sus propias palabras"],
+    ["Disposición", "Agendada, derivada, resuelta o cerrada — y por qué regla"],
+    ["Grabación", "Bajo tu política de retención, borrada en tu calendario"],
+    ["Traspaso", "Si interviene un humano, hereda toda la conversación"],
+  ],
+  handlesTitle: "Qué resuelve Esmi",
+  handles: [
+    {
+      title: "Agenda citas de punta a punta",
+      desc: "Lee tu calendario en vivo, ofrece los huecos que sí tienes, reserva la visita y manda un SMS bilingüe — en la misma llamada, sin pasar a un empleado.",
+      meta: "Calendario · SMS",
+    },
+    {
+      title: "Califica prospectos nuevos",
+      desc: "Hace las preguntas de tu equipo de ventas, puntúa el lead y escribe un resumen de un párrafo en el CRM antes de colgar.",
+      meta: "Puntuación · CRM",
+    },
+    {
+      title: "Escala urgencias",
+      desc: "Si la persona está herida, enojada o en apuros, Esmi lo reconoce en ambos idiomas y avisa a quien está de guardia en lugar de tomar un recado.",
+      meta: "Derivación · Guardia",
+    },
+  ],
+  opsTitle: "Cómo se opera Esmi",
+  ops: [
+    ["Idiomas", "Inglés y español, de forma nativa"],
+    ["Privacidad", "Alineado con PIPEDA en operaciones canadienses"],
+    ["Residencia", "Residencia de datos disponible a solicitud"],
+    ["Control", "Cada acción reversible por una persona"],
+  ],
+  closeTitle: "Ponlo en tu propia línea",
+  closeLede:
+    "Catorce días, tu número real, un consultor senior en el montaje — y cada llamada en el registro desde el primer timbrazo.",
+};
 
 function prettifyTenant(slug: string): string {
   return slug
@@ -93,11 +163,15 @@ function prettifyTenant(slug: string): string {
 export default async function TryEsmiPage({
   searchParams,
 }: {
-  // Next 16: searchParams is a Promise. ?tenant=acme-hvac&company=Acme+HVAC
-  searchParams: Promise<{ tenant?: string; company?: string }>;
+  searchParams: Promise<{ tenant?: string; company?: string; lang?: string }>;
 }) {
   const sp = await searchParams;
-  const tenantId = typeof sp.tenant === "string" && sp.tenant.trim() ? sp.tenant.trim() : undefined;
+  const locale: Locale = sp.lang === "es" ? "es" : "en";
+  const copy = locale === "es" ? ES : EN;
+  const navT = await getDictionary(locale);
+
+  const tenantId =
+    typeof sp.tenant === "string" && sp.tenant.trim() ? sp.tenant.trim() : undefined;
   const companyName =
     typeof sp.company === "string" && sp.company.trim()
       ? sp.company.trim()
@@ -105,37 +179,38 @@ export default async function TryEsmiPage({
         ? prettifyTenant(tenantId)
         : undefined;
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: locale === "es" ? "Prueba Esmi" : "Try Esmi — AI Receptionist Demo",
+        item: `${SITE_URL}/try-esmi`,
+      },
+    ],
+  };
+
   return (
     <>
       <JsonLd data={breadcrumbJsonLd} />
-      <Nav />
+      <Nav locale={locale} t={navT} />
       <main id="main-content">
-        {/* ── Opening: the recording leads ── */}
         <Section tone="field">
           <div className="grid gap-x-16 gap-y-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-center">
             <div>
-              {/* The `In production` StatusKey that sat here was a kicker —
-                  a small-caps label above a heading — which DESIGN.md's No
-                  Kicker Rule bans outright. The claim is true and worth
-                  making, so it moves into the prose, which is where that
-                  rule says context belongs. */}
-              <PageTitle max="13ch">Hear Esmi take a call</PageTitle>
-
+              <PageTitle max="13ch">{copy.title}</PageTitle>
               <Prose size="1.0625rem" max="42ch" style={{ marginTop: "1.7rem" }}>
-                Esmi is answering calls in production today. A real recording
-                first, then the same agent live in a chat you can type into.
-                No form, no scheduling — the product doing its job, and the
-                record it leaves behind.
+                {copy.lede}
               </Prose>
-
               <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">
-                <Stamp href="/book">Book a pilot</Stamp>
-                <QuietAction href="/solutions">See the agent stack</QuietAction>
+                <Stamp href={locale === "es" ? "/es/book" : "/book"}>{copy.book}</Stamp>
+                <QuietAction href={locale === "es" ? "/es/solutions" : "/solutions"}>
+                  {copy.stack}
+                </QuietAction>
               </div>
-
-              {/* The whole page is "hear what calling sounds like" — the
-                  actual number to dial belongs near the recording, not
-                  buried in the close section at the bottom of the page. */}
               <a
                 href="tel:+15615661066"
                 className="lg-fig lg-quiet"
@@ -148,91 +223,82 @@ export default async function TryEsmiPage({
                   textDecoration: "none",
                 }}
               >
-                Or call it yourself — +1 561 566 1066
+                {copy.orCall}
               </a>
+              {/* Language switcher for this surface (not full i18n path yet) */}
+              <p className="lg-fig mt-4" style={{ fontSize: "0.6875rem", letterSpacing: "0.1em" }}>
+                <a
+                  href={locale === "es" ? "/try-esmi" : "/try-esmi?lang=es"}
+                  className="lg-quiet"
+                  style={{ color: "var(--lg-ink-3)", textTransform: "uppercase" }}
+                >
+                  {locale === "es" ? "English" : "Español"}
+                </a>
+              </p>
             </div>
-
-            {/* The real artifact — a genuine recording, not a rendering of one. */}
             <div className="lg-margin-rule lg:pl-8">
-              <PublicVoicePreview />
+              <PublicVoicePreview initialLang={locale} />
             </div>
           </div>
         </Section>
 
-        {/* ── Live chat demo ── */}
         <Section tone="field-2" id="chat">
           <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)]">
             <div>
-              <SectionTitle max="15ch">
-                {companyName ? `Ask Esmi about ${companyName}` : "Now ask it yourself"}
-              </SectionTitle>
+              <SectionTitle max="15ch">{copy.chatTitle(companyName)}</SectionTitle>
               <Prose size="1rem" max="40ch" style={{ marginTop: "1.4rem" }}>
-                {companyName
-                  ? "This demo is configured with that business's hours, services, and booking rules — the same way a pilot would be."
-                  : "This is the same agent that answers the phone, running against a sample business. Ask it for an appointment, in English or Spanish."}
+                {copy.chatBody(companyName)}
               </Prose>
             </div>
-
-            <EsmiChat tenantId={tenantId} companyName={companyName} />
-          </div>
-        </Section>
-
-        {/* ── What a call produces ── */}
-        <Section tone="field">
-          <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
-            <div>
-              <SectionTitle max="16ch">What every call leaves behind</SectionTitle>
-              <Prose size="1rem" max="42ch" style={{ marginTop: "1.4rem" }}>
-                The conversation is the visible part. The record is the part
-                that matters at month-end, in a dispute, or when an auditor
-                asks what happened.
-              </Prose>
-            </div>
-            <RuledList items={PRODUCES} labelWidth="8.5rem" />
-          </div>
-        </Section>
-
-        {/* ── What it handles ── */}
-        <Section tone="stock">
-          <SectionTitle tone="stock" max="18ch">
-            What Esmi handles
-          </SectionTitle>
-          <div className="mt-12">
-            <EntryList tone="stock" entries={HANDLES} />
-          </div>
-        </Section>
-
-        {/* ── How it is operated ── */}
-        <Section tone="field-2" tight>
-          <SectionTitle max="20ch">How Esmi is operated</SectionTitle>
-          <div className="mt-10">
-            <Band
-              cols={4}
-              items={[
-                ["Languages", "English and Spanish, natively"],
-                ["Privacy", "PIPEDA-aligned for Canadian operations"],
-                ["Residency", "Data residency available on request"],
-                ["Oversight", "Every action reversible by a person"],
-              ]}
+            <EsmiChat
+              defaultLocale={locale}
+              tenantId={tenantId}
+              companyName={companyName}
             />
           </div>
         </Section>
 
-        {/* ── Close ── */}
+        <Section tone="field">
+          <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+            <div>
+              <SectionTitle max="16ch">{copy.producesTitle}</SectionTitle>
+              <Prose size="1rem" max="42ch" style={{ marginTop: "1.4rem" }}>
+                {copy.producesLede}
+              </Prose>
+            </div>
+            <RuledList items={copy.produces} labelWidth="8.5rem" />
+          </div>
+        </Section>
+
+        <Section tone="stock">
+          <SectionTitle tone="stock" max="18ch">
+            {copy.handlesTitle}
+          </SectionTitle>
+          <div className="mt-12">
+            <EntryList tone="stock" entries={copy.handles} />
+          </div>
+        </Section>
+
+        <Section tone="field-2" tight>
+          <SectionTitle max="20ch">{copy.opsTitle}</SectionTitle>
+          <div className="mt-10">
+            <Band cols={4} items={copy.ops} />
+          </div>
+        </Section>
+
         <Section tone="field-3" style={{ borderTop: "2px solid var(--lg-foil)" }}>
           <div className="grid items-end gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
             <div>
               <SectionTitle scale="display" max="16ch">
-                Put it on your own line
+                {copy.closeTitle}
               </SectionTitle>
               <Prose size="1.0625rem" max="48ch" style={{ marginTop: "1.5rem" }}>
-                Fourteen days, your real number, a senior consultant on the
-                setup — and every call on the record from the first ring.
+                {copy.closeLede}
               </Prose>
             </div>
             <div className="flex flex-wrap items-center gap-x-8 gap-y-4 lg:justify-end">
-              <Stamp href="/book" size="1rem">
-                Book a pilot
+              <Stamp href={locale === "es" ? "/es/book" : "/book"} size="1rem">
+                {copy.book}
               </Stamp>
               <a
                 href="tel:+15615661066"
@@ -250,7 +316,7 @@ export default async function TryEsmiPage({
           </div>
         </Section>
       </main>
-      <Footer />
+      <Footer locale={locale} t={navT} />
     </>
   );
 }

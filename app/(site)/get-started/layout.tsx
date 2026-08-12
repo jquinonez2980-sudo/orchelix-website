@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
+import { clerkWidgetAppearance } from "@/app/lib/clerkAppearance";
 
 /* /get-started — self-serve onboarding application (Phase 4 ticket 4.1).
 
@@ -12,7 +13,11 @@ import { ClerkProvider } from "@clerk/nextjs";
    and /app — the marketing site must not depend on Clerk. proxy.ts includes
    this path in its matcher (so auth() works) but NOT in isProtected: signed-out
    visitors get an in-page sign-in card rather than a redirect to Clerk's
-   hosted portal. */
+   hosted portal.
+
+   Visual world: .lg-app remaps navy/teal product tokens onto the Ruled Record
+   (field, graphite ink, magenta stamp) so the application path matches the
+   marketing site and dashboard rather than a third teal-rounded system. */
 
 export const dynamic = "force-dynamic";
 
@@ -28,8 +33,8 @@ export default function GetStartedLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider afterSignOutUrl="/">
-      <div className="min-h-screen bg-surface-2">{children}</div>
+    <ClerkProvider afterSignOutUrl="/" appearance={clerkWidgetAppearance}>
+      <div className="lg-app lg-world min-h-screen bg-paper">{children}</div>
     </ClerkProvider>
   );
 }

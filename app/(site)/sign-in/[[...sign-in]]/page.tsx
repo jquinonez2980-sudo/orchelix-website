@@ -1,4 +1,7 @@
 import { SignIn } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+import { clerkWidgetAppearance } from "@/app/lib/clerkAppearance";
 
 /* Where a completed sign-in lands.
 
@@ -14,6 +17,10 @@ import { SignIn } from "@clerk/nextjs";
    `fallbackRedirectUrl` alone is the obvious-looking fix and it is wrong:
    Clerk's "already signed in" codepath reads forceRedirectUrl, and without it
    that path has nowhere to go. Both are set, both dynamic.
+
+   ALREADY SIGNED IN. Clerk's <SignIn/> renders nothing when a session exists
+   and sometimes fails to navigate — a blank page. We short-circuit server-side
+   with redirect() so a signed-in visitor never sees an empty shell.
 
    SECURITY. `redirect_url` is attacker-controllable — anyone can link to
    /sign-in?redirect_url=https://evil.example and, unvalidated, send a
@@ -31,19 +38,11 @@ import { SignIn } from "@clerk/nextjs";
 
    That bound is the point. The worst case for ANY input, malformed or
    hostile, is /dashboard — which is exactly the behaviour being replaced.
-   This change cannot route anyone somewhere worse than the bug it fixes.
-
-   SEPARATE, PRE-EXISTING, NOT FIXED HERE. A visitor who already holds a
-   session and lands on /sign-in gets a blank page: Clerk refuses to render
-   <SignIn/>, logs "redirecting to the afterSignIn URL instead", and then does
-   not navigate. This reproduces on the unmodified production file — it is not
-   caused by anything above, and setting either redirect prop does not prevent
-   it. See the fix/clerk-signin-blank-page branch for the previous encounter.
-   Left alone deliberately rather than patched blind. */
+   This change cannot route anyone somewhere worse than the bug it fixes. */
 
 /* The only authenticated consoles that exist. A destination outside these is
    not a legitimate post-sign-in target, whoever supplied it. */
-const ALLOWED_PREFIXES = ["/app", "/dashboard"] as const;
+const ALLOWED_PREFIXES = ["/app", "/dashboard", "/get-started"] as const;
 
 function safeRedirect(raw: string | string[] | undefined): string {
   const value = Array.isArray(raw) ? raw[0] : raw;
@@ -64,7 +63,9 @@ function safeRedirect(raw: string | string[] | undefined): string {
        or the prefix followed by a boundary character — so "/app" and
        "/app/x" and "/app?t=1" pass, while "/appended" does not. */
     const allowed = ALLOWED_PREFIXES.some(
-      (p) => path === p || /^[/?#]/.test(path.slice(p.length)) && path.startsWith(p)
+      (p) =>
+        path === p ||
+        (/^[/?#]/.test(path.slice(p.length)) && path.startsWith(p)),
     );
     return allowed ? path : "/dashboard";
   } catch {
@@ -79,12 +80,20 @@ export default async function SignInPage({
 }) {
   const target = safeRedirect((await searchParams).redirect_url);
 
+  /* Blank-page fix: if Clerk already has a session, do not render <SignIn/>.
+     Client-side afterSignIn navigation is unreliable when the component
+     short-circuits; a server redirect always lands. */
+  const { userId } = await auth();
+  if (userId) redirect(target);
+
   return (
     <SignIn
       path="/sign-in"
       routing="path"
       forceRedirectUrl={target}
       fallbackRedirectUrl={target}
+      appearance={clerkWidgetAppearance}
+      signUpUrl="/sign-up"
     />
   );
 }

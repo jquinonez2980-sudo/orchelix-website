@@ -11,7 +11,8 @@ function Check() {
   return (
     <span
       aria-hidden
-      className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-teal-500 text-xs font-semibold text-white"
+      className="flex h-6 w-6 shrink-0 items-center justify-center border border-navy-600 bg-navy-600 text-xs font-semibold text-white"
+      style={{ borderRadius: 0 }}
     >
       ✓
     </span>
@@ -22,7 +23,8 @@ function Pending() {
   return (
     <span
       aria-hidden
-      className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-amber-300 bg-amber-50 text-xs font-semibold text-amber-800"
+      className="flex h-6 w-6 shrink-0 items-center justify-center border border-line bg-surface-2 text-xs font-semibold text-ink-3"
+      style={{ borderRadius: 0 }}
     >
       •
     </span>

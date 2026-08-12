@@ -3,23 +3,11 @@
    status, Usage/Billing plan soft-limit status, Admin) instead of every
    page hand-rolling its own badge markup and color choice.
 
-   Converted to the Ruled Record 2026-08-08. Tones are written as explicit
-   ledger tokens rather than Tailwind palette utilities, because this is the
-   one file where status *semantics* live — leaving it to the blanket colour
-   overrides in globals.css would make `positive` and `warning` both resolve
-   to foil and destroy the distinction on an operating surface.
-
-   The scale maps onto the call register's own vocabulary:
-     positive → tick green   (ANSWERED)
-     warning  → foil         (BOOKED / needs attention)
-     negative → rule red     (ROUTED / failed)
-     neutral  → ink 3        (CLOSED / inert)
-
-   NOTE: the source scale had six tones; this world has four status colours.
-   `info` and `violet` (voicemail) are held apart from `neutral` by ink tier
-   and border weight rather than by hue — a real distinction, but a smaller
-   one than before. If voicemail must keep its own colour, that is a
-   design-system decision to take deliberately, not a token to invent here. */
+   Single-accent Status Scale (DESIGN.md): foil marks attention / pending /
+   the "AI moment" (booked). Everything else is separated by ink tier, border
+   weight, and the label — never a second green or red hue. Green/red fills
+   were retired 2026-08-12 so the product surface matches the marketing
+   register's one-accent notation. */
 
 export type BadgeTone = "neutral" | "positive" | "warning" | "negative" | "info" | "violet";
 
@@ -31,26 +19,30 @@ const TONES: Record<BadgeTone, ToneStyle> = {
     background: "transparent",
     borderColor: "var(--lg-hair)",
   },
+  /* Success / answered — ink on a quiet hair fill, not green. */
   positive: {
-    color: "var(--lg-tick-text)",
-    background: "rgba(47, 143, 107, 0.12)",
-    borderColor: "rgba(47, 143, 107, 0.34)",
+    color: "var(--lg-ink)",
+    background: "var(--lg-hair-2)",
+    borderColor: "var(--lg-hair)",
   },
+  /* Attention / booked — the only foil-tinted state. */
   warning: {
     color: "var(--lg-foil)",
     background: "rgba(183, 19, 90, 0.10)",
     borderColor: "rgba(183, 19, 90, 0.34)",
   },
+  /* Failure / missed — heavier graphite rule, not red. */
   negative: {
-    color: "var(--lg-rule-text)",
-    background: "rgba(180, 52, 42, 0.12)",
-    borderColor: "var(--lg-rule-quiet)",
+    color: "var(--lg-ink)",
+    background: "transparent",
+    borderColor: "var(--lg-rule)",
   },
   info: {
     color: "var(--lg-ink)",
     background: "transparent",
     borderColor: "var(--lg-hair)",
   },
+  /* Secondary inert state — same ink family, quieter border. */
   violet: {
     color: "var(--lg-ink-2)",
     background: "transparent",

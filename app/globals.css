@@ -189,15 +189,18 @@
   /* Ink on the field. Graphite is the brand's primary colour for exactly
      this — body copy and headlines on a light ground. */
   --lg-ink:        #2E323E;
-  --lg-ink-2:      rgba(46, 50, 62, 0.68);
-  --lg-ink-3:      rgba(46, 50, 62, 0.48);
+  /* Ink Floor Rule (WCAG AA 4.5:1). Previous alphas 0.68 / 0.48 were tuned
+     for the dark field and failed on white: ink-3 2.71:1, ink-2 on field-3
+     4.24:1. Raised 2026-08-12 so every word-carrying ink clears the floor. */
+  --lg-ink-2:      rgba(46, 50, 62, 0.80);
+  --lg-ink-3:      rgba(46, 50, 62, 0.72);
   --lg-hair:       rgba(46, 50, 62, 0.14);
   --lg-hair-2:     rgba(46, 50, 62, 0.08);
 
   /* Ink on stock — stock is light now too, so this converges with `ink`
      rather than needing its own darker/lighter pair. */
   --lg-ink-on-stock:   #2E323E;
-  --lg-ink-on-stock-2: rgba(46, 50, 62, 0.68);
+  --lg-ink-on-stock-2: rgba(46, 50, 62, 0.80);
 
   --lg-tick:       #ADB5BD;
 
@@ -340,21 +343,33 @@
   color: var(--lg-ink);
 }
 
-/* The primary button carries `text-white` from Tailwind's built-in palette,
-   which is not a theme token and so cannot be retargeted by variable. Foil
-   needs dark ink on it; this scoped rule outranks `.text-white` (0,2,0 beats
-   0,1,0) without editing thirty-five call sites. */
-/* Compound selectors on purpose: the status block below also maps
-   `.text-white`, and at equal specificity the later rule would win and put
-   light ink back on a gold fill. Matching both classes outranks it. */
-.lg-app .bg-navy-600.text-white,
-.lg-app .bg-teal-500.text-white,
+/* Primary/accent fills alias to `--lg-foil`. Text on them must be
+   `--lg-foil-ink` (white, 6.45:1) — never graphite ink and never the retired
+   gold-brown. Cover the fill itself and descendants that still carry
+   Tailwind's literal `text-white` / light navy utilities. */
 .lg-app .bg-navy-600,
-.lg-app .bg-teal-500 {
-  /* These legacy scales alias to `--lg-foil`, so this is text on the accent.
-     It held the dark world's gold-brown foil-ink, which measured 2.55:1 once
-     the ground under it went magenta. `--lg-foil-ink` is 6.45:1. */
+.lg-app .bg-navy-500,
+.lg-app .bg-teal-500,
+.lg-app .bg-teal-600 {
   color: var(--lg-foil-ink);
+}
+.lg-app .bg-navy-600 .text-white,
+.lg-app .bg-navy-500 .text-white,
+.lg-app .bg-teal-500 .text-white,
+.lg-app .bg-teal-600 .text-white {
+  color: var(--lg-foil-ink);
+}
+/* Secondary copy on a foil panel: white at reduced opacity stays readable
+   and does not reintroduce the unmapped navy-100 light-blue on magenta. */
+.lg-app .bg-navy-600 .text-navy-100,
+.lg-app .bg-navy-600 .text-navy-200,
+.lg-app .bg-navy-500 .text-navy-100,
+.lg-app .bg-navy-500 .text-navy-200 {
+  color: rgba(255, 255, 255, 0.78);
+}
+.lg-app .bg-navy-600 .text-teal-300,
+.lg-app .bg-navy-500 .text-teal-300 {
+  color: rgba(255, 255, 255, 0.88);
 }
 
 /* Tailwind's `shadow-*` utilities compile to `--tw-shadow`, not to the
@@ -451,7 +466,9 @@
 .lg-app .bg-violet-50 { background-color: rgba(46, 50, 62, 0.04); }
 .lg-app .border-violet-200 { border-color: var(--lg-hair); }
 
-/* Tailwind built-ins used as surfaces inside panels. */
+/* Tailwind built-ins used as surfaces inside panels.
+   `text-white` on the light field would vanish, so it becomes ink — except
+   on foil fills, handled above with higher-specificity descendants. */
 .lg-app .bg-white { background-color: var(--lg-field-2); }
 .lg-app .text-white { color: var(--lg-ink); }
 .lg-app .border-white { border-color: var(--lg-hair); }

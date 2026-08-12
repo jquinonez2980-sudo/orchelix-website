@@ -49,24 +49,20 @@ function fmtCaller(e164: string | null): string {
 
 /* ── outcome badge ───────────────────────────────────────────────────────── */
 
-// escalated was gold — that color is AcumenAI's reserved signature accent
-// (see globals.css), not an Esmi/Orchelix color; using it here was a
-// branding leak, same issue fixed on Team's "Pending" badge. warning (amber)
-// reads correctly as "needs attention" without the collision.
-//
-// Disposition colors per docs/ESMI_DASHBOARD_UX.md Section 5.2: Booked =
-// teal, Info = slate, Escalated = amber, Missed = red, Voicemail = violet.
-// "abandoned" (the outcome vocabulary's actual value — see
-// platform_api/call_log.py's OUTCOMES) is the spec's "Missed" concept, and
-// "other" isn't one of the spec's five — kept neutral as a reasonable
-// fallback for whatever it turns out to mean on a given call.
-export const OUTCOME_STYLE: Record<string, { label: string; tone: BadgeTone }> = {
-  booked: { label: "Booked", tone: "positive" }, // teal
-  escalated: { label: "Escalated", tone: "warning" }, // amber
-  info: { label: "Info", tone: "neutral" }, // slate
-  voicemail: { label: "Voicemail", tone: "violet" },
-  abandoned: { label: "Missed", tone: "negative" }, // red
-  other: { label: "Other", tone: "neutral" },
+/* Bridge to the marketing call-register dispositions (BOOKED / ROUTED /
+   ANSWERED / CLOSED). Platform API still returns booked | escalated | info |
+   voicemail | abandoned | other — labels here are what the operator reads;
+   tones follow the single-accent Status Scale (foil only for booked). */
+export const OUTCOME_STYLE: Record<
+  string,
+  { label: string; tone: BadgeTone; disposition: string }
+> = {
+  booked: { label: "Booked", tone: "warning", disposition: "BOOKED" },
+  escalated: { label: "Routed", tone: "info", disposition: "ROUTED" },
+  info: { label: "Answered", tone: "positive", disposition: "ANSWERED" },
+  voicemail: { label: "Voicemail", tone: "violet", disposition: "CLOSED" },
+  abandoned: { label: "Missed", tone: "negative", disposition: "CLOSED" },
+  other: { label: "Other", tone: "neutral", disposition: "CLOSED" },
 };
 
 function OutcomeBadge({ outcome }: { outcome: CallOutcome | null }) {

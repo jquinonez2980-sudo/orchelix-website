@@ -25,10 +25,12 @@ export function Tile({
   );
 }
 
+/* Single-accent status: ok = ink hair, approaching = foil, over = heavy rule
+   (remapped under .lg-app). No green/amber/rose rainbow. */
 const STATUS_BAR_COLOR: Record<"ok" | "approaching" | "over", string> = {
-  ok: "bg-teal-600",
-  approaching: "bg-amber-500",
-  over: "bg-rose-600",
+  ok: "bg-navy-600",
+  approaching: "bg-navy-500",
+  over: "bg-ink",
 };
 
 export function MinutesProgress({ minutes, plan }: { minutes: number; plan: PlanUsage }) {
@@ -63,7 +65,10 @@ export function MinutesProgress({ minutes, plan }: { minutes: number; plan: Plan
 export function LimitBanner({ plan }: { plan: PlanUsage }) {
   if (plan.status === "over") {
     return (
-      <div className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+      <div
+        className="border border-line bg-surface-2 px-4 py-3 text-sm text-ink"
+        style={{ borderLeft: "2px solid var(--lg-ink)" }}
+      >
         <span className="font-medium">Over included minutes</span> — you&apos;ve used{" "}
         {plan.percent_used}% of the {plan.included_minutes?.toLocaleString()} minutes
         included in your {plan.label} plan this month. This is a heads-up only — Esmi
@@ -73,7 +78,10 @@ export function LimitBanner({ plan }: { plan: PlanUsage }) {
   }
   if (plan.status === "approaching") {
     return (
-      <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+      <div
+        className="border border-line bg-surface-2 px-4 py-3 text-sm text-ink"
+        style={{ borderLeft: "2px solid var(--lg-foil)" }}
+      >
         <span className="font-medium">Approaching your included minutes</span> —{" "}
         {plan.percent_used}% used of {plan.included_minutes?.toLocaleString()} min/mo on
         the {plan.label} plan.

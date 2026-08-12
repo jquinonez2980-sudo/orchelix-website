@@ -1016,7 +1016,7 @@ function LiveConsole({ token }: { token: string | null }) {
               className="rounded-lg px-3 py-1.5 text-[13px] font-semibold"
               style={{
                 background: "var(--gold-500)",
-                color: "#2A1D02",
+                color: "var(--lg-foil-ink)",
                 fontFamily: "var(--font-display)",
                 opacity: bulkBusy ? 0.6 : 1,
                 cursor: bulkBusy ? "default" : "pointer",
@@ -1065,7 +1065,7 @@ function LiveConsole({ token }: { token: string | null }) {
                     className="rounded-lg px-3 py-1.5 text-[13px] font-semibold"
                     style={{
                       background: "var(--gold-500)",
-                      color: "#2A1D02",
+                      color: "var(--lg-foil-ink)",
                       fontFamily: "var(--font-display)",
                       cursor: "pointer",
                     }}

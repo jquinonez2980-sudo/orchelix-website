@@ -8,7 +8,12 @@ import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import { clerkWidgetAppearance } from "@/app/lib/clerkAppearance";
 import { Menu, X } from "lucide-react";
 import DraftModeBanner from "./DraftModeBanner";
-import { NAV_ITEMS, isNavItemActive, type NavItem } from "./navItems";
+import {
+  isNavItemActive,
+  visibleNavGroups,
+  type NavGroup,
+  type NavItem,
+} from "./navItems";
 
 /* Dashboard chrome: fixed left sidebar on desktop (lg+), slide-in drawer on
    mobile. Interaction pattern (hamburger toggle, Escape-to-close, backdrop)
@@ -70,41 +75,35 @@ function NavLink({
 }
 
 function SidebarNav({
-  items,
+  groups,
   pathname,
   onNavigate,
 }: {
-  items: NavItem[];
+  groups: NavGroup[];
   pathname: string;
   onNavigate?: () => void;
 }) {
-  const staffItems = items.filter((i) => i.staffOnly);
-  const mainItems = items.filter((i) => !i.staffOnly);
   return (
-    <nav aria-label="Primary" className="flex flex-1 flex-col gap-1 overflow-y-auto p-3">
-      {mainItems.map((item) => (
-        <NavLink
-          key={item.href}
-          item={item}
-          active={isNavItemActive(pathname, item.href)}
-          onNavigate={onNavigate}
-        />
+    <nav aria-label="Primary" className="flex flex-1 flex-col overflow-y-auto p-3">
+      {groups.map((group, index) => (
+        <div key={group.id} className={index === 0 ? "" : "mt-4"}>
+          {group.label && (
+            <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-wide text-ink-4">
+              {group.label}
+            </p>
+          )}
+          <div className="flex flex-col gap-0.5">
+            {group.items.map((item) => (
+              <NavLink
+                key={item.href}
+                item={item}
+                active={isNavItemActive(pathname, item.href)}
+                onNavigate={onNavigate}
+              />
+            ))}
+          </div>
+        </div>
       ))}
-      {staffItems.length > 0 && (
-        <>
-          <p className="mt-4 mb-1 px-3 text-[11px] font-semibold uppercase tracking-wide text-ink-4">
-            Internal
-          </p>
-          {staffItems.map((item) => (
-            <NavLink
-              key={item.href}
-              item={item}
-              active={isNavItemActive(pathname, item.href)}
-              onNavigate={onNavigate}
-            />
-          ))}
-        </>
-      )}
     </nav>
   );
 }
@@ -119,7 +118,7 @@ export default function DashboardShell({
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const close = () => setOpen(false);
-  const items = NAV_ITEMS.filter((i) => !i.staffOnly || isOrchelixStaff);
+  const groups = visibleNavGroups(isOrchelixStaff);
 
   useEffect(() => {
     if (!open) return;
@@ -139,7 +138,7 @@ export default function DashboardShell({
             <Logo />
           </Link>
         </div>
-        <SidebarNav items={items} pathname={pathname} />
+        <SidebarNav groups={groups} pathname={pathname} />
       </aside>
 
       <div className="flex min-h-screen flex-col lg:pl-60">
@@ -204,7 +203,7 @@ export default function DashboardShell({
                   <X className="h-5 w-5" strokeWidth={1.75} />
                 </button>
               </div>
-              <SidebarNav items={items} pathname={pathname} onNavigate={close} />
+              <SidebarNav groups={groups} pathname={pathname} onNavigate={close} />
             </div>
           </>
         )}

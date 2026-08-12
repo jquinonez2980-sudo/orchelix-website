@@ -181,7 +181,7 @@ export default async function ArticlePage({ params }: PageProps<"/[locale]/blog/
                   {post.related.map((r) => (
                     <li
                       key={r.href}
-                      style={{ borderBottom: "1px solid rgba(16,36,58,0.14)" }}
+                      style={{ borderBottom: "1px solid var(--lg-hair)" }}
                     >
                       <a
                         href={r.href}

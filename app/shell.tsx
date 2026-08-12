@@ -42,14 +42,14 @@ export const SITE_URL = "https://www.orchelix.com";
 const DIRECTION_CONTRACT = `<!--
 THESIS: The audit trail is the interface. Refuses the category's centered hero +
 three identical product cards, and its opposite, the cream editorial broadsheet.
-OWN-WORLD: Bound ledger — navy buckram field, gold foil stamp, red column rule,
-tick marks, ruled registers. Archivo condensed caps / Literata / Azeret tabular.
+OWN-WORLD: Ruled record — white field, graphite ruling, one magenta stamp,
+tick marks, tabular registers. Archivo condensed caps / Literata / Azeret mono.
 STORY: An operator sees Esmi answering calls in two languages, every row
 timestamped with a reason and a disposition, and books a pilot.
-FIRST VIEWPORT: Navy ruled field. Left column sets the offer and the stamped
+FIRST VIEWPORT: White ruled field. Left column sets the offer and the stamped
 primary action; right column is the call register at full scale with its own
 notation legend. The register leads, the chrome recedes.
-FORM: The Ruled Record — candidate 6 of 7, seed key 8a1b2873.
+FORM: The Ruled Record — light rebrand 2026-08-10, seed key 8a1b2873.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the
 finish review, the verdict, and DESIGN.md
 -->`;

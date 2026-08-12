@@ -114,7 +114,7 @@ export default async function BlogIndexPage({ params }: PageProps<"/[locale]">) 
                 style={
                   {
                     "--i": i,
-                    borderBottom: "1px solid rgba(16,36,58,0.14)",
+                    borderBottom: "1px solid var(--lg-hair)",
                   } as React.CSSProperties
                 }
               >

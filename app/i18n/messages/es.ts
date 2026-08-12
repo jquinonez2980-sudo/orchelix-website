@@ -74,7 +74,7 @@ const es: Messages = {
     },
     tallyCalls: "{n} llamadas",
     illustrative:
-      "Entradas ilustrativas. Grabaciones reales de Esmi disponibles a solicitud.",
+      "Entradas ilustrativas. Reproduce una grabación real de Esmi en la columna de al lado.",
 
     problemTitle: "El trabajo se hace. El problema es todo lo que se cae mientras lo haces.",
     arrears: [

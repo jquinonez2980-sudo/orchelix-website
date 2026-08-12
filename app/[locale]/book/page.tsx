@@ -87,7 +87,7 @@ export default async function BookPage({ params }: PageProps<"/[locale]">) {
                   className="grid gap-x-10 gap-y-2 lg:grid-cols-[9rem_minmax(0,1fr)]"
                   style={{
                     padding: "1.6rem 0",
-                    borderBottom: "1px solid rgba(16,36,58,0.14)",
+                    borderBottom: "1px solid var(--lg-hair)",
                   }}
                 >
                   <span

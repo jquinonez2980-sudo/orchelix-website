@@ -65,7 +65,10 @@ export default function Nav({
     { label: t.nav.industries, href: localizedHref("/industries", locale) },
     { label: t.nav.pricing, href: localizedHref("/pricing", locale) },
     { label: t.nav.about, href: localizedHref("/about", locale) },
-    { label: t.nav.tryEsmi, href: "/try-esmi" },
+    {
+      label: t.nav.tryEsmi,
+      href: locale === "es" ? "/try-esmi?lang=es" : "/try-esmi",
+    },
   ];
 
   /* The switcher keeps you on the page you are reading rather than dumping you

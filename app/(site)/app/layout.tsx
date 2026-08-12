@@ -1,4 +1,5 @@
 import { ClerkProvider } from "@clerk/nextjs";
+import { clerkWidgetAppearance } from "@/app/lib/clerkAppearance";
 import ScrollUnlocker from "./ScrollUnlocker";
 
 /* AcumenAI operator console layout — scopes ClerkProvider to /app so the rest of
@@ -19,6 +20,7 @@ export default function AcumenAppLayout({ children }: { children: React.ReactNod
       afterSignOutUrl="/"
       signInFallbackRedirectUrl="/app"
       signUpFallbackRedirectUrl="/app"
+      appearance={clerkWidgetAppearance}
     >
       <ScrollUnlocker />
       {/* `lg-app` scopes the console into the ledger world by retargeting the

@@ -90,7 +90,7 @@ export default async function HowItWorksPage({ params }: PageProps<"/[locale]">)
               <li
                 key={s.when}
                 className="grid gap-x-10 gap-y-3 lg:grid-cols-[8rem_minmax(0,1.15fr)_minmax(0,0.85fr)]"
-                style={{ padding: "1.8rem 0", borderBottom: "1px solid rgba(16,36,58,0.14)" }}
+                style={{ padding: "1.8rem 0", borderBottom: "1px solid var(--lg-hair)" }}
               >
                 <span
                   className="lg-fig"

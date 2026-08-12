@@ -37,11 +37,10 @@ function fmtWhen(iso: string | null): { date: string; time: string } {
 
 /* ── outcome badge ───────────────────────────────────────────────────────── */
 
-// escalated is amber, not gold — gold is AcumenAI's reserved signature accent
-// (see globals.css / CallLog.tsx's identical note).
+/* Same disposition bridge as CallLog — foil only for booked. */
 const OUTCOME_STYLE: Record<string, { label: string; tone: BadgeTone }> = {
-  booked: { label: "Booked", tone: "positive" },
-  escalated: { label: "Escalated", tone: "warning" },
+  booked: { label: "Booked", tone: "warning" },
+  escalated: { label: "Routed", tone: "info" },
   // Idle thread aged out by scripts/close_chat_sessions.py — a real ending, but
   // an uneventful one, so it stays neutral rather than reading as a failure.
   closed: { label: "Closed", tone: "neutral" },

@@ -174,36 +174,92 @@ function LanguageMixSection({ mix }: { mix: OverviewResponse["current"]["languag
 
 function ActivityRow({ item }: { item: RecentActivityItem }) {
   const style = OUTCOME_STYLE[item.outcome ?? "other"] ?? OUTCOME_STYLE.other;
+  const href = item.type === "call" ? "/dashboard/calls" : "/dashboard/chats";
   return (
-    <li className="flex items-center justify-between gap-3 py-2.5">
-      <div className="min-w-0">
-        <p className="text-sm font-medium text-ink">{item.type === "call" ? "Call" : "Web chat"}</p>
-        <p className="text-xs text-ink-4">
-          {fmtWhen(item.at)}
-          {item.language && ` · ${item.language === "en" ? "English" : "Spanish"}`}
-        </p>
-      </div>
-      <Badge tone={style.tone}>{style.label}</Badge>
+    <li className="border-b border-line last:border-b-0">
+      <Link
+        href={href}
+        className="flex items-center justify-between gap-3 py-3 transition-colors hover:bg-surface-2"
+      >
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
+            <p className="lg-fig text-xs font-medium uppercase tracking-wide text-ink-3">
+              {fmtWhen(item.at)}
+            </p>
+            {item.language && (
+              <p
+                className="lg-fig text-xs uppercase tracking-wide"
+                style={{
+                  color: item.language === "es" ? "var(--lg-foil)" : "var(--lg-ink-3)",
+                }}
+              >
+                {item.language === "en" ? "EN" : "ES"}
+              </p>
+            )}
+          </div>
+          <p className="mt-0.5 text-sm font-medium text-ink">
+            {item.type === "call" ? "Call" : "Web chat"}
+            <span className="ml-2 text-xs font-normal text-ink-3">{style.disposition}</span>
+          </p>
+        </div>
+        <Badge tone={style.tone}>{style.label}</Badge>
+      </Link>
     </li>
+  );
+}
+
+function DispositionKey() {
+  const keys: { code: string; meaning: string; tone: "warning" | "info" | "positive" | "negative" }[] = [
+    { code: "BOOKED", meaning: "Appointment set", tone: "warning" },
+    { code: "ROUTED", meaning: "Handed to a person", tone: "info" },
+    { code: "ANSWERED", meaning: "Resolved on the line", tone: "positive" },
+    { code: "CLOSED", meaning: "Ended / missed / voicemail", tone: "negative" },
+  ];
+  return (
+    <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-2 border-t border-line pt-3">
+      {keys.map((k) => (
+        <li key={k.code} className="flex items-center gap-2">
+          <Badge tone={k.tone}>{k.code}</Badge>
+          <span className="text-xs text-ink-3">{k.meaning}</span>
+        </li>
+      ))}
+    </ul>
   );
 }
 
 function RecentActivitySection({ items }: { items: RecentActivityItem[] }) {
   return (
     <section>
-      <h2 className="font-display text-base font-semibold text-ink">Recent activity</h2>
-      <div className="mt-3 rounded-lg border border-line bg-surface px-5 shadow-sm">
+      <div className="flex flex-wrap items-end justify-between gap-2">
+        <div>
+          <h2 className="font-display text-base font-semibold text-ink">Activity register</h2>
+          <p className="mt-0.5 text-xs text-ink-3">
+            What Esmi handled — same disposition language as the marketing register.
+            Open a row to review the full log.
+          </p>
+        </div>
+        <div className="flex gap-3 text-xs font-medium">
+          <Link href="/dashboard/calls" className="text-navy-600 hover:underline">
+            All calls
+          </Link>
+          <Link href="/dashboard/chats" className="text-navy-600 hover:underline">
+            All chats
+          </Link>
+        </div>
+      </div>
+      <div className="mt-3 border border-line bg-surface px-5">
         {items.length === 0 ? (
           <p className="py-5 text-sm text-ink-3">
-            No calls or chats yet — recent activity will show up here.
+            No calls or chats yet — the register fills as Esmi works.
           </p>
         ) : (
-          <ul className="divide-y divide-line">
+          <ul>
             {items.map((item, i) => (
               <ActivityRow key={i} item={item} />
             ))}
           </ul>
         )}
+        <DispositionKey />
       </div>
     </section>
   );
@@ -311,8 +367,8 @@ export default function Overview() {
     <div className="space-y-4">
       <SetupChecklistSection checklist={data.setup_checklist} />
 
-      {/* Hero: after-hours calls — the money-you-didn't-lose number */}
-      <section className="rounded-lg bg-navy-600 p-6 shadow-sm sm:p-8">
+      {/* Hero: after-hours — the money-you-didn't-lose number */}
+      <section className="bg-navy-600 p-6 sm:p-8">
         <p className="text-sm font-medium text-teal-300">After-hours calls answered</p>
         <div className="mt-2 flex flex-wrap items-end gap-x-6 gap-y-2">
           <p className="text-4xl font-semibold leading-none text-white sm:text-5xl">
@@ -334,8 +390,11 @@ export default function Overview() {
         </p>
       </section>
 
-      {/* KPI tiles */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      {/* Primary surface: the activity register (audit trail as work surface) */}
+      <RecentActivitySection items={data.recent_activity} />
+
+      {/* Secondary: four owner-relevant KPIs — not a six-tile farm */}
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <DeltaTile
           label="Calls answered"
           value={String(cur.calls_answered)}
@@ -347,17 +406,10 @@ export default function Overview() {
           delta={computeDelta(cur.appointments_booked, prev.appointments_booked)}
         />
         <DeltaTile
-          label="Leads escalated to you"
+          label="Leads routed to you"
           value={String(cur.leads_escalated)}
           delta={computeDelta(cur.leads_escalated, prev.leads_escalated)}
           note="Callers Esmi flagged for a human follow-up"
-        />
-        <DeltaTile
-          label="Minutes used"
-          value={`${cur.minutes_used.toLocaleString(undefined, {
-            maximumFractionDigits: 1,
-          })} min`}
-          delta={computeDelta(cur.minutes_used, prev.minutes_used)}
         />
         <DeltaTile
           label="Web chats"
@@ -369,34 +421,36 @@ export default function Overview() {
               : undefined
           }
         />
-        {cur.est_revenue_booked != null && (
-          <DeltaTile
-            label="Estimated revenue booked"
-            value={`$${cur.est_revenue_booked.toLocaleString()}`}
-            delta={computeDelta(
-              cur.est_revenue_booked,
-              prev.est_revenue_booked ?? 0,
-            )}
-            note="Bookings × your average service price"
-          />
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <LanguageMixSection mix={cur.language_mix} />
+        {usage ? (
+          <UsageMeterSection usage={usage} />
+        ) : (
+          <section className="space-y-3">
+            <div className="border border-line bg-surface p-5">
+              <p className="text-sm text-ink-3">Minutes used this month</p>
+              <p className="mt-1 font-display text-2xl font-semibold text-ink">
+                {cur.minutes_used.toLocaleString(undefined, {
+                  maximumFractionDigits: 1,
+                })}{" "}
+                <span className="text-base font-medium text-ink-3">min</span>
+              </p>
+              <Link
+                href="/dashboard/usage"
+                className="mt-2 inline-block text-xs font-medium text-navy-600 hover:underline"
+              >
+                Full usage →
+              </Link>
+            </div>
+          </section>
         )}
       </div>
 
-      {usage && <UsageMeterSection usage={usage} />}
-
-      <LanguageMixSection mix={cur.language_mix} />
-
-      <RecentActivitySection items={data.recent_activity} />
-
       <p className="text-xs text-ink-4">
         Last 7 days vs the 7 days before, in your business timezone ({data.business_tz}).
-        Phone calls and web chats — other channels aren&apos;t counted yet.{" "}
-        <Link href="/dashboard/calls" className="text-teal-700 hover:underline">
-          See every call →
-        </Link>{" "}
-        <Link href="/dashboard/chats" className="text-teal-700 hover:underline">
-          See every chat →
-        </Link>
+        Phone calls and web chats — other channels aren&apos;t counted yet.
       </p>
     </div>
   );

@@ -30,7 +30,7 @@ export default function HowItWorks({ t }: { t: Messages }) {
                 style={{
                   gridTemplateColumns: "minmax(0,1fr)",
                   padding: "1.6rem 0",
-                  borderBottomColor: "rgba(16,36,58,0.14)",
+                  borderBottomColor: "var(--lg-hair)",
                   gap: "0.45rem",
                 }}
               >

@@ -172,7 +172,7 @@ export default function LeadCaptureForm() {
             padding: "0.95rem 1.7rem",
             borderRadius: 0,
             border: 0,
-            color: "#2A1D02",
+            color: "var(--lg-foil-ink)",
             cursor: canSubmit ? "pointer" : "not-allowed",
             opacity: canSubmit ? 1 : 0.45,
             display: "inline-flex",

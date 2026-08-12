@@ -74,9 +74,18 @@ function fmtTime(sec: number): string {
   return `${m}:${String(s).padStart(2, "0")}`;
 }
 
-export default function PublicVoicePreview() {
+export default function PublicVoicePreview({
+  compact = false,
+  initialLang = "en",
+  id = "voice-preview",
+}: {
+  /** Hero / inline strip: fewer samples, no large section title. */
+  compact?: boolean;
+  initialLang?: Lang;
+  id?: string;
+} = {}) {
   const [sampleId, setSampleId] = useState("general");
-  const [language, setLanguage] = useState<Lang>("en");
+  const [language, setLanguage] = useState<Lang>(initialLang);
   const [status, setStatus] = useState<Status>("idle");
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [loadedKey, setLoadedKey] = useState<string | null>(null);
@@ -207,22 +216,42 @@ export default function PublicVoicePreview() {
   else if (status === "error") statusWord = isEs ? "Error" : "Error";
   else statusWord = isEs ? "Listo" : "Ready";
 
+  const samples = compact ? SAMPLES.slice(0, 3) : SAMPLES;
+
   return (
-    <section id="voice-preview">
+    <section id={id}>
       <div style={{ position: "relative" }}>
-        {/* ── Section head */}
-        <div style={{ marginBottom: 28 }}>
-          <div style={{ marginTop: 14 }}>
-            <SectionTitle max="22ch">
-              {isEs ? "Elige un tipo de negocio, escucha a Esmi." : "Pick a business type, hear Esmi say hello."}
-            </SectionTitle>
+        {/* ── Section head (full page only) */}
+        {!compact && (
+          <div style={{ marginBottom: 28 }}>
+            <div style={{ marginTop: 14 }}>
+              <SectionTitle max="22ch">
+                {isEs
+                  ? "Elige un tipo de negocio, escucha a Esmi."
+                  : "Pick a business type, hear Esmi say hello."}
+              </SectionTitle>
+            </div>
           </div>
-        </div>
+        )}
+        {compact && (
+          <p
+            className="lg-fig mb-3"
+            style={{
+              fontSize: "0.6875rem",
+              letterSpacing: "0.13em",
+              textTransform: "uppercase",
+              color: "var(--lg-ink-3)",
+              margin: "0 0 0.75rem",
+            }}
+          >
+            {isEs ? "Grabación real de Esmi" : "Real Esmi recording"}
+          </p>
+        )}
 
         {/* ── Control row: industry pills · language segmented control */}
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
           <div className="flex flex-wrap gap-2" role="group" aria-label={isEs ? "Tipo de negocio" : "Business type"}>
-            {SAMPLES.map((s) => {
+            {samples.map((s) => {
               const active = s.id === sampleId;
               return (
                 <button
@@ -233,7 +262,7 @@ export default function PublicVoicePreview() {
                   className="epv-pill px-3.5 py-2.5 sm:py-2"
                   style={{
                     fontFamily: "var(--font-display)",
-                    fontSize: 13,
+                    fontSize: compact ? 12 : 13,
                     fontWeight: 500,
                     lineHeight: 1.1,
                     border: `1px solid ${active ? "var(--lg-ink-3)" : "var(--lg-hair)"}`,

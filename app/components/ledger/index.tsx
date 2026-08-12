@@ -36,7 +36,8 @@ export function ink2For(tone: Tone) {
   return isStock(tone) ? "var(--lg-ink-on-stock-2)" : "var(--lg-ink-2)";
 }
 export function hairFor(tone: Tone) {
-  return isStock(tone) ? "rgba(16,36,58,0.14)" : "var(--lg-hair-2)";
+  /* Graphite hair on every tone — navy alpha was a pre-rebrand leftover. */
+  return isStock(tone) ? "var(--lg-hair)" : "var(--lg-hair-2)";
 }
 
 /** A full-bleed section in one of the world's five tones. */

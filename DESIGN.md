@@ -16,12 +16,12 @@ colors:
   tick-text: "#2E323E"
   tick: "#ADB5BD"
   ink: "#2E323E"
-  ink-2: "rgba(46, 50, 62, 0.68)"
-  ink-3: "rgba(46, 50, 62, 0.48)"
+  ink-2: "rgba(46, 50, 62, 0.80)"
+  ink-3: "rgba(46, 50, 62, 0.72)"
   hair: "rgba(46, 50, 62, 0.14)"
   hair-2: "rgba(46, 50, 62, 0.08)"
   ink-on-stock: "#2E323E"
-  ink-on-stock-2: "rgba(46, 50, 62, 0.68)"
+  ink-on-stock-2: "rgba(46, 50, 62, 0.80)"
 typography:
   scale:
     micro: "0.625rem"
@@ -146,7 +146,7 @@ components:
 >
 > **Two files are exempt from the detector, and the exemption is recorded here because it cannot be recorded where it is configured.** `.impeccable/config.json` holds `detector.ignoreFiles` as bare globs with no room for a reason, so: `app/api/contact/route.ts` and `app/api/leads/meta/route.ts` are transactional **email** templates, not web UI. Inline hex, table layout, and rounded corners are the only styling mail clients render reliably, and a design system for the web surface has no business governing them. They accounted for 41 of the 74 findings outstanding at the end of the conversion. Nothing else is ignored; every remaining finding is a real one on an unconverted surface.
 >
-> **The site is in a mixed state.** `/book`, `/acumen`, `/blog`, `/ai-receptionist`, `/missed-calls`, `/home-services`, `/kitchen-bath`, and the whole `/es` tree still carry the previous light/teal design. They now sit under the new `Nav` and `Footer`, so a visitor can cross from this world into the old one in a single click. Anything new on those routes should be built in this system, not matched to the page around it.
+> **The site is mostly converted; residual mixed systems remain.** Core marketing routes (`/`, `/pricing`, `/solutions`, `/how-it-works`, `/industries`, `/about`, `/book`) and shared chrome use this system. Residual mixed systems: `/get-started` (navy/teal wizard), product dashboard under `.lg-app` remaps (Operate surface, not a marketing twin), `/acumen` showcase gold language, blog article bodies, and privacy/terms. Anything new on public routes should be built in this system.
 
 ## Overview
 
@@ -196,16 +196,16 @@ One white field in three near-adjacent tonal steps, a graphite ink that also dra
 
 **The Marks-vs-Text Rule.** `rule`, `rule-quiet`, `hair`, `hair-2`, and `tick` are *marks* — rules, borders, and the small drawn swatches — where contrast is not a text requirement. Measured as text they run 1.29:1 to 3.27:1, all under the floor, and none of them may carry a word. In the dark world this rule was paired with lighter `-text` steps of the same hues; that pairing is gone, because status words are now simply set in `ink`. The base value draws; ink is read.
 
-**The Ink Floor Rule.** Every ink that carries a word must clear 4.5:1 on the tone it sits on. Two shipped values do not, and both are inherited from an alpha ladder that was calibrated against a dark ground where the same alphas landed much brighter:
+**The Ink Floor Rule.** Every ink that carries a word must clear 4.5:1 on the tone it sits on. Fixed 2026-08-12: alphas raised from the dark-world ladder (`0.68` / `0.48`) to values that clear AA on the light field.
 
-| Value | Where | Measured | Needs |
+| Value | Role | Alpha | Status |
 | --- | --- | --- | --- |
-| `ink-3` (`rgba(46,50,62,0.48)`) | label / meta text | **2.71:1** on field | ≈0.72 alpha |
-| `ink-2` (`rgba(46,50,62,0.68)`) | body copy on `field-3` | **4.24:1** | ≈0.72 alpha |
+| `ink-2` (`rgba(46,50,62,0.80)`) | body / secondary | 0.80 | Clears AA on field and field-3 |
+| `ink-3` (`rgba(46,50,62,0.72)`) | label / meta | 0.72 | Clears AA on field |
 
-`ink-2` on the white field is 4.68:1 and passes. These are recorded as defects, not as steps — the detector is right to keep flagging any new ink below the floor, and the fix is to raise the two alphas rather than to widen the rule.
+Do not reintroduce sub-floor alphas. New ink steps are alphas of Graphite `#2E323E` that still pass 4.5:1 on the lightest ground they sit on.
 
-**The Status Scale (product surface).** `/dashboard` carries real state that has to be readable at a glance in a table. With the palette down to one hue, colour alone can no longer separate four states: `foil` marks attention or pending, and everything else is held apart by ink tier, border weight, and the label itself. `Badge.tsx` is the single place these semantics are defined. Do not reintroduce a green or a red to the product surface to recover the old four-hue scale — that is a design-system change, and it would contradict the single-accent decision the rebrand was for.
+**The Status Scale (product surface).** `/dashboard` carries real state that has to be readable at a glance in a table. With the palette down to one hue, colour alone can no longer separate four states: `foil` marks attention, pending, or the booked "AI moment," and everything else is held apart by ink tier, border weight, and the label itself. `Badge.tsx` is the single place these semantics are defined — green/red fills were removed 2026-08-12. Call outcomes bridge to the marketing register dispositions (`BOOKED` / `ROUTED` / `ANSWERED` / `CLOSED`) via labels in `CallLog.tsx` `OUTCOME_STYLE`.
 
 **The Ruling Is Structure Rule.** The ruling is a structural colour. It draws column verticals, section top rules, ticks, and separators. It never carries error, danger, destructive, or "urgent" meaning on this surface. This survived the rebrand intact and got stronger: the ruling is now the ink's own colour at low alpha, so there is no longer even a distinct hue that could be mistaken for an alert. On the marketing surface an error is drawn with a device — a margin annotation of a heavy ink rule and a mono label — not by borrowing the rule; `/book` and `/try-esmi` both do this.
 

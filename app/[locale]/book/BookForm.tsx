@@ -277,7 +277,7 @@ export default function BookForm({ t }: { t: BookFormCopy }) {
             fontSize: "0.9375rem",
             letterSpacing: "0.08em",
             textTransform: "uppercase",
-            color: "#2A1D02",
+            color: "var(--lg-foil-ink)",
             padding: "0.95rem 1.7rem",
             border: 0,
             cursor: busy ? "wait" : "pointer",

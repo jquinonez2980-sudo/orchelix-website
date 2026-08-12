@@ -65,7 +65,7 @@ const en = {
       CLOSED: "CLOSED",
     },
     tallyCalls: "{n} calls",
-    illustrative: "Illustrative entries. Real Esmi recordings available on request.",
+    illustrative: "Illustrative entries. Play a real Esmi recording in the column beside this register.",
 
     problemTitle: "The work gets done. It's everything that slips while you do it.",
     arrears: [
