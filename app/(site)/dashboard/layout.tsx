@@ -3,6 +3,7 @@ import { ClerkProvider, OrganizationSwitcher } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { ADMIN_ORG_SLUG } from "@/app/lib/platformProxy";
 import DashboardShell from "./DashboardShell";
+import { DashI18nProvider } from "./i18n";
 import { clerkWidgetAppearance } from "@/app/lib/clerkAppearance";
 
 /* Esmi tenant dashboard shell (/dashboard).
@@ -79,9 +80,11 @@ export default async function EsmiDashboardLayout({
 
   return (
     <ClerkProvider afterSignOutUrl="/" appearance={clerkWidgetAppearance}>
-      <DashboardShell isOrchelixStaff={isOrchelixStaff}>
-        {orgSlug ? children : <OrgGate />}
-      </DashboardShell>
+      <DashI18nProvider>
+        <DashboardShell isOrchelixStaff={isOrchelixStaff}>
+          {orgSlug ? children : <OrgGate />}
+        </DashboardShell>
+      </DashI18nProvider>
     </ClerkProvider>
   );
 }

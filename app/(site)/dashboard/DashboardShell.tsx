@@ -9,6 +9,11 @@ import { clerkWidgetAppearance } from "@/app/lib/clerkAppearance";
 import { Menu, X } from "lucide-react";
 import DraftModeBanner from "./DraftModeBanner";
 import {
+  groupLabel,
+  navLabel,
+  useDashI18n,
+} from "./i18n";
+import {
   isNavItemActive,
   visibleNavGroups,
   type NavGroup,
@@ -28,6 +33,7 @@ import {
 const ESMI_LOGO_RATIO = 566 / 273;
 
 function Logo({ compact = false }: { compact?: boolean }) {
+  const { t } = useDashI18n();
   const height = compact ? 22 : 28;
   const width = Math.round(height * ESMI_LOGO_RATIO);
   return (
@@ -41,7 +47,7 @@ function Logo({ compact = false }: { compact?: boolean }) {
         priority
       />
       {!compact && (
-        <span className="text-[11px] font-medium text-ink-4">by Orchelix</span>
+        <span className="text-[11px] font-medium text-ink-4">{t.byOrchelix}</span>
       )}
     </span>
   );
@@ -56,6 +62,7 @@ function NavLink({
   active: boolean;
   onNavigate?: () => void;
 }) {
+  const { t } = useDashI18n();
   const Icon = item.icon;
   return (
     <Link
@@ -69,7 +76,7 @@ function NavLink({
       }`}
     >
       <Icon className="h-[18px] w-[18px] shrink-0" strokeWidth={1.75} />
-      {item.label}
+      {navLabel(t, item.label)}
     </Link>
   );
 }
@@ -83,6 +90,7 @@ function SidebarNav({
   pathname: string;
   onNavigate?: () => void;
 }) {
+  const { t } = useDashI18n();
   /* Work stays always open. Configure / Account / Internal collapse when
      none of their items is active — progressive disclosure for owner operators. */
   return (
@@ -105,12 +113,14 @@ function SidebarNav({
           </div>
         );
 
+        const label = groupLabel(t, group.id, group.label);
+
         if (alwaysOpen || !group.label) {
           return (
             <div key={group.id} className={index === 0 ? "" : "mt-4"}>
-              {group.label && (
+              {label && (
                 <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-wide text-ink-4">
-                  {group.label}
+                  {label}
                 </p>
               )}
               {links}
@@ -126,7 +136,7 @@ function SidebarNav({
           >
             <summary className="cursor-pointer list-none px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-ink-4 hover:text-ink marker:content-none [&::-webkit-details-marker]:hidden">
               <span className="flex items-center justify-between gap-2">
-                {group.label}
+                {label}
                 <span aria-hidden className="text-ink-4">
                   ▾
                 </span>
@@ -149,6 +159,7 @@ export default function DashboardShell({
 }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const { t, locale, setLocale } = useDashI18n();
   const close = () => setOpen(false);
   const groups = visibleNavGroups(isOrchelixStaff);
 
@@ -179,7 +190,7 @@ export default function DashboardShell({
           <button
             type="button"
             onClick={() => setOpen(true)}
-            aria-label="Open menu"
+            aria-label={t.openMenu}
             aria-expanded={open}
             className="-ml-1 inline-flex h-10 w-10 items-center justify-center rounded-md text-ink-2 hover:bg-surface-2 lg:hidden"
           >
@@ -189,6 +200,15 @@ export default function DashboardShell({
             <Logo compact />
           </Link>
           <div className="ml-auto flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setLocale(locale === "en" ? "es" : "en")}
+              className="lg-fig hidden text-xs font-medium uppercase tracking-wide text-ink-3 hover:text-ink sm:inline"
+              style={{ letterSpacing: "0.1em" }}
+              aria-label={t.switchTo}
+            >
+              {t.switchTo}
+            </button>
             {/* Point "Create organization" at our own signup wizard instead
                 of Clerk's generic dialog. An org created through that dialog
                 picks its own slug, which would match no Esmi tenant, so every
@@ -229,10 +249,20 @@ export default function DashboardShell({
                 <button
                   type="button"
                   onClick={close}
-                  aria-label="Close menu"
+                  aria-label={t.closeMenu}
                   className="inline-flex h-10 w-10 items-center justify-center rounded-md text-ink-2 hover:bg-surface-2"
                 >
                   <X className="h-5 w-5" strokeWidth={1.75} />
+                </button>
+              </div>
+              <div className="border-b border-line px-4 py-2 sm:hidden">
+                <button
+                  type="button"
+                  onClick={() => setLocale(locale === "en" ? "es" : "en")}
+                  className="lg-fig text-xs font-medium uppercase tracking-wide text-ink-3"
+                  style={{ letterSpacing: "0.1em" }}
+                >
+                  {t.switchTo}
                 </button>
               </div>
               <SidebarNav groups={groups} pathname={pathname} onNavigate={close} />

@@ -11,6 +11,7 @@ import {
   type PlatformCall,
 } from "@/app/lib/esmiPlatform";
 import { Badge, type BadgeTone } from "../Badge";
+import CoachFromCall from "../CoachFromCall";
 import { useActiveOrgSlug } from "../useActiveOrgSlug";
 
 const PAGE_SIZE = 25;
@@ -209,33 +210,9 @@ function WhatsAppDownloadButton({ callId }: { callId: string }) {
 }
 
 function CallDetail({ call }: { call: PlatformCall }) {
-  const style = OUTCOME_STYLE[call.outcome ?? "other"] ?? OUTCOME_STYLE.other;
   return (
     <div className="space-y-4 border-t border-line bg-surface-2 px-4 py-4 sm:px-6">
-      {/* Human-in-the-loop strip — the product promise made operational */}
-      <div
-        className="border border-line bg-surface px-4 py-3"
-        style={{ borderLeft: "2px solid var(--lg-foil)" }}
-      >
-        <p className="lg-fig text-xs uppercase tracking-wide text-ink-3" style={{ letterSpacing: "0.12em" }}>
-          Review · {style.disposition}
-        </p>
-        <p className="mt-1 text-sm text-ink-2">
-          Inspect, override the story in Knowledge if Esmi was wrong, or coach
-          the voice. Every call is on the record for that reason.
-        </p>
-        <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm font-medium">
-          <a href="/dashboard/knowledge" className="text-navy-600 hover:underline">
-            Correct knowledge →
-          </a>
-          <a href="/dashboard/voice" className="text-navy-600 hover:underline">
-            Coach voice →
-          </a>
-          <a href="/dashboard/settings" className="text-navy-600 hover:underline">
-            Adjust hours &amp; routing →
-          </a>
-        </div>
-      </div>
+      <CoachFromCall call={call} />
 
       {call.recording_url && (
         <div>

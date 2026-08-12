@@ -6,23 +6,12 @@ import {
   fetchOverview,
   fetchUsage,
   type OverviewResponse,
-  type RecentActivityItem,
   type UsageResponse,
 } from "@/app/lib/esmiPlatform";
-import { Badge } from "./Badge";
-import { OUTCOME_STYLE } from "./calls/CallLog";
+import NightRegister from "./NightRegister";
 import { LimitBanner, MinutesProgress, Tile } from "./PlanUsageWidgets";
 import { useActiveOrgSlug } from "./useActiveOrgSlug";
-
-const dateFmt = new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric" });
-const timeFmt = new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit" });
-
-function fmtWhen(iso: string | null): string {
-  if (!iso) return "—";
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "—";
-  return `${dateFmt.format(d)}, ${timeFmt.format(d)}`;
-}
+import { useDashI18n } from "./i18n";
 
 /* KPI tiles per the stat-tile contract: sentence-case label, semibold value in
    proportional figures (no tabular-nums at display size), signed delta vs a
@@ -108,6 +97,7 @@ function ChecklistRow({ done, label }: { done: boolean; label: string }) {
 }
 
 function SetupChecklistSection({ checklist }: { checklist: OverviewResponse["setup_checklist"] }) {
+  const { t } = useDashI18n();
   if (!checklist) return null;
   return (
     <section
@@ -115,12 +105,9 @@ function SetupChecklistSection({ checklist }: { checklist: OverviewResponse["set
       style={{ borderLeft: "2px solid var(--lg-foil)" }}
     >
       <h2 className="font-display text-base font-semibold uppercase tracking-tight text-ink">
-        Finish setting up Esmi
+        {t.overview.setupTitle}
       </h2>
-      <p className="mt-1 text-xs text-ink-3">
-        Same 14-day pilot path you saw on the marketing site — map, configure,
-        then go live with a consultant.
-      </p>
+      <p className="mt-1 text-xs text-ink-3">{t.overview.setupLede}</p>
       <ul className="mt-3 space-y-2.5">
         {checklist.items.map((item) => (
           <ChecklistRow key={item.key} done={item.done} label={item.label} />
@@ -150,17 +137,18 @@ const LANGUAGE_MIX_LABEL: Record<"en" | "es" | "unknown", string> = {
 };
 
 function LanguageMixSection({ mix }: { mix: OverviewResponse["current"]["language_mix"] }) {
+  const { t } = useDashI18n();
   const total = mix.en + mix.es + mix.unknown;
   const rows = (["en", "es", "unknown"] as const).filter((k) => mix[k] > 0);
 
   return (
     <section>
       <h2 className="font-display text-base font-semibold text-ink">
-        Language mix (last 7 days)
+        {t.overview.languageMix}
       </h2>
-      <div className="mt-3 rounded-lg border border-line bg-surface p-5 shadow-sm">
+      <div className="mt-3 border border-line bg-surface p-5">
         {total === 0 ? (
-          <p className="text-sm text-ink-3">No calls in the last 7 days.</p>
+          <p className="text-sm text-ink-3">{t.overview.noCallsWeek}</p>
         ) : (
           <ul className="space-y-2.5">
             {rows.map((key) => {
@@ -190,101 +178,6 @@ function LanguageMixSection({ mix }: { mix: OverviewResponse["current"]["languag
   );
 }
 
-/* ── recent activity ────────────────────────────────────────────────────────── */
-
-function ActivityRow({ item }: { item: RecentActivityItem }) {
-  const style = OUTCOME_STYLE[item.outcome ?? "other"] ?? OUTCOME_STYLE.other;
-  const href = item.type === "call" ? "/dashboard/calls" : "/dashboard/chats";
-  return (
-    <li className="border-b border-line last:border-b-0">
-      <Link
-        href={href}
-        className="flex items-center justify-between gap-3 py-3 transition-colors hover:bg-surface-2"
-      >
-        <div className="min-w-0">
-          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
-            <p className="lg-fig text-xs font-medium uppercase tracking-wide text-ink-3">
-              {fmtWhen(item.at)}
-            </p>
-            {item.language && (
-              <p
-                className="lg-fig text-xs uppercase tracking-wide"
-                style={{
-                  color: item.language === "es" ? "var(--lg-foil)" : "var(--lg-ink-3)",
-                }}
-              >
-                {item.language === "en" ? "EN" : "ES"}
-              </p>
-            )}
-          </div>
-          <p className="mt-0.5 text-sm font-medium text-ink">
-            {item.type === "call" ? "Call" : "Web chat"}
-            <span className="ml-2 text-xs font-normal text-ink-3">{style.disposition}</span>
-          </p>
-        </div>
-        <Badge tone={style.tone}>{style.label}</Badge>
-      </Link>
-    </li>
-  );
-}
-
-function DispositionKey() {
-  const keys: { code: string; meaning: string; tone: "warning" | "info" | "positive" | "negative" }[] = [
-    { code: "BOOKED", meaning: "Appointment set", tone: "warning" },
-    { code: "ROUTED", meaning: "Handed to a person", tone: "info" },
-    { code: "ANSWERED", meaning: "Resolved on the line", tone: "positive" },
-    { code: "CLOSED", meaning: "Ended / missed / voicemail", tone: "negative" },
-  ];
-  return (
-    <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-2 border-t border-line pt-3">
-      {keys.map((k) => (
-        <li key={k.code} className="flex items-center gap-2">
-          <Badge tone={k.tone}>{k.code}</Badge>
-          <span className="text-xs text-ink-3">{k.meaning}</span>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-function RecentActivitySection({ items }: { items: RecentActivityItem[] }) {
-  return (
-    <section>
-      <div className="flex flex-wrap items-end justify-between gap-2">
-        <div>
-          <h2 className="font-display text-base font-semibold text-ink">Activity register</h2>
-          <p className="mt-0.5 text-xs text-ink-3">
-            What Esmi handled — same disposition language as the marketing register.
-            Open a row to review the full log.
-          </p>
-        </div>
-        <div className="flex gap-3 text-xs font-medium">
-          <Link href="/dashboard/calls" className="text-navy-600 hover:underline">
-            All calls
-          </Link>
-          <Link href="/dashboard/chats" className="text-navy-600 hover:underline">
-            All chats
-          </Link>
-        </div>
-      </div>
-      <div className="mt-3 border border-line bg-surface px-5">
-        {items.length === 0 ? (
-          <p className="py-5 text-sm text-ink-3">
-            No calls or chats yet — the register fills as Esmi works.
-          </p>
-        ) : (
-          <ul>
-            {items.map((item, i) => (
-              <ActivityRow key={i} item={item} />
-            ))}
-          </ul>
-        )}
-        <DispositionKey />
-      </div>
-    </section>
-  );
-}
-
 /* ── usage meter ────────────────────────────────────────────────────────────── */
 
 function UsageMeterSection({ usage }: { usage: UsageResponse }) {
@@ -299,13 +192,43 @@ function UsageMeterSection({ usage }: { usage: UsageResponse }) {
   );
 }
 
+function AfterHoursHero({
+  value,
+  prev,
+  quiet,
+}: {
+  value: number;
+  prev: number;
+  quiet: boolean;
+}) {
+  const { t } = useDashI18n();
+  return (
+    <section className="bg-navy-600 p-6 sm:p-8">
+      <p className="text-sm font-medium text-teal-300">{t.overview.afterHours}</p>
+      <div className="mt-2 flex flex-wrap items-end gap-x-6 gap-y-2">
+        <p className="text-4xl font-semibold leading-none text-white sm:text-5xl">{value}</p>
+        <div className="pb-1">
+          <DeltaLine delta={computeDelta(value, prev)} invert />
+        </div>
+      </div>
+      <p className="mt-3 max-w-xl text-sm leading-6 text-navy-100">
+        {quiet
+          ? "Esmi is on duty around the clock. The moment someone calls while you're closed, it's answered — and counted here."
+          : value > 0
+            ? "Calls Esmi picked up while your doors were closed — customers who would otherwise have reached voicemail or a competitor."
+            : "No after-hours calls this week — and if one comes in at 2am, Esmi has it covered."}
+      </p>
+    </section>
+  );
+}
+
 function SkeletonTiles() {
   return (
     <div className="space-y-4">
-      <div className="h-44 animate-pulse rounded-lg bg-surface-2" />
+      <div className="h-44 animate-pulse bg-surface-2" />
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-32 animate-pulse rounded-lg bg-surface-2" />
+          <div key={i} className="h-32 animate-pulse bg-surface-2" />
         ))}
       </div>
     </div>
@@ -387,31 +310,14 @@ export default function Overview() {
     <div className="space-y-4">
       <SetupChecklistSection checklist={data.setup_checklist} />
 
-      {/* Hero: after-hours — the money-you-didn't-lose number */}
-      <section className="bg-navy-600 p-6 sm:p-8">
-        <p className="text-sm font-medium text-teal-300">After-hours calls answered</p>
-        <div className="mt-2 flex flex-wrap items-end gap-x-6 gap-y-2">
-          <p className="text-4xl font-semibold leading-none text-white sm:text-5xl">
-            {cur.after_hours_calls}
-          </p>
-          <div className="pb-1">
-            <DeltaLine
-              delta={computeDelta(cur.after_hours_calls, prev.after_hours_calls)}
-              invert
-            />
-          </div>
-        </div>
-        <p className="mt-3 max-w-xl text-sm leading-6 text-navy-100">
-          {quiet
-            ? "Esmi is on duty around the clock. The moment someone calls while you're closed, it's answered — and counted here."
-            : cur.after_hours_calls > 0
-              ? "Calls Esmi picked up while your doors were closed — customers who would otherwise have reached voicemail or a competitor."
-              : "No after-hours calls this week — and if one comes in at 2am, Esmi has it covered."}
-        </p>
-      </section>
+      <AfterHoursHero
+        value={cur.after_hours_calls}
+        prev={prev.after_hours_calls}
+        quiet={quiet}
+      />
 
-      {/* Primary surface: the activity register (audit trail as work surface) */}
-      <RecentActivitySection items={data.recent_activity} />
+      {/* Primary surface: dense live register from calls + chats APIs */}
+      <NightRegister />
 
       {/* Secondary: four owner-relevant KPIs — not a six-tile farm */}
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">

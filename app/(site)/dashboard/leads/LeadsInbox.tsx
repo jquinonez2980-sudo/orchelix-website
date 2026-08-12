@@ -51,10 +51,10 @@ function StatusBadge({ status }: { status: LeadStatus }) {
 
 const OUTCOME_LABEL: Record<string, string> = {
   booked: "Booked",
-  escalated: "Escalated",
-  info: "Info",
+  escalated: "Routed",
+  info: "Answered",
   voicemail: "Voicemail",
-  abandoned: "Abandoned",
+  abandoned: "Missed",
   other: "Other",
 };
 
