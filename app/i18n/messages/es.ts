@@ -50,6 +50,16 @@ const es: Messages = {
     countries: "Canadá y Estados Unidos",
   },
 
+  visuals: {
+    editorialLedger:
+      "Fuera de horario: un registro rayado, un teléfono negro y un sello magenta sobre un escritorio de grafito.",
+    consultingEngagement:
+      "Un consultor traza un proceso en papel, lápiz de grafito en la mano y un sello magenta al borde de la hoja.",
+    bilingualOperations:
+      "Un mostrador al anochecer con dos teléfonos y dos pilas de fichas, una marcada en magenta.",
+    og: "Una hoja de registro en blanco, rayada, con un solo sello magenta.",
+  },
+
   home: {
     title: "Orchelix | Agentes de IA que operan tu área comercial",
     description:

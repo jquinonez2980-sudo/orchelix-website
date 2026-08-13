@@ -17,7 +17,9 @@ import {
   StatusKey,
   RuledList,
   Band,
+  Plate,
 } from "@/app/components/ledger";
+import bilingualOperations from "@/public/bilingual-operations.jpg";
 
 const SITE_URL = "https://www.orchelix.com";
 
@@ -121,6 +123,9 @@ export default async function SolutionsPage({ params }: PageProps<"/[locale]">) 
                   {t.common.bookPilot}
                 </Stamp>
                 <QuietAction href="/try-esmi">{t.common.hearRealCall}</QuietAction>
+              </div>
+              <div className="mt-10">
+                <Plate src={bilingualOperations} alt={t.visuals.bilingualOperations} max={440} />
               </div>
             </div>
             <RuledList items={p.esmiCapabilities} labelWidth="8.5rem" />

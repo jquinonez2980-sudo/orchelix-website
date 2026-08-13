@@ -1,19 +1,25 @@
 /* Named operators from PRODUCT.md — names and plain facts only.
    No quotes, logos, or outcome metrics unless assets and numbers are real. */
 
-import { Section, SectionTitle, Prose } from "@/app/components/ledger";
+import { Section, SectionTitle, Prose, Plate } from "@/app/components/ledger";
 import type { Messages } from "@/app/i18n/messages/en";
+import bilingualOperations from "@/public/bilingual-operations.jpg";
 
 export default function Operators({ t }: { t: Messages }) {
   const o = t.operators;
   return (
     <Section id="operators" tone="stock">
-      <SectionTitle tone="stock" max="16ch">
-        {o.title}
-      </SectionTitle>
-      <Prose size="1.0625rem" max="48ch" tone="stock" style={{ marginTop: "1.5rem" }}>
-        {o.lede}
-      </Prose>
+      <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-end">
+        <div>
+          <SectionTitle tone="stock" max="16ch">
+            {o.title}
+          </SectionTitle>
+          <Prose size="1.0625rem" max="48ch" tone="stock" style={{ marginTop: "1.5rem" }}>
+            {o.lede}
+          </Prose>
+        </div>
+        <Plate src={bilingualOperations} alt={t.visuals.bilingualOperations} max={560} />
+      </div>
       <ul
         className="mt-12 m-0 grid list-none gap-0 p-0 sm:grid-cols-3"
         style={{ borderTop: "2px solid var(--lg-rule)" }}

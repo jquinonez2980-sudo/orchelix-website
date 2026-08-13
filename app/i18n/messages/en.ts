@@ -42,6 +42,16 @@ const en = {
     countries: "Canada & United States",
   },
 
+  visuals: {
+    editorialLedger:
+      "After hours: a ruled ledger, a black telephone, and a single magenta stamp on a graphite desk.",
+    consultingEngagement:
+      "A consultant mapping a workflow on paper, graphite pencil in hand, magenta stamp at the edge of the sheet.",
+    bilingualOperations:
+      "A dusk reception counter with two telephones and two stacks of cards, one marked in magenta.",
+    og: "A blank ruled ledger page with a single magenta stamp.",
+  },
+
   home: {
     title: "Orchelix | AI agents that run revenue operations",
     description:

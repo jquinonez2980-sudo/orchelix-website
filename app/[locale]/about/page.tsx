@@ -14,8 +14,10 @@ import {
   QuietAction,
   RuledList,
   EntryList,
+  Plate,
 } from "@/app/components/ledger";
 import aboutVisual from "@/public/about-visual.png";
+import consultingEngagement from "@/public/consulting-engagement.jpg";
 
 export function generateStaticParams() {
   return localesFor("/about").map((locale) => ({ locale }));
@@ -99,7 +101,10 @@ export default async function AboutPage({ params }: PageProps<"/[locale]">) {
 
         {/* ── How an engagement runs ── */}
         <Section tone="field">
-          <SectionTitle max="18ch">{p.engagementHeading}</SectionTitle>
+          <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:items-end">
+            <SectionTitle max="18ch">{p.engagementHeading}</SectionTitle>
+            <Plate src={consultingEngagement} alt={t.visuals.consultingEngagement} max={520} />
+          </div>
           <div className="mt-12">
             <EntryList columns={2} entries={p.engagement} />
           </div>

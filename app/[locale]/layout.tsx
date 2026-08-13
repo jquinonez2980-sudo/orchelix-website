@@ -35,7 +35,7 @@ export async function generateMetadata({
       siteName: "Orchelix",
       title: t.home.title,
       description: t.home.description,
-      images: [{ url: "/og-image.jpg", width: 1408, height: 736, alt: "Orchelix" }],
+      images: [{ url: "/og-image.jpg", width: 1280, height: 720, alt: t.visuals.og }],
     },
     twitter: {
       card: "summary_large_image",

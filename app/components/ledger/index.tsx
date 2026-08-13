@@ -128,6 +128,28 @@ export function PageVisual({
   );
 }
 
+/** A named editorial still. Unlike PageVisual, this carries an alt. */
+export function Plate({
+  src,
+  alt,
+  max,
+}: {
+  src: StaticImageData;
+  alt: string;
+  max: number;
+}) {
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      placeholder="blur"
+      sizes={`${max}px`}
+      className="lg-settle-media"
+      style={{ width: "100%", maxWidth: max, height: "auto" }}
+    />
+  );
+}
+
 export function PageTitle({
   children,
   tone = "field",
