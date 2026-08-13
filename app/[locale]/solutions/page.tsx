@@ -109,7 +109,7 @@ export default async function SolutionsPage({ params }: PageProps<"/[locale]">) 
 
         {/* ── Esmi — shipped ── */}
         <Section tone="field-2" id="agent-esmi">
-          <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+          <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
             <div>
               <div className="mb-5">
                 <StatusKey>{t.common.inProduction}</StatusKey>
@@ -124,10 +124,10 @@ export default async function SolutionsPage({ params }: PageProps<"/[locale]">) 
                 </Stamp>
                 <QuietAction href="/try-esmi">{t.common.hearRealCall}</QuietAction>
               </div>
-              <div className="mt-10">
-                <Plate src={bilingualOperations} alt={t.visuals.bilingualOperations} max={440} />
-              </div>
             </div>
+            <Plate src={bilingualOperations} alt={t.visuals.bilingualOperations} max={720} />
+          </div>
+          <div className="mt-16">
             <RuledList items={p.esmiCapabilities} labelWidth="8.5rem" />
           </div>
         </Section>
