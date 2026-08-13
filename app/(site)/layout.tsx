@@ -18,7 +18,15 @@ export const metadata: Metadata = {
   },
   description:
     "Multi-agent systems for revenue operations, deployed by senior consultants. Bilingual English and Spanish call handling with a reviewable audit trail.",
-  icons: { icon: "/favicon.ico", apple: "/apple-touch-icon.png" },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "48x48" },
+      { url: "/icon-48.png", type: "image/png", sizes: "48x48" },
+      { url: "/icon-96.png", type: "image/png", sizes: "96x96" },
+      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+  },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
 };
 
