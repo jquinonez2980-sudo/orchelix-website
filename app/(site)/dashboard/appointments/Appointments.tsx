@@ -59,17 +59,33 @@ function fmtPhone(e164: string | null): string | null {
 // all Esmi-facilitated bookings (voice or chat conversation, or the
 // website's own booking widget hitting the same booking API); manual is
 // the one channel that's genuinely different — a human typed it in.
-const SOURCE_STYLE: Record<string, { label: string; tone: BadgeTone }> = {
-  voice: { label: "Phone", tone: "positive" },
-  chat: { label: "Web chat", tone: "info" },
-  website: { label: "Website", tone: "info" },
-  manual: { label: "Added manually", tone: "neutral" },
+const SOURCE_TONE: Record<string, BadgeTone> = {
+  voice: "positive",
+  chat: "info",
+  website: "info",
+  manual: "neutral",
 };
 
 function SourceChip({ appt }: { appt: Appointment }) {
-  const key = appt.source && SOURCE_STYLE[appt.source] ? appt.source : "manual";
-  const s = SOURCE_STYLE[key];
-  return <Badge tone={s.tone}>{s.label}</Badge>;
+  const { t } = useDashI18n();
+  const raw = (appt.source || "").toLowerCase();
+  const key =
+    raw === "voice" || raw === "phone" || raw === "call"
+      ? "voice"
+      : raw === "chat"
+        ? "chat"
+        : raw === "website" || raw === "web"
+          ? "website"
+          : "manual";
+  const label =
+    key === "voice"
+      ? t.ui.phoneCall
+      : key === "chat"
+        ? t.ui.webChat
+        : key === "website"
+          ? t.ui.websiteBooking
+          : t.ui.addedManually;
+  return <Badge tone={SOURCE_TONE[key]}>{label}</Badge>;
 }
 
 /* ── appointment card ────────────────────────────────────────────────────── */

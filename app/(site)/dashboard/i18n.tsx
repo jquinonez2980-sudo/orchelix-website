@@ -97,7 +97,10 @@ type DashMessages = {
     unsaved: string;
     noContact: string;
     phone: string;
+    phoneCall: string;
     webChat: string;
+    websiteBooking: string;
+    addedManually: string;
     allStatuses: string;
     searchContact: string;
     searchNamePhone: string;
@@ -324,7 +327,10 @@ const en: DashMessages = {
     unsaved: "Unsaved changes",
     noContact: "No contact on file",
     phone: "Phone",
+    phoneCall: "Phone call",
     webChat: "Web chat",
+    websiteBooking: "Website",
+    addedManually: "Added manually",
     allStatuses: "All statuses",
     searchContact: "Search contact or summary…",
     searchNamePhone: "Search name or phone…",
@@ -560,7 +566,10 @@ const es: DashMessages = {
     unsaved: "Cambios sin guardar",
     noContact: "Sin contacto",
     phone: "Teléfono",
+    phoneCall: "Llamada",
     webChat: "Chat web",
+    websiteBooking: "Sitio web",
+    addedManually: "Agregado a mano",
     allStatuses: "Todos los estados",
     searchContact: "Buscar contacto o resumen…",
     searchNamePhone: "Buscar nombre o teléfono…",
