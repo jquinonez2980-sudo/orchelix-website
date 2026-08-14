@@ -47,9 +47,39 @@ const OUTCOME_STYLE: Record<string, { label: string; tone: BadgeTone }> = {
   closed: { label: "Closed", tone: "neutral" },
 };
 
-function OutcomeBadge({ outcome }: { outcome: ChatOutcome | null }) {
+/* A thread with no activity for this long is over, whether or not the
+   summarizer has got to it yet. Matches the backend's own idle threshold
+   (platform_api/chats.py summarize, idle_minutes default 30). */
+const IDLE_MINUTES = 30;
+
+function isStillLive(lastAt: string | null): boolean {
+  if (!lastAt) return false;
+  const t = Date.parse(lastAt);
+  if (Number.isNaN(t)) return false;
+  return Date.now() - t < IDLE_MINUTES * 60_000;
+}
+
+function OutcomeBadge({
+  outcome,
+  lastAt,
+}: {
+  outcome: ChatOutcome | null;
+  lastAt?: string | null;
+}) {
   const { t } = useDashI18n();
-  if (!outcome) return <Badge tone="neutral">{t.ui.inProgress}</Badge>;
+  if (!outcome) {
+    /* A null outcome only means nothing has WRITTEN one — the summarizer runs
+       on a schedule and may not have reached this row. Reporting a chat from
+       last week as "In progress" is simply false, and it was making the whole
+       page look broken. Old threads read as ended; only genuinely recent ones
+       are still live. "Ended" rather than "Closed" because Closed is the
+       summarizer's verdict and this is the interface's inference. */
+    return isStillLive(lastAt ?? null) ? (
+      <Badge tone="neutral">{t.ui.inProgress}</Badge>
+    ) : (
+      <Badge tone="neutral">Ended</Badge>
+    );
+  }
   const labels: Record<string, string> = {
     booked: OUTCOME_STYLE.booked.label,
     escalated: OUTCOME_STYLE.escalated.label,
@@ -263,7 +293,7 @@ function ChatRow({ chat }: { chat: PlatformChat }) {
           {chat.message_count}
         </td>
         <td className="whitespace-nowrap px-4 py-3">
-          <OutcomeBadge outcome={chat.outcome} />
+          <OutcomeBadge outcome={chat.outcome} lastAt={chat.last_at} />
         </td>
         <td className="max-w-md px-4 py-3 text-sm text-ink-2">
           <span className="line-clamp-2">{chat.summary || "—"}</span>
@@ -304,7 +334,7 @@ function ChatRow({ chat }: { chat: PlatformChat }) {
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-sm font-medium text-ink">{started.date}</span>
                 <span className="text-sm text-ink-3">{started.time}</span>
-                <OutcomeBadge outcome={chat.outcome} />
+                <OutcomeBadge outcome={chat.outcome} lastAt={chat.last_at} />
               </div>
               <div className="mt-1 text-sm text-ink-2">
                 {chat.message_count} message{chat.message_count === 1 ? "" : "s"} · last active{" "}

@@ -411,7 +411,8 @@ const en: DashMessages = {
     hours: "Hours",
     openDays: "Open days",
     services: "Services",
-    noServices: "No services yet.",
+    noServices:
+      "Nothing bookable yet. A service is what a caller can book — its name and how long it takes. Add one and Esmi can offer real times for it on the phone.",
     addService: "+ Add service",
     confirmTz: "Confirm the timezone change above to save.",
     open: "Open",
@@ -651,7 +652,8 @@ const es: DashMessages = {
     hours: "Horario",
     openDays: "Días abiertos",
     services: "Servicios",
-    noServices: "Aún no hay servicios.",
+    noServices:
+      "Nada reservable todavía. Un servicio es lo que un cliente puede reservar: su nombre y cuánto dura. Agrega uno y Esmi podrá ofrecer horarios reales por teléfono.",
     addService: "+ Agregar servicio",
     confirmTz: "Confirma el cambio de zona horaria arriba para guardar.",
     open: "Abre",
