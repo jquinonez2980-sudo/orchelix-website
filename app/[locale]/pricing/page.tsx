@@ -258,7 +258,7 @@ function RateSchedule({ t, locale }: { t: Messages; locale: Locale }) {
     { term: p.terms.monthly, cells: ["$299", "$599", "$999"], strong: true },
     { term: p.terms.setup, cells: ["$499", "$799", v.custom] },
     { term: p.terms.minutes, cells: ["300", "800", "1,500"] },
-    { term: p.terms.overage, cells: ["$0.25", "$0.20", "$0.15"] },
+    { term: p.terms.overage, cells: ["$0.25", "$0.20", "$0.22"] },
     { term: p.terms.numbers, cells: [v.starterNumbers, v.growthNumbers, v.scaleNumbers] },
     { term: p.terms.channels, cells: [v.starterChannels, v.growthChannels, v.scaleChannels] },
     { term: p.terms.booking, cells: [v.starterBooking, v.growthBooking, v.scaleBooking] },
