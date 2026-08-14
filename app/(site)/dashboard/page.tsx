@@ -8,13 +8,7 @@ export default function OverviewPage() {
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
       <div className="mb-6">
-        <p
-          className="lg-fig text-xs uppercase tracking-wide text-ink-3"
-          style={{ letterSpacing: "0.12em" }}
-        >
-          {t.overview.kicker}
-        </p>
-        <h1 className="mt-1 font-display text-2xl font-semibold uppercase tracking-tight text-ink">
+        <h1 className="font-display text-[1.85rem] font-bold uppercase leading-[1.02] tracking-[-0.022em] text-ink">
           {t.overview.title}
         </h1>
         <p className="mt-1 max-w-xl text-sm leading-6 text-ink-2">{t.overview.lede}</p>

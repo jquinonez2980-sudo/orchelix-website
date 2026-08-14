@@ -65,7 +65,7 @@ const deleteBtnCls =
 // Same navy/ghost pair the Add form uses, pulled out so the inline editor
 // matches it exactly rather than re-deriving the classes.
 const primaryBtnCls =
-  "rounded-md bg-navy-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-navy-500 disabled:opacity-50";
+  "border border-[var(--lg-rule)] px-3 py-1.5 font-display text-[0.6875rem] uppercase tracking-[0.1em] text-[var(--lg-ink)] transition-colors duration-150 hover:bg-[var(--lg-field-2)] disabled:border-[var(--lg-hair)] disabled:text-[var(--lg-ink-3)]";
 const secondaryBtnCls =
   "shrink-0 rounded px-2 py-1 text-xs font-medium text-ink-2 hover:bg-surface-2 disabled:opacity-50";
 
@@ -426,7 +426,7 @@ function EntriesList({
           <button
             type="button"
             onClick={onRetry}
-            className="mt-3 rounded-md bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-500"
+            className="border border-[var(--lg-rule)] px-4 py-2 font-display text-[0.75rem] uppercase tracking-[0.08em] text-[var(--lg-ink)] transition-colors duration-150 hover:bg-[var(--lg-field-2)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--lg-foil)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--lg-field)]"
           >
             {t.ui.tryAgain}
           </button>
@@ -496,7 +496,7 @@ function PdfUploadForm({ onUploaded }: { onUploaded: (entry: KnowledgePdfEntry) 
             const file = e.target.files?.[0];
             if (file) handleFile(file);
           }}
-          className="block w-full text-sm text-ink-2 file:mr-3 file:rounded-md file:border-0 file:bg-navy-600 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-navy-500 disabled:opacity-50"
+          className="block w-full text-sm text-[var(--lg-ink-2)] file:mr-3 file:border file:border-[var(--lg-rule)] file:bg-transparent file:px-4 file:py-2 file:font-display file:text-[0.75rem] file:uppercase file:tracking-[0.08em] file:text-[var(--lg-ink)] hover:file:bg-[var(--lg-field-2)] disabled:opacity-50"
         />
         {uploading && <span className="shrink-0 text-sm text-ink-4">{t.ui.uploading}</span>}
       </div>
@@ -581,7 +581,7 @@ function PdfsList({
           <button
             type="button"
             onClick={onRetry}
-            className="mt-3 rounded-md bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-500"
+            className="border border-[var(--lg-rule)] px-4 py-2 font-display text-[0.75rem] uppercase tracking-[0.08em] text-[var(--lg-ink)] transition-colors duration-150 hover:bg-[var(--lg-field-2)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--lg-foil)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--lg-field)]"
           >
             {t.ui.tryAgain}
           </button>
@@ -640,7 +640,7 @@ function TestBox() {
           type="button"
           disabled={loading || !query.trim()}
           onClick={run}
-          className="rounded-md bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-500 disabled:opacity-50 sm:shrink-0"
+          className="border border-[var(--lg-rule)] px-4 py-2 font-display text-[0.75rem] uppercase tracking-[0.08em] text-[var(--lg-ink)] transition-colors duration-150 hover:bg-[var(--lg-field-2)] disabled:border-[var(--lg-hair)] disabled:text-[var(--lg-ink-3)] disabled:hover:bg-transparent sm:shrink-0"
         >
           {loading ? "Searching…" : "Test"}
         </button>

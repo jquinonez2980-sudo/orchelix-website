@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
+  type OverviewBucket,
   fetchOverview,
   fetchUsage,
   type OverviewResponse,
@@ -232,6 +233,91 @@ function AfterHoursHero({
   );
 }
 
+/* The week, ruled. Rows are close-set, the figure is tabular and right-set
+   against its own column, and a quiet week reads as a legible zero rather
+   than an empty box. */
+function WeekRegister({ cur, prev }: { cur: OverviewBucket; prev: OverviewBucket }) {
+  const rows = [
+    {
+      label: "Calls answered",
+      value: cur.calls_answered,
+      delta: computeDelta(cur.calls_answered, prev.calls_answered),
+      note: "Picked up by Esmi on your line",
+    },
+    {
+      label: "Appointments booked",
+      value: cur.appointments_booked,
+      delta: computeDelta(cur.appointments_booked, prev.appointments_booked),
+      note: "Written straight to your calendar",
+    },
+    {
+      label: "Leads routed to you",
+      value: cur.leads_escalated,
+      delta: computeDelta(cur.leads_escalated, prev.leads_escalated),
+      note: "Callers Esmi flagged for a person",
+    },
+    {
+      label: "Web chats",
+      value: cur.web_chats,
+      delta: computeDelta(cur.web_chats, prev.web_chats),
+      note: "Conversations from your website",
+    },
+  ];
+  const quiet = rows.every((r) => r.value === 0);
+
+  return (
+    <section
+      className="border border-[var(--lg-hair)] bg-[var(--lg-field)]"
+      style={{ borderTop: "2px solid var(--lg-rule)" }}
+    >
+      <div className="flex items-baseline justify-between px-5 pt-4">
+        <h2 className="font-display text-base font-semibold uppercase tracking-tight text-[var(--lg-ink)]">
+          This week
+        </h2>
+        <p className="font-mono text-[0.625rem] uppercase tracking-[0.13em] text-[var(--lg-ink-3)]">
+          vs prior 7 days
+        </p>
+      </div>
+
+      <dl className="mt-3">
+        {rows.map((row) => (
+          <div
+            key={row.label}
+            className="flex items-baseline gap-4 border-t border-[var(--lg-hair-2)] px-5 py-3"
+          >
+            <dt className="min-w-0 flex-1">
+              <span className="font-mono text-[0.6875rem] uppercase tracking-[0.13em] text-[var(--lg-ink-2)]">
+                {row.label}
+              </span>
+              <span className="ml-3 hidden text-xs text-[var(--lg-ink-3)] sm:inline">
+                {row.note}
+              </span>
+            </dt>
+            <dd className="shrink-0 text-right">
+              <span className="font-display text-[1.5rem] font-bold leading-none tabular-nums text-[var(--lg-ink)]">
+                {row.value}
+              </span>
+            </dd>
+            <dd className="w-28 shrink-0 text-right">
+              <DeltaLine delta={row.delta} />
+            </dd>
+          </div>
+        ))}
+      </dl>
+
+      {quiet && (
+        <p
+          className="border-t px-5 py-3 text-xs text-[var(--lg-ink-2)]"
+          style={{ borderTopColor: "var(--lg-rule)" }}
+        >
+          A quiet week on the line. Esmi is answering — these fill in as calls
+          and chats come through.
+        </p>
+      )}
+    </section>
+  );
+}
+
 function SkeletonTiles() {
   return (
     <div className="space-y-4">
@@ -334,35 +420,12 @@ export default function Overview() {
       {/* Primary surface: dense live register from calls + chats APIs */}
       <NightRegister />
 
-      {/* Secondary: four owner-relevant KPIs — not a six-tile farm */}
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <DeltaTile
-          label="Calls answered"
-          value={String(cur.calls_answered)}
-          delta={computeDelta(cur.calls_answered, prev.calls_answered)}
-        />
-        <DeltaTile
-          label="Appointments booked"
-          value={String(cur.appointments_booked)}
-          delta={computeDelta(cur.appointments_booked, prev.appointments_booked)}
-        />
-        <DeltaTile
-          label="Leads routed to you"
-          value={String(cur.leads_escalated)}
-          delta={computeDelta(cur.leads_escalated, prev.leads_escalated)}
-          note="Callers Esmi flagged for a human follow-up"
-        />
-        <DeltaTile
-          label="Web chats"
-          value={String(cur.web_chats)}
-          delta={computeDelta(cur.web_chats, prev.web_chats)}
-          note={
-            cur.web_chats === 0 && prev.web_chats === 0
-              ? "Conversations from your website chat will show up here"
-              : undefined
-          }
-        />
-      </div>
+      {/* The week's figures as a ruled register, not a tile row. Four
+          identical boxes of label-number-caption is the card farm the whole
+          world refuses — and on a quiet week it renders as four zeros in
+          four boxes, which reads as broken rather than ready. A ledger rules
+          its figures into a column and tallies at the foot. */}
+      <WeekRegister cur={cur} prev={prev} />
 
       <div className="grid gap-4 lg:grid-cols-2">
         <LanguageMixSection mix={cur.language_mix} />
