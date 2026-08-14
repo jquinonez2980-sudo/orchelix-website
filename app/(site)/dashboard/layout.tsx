@@ -26,6 +26,16 @@ export const metadata: Metadata = {
      marketing site. Linked from this layout only so only /dashboard is
      installable. Theme/background match DESIGN.md field (#FFFFFF). */
   manifest: "/esmi-dashboard.webmanifest",
+  /* The installed app is Esmi, not Orchelix. Without this the dashboard
+     inherits the marketing site's helix icons and an iPhone home screen shows
+     the wrong brand. The marketing tab icon is deliberately untouched. */
+  icons: {
+    icon: [
+      { url: "/esmi-app-192.png", type: "image/png", sizes: "192x192" },
+      { url: "/esmi-app-48.png", type: "image/png", sizes: "48x48" },
+    ],
+    apple: [{ url: "/esmi-app-180.png", sizes: "180x180" }],
+  },
   appleWebApp: {
     capable: true,
     title: "Esmi Dashboard",

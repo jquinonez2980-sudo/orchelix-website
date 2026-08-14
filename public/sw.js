@@ -16,9 +16,8 @@ const OFFLINE_URL = "/esmi-offline.html";
 const PRECACHE_URLS = [
   OFFLINE_URL,
   "/esmi-dashboard.webmanifest",
-  "/icon-96.png",
-  "/icon-192.png",
-  "/apple-touch-icon.png",
+  "/esmi-app-192.png",
+  "/esmi-app-maskable-512.png",
 ];
 
 function isSameOrigin(url) {
@@ -181,8 +180,8 @@ async function showPushNotification(event) {
     body,
     tag,
     data: { url },
-    icon: "/icon-192.png",
-    badge: "/icon-96.png",
+    icon: "/esmi-app-192.png",
+    badge: "/esmi-app-96.png",
     lang: "en",
   });
 }

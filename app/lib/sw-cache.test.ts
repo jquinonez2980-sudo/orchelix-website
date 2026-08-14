@@ -45,3 +45,24 @@ test("service worker handles push and notificationclick", () => {
   assert.match(SW, /safeDashboardUrl/);
   assert.match(SW, /clients\.openWindow/);
 });
+
+test("the installed app carries the Esmi mark, not Orchelix's", () => {
+  // The dashboard installs as Esmi. It previously inherited the marketing
+  // site's helix icons, so a phone home screen showed the wrong brand.
+  const manifest = JSON.parse(
+    fs.readFileSync(path.join(ROOT, "public", "esmi-dashboard.webmanifest"), "utf8"),
+  );
+  assert.ok(manifest.icons.length > 0);
+  for (const icon of manifest.icons) {
+    assert.match(icon.src, /^\/esmi-app-/, `manifest icon ${icon.src} is not an Esmi icon`);
+    assert.ok(
+      fs.existsSync(path.join(ROOT, "public", icon.src.replace(/^\//, ""))),
+      `manifest references a missing file: ${icon.src}`,
+    );
+  }
+  // Android crops maskable icons to a circle; one must be drawn for that.
+  assert.ok(manifest.icons.some((i) => i.purpose === "maskable"));
+  // The service worker's precache and notification icons too.
+  assert.doesNotMatch(SW, /["']\/icon-\d+\.png["']/);
+  assert.doesNotMatch(SW, /apple-touch-icon/);
+});

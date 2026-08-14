@@ -1,11 +1,14 @@
 {
   "name": "Esmi Dashboard",
   "short_name": "Esmi",
-  "description": "Operator console for the Esmi AI receptionist — leads, calls, and missed transfers.",
+  "description": "Operator console for the Esmi AI receptionist \u2014 leads, calls, and missed transfers.",
   "start_url": "/dashboard",
   "scope": "/dashboard",
   "display": "standalone",
-  "display_override": ["standalone", "browser"],
+  "display_override": [
+    "standalone",
+    "browser"
+  ],
   "orientation": "any",
   "background_color": "#FFFFFF",
   "theme_color": "#FFFFFF",
@@ -14,38 +17,44 @@
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "/icon-48.png",
+      "src": "/esmi-app-48.png",
       "sizes": "48x48",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icon-96.png",
+      "src": "/esmi-app-96.png",
       "sizes": "96x96",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icon-144.png",
+      "src": "/esmi-app-144.png",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/apple-touch-icon.png",
+      "src": "/esmi-app-180.png",
       "sizes": "180x180",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icon-192.png",
+      "src": "/esmi-app-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icon-192.png",
-      "sizes": "192x192",
+      "src": "/esmi-app-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/esmi-app-maskable-512.png",
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
