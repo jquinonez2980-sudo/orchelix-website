@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import NotificationsSettings from "./NotificationsSettings";
 import SettingsForm from "./SettingsForm";
 import VersionHistory from "./VersionHistory";
 
@@ -13,6 +14,7 @@ export default function SettingsPanels() {
   return (
     <div className="space-y-6">
       <SettingsForm onSaved={() => setVersionBump((n) => n + 1)} />
+      <NotificationsSettings />
       <VersionHistory reloadSignal={versionBump} />
     </div>
   );

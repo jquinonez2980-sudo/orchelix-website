@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { ClerkProvider, OrganizationSwitcher } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { ADMIN_ORG_SLUG } from "@/app/lib/platformProxy";
@@ -22,6 +22,19 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Esmi Dashboard",
   robots: { index: false, follow: false },
+  /* Static file, not app/manifest.ts: a root manifest would attach to the
+     marketing site. Linked from this layout only so only /dashboard is
+     installable. Theme/background match DESIGN.md field (#FFFFFF). */
+  manifest: "/esmi-dashboard.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: "Esmi Dashboard",
+    statusBarStyle: "default",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#FFFFFF",
 };
 
 function OrgGate() {

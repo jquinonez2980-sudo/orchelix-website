@@ -8,12 +8,16 @@ import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import { clerkWidgetAppearance } from "@/app/lib/clerkAppearance";
 import { Menu, X } from "lucide-react";
 import DraftModeBanner from "./DraftModeBanner";
+import InstallControl from "@/app/components/pwa/InstallControl";
 import { track } from "@/app/lib/analytics";
+import { registerDashboardSW } from "@/app/lib/pwa";
+import { restorePushSubscription } from "@/app/lib/push";
 import {
   groupLabel,
   navLabel,
   useDashI18n,
 } from "./i18n";
+import { useActiveOrgSlug } from "./useActiveOrgSlug";
 import {
   isNavItemActive,
   visibleNavGroups,
@@ -161,8 +165,18 @@ export default function DashboardShell({
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const { t, locale, setLocale } = useDashI18n();
+  const orgSlug = useActiveOrgSlug();
   const close = () => setOpen(false);
   const groups = visibleNavGroups(isOrchelixStaff);
+
+  useEffect(() => {
+    registerDashboardSW();
+  }, []);
+
+  useEffect(() => {
+    if (!orgSlug) return;
+    void restorePushSubscription();
+  }, [orgSlug]);
 
   useEffect(() => {
     if (!open) return;
@@ -214,6 +228,7 @@ export default function DashboardShell({
             >
               {t.switchTo}
             </button>
+            <InstallControl />
             {/* Point "Create organization" at our own signup wizard instead
                 of Clerk's generic dialog. An org created through that dialog
                 picks its own slug, which would match no Esmi tenant, so every

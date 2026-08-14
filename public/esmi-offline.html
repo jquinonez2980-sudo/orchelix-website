@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#FFFFFF" />
+    <meta name="color-scheme" content="light" />
+    <title>Esmi — Offline</title>
+    <style>
+      :root {
+        --field: #ffffff;
+        --ink: #2e323e;
+        --ink-2: rgba(46, 50, 62, 0.8);
+        --ink-3: rgba(46, 50, 62, 0.72);
+        --rule: rgba(46, 50, 62, 0.55);
+        --foil: #b7135a;
+        --foil-ink: #ffffff;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        background: var(--field);
+        color: var(--ink);
+      }
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.25rem;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+      }
+      main {
+        width: 100%;
+        max-width: 28rem;
+        border-top: 2px solid var(--rule);
+        padding-top: 1.6rem;
+      }
+      .kicker {
+        margin: 0 0 0.5rem;
+        font-family: ui-monospace, monospace;
+        font-size: 0.625rem;
+        font-weight: 400;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+      }
+      h1 {
+        margin: 0 0 0.75rem;
+        font-size: 1.25rem;
+        font-weight: 700;
+        letter-spacing: -0.008em;
+        line-height: 1.2;
+        text-transform: uppercase;
+      }
+      .lede {
+        margin: 0 0 1.6rem;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1rem;
+        line-height: 1.62;
+        color: var(--ink-2);
+        max-width: 40ch;
+      }
+      a {
+        display: inline-block;
+        background: var(--foil);
+        color: var(--foil-ink);
+        font-size: 0.9375rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        line-height: 1;
+        text-transform: uppercase;
+        text-decoration: none;
+        padding: 0.95rem 1.7rem;
+      }
+      a:focus-visible {
+        outline: 2px solid var(--foil);
+        outline-offset: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="kicker" id="kicker">Esmi Dashboard</p>
+      <h1 id="title">You&rsquo;re offline</h1>
+      <p class="lede" id="lede">
+        This device can&rsquo;t reach Esmi right now. Check the connection and
+        try again. Nothing here is a saved copy of your business data.
+      </p>
+      <a id="retry" href="/dashboard">Try again</a>
+    </main>
+    <script>
+      try {
+        if (localStorage.getItem("esmi:dash-locale") === "es") {
+          document.documentElement.lang = "es";
+          document.title = "Esmi — Sin conexión";
+          document.getElementById("title").textContent = "Sin conexión";
+          document.getElementById("lede").textContent =
+            "Este dispositivo no puede llegar a Esmi ahora. Revisa la conexión e inténtalo de nuevo. Aquí no hay una copia guardada de los datos de tu negocio.";
+          document.getElementById("retry").textContent = "Reintentar";
+        }
+      } catch (e) {
+        /* private mode / blocked storage */
+      }
+    </script>
+  </body>
+</html>
