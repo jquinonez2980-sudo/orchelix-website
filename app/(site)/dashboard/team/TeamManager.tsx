@@ -119,7 +119,7 @@ function InviteForm({
         </button>
       </div>
       {error && <p className="mt-2 text-sm text-rose-600">{error}</p>}
-      {!error && sent && <p className="mt-2 text-sm text-teal-700">Invite sent.</p>}
+      {!error && sent && <p className="mt-2 text-sm text-[var(--lg-ink-2)] hover:text-[var(--lg-ink)]">Invite sent.</p>}
     </div>
   );
 }
@@ -316,7 +316,7 @@ export default function TeamManager() {
 
   if (!isLoaded || !authLoaded) {
     return (
-      <div className="animate-pulse space-y-4 rounded-lg border border-line bg-surface p-6 shadow-sm">
+      <div className="space-y-4 rounded-lg border border-line bg-surface p-6 shadow-sm">
         <div className="h-4 w-40 rounded bg-surface-2" />
         <div className="h-9 w-full rounded bg-surface-2" />
         <div className="h-9 w-full rounded bg-surface-2" />

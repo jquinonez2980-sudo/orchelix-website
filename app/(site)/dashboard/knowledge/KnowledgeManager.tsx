@@ -224,7 +224,7 @@ function AddEntryForm({ onAdded }: { onAdded: (entry: KnowledgeEntry) => void })
         </button>
         {error && <span className="text-sm text-rose-600">{error}</span>}
         {!error && justAdded && (
-          <span className="text-sm text-teal-700">{t.ui.addedOk}</span>
+          <span className="text-sm text-[var(--lg-ink-2)] hover:text-[var(--lg-ink)]">{t.ui.addedOk}</span>
         )}
       </div>
     </div>
@@ -380,7 +380,7 @@ function SkeletonRows() {
     <div>
       {Array.from({ length: 3 }).map((_, i) => (
         <div key={i} className="border-t border-line px-4 py-3 first:border-t-0 sm:px-6">
-          <div className="animate-pulse space-y-2">
+          <div className="space-y-2">
             <div className="h-4 w-1/3 rounded bg-surface-2" />
             <div className="h-3 w-full rounded bg-surface-2" />
             <div className="h-3 w-2/3 rounded bg-surface-2" />
@@ -502,7 +502,7 @@ function PdfUploadForm({ onUploaded }: { onUploaded: (entry: KnowledgePdfEntry) 
       </div>
       {error && <p className="mt-2 text-sm text-rose-600">{error}</p>}
       {!error && uploadedName && !uploading && (
-        <p className="mt-2 text-sm text-teal-700">
+        <p className="mt-2 text-sm text-[var(--lg-ink-2)] hover:text-[var(--lg-ink)]">
           &quot;{uploadedName}&quot; — {t.ui.addedOk}
         </p>
       )}
@@ -686,7 +686,7 @@ export default function KnowledgeManager() {
     <div className="space-y-6">
       <p className="text-sm text-ink-3">
         Looking to change your prices?{" "}
-        <Link href="/dashboard/settings" className="text-teal-700 hover:underline">
+        <Link href="/dashboard/settings" className="text-[var(--lg-ink-2)] hover:text-[var(--lg-ink)] hover:underline">
           Manage prices in Settings →
         </Link>
       </p>

@@ -39,7 +39,7 @@ function DeltaLine({ delta, invert = false }: { delta: Delta; invert?: boolean }
   }
   if (delta.kind === "new") {
     return (
-      <p className={`text-xs font-medium ${invert ? "text-teal-300" : "text-teal-700"}`}>
+      <p className={`text-xs font-medium ${invert ? "text-teal-300" : "text-[var(--lg-ink-2)] hover:text-[var(--lg-ink)]"}`}>
         New {period}
       </p>
     );
@@ -50,7 +50,7 @@ function DeltaLine({ delta, invert = false }: { delta: Delta; invert?: boolean }
       ? "text-teal-300"
       : "text-navy-200"
     : up
-      ? "text-teal-700"
+      ? "text-[var(--lg-ink-2)] hover:text-[var(--lg-ink)]"
       : "text-rose-600";
   return (
     <p className={`text-xs font-medium ${cls}`}>
@@ -87,7 +87,9 @@ function ChecklistRow({ done, label }: { done: boolean; label: string }) {
       <span
         aria-hidden
         className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${
-          done ? "bg-teal-500 text-white" : "border border-line bg-surface text-transparent"
+          done
+            ? "bg-[var(--lg-ink)] text-[var(--lg-field)]"
+            : "border border-[var(--lg-rule-quiet)] bg-[var(--lg-field)] text-transparent"
         }`}
       >
         {done ? "✓" : "•"}
@@ -165,7 +167,7 @@ function LanguageMixSection({ mix }: { mix: OverviewResponse["current"]["languag
                   </div>
                   <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-surface-2">
                     <div
-                      className="h-full rounded-full bg-navy-600"
+                      className="h-full bg-[var(--lg-ink)]"
                       style={{ width: `${pct}%` }}
                     />
                   </div>
@@ -204,15 +206,22 @@ function AfterHoursHero({
 }) {
   const { t } = useDashI18n();
   return (
-    <section className="bg-navy-600 p-6 sm:p-8">
-      <p className="text-sm font-medium text-teal-300">{t.overview.afterHours}</p>
-      <div className="mt-2 flex flex-wrap items-end gap-x-6 gap-y-2">
-        <p className="text-4xl font-semibold leading-none text-white sm:text-5xl">{value}</p>
-        <div className="pb-1">
-          <DeltaLine delta={computeDelta(value, prev)} invert />
+    <section
+      className="border-t-2 bg-[var(--lg-field-2)] p-6 sm:p-8"
+      style={{ borderTopColor: "var(--lg-rule)" }}
+    >
+      <p className="font-mono text-[0.625rem] uppercase tracking-[0.13em] text-[var(--lg-ink-3)]">
+        {t.overview.afterHours}
+      </p>
+      <div className="mt-3 flex flex-wrap items-end gap-x-6 gap-y-2">
+        <p className="font-display text-[3.25rem] font-bold leading-[0.94] tracking-[-0.028em] text-[var(--lg-ink)] tabular-nums sm:text-[4rem]">
+          {value}
+        </p>
+        <div className="pb-2">
+          <DeltaLine delta={computeDelta(value, prev)} />
         </div>
       </div>
-      <p className="mt-3 max-w-xl text-sm leading-6 text-navy-100">
+      <p className="mt-3 max-w-xl text-sm leading-6 text-[var(--lg-ink-2)]">
         {quiet
           ? "Esmi is on duty around the clock. The moment someone calls while you're closed, it's answered — and counted here."
           : value > 0
@@ -226,10 +235,10 @@ function AfterHoursHero({
 function SkeletonTiles() {
   return (
     <div className="space-y-4">
-      <div className="h-44 animate-pulse bg-surface-2" />
+      <div className="h-44 bg-[var(--lg-field-2)]" />
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-32 animate-pulse bg-surface-2" />
+          <div key={i} className="h-32 bg-[var(--lg-field-2)]" />
         ))}
       </div>
     </div>
@@ -293,7 +302,7 @@ export default function Overview() {
           <button
             type="button"
             onClick={() => setReloadKey((k) => k + 1)}
-            className="rounded-md bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-500"
+            className="border border-[var(--lg-rule)] px-4 py-2 font-display text-[0.75rem] uppercase tracking-[0.08em] text-[var(--lg-ink)] transition-colors duration-150 hover:bg-[var(--lg-field-2)]"
           >
             Try again
           </button>

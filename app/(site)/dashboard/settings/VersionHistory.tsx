@@ -163,7 +163,7 @@ function VersionRow({
           </div>
           <p className="mt-0.5 truncate text-sm text-ink-2">{v.summary}</p>
         </div>
-        <span className="shrink-0 text-xs font-medium text-teal-700">
+        <span className="shrink-0 text-xs font-medium text-[var(--lg-ink-2)]">
           {expanded ? "Hide" : "View"}
         </span>
       </button>
@@ -185,7 +185,7 @@ function SkeletonRows() {
     <div>
       {Array.from({ length: 3 }).map((_, i) => (
         <div key={i} className="border-t border-line px-4 py-3 first:border-t-0 sm:px-6">
-          <div className="flex animate-pulse items-center gap-3">
+          <div className="flex items-center gap-3">
             <div className="h-4 w-8 rounded bg-surface-2" />
             <div className="h-3 w-28 rounded bg-surface-2" />
             <div className="h-3 flex-1 rounded bg-surface-2" />
@@ -232,7 +232,7 @@ export default function VersionHistory({ reloadSignal }: { reloadSignal?: number
         <button
           type="button"
           onClick={() => setReloadKey((k) => k + 1)}
-          className="shrink-0 rounded-md px-3 py-1.5 text-xs font-medium text-teal-700 hover:bg-teal-50"
+          className="shrink-0 text-[0.75rem] font-medium text-[var(--lg-ink-2)] underline-offset-4 hover:text-[var(--lg-ink)] hover:underline"
         >
           Refresh
         </button>
@@ -244,7 +244,7 @@ export default function VersionHistory({ reloadSignal }: { reloadSignal?: number
           <button
             type="button"
             onClick={() => setReloadKey((k) => k + 1)}
-            className="mt-3 rounded-md bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-500"
+            className="mt-3 border border-[var(--lg-rule)] px-4 py-2 text-[0.75rem] font-display uppercase tracking-[0.08em] text-[var(--lg-ink)] transition-colors duration-150 hover:bg-[var(--lg-field-2)]"
           >
             Try again
           </button>

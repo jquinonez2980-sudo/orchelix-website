@@ -35,11 +35,11 @@ function DeltaLine({ delta }: { delta: Delta }) {
     return <p className="text-xs text-ink-4">— {period}</p>;
   }
   if (delta.kind === "new") {
-    return <p className="text-xs font-medium text-teal-700">New {period}</p>;
+    return <p className="text-xs font-medium text-[var(--lg-ink-2)] hover:text-[var(--lg-ink)]">New {period}</p>;
   }
   const up = delta.value > 0;
   return (
-    <p className={`text-xs font-medium ${up ? "text-teal-700" : "text-rose-600"}`}>
+    <p className={`text-xs font-medium ${up ? "text-[var(--lg-ink-2)] hover:text-[var(--lg-ink)]" : "text-rose-600"}`}>
       {up ? "↑" : "↓"} {Math.abs(delta.value)}% {period}
     </p>
   );
@@ -143,7 +143,7 @@ function SkeletonTiles() {
   return (
     <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
       {Array.from({ length: 4 }).map((_, i) => (
-        <div key={i} className="h-32 animate-pulse rounded-lg bg-surface-2" />
+        <div key={i} className="h-32 rounded-lg bg-surface-2" />
       ))}
     </div>
   );

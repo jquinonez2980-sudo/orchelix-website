@@ -83,7 +83,7 @@ function LeadScore({ score }: { score: number | null }) {
   if (score == null) return <span className="text-sm text-ink-4">—</span>;
   const warm = score >= 70;
   return (
-    <span className={`text-sm font-medium tabular-nums ${warm ? "text-teal-700" : "text-ink-2"}`}>
+    <span className={`text-sm font-medium tabular-nums ${warm ? "text-[var(--lg-ink-2)] hover:text-[var(--lg-ink)]" : "text-ink-2"}`}>
       {score}
     </span>
   );
@@ -242,7 +242,7 @@ function SkeletonRows() {
       {Array.from({ length: 6 }).map((_, i) => (
         <tr key={i} className="border-t border-line">
           <td colSpan={7} className="px-4 py-3 sm:px-6">
-            <div className="flex animate-pulse items-center gap-4">
+            <div className="flex items-center gap-4">
               <div className="h-4 w-24 rounded bg-surface-2" />
               <div className="h-5 w-16 rounded-full bg-surface-2" />
               <div className="h-4 w-32 rounded bg-surface-2" />
@@ -451,7 +451,7 @@ export default function LeadsInbox() {
               setSearch("");
               setPage(0);
             }}
-            className="h-9 rounded-md px-3 text-sm font-medium text-teal-700 hover:bg-teal-50"
+            className="h-9 rounded-md px-3 text-sm font-medium text-[var(--lg-ink-2)] hover:text-[var(--lg-ink)] hover:bg-[var(--lg-field-2)]"
           >
             {t.ui.clearFilters}
           </button>

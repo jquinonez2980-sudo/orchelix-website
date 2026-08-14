@@ -160,7 +160,7 @@ function Skeleton() {
   return (
     <ul className="space-y-2 bg-surface-2 p-3 sm:p-4">
       {Array.from({ length: 5 }).map((_, i) => (
-        <li key={i} className="h-20 animate-pulse rounded-lg bg-surface-2" />
+        <li key={i} className="h-20 rounded-lg bg-surface-2" />
       ))}
     </ul>
   );
@@ -289,7 +289,7 @@ export default function Appointments() {
           {data.appointments.map((a, i) => (
             <Fragment key={a.id}>
               {status === "all" && i === 0 && a.status === "upcoming" && (
-                <li className="pb-0.5 text-xs font-semibold uppercase tracking-wide text-teal-700">
+                <li className="pb-0.5 text-xs font-semibold uppercase tracking-wide text-[var(--lg-ink-2)] hover:text-[var(--lg-ink)]">
                   {t.ui.upcoming}
                 </li>
               )}

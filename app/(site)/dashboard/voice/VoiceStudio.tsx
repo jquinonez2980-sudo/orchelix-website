@@ -139,7 +139,7 @@ function VoiceCard({
             loud enough to compete with the voice name itself. */}
         <span className="mt-0.5 block text-[11px] uppercase tracking-[0.07em] text-ink-4">
           {personality}
-          {popular && <span className="text-teal-600"> · Popular</span>}
+          {popular && <span className="text-[var(--lg-ink-2)]"> · Popular</span>}
         </span>
         <span className="mt-1.5 block text-xs leading-5 text-ink-3">{tagline}</span>
       </span>
@@ -260,13 +260,13 @@ export default function VoiceStudio() {
   if (loading) {
     return (
       <div className="space-y-5">
-        <div className="h-[76px] animate-pulse rounded-xl bg-surface-2" />
+        <div className="h-[76px] rounded-xl bg-surface-2" />
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
           <div className="space-y-5 lg:col-span-7">
-            <div className="h-56 animate-pulse rounded-xl bg-surface-2" />
-            <div className="h-44 animate-pulse rounded-xl bg-surface-2" />
+            <div className="h-56 rounded-xl bg-surface-2" />
+            <div className="h-44 rounded-xl bg-surface-2" />
           </div>
-          <div className="h-96 animate-pulse rounded-xl bg-surface-2 lg:col-span-5" />
+          <div className="h-96 rounded-xl bg-surface-2 lg:col-span-5" />
         </div>
       </div>
     );
@@ -373,10 +373,10 @@ export default function VoiceStudio() {
       </span>
     );
   } else if (applyMessage) {
-    statusNode = <span className="text-teal-700">{applyMessage}</span>;
+    statusNode = <span className="text-[var(--lg-ink-2)] hover:text-[var(--lg-ink)]">{applyMessage}</span>;
   } else if (savedAt) {
     statusNode = (
-      <span className="flex items-center gap-2 text-teal-700">
+      <span className="flex items-center gap-2 text-[var(--lg-ink-2)] hover:text-[var(--lg-ink)]">
         <Check className="h-3.5 w-3.5" strokeWidth={2.5} />
         Saved
       </span>
@@ -497,7 +497,7 @@ export default function VoiceStudio() {
                 disabled={applyDisabled}
                 onClick={handleApply}
                 title={applyTooltip}
-                className="rounded-lg border border-teal-600 px-3.5 py-2 text-sm font-medium text-teal-700 transition-colors duration-150 hover:bg-teal-50 disabled:cursor-not-allowed disabled:border-line disabled:text-ink-4 disabled:hover:bg-transparent"
+                className="rounded-lg border border-teal-600 px-3.5 py-2 text-sm font-medium text-[var(--lg-ink-2)] hover:text-[var(--lg-ink)] transition-colors duration-150 hover:bg-[var(--lg-field-2)] disabled:cursor-not-allowed disabled:border-line disabled:text-ink-4 disabled:hover:bg-transparent"
               >
                 {applying ? "Applying…" : "Apply to live Esmi"}
               </button>

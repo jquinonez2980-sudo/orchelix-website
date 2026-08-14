@@ -1,5 +1,7 @@
 "use client";
 
+import Action from "../Action";
+
 import { useEffect, useState } from "react";
 import {
   fetchConfig,
@@ -371,7 +373,7 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
 
   if (loading) {
     return (
-      <div className="animate-pulse space-y-4 rounded-lg border border-line bg-surface p-6 shadow-sm">
+      <div className="space-y-4 rounded-lg border border-line bg-surface p-6 shadow-sm">
         <div className="h-4 w-40 rounded bg-surface-2" />
         <div className="h-9 w-full rounded bg-surface-2" />
         <div className="h-9 w-full rounded bg-surface-2" />
@@ -632,7 +634,7 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
           <button
             type="button"
             onClick={addService}
-            className="rounded-md px-3 py-1.5 text-sm font-medium text-teal-700 hover:bg-teal-50"
+            className="text-[0.8125rem] font-medium text-[var(--lg-ink-2)] underline-offset-4 hover:text-[var(--lg-ink)] hover:underline"
           >
             {t.ui.addService}
           </button>
@@ -640,20 +642,23 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
       </Section>
 
       <div className="flex items-center gap-3 border-t border-line bg-surface-2 px-4 py-4 sm:px-6">
-        <button
-          type="button"
-          disabled={!dirty || saving || tzBlocked}
+        {/* The one primary on this page. Everything else is secondary or
+            quiet — see Action.tsx on the Stamp Scarcity Rule. */}
+        <Action
+          weight="primary"
+          disabled={!dirty || tzBlocked}
+          pending={saving}
+          pendingLabel={t.ui.saving}
           onClick={handleSave}
-          className="rounded-md bg-navy-600 px-4 py-2 text-sm font-medium text-white hover:bg-navy-500 disabled:opacity-50"
         >
-          {saving ? t.ui.saving : t.ui.saveChanges}
-        </button>
+          {t.ui.saveChanges}
+        </Action>
         {tzBlocked && (
           <span className="text-sm text-amber-800">{t.ui.confirmTz}</span>
         )}
         {saveError && <span className="text-sm text-rose-600">{saveError}</span>}
         {!saveError && savedAt && !dirty && (
-          <span className="text-sm text-teal-700">{t.ui.saved}</span>
+          <span className="text-sm text-[var(--lg-ink-2)]">{t.ui.saved}</span>
         )}
         {dirty && !saving && <span className="text-sm text-ink-4">{t.ui.unsaved}</span>}
       </div>

@@ -225,7 +225,7 @@ export default function NightRegister() {
           <ul className="divide-y divide-line">
             {Array.from({ length: 5 }).map((_, i) => (
               <li key={i} className="py-3">
-                <div className="h-10 animate-pulse rounded bg-surface-2" />
+                <div className="h-10 rounded bg-surface-2" />
               </li>
             ))}
           </ul>

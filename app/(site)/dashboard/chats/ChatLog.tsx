@@ -91,7 +91,7 @@ function TranscriptView({ detail }: { detail: ChatDetail }) {
         return (
           <p key={i} className="text-ink-2">
             <span
-              className={`mr-1.5 font-semibold ${isAgent ? "text-teal-700" : "text-navy-500"}`}
+              className={`mr-1.5 font-semibold ${isAgent ? "text-[var(--lg-ink-2)] hover:text-[var(--lg-ink)]" : "text-navy-500"}`}
             >
               {isAgent ? "Esmi" : t.ui.visitor}
             </span>
@@ -208,7 +208,7 @@ function ChatDetailPanel({ chatId }: { chatId: string }) {
           {t.ui.transcript}
         </p>
         {loading ? (
-          <div className="animate-pulse space-y-2">
+          <div className="space-y-2">
             <div className="h-4 w-2/3 rounded bg-surface-2" />
             <div className="h-4 w-1/2 rounded bg-surface-2" />
             <div className="h-4 w-3/5 rounded bg-surface-2" />
@@ -333,7 +333,7 @@ function SkeletonRows() {
       {Array.from({ length: 6 }).map((_, i) => (
         <tr key={i} className="border-t border-line">
           <td colSpan={6} className="px-4 py-3 sm:px-6">
-            <div className="flex animate-pulse items-center gap-4">
+            <div className="flex items-center gap-4">
               <div className="h-4 w-32 rounded bg-surface-2" />
               <div className="h-4 w-28 rounded bg-surface-2" />
               <div className="h-4 w-10 rounded bg-surface-2" />
@@ -503,7 +503,7 @@ export default function ChatLog() {
           <button
             type="button"
             onClick={resetFilters}
-            className="h-9 rounded-md px-3 text-sm font-medium text-teal-700 hover:bg-teal-50"
+            className="h-9 rounded-md px-3 text-sm font-medium text-[var(--lg-ink-2)] hover:text-[var(--lg-ink)] hover:bg-[var(--lg-field-2)]"
           >
             {t.ui.clearFilters}
           </button>

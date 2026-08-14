@@ -141,7 +141,7 @@ export default function QualityStudio() {
        tokens, same mono-eyebrow register — one design system, lower rank. */
     <section className="border-t border-line pt-6">
       <div className="flex items-center gap-2">
-        <Sparkles className="h-3.5 w-3.5 text-teal-500" strokeWidth={2} />
+        <Sparkles className="h-3.5 w-3.5 text-[var(--lg-ink-2)]" strokeWidth={2} />
         <span className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-ink-4">
           Quality Studio
         </span>

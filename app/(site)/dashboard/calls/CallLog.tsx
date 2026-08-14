@@ -106,7 +106,7 @@ function TranscriptView({ call }: { call: PlatformCall }) {
           return (
             <p key={i} className="text-ink-2">
               <span
-                className={`mr-1.5 font-semibold ${isAgent ? "text-teal-700" : "text-navy-500"}`}
+                className={`mr-1.5 font-semibold ${isAgent ? "text-[var(--lg-ink-2)] hover:text-[var(--lg-ink)]" : "text-navy-500"}`}
               >
                 {isAgent ? "Esmi" : "Caller"}
               </span>
@@ -132,7 +132,7 @@ function TranscriptView({ call }: { call: PlatformCall }) {
         return (
           <p key={i} className="text-ink-2">
             <span
-              className={`mr-1.5 font-semibold ${isAgent ? "text-teal-700" : "text-navy-500"}`}
+              className={`mr-1.5 font-semibold ${isAgent ? "text-[var(--lg-ink-2)] hover:text-[var(--lg-ink)]" : "text-navy-500"}`}
             >
               {isAgent ? "Esmi" : "Caller"}
             </span>
@@ -190,7 +190,7 @@ function WhatsAppDownloadButton({ callId }: { callId: string }) {
         className={
           "inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md " +
           "bg-teal-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm " +
-          "hover:bg-teal-500 enabled:active:bg-teal-700 " +
+          "hover:bg-[var(--lg-field-2)]0 enabled:active:bg-teal-700 " +
           "disabled:cursor-wait disabled:opacity-60"
         }
       >
@@ -423,7 +423,7 @@ function SkeletonRows() {
       {Array.from({ length: 6 }).map((_, i) => (
         <tr key={i} className="border-t border-line">
           <td colSpan={7} className="px-4 py-3 sm:px-6">
-            <div className="flex animate-pulse items-center gap-4">
+            <div className="flex items-center gap-4">
               <div className="h-4 w-32 rounded bg-surface-2" />
               <div className="h-4 w-28 rounded bg-surface-2" />
               <div className="h-4 w-12 rounded bg-surface-2" />
@@ -718,7 +718,7 @@ export default function CallLog() {
           <button
             type="button"
             onClick={resetFilters}
-            className="h-9 rounded-md px-3 text-sm font-medium text-teal-700 hover:bg-teal-50"
+            className="h-9 rounded-md px-3 text-sm font-medium text-[var(--lg-ink-2)] hover:text-[var(--lg-ink)] hover:bg-[var(--lg-field-2)]"
           >
             {t.ui.clearFilters}
           </button>

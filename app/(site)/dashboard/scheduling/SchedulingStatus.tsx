@@ -75,8 +75,8 @@ function HoursRow({ hours }: { hours: SchedulingLocationHours }) {
 function SkeletonCards() {
   return (
     <div className="space-y-4">
-      <div className="h-40 animate-pulse rounded-lg bg-surface-2" />
-      <div className="h-32 animate-pulse rounded-lg bg-surface-2" />
+      <div className="h-40 rounded-lg bg-surface-2" />
+      <div className="h-32 rounded-lg bg-surface-2" />
     </div>
   );
 }
@@ -183,7 +183,7 @@ export default function SchedulingStatus() {
           )}
         </div>
         <div className="border-t border-line px-4 py-3 sm:px-6">
-          <Link href="/dashboard/settings" className="text-sm text-teal-700 hover:underline">
+          <Link href="/dashboard/settings" className="text-sm text-[var(--lg-ink-2)] hover:text-[var(--lg-ink)] hover:underline">
             Edit hours in Settings →
           </Link>
         </div>

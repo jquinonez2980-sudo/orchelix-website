@@ -255,9 +255,12 @@ export default function VoicePreviewPlayer({
           }
         >
           {status === "loading" ? (
+            /* A held mark, not a spinner. DESIGN.md forbids `infinite` on
+               anything asserting a system state; the button is disabled and
+               labelled while loading, so the state is legible without motion. */
             <span
               aria-hidden
-              className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white"
+              className="h-3.5 w-3.5 border-2 border-current opacity-60"
             />
           ) : status === "playing" ? (
             <Pause className="h-4 w-4" fill="currentColor" strokeWidth={0} />

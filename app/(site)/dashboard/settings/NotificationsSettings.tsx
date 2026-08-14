@@ -236,7 +236,7 @@ export default function NotificationsSettings() {
                     type="button"
                     onClick={() => void onEnable()}
                     disabled={busy || iosNeedsStandalone}
-                    className="h-10 bg-navy-600 px-4 text-sm font-medium text-white hover:bg-navy-500 disabled:opacity-50"
+                    className="h-10 border border-[var(--lg-rule)] px-4 text-[0.75rem] font-display uppercase tracking-[0.08em] text-[var(--lg-ink)] transition-colors duration-150 hover:bg-[var(--lg-field-2)] disabled:border-[var(--lg-hair)] disabled:text-[var(--lg-ink-3)] disabled:hover:bg-transparent"
                   >
                     {busy ? t.working : t.enable}
                   </button>

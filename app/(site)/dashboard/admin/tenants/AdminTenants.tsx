@@ -325,7 +325,7 @@ export default function AdminTenants() {
   }
 
   if (!rows) {
-    return <div className="h-64 animate-pulse rounded-lg bg-surface-2" />;
+    return <div className="h-64 rounded-lg bg-surface-2" />;
   }
 
   return (

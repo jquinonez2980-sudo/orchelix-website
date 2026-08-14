@@ -140,8 +140,8 @@ function ComingSoonSection() {
 function SkeletonCards() {
   return (
     <div className="space-y-4">
-      <div className="h-44 animate-pulse rounded-lg bg-surface-2" />
-      <div className="h-32 animate-pulse rounded-lg bg-surface-2" />
+      <div className="h-44 rounded-lg bg-surface-2" />
+      <div className="h-32 rounded-lg bg-surface-2" />
     </div>
   );
 }

@@ -80,7 +80,7 @@ export default function VoiceOnboardingStep() {
 
   if (loading) {
     return (
-      <div className="animate-pulse space-y-4 rounded-lg border border-line bg-surface p-6 shadow-sm">
+      <div className="space-y-4 rounded-lg border border-line bg-surface p-6 shadow-sm">
         <div className="h-4 w-40 rounded bg-surface-2" />
         <div className="h-24 w-full rounded bg-surface-2" />
       </div>
