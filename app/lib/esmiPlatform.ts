@@ -41,8 +41,6 @@ export type PlatformCall = {
   summary: string | null;
   transcript: CallTranscript;
   recording_url: string | null;
-  cost_vapi: number | null;
-  cost_llm: number | null;
 };
 
 export type CallsResponse = {
@@ -806,8 +804,6 @@ export type UsageResponse = {
   period_end: string; // ISO timestamp, now
   calls: number;
   minutes: number;
-  cost_vapi: number | null;
-  cost_llm: number | null;
   plan: PlanUsage;
   weekly: WeeklyUsage;
 };

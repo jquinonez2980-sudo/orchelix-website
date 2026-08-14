@@ -212,26 +212,19 @@ export default function Usage() {
 
   if (!data) return <SkeletonTiles />;
 
-  const totalCost =
-    data.cost_vapi != null || data.cost_llm != null
-      ? (data.cost_vapi ?? 0) + (data.cost_llm ?? 0)
-      : null;
-
   return (
     <div className="space-y-4">
       {data.plan.status && data.plan.status !== "ok" && <LimitBanner plan={data.plan} />}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      {/* Three tiles, not four: the "Estimated cost" tile showed Orchelix's
+          VAPI + LLM spend, which is our supplier cost, not the client's bill.
+          It now lives on the super-admin economics view instead. */}
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
         <Tile label="Plan" value={data.plan.label} />
         <Tile label="Calls" value={data.calls.toLocaleString()} />
         <div className="rounded-lg border border-line bg-surface p-5 shadow-sm">
           <p className="text-sm text-ink-3">Voice minutes used</p>
           <MinutesProgress minutes={data.minutes} plan={data.plan} />
         </div>
-        <Tile
-          label="Estimated cost"
-          value={totalCost != null ? `$${totalCost.toFixed(2)}` : "—"}
-          note="VAPI + LLM, not what you're billed"
-        />
       </div>
       <p className="text-xs text-ink-4">
         {formatMonth(data.period_start)} so far ({data.period_start} through today, in
