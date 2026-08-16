@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { SectionTitle } from "../PageTitle";
 import Action from "../Action";
 import Link from "next/link";
 import {
@@ -135,9 +136,9 @@ export default function SchedulingStatus() {
       <section className="overflow-hidden rounded-lg border border-line bg-surface shadow-sm">
         <div className="flex items-center justify-between border-b border-line px-4 py-4 sm:px-6">
           <div>
-            <h2 className="font-display text-base font-semibold text-ink">
+            <SectionTitle>
               Calendar connection
-            </h2>
+            </SectionTitle>
             <p className="mt-1 text-sm text-ink-3">
               {data.connected
                 ? "Esmi can read and write your calendar."
@@ -162,7 +163,7 @@ export default function SchedulingStatus() {
 
       <section className="overflow-hidden rounded-lg border border-line bg-surface shadow-sm">
         <div className="border-b border-line px-4 py-4 sm:px-6">
-          <h2 className="font-display text-base font-semibold text-ink">Booking hours</h2>
+          <SectionTitle>Booking hours</SectionTitle>
           <p className="mt-1 text-sm text-ink-3">
             Set in Settings — shown here read-only.
           </p>

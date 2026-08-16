@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { SectionTitle } from "../PageTitle";
 import Action from "../Action";
 import {
   fetchUsage,
@@ -75,9 +76,9 @@ function WeeklyDeltaSection({
 }) {
   return (
     <section>
-      <h2 className="font-display text-base font-semibold text-ink">
+      <SectionTitle>
         This week vs last week
-      </h2>
+      </SectionTitle>
       <div className="mt-3 grid grid-cols-2 gap-4">
         <Tile label="Calls answered" value={String(current.calls_answered)}>
           <div className="mt-1.5">
@@ -105,9 +106,9 @@ function OutcomeBreakdownSection({ bucket }: { bucket: WeeklyUsageBucket }) {
 
   return (
     <section>
-      <h2 className="font-display text-base font-semibold text-ink">
+      <SectionTitle>
         Calls by outcome (last 7 days)
-      </h2>
+      </SectionTitle>
       <div className="mt-3 rounded-lg border border-line bg-surface p-5 shadow-sm">
         {total === 0 ? (
           <p className="text-sm text-ink-3">No calls in the last 7 days.</p>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { SectionTitle } from "../PageTitle";
 import Action from "../Action";
 import {
   fetchAnalytics,
@@ -33,9 +34,9 @@ function VolumeChart({ days }: { days: AnalyticsDayCount[] }) {
   return (
     <section>
       <div className="flex items-baseline justify-between">
-        <h2 className="font-display text-base font-semibold text-ink">
+        <SectionTitle>
           Call volume (last {days.length} days)
-        </h2>
+        </SectionTitle>
         <span className="text-sm text-ink-3">{total} calls</span>
       </div>
       <div className="mt-3 rounded-lg border border-line bg-surface p-5 shadow-sm">
@@ -79,7 +80,7 @@ function LanguageMixSection({ mix }: { mix: LanguageMix }) {
 
   return (
     <section>
-      <h2 className="font-display text-base font-semibold text-ink">Language mix</h2>
+      <SectionTitle>Language mix</SectionTitle>
       <div className="mt-3 rounded-lg border border-line bg-surface p-5 shadow-sm">
         {total === 0 ? (
           <p className="text-sm text-ink-3">No calls in this window.</p>
@@ -130,9 +131,9 @@ const COMING_SOON = [
 function ComingSoonSection() {
   return (
     <section>
-      <h2 className="font-display text-base font-semibold uppercase tracking-tight text-ink">
+      <SectionTitle>
         Coming soon
-      </h2>
+      </SectionTitle>
       <div className="mt-3 border-t-2 border-[var(--lg-rule)]">
         {COMING_SOON.map((c) => (
           <article

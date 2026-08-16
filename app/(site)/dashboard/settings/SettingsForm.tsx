@@ -1,6 +1,7 @@
 "use client";
 
 import Action from "../Action";
+import { SectionTitle } from "../PageTitle";
 
 import { useEffect, useState } from "react";
 import {
@@ -190,7 +191,7 @@ function Section({
 }) {
   return (
     <div className="border-t border-line px-4 py-5 first:border-t-0 sm:px-6">
-      <h2 className="font-display text-base font-semibold text-ink">{title}</h2>
+      <SectionTitle>{title}</SectionTitle>
       {description && <p className="mt-1 text-sm text-ink-3">{description}</p>}
       <div className="mt-4 space-y-4">{children}</div>
     </div>

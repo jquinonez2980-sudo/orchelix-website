@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { SectionTitle } from "../PageTitle";
 import Action from "../Action";
 import Link from "next/link";
 import { useDashI18n } from "../i18n";
@@ -118,7 +119,7 @@ function Section({
   return (
     <div className="overflow-hidden rounded-lg border border-line bg-surface shadow-sm">
       <div className="border-b border-line px-4 py-4 sm:px-6">
-        <h2 className="font-display text-base font-semibold text-ink">{title}</h2>
+        <SectionTitle>{title}</SectionTitle>
         {description && <p className="mt-1 text-sm text-ink-3">{description}</p>}
       </div>
       {children}

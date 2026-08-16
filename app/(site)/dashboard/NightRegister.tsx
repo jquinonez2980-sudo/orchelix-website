@@ -4,6 +4,7 @@
    available) so the operator sees a real ledger, not a thin activity teaser. */
 
 import { useEffect, useState } from "react";
+import { SectionTitle } from "./PageTitle";
 import Link from "next/link";
 import {
   fetchCalls,
@@ -201,9 +202,9 @@ export default function NightRegister() {
     <section>
       <div className="flex flex-wrap items-end justify-between gap-2">
         <div>
-          <h2 className="font-display text-base font-semibold text-ink">
+          <SectionTitle>
             {t.overview.registerTitle}
-          </h2>
+          </SectionTitle>
           <p className="mt-0.5 text-xs text-ink-3">{t.overview.registerLede}</p>
         </div>
         <div className="flex gap-3 text-xs font-medium">

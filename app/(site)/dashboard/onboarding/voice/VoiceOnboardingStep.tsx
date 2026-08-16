@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import PageTitle, { PageLede } from "../../PageTitle";
+import PageTitle, { PageLede, SectionTitle } from "../../PageTitle";
 import { useRouter } from "next/navigation";
 import { Check } from "lucide-react";
 import {
@@ -158,7 +158,7 @@ export default function VoiceOnboardingStep() {
 
       <div className="overflow-hidden rounded-lg border border-line bg-surface shadow-sm">
         <div className="border-t border-line px-4 py-5 first:border-t-0 sm:px-6">
-          <h2 className="font-display text-base font-semibold text-ink">Phone greeting</h2>
+          <SectionTitle>Phone greeting</SectionTitle>
           <p className="mt-1 text-sm text-ink-3">
             Esmi opens with this line. Leave it blank to use the default opening below.
           </p>

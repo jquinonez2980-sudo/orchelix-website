@@ -31,6 +31,35 @@ export default function PageTitle({ children }: { children: ReactNode }) {
   );
 }
 
+/* The section heading inside a route — one level down from PageTitle.
+ *
+ * Nineteen of these were hand-set and fifteen were sentence case, which is the
+ * same drift as the `<h1>`s and falls under the same line of DESIGN.md. It
+ * only became visible when the "Coming soon" block on Analytics was rebuilt as
+ * an EntryList: its heading came out uppercase and sat directly beside "Call
+ * volume" and "Language mix", which had not. Fixing one heading on a page and
+ * leaving its siblings is how a surface ends up looking half-designed.
+ *
+ * `text-base` rather than the headline clamp — this is a label on a block
+ * inside a page, not the page's own title. */
+export function SectionTitle({
+  children,
+  /** For an `aria-labelledby` on the section this heading names. */
+  id,
+}: {
+  children: ReactNode;
+  id?: string;
+}) {
+  return (
+    <h2
+      id={id}
+      className="font-display text-base font-semibold uppercase tracking-tight text-ink"
+    >
+      {children}
+    </h2>
+  );
+}
+
 /* The standfirst under a PageTitle. Body face, sentence case, held to a ~60ch
    measure — DESIGN.md sets prose at 60ch and forbids body copy in the
    condensed display face. This shipped in five different variants (`mt-1`,

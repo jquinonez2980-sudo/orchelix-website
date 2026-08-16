@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { SectionTitle } from "../PageTitle";
 import { useDashI18n } from "../i18n";
 import { useActiveOrgSlug } from "../useActiveOrgSlug";
 import {
@@ -167,12 +168,7 @@ export default function NotificationsSettings() {
       aria-labelledby="notifications-heading"
     >
       <div className="px-4 py-5 sm:px-6">
-        <h2
-          id="notifications-heading"
-          className="font-display text-base font-semibold uppercase tracking-tight text-ink"
-        >
-          {t.title}
-        </h2>
+        <SectionTitle id="notifications-heading">{t.title}</SectionTitle>
         <p className="mt-1 max-w-2xl text-sm leading-6 text-ink-3">{t.lede}</p>
 
         {availability === "checking" && (

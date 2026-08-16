@@ -1,6 +1,7 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
+import { SectionTitle } from "../PageTitle";
 import { useEffect, useState } from "react";
 import {
   fetchConfigVersion,
@@ -223,7 +224,7 @@ export default function VersionHistory({ reloadSignal }: { reloadSignal?: number
     <div className="overflow-hidden rounded-lg border border-line bg-surface shadow-sm">
       <div className="flex items-start justify-between gap-3 border-b border-line px-4 py-4 sm:px-6">
         <div>
-          <h2 className="font-display text-base font-semibold text-ink">Version history</h2>
+          <SectionTitle>Version history</SectionTitle>
           <p className="mt-1 text-sm text-ink-3">
             Every save creates a new version. Rollback isn&apos;t available yet — for now
             this is a read-only record of what changed and when.

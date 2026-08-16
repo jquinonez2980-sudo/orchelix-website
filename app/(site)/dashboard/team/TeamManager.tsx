@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth, useOrganization } from "@clerk/nextjs";
+import { SectionTitle } from "../PageTitle";
 import { useEffect, useState } from "react";
 import { Badge } from "../Badge";
 
@@ -75,7 +76,7 @@ function InviteForm({
 
   return (
     <div className="rounded-lg border border-line bg-surface p-4 shadow-sm sm:p-6">
-      <h2 className="font-display text-base font-semibold text-ink">Invite a team member</h2>
+      <SectionTitle>Invite a team member</SectionTitle>
       <p className="mt-1 text-sm text-ink-3">
         They&apos;ll get an email invite to join this business&apos;s dashboard.
       </p>
@@ -353,9 +354,9 @@ export default function TeamManager() {
 
       <div className={`overflow-hidden rounded-lg border border-line bg-surface shadow-sm ${canManage ? "mt-6" : "mt-4"}`}>
         <div className="border-b border-line px-4 py-4 sm:px-6">
-          <h2 className="font-display text-base font-semibold text-ink">
+          <SectionTitle>
             Members {!membersLoading ? `(${memberList.length})` : ""}
-          </h2>
+          </SectionTitle>
         </div>
         {membersLoading && <p className="px-4 py-6 text-sm text-ink-4 sm:px-6">Loading…</p>}
         {!membersLoading && memberList.length === 0 && (
@@ -377,9 +378,9 @@ export default function TeamManager() {
       {invitationList.length > 0 && (
         <div className="mt-6 overflow-hidden rounded-lg border border-line bg-surface shadow-sm">
           <div className="border-b border-line px-4 py-4 sm:px-6">
-            <h2 className="font-display text-base font-semibold text-ink">
+            <SectionTitle>
               Pending invitations ({invitationList.length})
-            </h2>
+            </SectionTitle>
           </div>
           {invitationList.map((i) => (
             <InvitationRow key={i.id} invitation={i} canManage={canManage} onChanged={refresh} />

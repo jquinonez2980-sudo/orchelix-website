@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { SectionTitle } from "./PageTitle";
 import Action from "./Action";
 import Link from "next/link";
 import {
@@ -109,9 +110,9 @@ function SetupChecklistSection({ checklist }: { checklist: OverviewResponse["set
       className="border border-line bg-surface p-5"
       style={{ borderLeft: "2px solid var(--lg-foil)" }}
     >
-      <h2 className="font-display text-base font-semibold uppercase tracking-tight text-ink">
+      <SectionTitle>
         {t.overview.setupTitle}
-      </h2>
+      </SectionTitle>
       <p className="mt-1 text-xs text-ink-3">{t.overview.setupLede}</p>
       <ul className="mt-3 space-y-2.5">
         {checklist.items.map((item) => (
@@ -148,9 +149,9 @@ function LanguageMixSection({ mix }: { mix: OverviewResponse["current"]["languag
 
   return (
     <section>
-      <h2 className="font-display text-base font-semibold text-ink">
+      <SectionTitle>
         {t.overview.languageMix}
-      </h2>
+      </SectionTitle>
       <div className="mt-3 border border-line bg-surface p-5">
         {total === 0 ? (
           <p className="text-sm text-ink-3">{t.overview.noCallsWeek}</p>
@@ -272,9 +273,9 @@ function WeekRegister({ cur, prev }: { cur: OverviewBucket; prev: OverviewBucket
       style={{ borderTop: "2px solid var(--lg-rule)" }}
     >
       <div className="flex items-baseline justify-between px-5 pt-4">
-        <h2 className="font-display text-base font-semibold uppercase tracking-tight text-[var(--lg-ink)]">
+        <SectionTitle>
           This week
-        </h2>
+        </SectionTitle>
         <p className="font-mono text-[0.625rem] uppercase tracking-[0.13em] text-[var(--lg-ink-3)]">
           vs prior 7 days
         </p>

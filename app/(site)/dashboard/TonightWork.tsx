@@ -3,6 +3,7 @@
 /* Tonight's work — open reviews + escalated leads + after-hours at a glance. */
 
 import { useEffect, useState } from "react";
+import { SectionTitle } from "./PageTitle";
 import Link from "next/link";
 import {
   fetchCallReviews,
@@ -81,9 +82,9 @@ export default function TonightWork({
       className="border border-line bg-surface p-5"
       style={{ borderTop: "2px solid var(--lg-rule)" }}
     >
-      <h2 className="font-display text-base font-semibold uppercase tracking-tight text-ink">
+      <SectionTitle>
         {locale === "es" ? "Trabajo de esta noche" : "Tonight's work"}
-      </h2>
+      </SectionTitle>
       <p className="mt-0.5 text-xs text-ink-3">
         {locale === "es"
           ? "Lo que necesita una persona esta mañana — no un tablero de KPIs."
