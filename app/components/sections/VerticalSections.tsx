@@ -48,7 +48,7 @@ export default function VerticalPage({
   return (
     <main id="main-content">
       {/* ── Opening: the offer, and the facts that qualify it ── */}
-      <Section tone="field">
+      <Section tone="field" scene>
         {/* Centered rather than bottom-aligned: the right column here is a
             data block, not the short action group the other pages put there,
             and end-alignment left a viewport-tall void beside the headline. */}

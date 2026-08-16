@@ -8,6 +8,7 @@
 
 import Image, { type StaticImageData } from "next/image";
 import type { CSSProperties, ReactNode } from "react";
+import { PlusFrame } from "@/app/components/sections/PlusMark";
 
 type Tone = "field" | "field-2" | "field-3" | "stock" | "stock-2";
 
@@ -48,6 +49,7 @@ export function Section({
   className = "",
   style,
   tight,
+  scene,
 }: {
   tone?: Tone;
   id?: string;
@@ -55,6 +57,7 @@ export function Section({
   className?: string;
   style?: CSSProperties;
   tight?: boolean;
+  scene?: boolean;
 }) {
   return (
     /* `lg-world` marks the ledger surface regardless of tone. The pale stock
@@ -66,12 +69,12 @@ export function Section({
          RevealObserver marks this on entry and the data blocks inside key
          their Rule and Settle off it. */
       data-lg-reveal=""
-      className={`lg-world ${TONE_CLASS[tone]} ${className}`}
+      className={`lg-world ${TONE_CLASS[tone]} ${scene ? "lg-scene" : ""} ${className}`.trim()}
       style={{ ...TONE_STYLE[tone], ...style }}
     >
       <div
         className={`mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-10 ${
-          tight ? "py-14 lg:py-20" : "py-20 lg:py-28"
+          scene ? "py-24 lg:py-36" : tight ? "py-14 lg:py-20" : "py-20 lg:py-28"
         }`}
       >
         {children}
@@ -160,23 +163,19 @@ export function PageTitle({
   max?: string;
 }) {
   return (
-    <h1
-      style={{
-        fontFamily: "var(--font-display)",
-        fontStretch: "82%",
-        fontWeight: 700,
-        fontSize: "clamp(2.5rem, 5.4vw, 4.25rem)",
-        lineHeight: 0.96,
-        letterSpacing: "-0.028em",
-        textTransform: "uppercase",
-        color: inkFor(tone),
-        maxWidth: max,
-        textWrap: "balance",
-        margin: 0,
-      }}
-    >
-      {children}
-    </h1>
+    <PlusFrame className="w-fit max-w-full">
+      <h1
+        className="lg-poster"
+        style={{
+          color: inkFor(tone),
+          maxWidth: max,
+          textWrap: "balance",
+          margin: 0,
+        }}
+      >
+        {children}
+      </h1>
+    </PlusFrame>
   );
 }
 

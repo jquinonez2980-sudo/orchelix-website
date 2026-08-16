@@ -14,7 +14,7 @@ export default function NotFound() {
     <>
       <Nav />
       <main id="main-content">
-        <Section tone="field">
+        <Section tone="field" scene>
           <div className="mx-auto max-w-xl text-center">
             <p
               className="lg-fig"

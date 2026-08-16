@@ -1,12 +1,13 @@
-/* The register is the hero — the artifact at full scale with its own ruled
-   grid and notation, the way the craft bar puts the map itself in the first
-   viewport. On mobile the register leads and the offer copy follows it. */
+/* Poster first viewport: stacked condensed type, meta strip, plus marks.
+   The register is the one hover-to-explore object, not a competing column
+   of explanation. */
 
 import { Stamp, QuietAction } from "@/app/components/ledger";
 import { localizedHref, type Locale } from "@/app/i18n/config";
 import type { Messages } from "@/app/i18n/messages/en";
-/* Client wrapper: next/dynamic ssr:false is illegal in Server Components. */
-import HeroProof from "./HeroProofLazy";
+import HeroExplore from "./HeroExplore";
+import LiveClock from "./LiveClock";
+import { PlusFrame } from "./PlusMark";
 
 type Disposition = "BOOKED" | "ROUTED" | "ANSWERED" | "CLOSED";
 
@@ -18,13 +19,6 @@ type Entry = {
   detail: string;
 };
 
-/* Illustrative register. Shapes and dispositions mirror real Esmi call
-   handling; the entries themselves are authored, and the page says so.
-
-   The reasons are deliberately NOT translated between locales: they are what
-   callers actually said, and a night on a bilingual line genuinely contains
-   both languages. Translating them would misrepresent the product. Only the
-   chrome — column heads, caption, dispositions — changes language. */
 const ENTRIES: Entry[] = [
   { time: "18:42", lang: "ES", reason: "Plantilla de encimera", disposition: "BOOKED", detail: "Jue 9:00" },
   { time: "19:07", lang: "EN", reason: "After-hours, no heat", disposition: "ROUTED", detail: "On-call tech" },
@@ -40,13 +34,6 @@ const ENTRIES: Entry[] = [
 
 const DISPOSITION_ORDER: Disposition[] = ["BOOKED", "ROUTED", "ANSWERED", "CLOSED"];
 
-/* 2026-08-10 rebrand: the register used to code each disposition in its own
-   hue (gold/red/green). The new brand has exactly one accent and reserves
-   it for the outcome that should read as the "AI moment" — a booked
-   appointment — everything else stays structural Graphite/ink, distinguished
-   by the label itself rather than a colour per status. `--lg-rule-text` and
-   `--lg-tick-text` both resolve to the same ink colour now; the separate
-   names are kept only so this map doesn't need to change shape. */
 const DISPOSITION_COLOR: Record<Disposition, string> = {
   BOOKED: "var(--lg-foil)",
   ROUTED: "var(--lg-rule-text)",
@@ -54,8 +41,6 @@ const DISPOSITION_COLOR: Record<Disposition, string> = {
   CLOSED: "var(--lg-ink-3)",
 };
 
-/* Counts are derived, never typed — the foot rule can only ever describe the
-   rows actually rendered above it. */
 const TALLY = DISPOSITION_ORDER.map((d) => ({
   d,
   n: ENTRIES.filter((e) => e.disposition === d).length,
@@ -63,114 +48,94 @@ const TALLY = DISPOSITION_ORDER.map((d) => ({
 
 export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
   return (
-    <section id="top" className="lg-world lg-field lg-cloth-vivid relative">
-      {/* Measure ticks down the field edge — the ruled page's own scale. */}
+    <section id="top" className="lg-world lg-field lg-cloth-vivid lg-hero-scene relative">
       <div
         aria-hidden="true"
         className="lg-ticks pointer-events-none absolute inset-y-0 left-0 hidden w-[7px] lg:block"
         style={{ zIndex: 1 }}
       />
 
-      <div
-        className="lg-hero-grid relative mx-auto grid max-w-[1320px] gap-y-14 px-5 pt-16 pb-16 sm:px-8 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-x-14 lg:px-10 lg:pt-24 lg:pb-24"
-        style={{ zIndex: 1 }}
-      >
-        {/* ── Offer column ── */}
-        <div className="max-w-[34rem] self-center">
-          <h1
-            style={{
-              fontFamily: "var(--font-display)",
-              fontStretch: "82%",
-              fontWeight: 700,
-              fontSize: "clamp(2.5rem, 5.4vw, 4.25rem)",
-              lineHeight: 0.94,
-              letterSpacing: "-0.028em",
-              textTransform: "uppercase",
-              color: "var(--lg-ink)",
-              textWrap: "balance",
-              margin: 0,
-            }}
-          >
-            {t.home.heroTitle[0]}
-            <br />
-            {t.home.heroTitle[1]}
-          </h1>
-
-          <p
-            className="lg-prose"
-            style={{
-              fontFamily: "var(--font-body)",
-              fontSize: "1.0625rem",
-              lineHeight: 1.62,
-              color: "var(--lg-ink-2)",
-              maxWidth: "40ch",
-              marginTop: "1.7rem",
-              marginBottom: 0,
-            }}
-          >
-            {t.home.heroBody}
+      <div className="lg-hero-inner relative mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-10" style={{ zIndex: 1 }}>
+        <div className="lg-hero-meta">
+          <p>{t.home.metaLine}</p>
+          <p>{t.home.metaPlace}</p>
+          <p>
+            <LiveClock />
           </p>
-
-          <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">
-            <Stamp href={localizedHref("/book", locale)}>{t.common.bookPilot}</Stamp>
-            <QuietAction href="#hear-esmi">{t.common.hearRealCall}</QuietAction>
-          </div>
-
-          {/* Real production sample in the first viewport — illustrate
-              the register above; prove the voice here. */}
-          <HeroProof locale={locale ?? "en"} />
-
-          {/* The number itself — a visible way to reach a person right now,
-              not buried in the meta line it used to share with EN · ES and
-              the countries served. Someone ready to call shouldn't have to
-              find it in a caption. */}
-          <a
-            href="tel:+15615661066"
-            className="lg-quiet"
-            style={{
-              display: "inline-block",
-              fontFamily: "var(--font-display)",
-              fontStretch: "88%",
-              fontWeight: 600,
-              fontSize: "1.0625rem",
-              letterSpacing: "0.01em",
-              color: "var(--lg-ink)",
-              textDecoration: "none",
-              marginTop: "1.6rem",
-            }}
-          >
-            {t.common.phone}
-          </a>
-
-          {/* Drawn rules, not glyphs. */}
-          <div
-            className="lg-fig mt-3 flex flex-wrap items-center gap-y-2"
-            style={{
-              fontSize: "0.6875rem",
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "var(--lg-ink-2)",
-            }}
-          >
-            <span>EN · ES · FR+</span>
+          <p>
+            <span>EN</span>
             <Sep />
-            <span>{t.common.countries}</span>
-          </div>
+            <span>ES</span>
+            <Sep />
+            <span>FR+</span>
+          </p>
+          <span className="lg-hero-meta__line" aria-hidden="true" />
         </div>
 
-        {/* ── The register ──
-            Cut into the cloth rather than printed on it. `lg-inset` draws the
-            recess; the red margin rule is its left wall, which is why the
-            recess carries no left border of its own. The padding is the depth
-            of the cut and only exists at lg, where the two-column grid does —
-            below that the recess retires and the register runs to the gutters.
-            The section's own `pt` already spaces this from the nav, so the cut
-            only needs its inner margin. */}
-        <div className="lg-hero-register lg-inset lg-hero-register-solid lg-margin-rule self-center lg:py-8 lg:pr-7 lg:pl-8">
-          <Register t={t} />
+        <div className="lg-hero-grid">
+          <div className="lg-hero-offer">
+            <PlusFrame>
+              <PosterTitle lines={t.home.heroTitle} />
+            </PlusFrame>
+
+            <p className="lg-prose lg-hero-body">{t.home.heroBody}</p>
+
+            <div className="lg-hero-actions">
+              <Stamp href={localizedHref("/book", locale)}>{t.common.bookPilot}</Stamp>
+              <QuietAction href="#hear-esmi">{t.common.hearRealCall}</QuietAction>
+            </div>
+
+            <a href="tel:+15615661066" className="lg-quiet lg-hero-phone">
+              {t.common.phone}
+            </a>
+          </div>
+
+          <div className="lg-hero-register lg-inset lg-hero-register-solid lg-margin-rule">
+            <HeroExplore
+              hint={t.home.exploreHint}
+              hintTouch={t.home.exploreHintTouch}
+              esmiTitle={t.home.exploreEsmi}
+              esmiBody={t.home.exploreEsmiBody}
+              recordTitle={t.home.exploreRecord}
+              recordBody={t.home.exploreRecordBody}
+            >
+              <Register t={t} />
+            </HeroExplore>
+          </div>
         </div>
       </div>
     </section>
+  );
+}
+
+function splitPoster(line: string) {
+  const clean = line.replace(/\.$/, "");
+  const words = clean.split(" ");
+  if (words.length <= 2) {
+    return { lead: words.slice(0, -1).join(" "), last: `${words.at(-1) ?? ""}.` };
+  }
+  if (words.length === 3) {
+    return { lead: words.slice(0, 2).join(" "), last: `${words[2]}.` };
+  }
+  return {
+    lead: words.slice(0, -3).join(" "),
+    last: `${words.slice(-3).join(" ")}.`,
+  };
+}
+
+function PosterTitle({ lines }: { lines: string[] }) {
+  return (
+    <h1 className="lg-poster">
+      {lines.map((line) => {
+        const { lead, last } = splitPoster(line);
+        return (
+          <span className="lg-poster-block" key={line}>
+            {lead ? <span className="lg-poster-lead">{lead}</span> : null}
+            <span className="lg-poster-last">{last}</span>
+          </span>
+        );
+      })}
+    </h1>
   );
 }
 
@@ -178,14 +143,7 @@ function Sep() {
   return (
     <span
       aria-hidden="true"
-      style={{
-        display: "inline-block",
-        width: 1,
-        height: "0.85em",
-        background: "var(--lg-rule)",
-        opacity: 0.75,
-        margin: "0 0.85em",
-      }}
+      className="lg-hero-sep"
     />
   );
 }
@@ -211,7 +169,6 @@ function Register({ t }: { t: Messages }) {
         <span style={{ color: "var(--lg-ink-3)" }}>{t.home.registerWindow}</span>
       </figcaption>
 
-      {/* Column heads */}
       <div
         className="lg-fig lg-row lg-reg-row"
         style={{
@@ -231,61 +188,65 @@ function Register({ t }: { t: Messages }) {
       </div>
 
       <div className="lg-register">
-        {ENTRIES.map((e, i) => (
-          <div
-            key={e.time}
-            className="lg-row lg-reg-row"
-            style={{ "--i": i, padding: "0.72rem 0" } as React.CSSProperties}
-          >
-            <span className="lg-fig" style={{ fontSize: "0.8125rem", color: "var(--lg-ink-2)" }}>
-              {e.time}
-            </span>
-
-            <span
-              className="lg-fig"
-              style={{
-                fontSize: "0.625rem",
-                letterSpacing: "0.08em",
-                color: e.lang === "ES" ? "var(--lg-foil)" : "var(--lg-ink-3)",
-              }}
+        {ENTRIES.map((e, i) => {
+          const mark = e.disposition === "BOOKED" || e.lang === "ES" ? "esmi" : undefined;
+          return (
+            <div
+              key={e.time}
+              className="lg-row lg-reg-row"
+              data-mark={mark}
+              data-disp={e.disposition}
+              style={{ "--i": i, padding: "0.72rem 0" } as React.CSSProperties}
             >
-              {e.lang}
-            </span>
+              <span className="lg-fig" style={{ fontSize: "0.8125rem", color: "var(--lg-ink-2)" }}>
+                {e.time}
+              </span>
 
-            <span
-              className="lg-reg-reason"
-              lang={e.lang.toLowerCase()}
-              style={{
-                fontFamily: "var(--font-body)",
-                fontSize: "0.9375rem",
-                color: "var(--lg-ink)",
-              }}
-            >
-              {e.reason}
-            </span>
+              <span
+                className="lg-fig"
+                style={{
+                  fontSize: "0.625rem",
+                  letterSpacing: "0.08em",
+                  color: e.lang === "ES" ? "var(--lg-foil)" : "var(--lg-ink-3)",
+                }}
+              >
+                {e.lang}
+              </span>
 
-            <span
-              className="lg-fig lg-reg-outcome"
-              style={{ fontSize: "0.6875rem", color: "var(--lg-ink-3)", letterSpacing: "0.03em" }}
-            >
-              {e.detail}
-            </span>
+              <span
+                className="lg-reg-reason"
+                lang={e.lang.toLowerCase()}
+                style={{
+                  fontFamily: "var(--font-body)",
+                  fontSize: "0.9375rem",
+                  color: "var(--lg-ink)",
+                }}
+              >
+                {e.reason}
+              </span>
 
-            <span
-              className="lg-fig lg-tick lg-reg-disp"
-              style={{
-                fontSize: "0.625rem",
-                letterSpacing: "0.09em",
-                color: DISPOSITION_COLOR[e.disposition],
-              }}
-            >
-              {d[e.disposition]}
-            </span>
-          </div>
-        ))}
+              <span
+                className="lg-fig lg-reg-outcome"
+                style={{ fontSize: "0.6875rem", color: "var(--lg-ink-3)", letterSpacing: "0.03em" }}
+              >
+                {e.detail}
+              </span>
+
+              <span
+                className="lg-fig lg-tick lg-reg-disp"
+                style={{
+                  fontSize: "0.625rem",
+                  letterSpacing: "0.09em",
+                  color: DISPOSITION_COLOR[e.disposition],
+                }}
+              >
+                {d[e.disposition]}
+              </span>
+            </div>
+          );
+        })}
       </div>
 
-      {/* Foot rule — the ledger's subtotal line, tallied from the rows above. */}
       <div
         className="lg-fig flex flex-wrap items-center gap-x-5 gap-y-2"
         style={{

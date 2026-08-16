@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import {
@@ -12,22 +12,13 @@ import {
 } from "@/app/i18n/config";
 import type { Messages } from "@/app/i18n/messages/en";
 
-/* Six items. Products, How it works, Industries, Pricing, About, Hear Esmi.
-   Hrefs point at the routes that exist today; the /products/* consolidation
-   in REDESIGN-PLAN.md is a follow-up, and a nav of 404s helps nobody.
+/* Collapsed chrome: logo, language, stamp, menu. The six destinations
+   live in the drawer on every width so the first viewport can be a poster
+   rather than a link row. */
 
-   `Hear Esmi` (/try-esmi) was added 2026-08-08. It had been reachable only
-   from the home hero and one link on /industries — absent from the nav and
-   from the footer both — which left the strongest asset on the site with no
-   route in from the chrome.
-
-   Copy arrives as a prop rather than being imported: catalogues are
-   server-only, and this is a client component for the mobile drawer. */
-
-/* Only the slices this component renders. Nav is a client component, so its
-   props cross the server/client boundary in the RSC payload — passing the
-   whole catalogue would ship every page's copy to the browser for a header. */
-export type NavCopy = Pick<Messages, "nav" | "meta">;
+export type NavCopy = Pick<Messages, "nav" | "meta"> & {
+  common: Pick<Messages["common"], "phone">;
+};
 
 const EN_FALLBACK: NavCopy = {
   nav: {
@@ -38,16 +29,15 @@ const EN_FALLBACK: NavCopy = {
     about: "About",
     tryEsmi: "Hear Esmi",
     book: "Book a pilot",
+    menu: "Menu",
     openMenu: "Open menu",
     closeMenu: "Close menu",
     home: "Orchelix — Home",
   },
   meta: { localeName: "English", switchTo: "Español", switchLabel: "Cambiar a español" },
+  common: { phone: "+1 561 566 1066" },
 };
 
-/* Props default to English so the routes under `app/(site)/` — which are
-   English-only and outside the locale segment — can render the shared chrome
-   without threading a catalogue through every one of them. */
 export default function Nav({
   locale = "en",
   t = EN_FALLBACK,
@@ -58,6 +48,9 @@ export default function Nav({
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
   const pathname = usePathname();
+  const menuId = useId();
+  const menuRef = useRef<HTMLElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
 
   const links = [
     { label: t.nav.products, href: localizedHref("/solutions", locale) },
@@ -71,11 +64,6 @@ export default function Nav({
     },
   ];
 
-  /* The switcher keeps you on the page you are reading rather than dumping you
-     on the home page of the other language — the single most common failure of
-     bolted-on bilingual sites. The one exception is a page that has no
-     translation yet: there, the home page is the honest destination, because
-     the alternative is a 404 or an English page wearing a Spanish URL. */
   const other = otherLocale(locale);
   const currentPath = stripLocale(pathname || "/");
   const switchHref = TRANSLATED_PATHS.has(currentPath)
@@ -86,21 +74,22 @@ export default function Nav({
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") close();
+      if (e.key === "Escape") {
+        close();
+        toggleRef.current?.focus();
+      }
     };
     document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const first = menuRef.current?.querySelector<HTMLElement>("a, button");
+    first?.focus();
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
   }, [open]);
 
-  /* The header's bottom border is `--lg-hair`, which composites to about
-     1.3:1 on the field — invisible over a dark section, so the chrome had no
-     edge and read as part of the page. Past the first 24px the page is ruled
-     off from the chrome in the ledger's own device: the hair becomes the red
-     rule and the header steps up one field tone.
-
-     State flips once at the threshold rather than on every scroll event, so
-     React re-renders twice per page at most. Colour only — no height change,
-     no blur, no shadow; the nav does not shrink or float. */
   const [ruled, setRuled] = useState(false);
   useEffect(() => {
     const onScroll = () => {
@@ -116,10 +105,10 @@ export default function Nav({
     fontFamily: "var(--font-display)",
     fontStretch: "88%",
     fontWeight: 500,
-    fontSize: "0.8125rem",
-    letterSpacing: "0.075em",
+    fontSize: "1.05rem",
+    letterSpacing: "0.04em",
     textTransform: "uppercase",
-    color: "var(--lg-ink-2)",
+    color: "var(--lg-ink)",
     textDecoration: "none",
   };
 
@@ -133,69 +122,40 @@ export default function Nav({
         zIndex: 50,
       }}
     >
-      <div className="mx-auto flex max-w-[1320px] items-center gap-8 px-5 py-4 sm:px-8 lg:px-10">
+      <div className="lg-nav__bar mx-auto flex max-w-[1320px] items-center gap-6 px-5 py-3 sm:px-8 lg:px-10">
         <a
           href={localizedHref("/", locale)}
           onClick={close}
           aria-label={t.nav.home}
           style={{ display: "flex", alignItems: "center", textDecoration: "none", flexShrink: 0 }}
         >
-          {/* 2026-08-10 rebrand: the wordmark used to be a gold-foil mask
-              effect over the old lockup's alpha (a stamp catching light on
-              a dark field). The new brand's logo is full colour on its own
-              — graphite structure, magenta strand — and the field is light
-              now, so it just renders directly rather than being masked
-              behind a metallic ramp. */}
-          {/* Sized at 50px rather than the 34px it shipped at. The binding
-              constraint is the "AI CONSULTING" tagline: it occupies 8.8% of
-              the lockup's height (a measured 50px band of 569), so 34px put
-              it at a 3px cap height — below the size where the letterforms
-              survive downscaling at all. 50px buys ~4.4px on a 1x screen and
-              ~8.8 device pixels on the 2x displays most visitors are on,
-              which is where the phrase actually resolves.
-
-              It also has to be a real <Image>, not a raw <img>. At 122 CSS px
-              the browser was downscaling the 1383px source in one step — an
-              11x reduction no browser resamples well, and the reason it read
-              as blurry. next/image serves a 128w/256w variant resampled by
-              sharp instead. `sizes` is what makes it pick from imageSizes
-              (32-384) rather than deviceSizes; drop it and the smallest
-              candidate becomes 640w, which puts us straight back to
-              downscaling a far-too-large bitmap in the browser. */}
           <Image
             src="/orchelix-logo-full-color.png"
             alt={t.nav.home}
-            /* Intrinsic dimensions, not display ones: the true 2.431 ratio
-               reserves the correct box before paint. The old 140x49 claimed
-               2.857 and would have squashed the lockup had the CSS below
-               ever failed to apply. */
             width={1383}
             height={569}
             sizes="122px"
             quality={90}
             preload
+            className="lg-nav-logo"
             style={{ display: "block", height: 50, width: "auto" }}
           />
         </a>
 
-        <nav className="ml-auto hidden items-center gap-8 lg:flex">
-          {links.map(({ label, href }) => (
-            <a key={href} href={href} className="lg-quiet" style={linkStyle}>
-              {label}
-            </a>
-          ))}
-        </nav>
-
-        <div className="ml-auto flex items-center gap-5 lg:ml-0">
+        <div className="ml-auto flex items-center gap-3 sm:gap-5">
+          <a
+            href="tel:+15615661066"
+            className="lg-fig lg-quiet lg-nav-phone"
+            aria-label={t.common.phone}
+          >
+            {t.common.phone}
+          </a>
           <a
             href={switchHref}
             className="lg-fig lg-quiet hidden sm:inline-flex"
             style={{
               fontSize: "0.6875rem",
               letterSpacing: "0.11em",
-              /* Was `--lg-ink-3` (4.68:1 at 11px) — the dimmest thing in the
-                 header and reading as disabled. This is a navigation
-                 control, not meta text, so it takes the link ink (8.39:1). */
               color: "var(--lg-ink-2)",
               textDecoration: "none",
             }}
@@ -225,92 +185,105 @@ export default function Nav({
           </a>
 
           <button
+            ref={toggleRef}
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
-            aria-controls="mobile-nav"
+            aria-controls={menuId}
             aria-label={open ? t.nav.closeMenu : t.nav.openMenu}
-            className="lg:hidden flex items-center justify-center"
-            style={{
-              background: "transparent",
-              border: "1px solid var(--lg-hair)",
-              color: "var(--lg-ink)",
-              width: 44,
-              height: 44,
-              cursor: "pointer",
-              lineHeight: 0,
-            }}
+            className="lg-menu-btn flex items-center justify-center"
           >
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5">
-              {open ? <path d="M4 4l10 10M14 4L4 14" /> : <path d="M2 5h14M2 9h14M2 13h14" />}
+            <span className="lg-menu-btn__label">{t.nav.menu}</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              {open ? (
+                <path d="M3.2 2.4l10.4 10.4-.8.8L2.4 3.2zM13.6 2.4l.8.8L4 13.6l-.8-.8z" />
+              ) : (
+                <>
+                  <rect x="0" y="0" width="4.2" height="4.2" />
+                  <rect x="11.8" y="0" width="4.2" height="4.2" />
+                  <rect x="0" y="11.8" width="4.2" height="4.2" />
+                  <rect x="11.8" y="11.8" width="4.2" height="4.2" />
+                </>
+              )}
             </svg>
           </button>
         </div>
       </div>
 
-      {open && (
-        <nav
-          id="mobile-nav"
-          className="lg:hidden"
-          style={{ borderTop: "1px solid var(--lg-hair)", background: "var(--lg-field-2)" }}
-        >
-          <div className="mx-auto max-w-[1320px] px-5 py-2 sm:px-8">
-            {links.map(({ label, href }) => (
-              <a
-                key={href}
-                href={href}
-                onClick={close}
-                style={{
-                  ...linkStyle,
-                  display: "block",
-                  fontSize: "0.9375rem",
-                  color: "var(--lg-ink)",
-                  padding: "0.95rem 0",
-                  borderBottom: "1px solid var(--lg-hair-2)",
-                }}
-              >
-                {label}
-              </a>
-            ))}
+      <div
+        className="lg-menu-scrim"
+        data-open={open ? "true" : undefined}
+        onClick={close}
+        aria-hidden="true"
+      />
 
-            <div className="flex items-center gap-6 py-5">
-              <a
-                href={bookHref}
-                onClick={close}
-                className="lg-stamp lg-foil-surface inline-flex items-center"
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontStretch: "88%",
-                  fontWeight: 700,
-                  fontSize: "0.8125rem",
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  color: "var(--lg-foil-ink)",
-                  padding: "0.8rem 1.35rem",
-                  textDecoration: "none",
-                }}
-              >
-                {t.nav.book}
-              </a>
-              <a
-                href={switchHref}
-                onClick={close}
-                className="lg-fig"
-                style={{
-                  fontSize: "0.75rem",
-                  letterSpacing: "0.11em",
-                  color: "var(--lg-ink-2)",
-                  textDecoration: "none",
-                }}
-                lang={other}
-                hrefLang={other}
-              >
-                {t.meta.switchTo}
-              </a>
-            </div>
+      <nav
+        ref={menuRef}
+        id={menuId}
+        className="lg-menu"
+        data-open={open ? "true" : undefined}
+        aria-label={t.nav.menu}
+        aria-hidden={open ? undefined : true}
+        inert={!open || undefined}
+      >
+        <div className="lg-menu__inner">
+          {links.map(({ label, href }) => (
+            <a
+              key={href}
+              href={href}
+              onClick={close}
+              className="lg-menu__link lg-quiet"
+              style={linkStyle}
+            >
+              {label}
+            </a>
+          ))}
+
+          <div className="lg-menu__foot">
+            <a
+              href={bookHref}
+              onClick={close}
+              className="lg-stamp lg-foil-surface inline-flex items-center"
+              style={{
+                fontFamily: "var(--font-display)",
+                fontStretch: "88%",
+                fontWeight: 700,
+                fontSize: "0.8125rem",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                color: "var(--lg-foil-ink)",
+                padding: "0.8rem 1.35rem",
+                textDecoration: "none",
+              }}
+            >
+              {t.nav.book}
+            </a>
+            <a
+              href={switchHref}
+              onClick={close}
+              className="lg-fig lg-quiet"
+              style={{
+                fontSize: "0.75rem",
+                letterSpacing: "0.11em",
+                color: "var(--lg-ink-2)",
+                textDecoration: "none",
+              }}
+              lang={other}
+              hrefLang={other}
+            >
+              {t.meta.switchTo}
+            </a>
           </div>
-        </nav>
-      )}
+          <a
+            href="tel:+15615661066"
+            onClick={close}
+            className="lg-fig lg-quiet lg-menu__phone"
+            aria-label={t.common.phone}
+          >
+            {t.common.phone}
+          </a>
+        </div>
+      </nav>
     </header>
   );
 }

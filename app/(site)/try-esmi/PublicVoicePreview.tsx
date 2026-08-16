@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { SectionTitle } from "@/app/components/ledger";
+import VoiceWave from "@/app/components/sections/VoiceWave";
 
 /* Public, unauthenticated voice preview for try-esmi
    (docs/ESMI_DASHBOARD_UX.md Section 6 / Section 4 "player DNA").
@@ -53,18 +54,6 @@ type PreviewResponse = {
   watermark: string;
 };
 
-/* The waveform doubles as the progress track: a fixed, non-animated
-   silhouette whose played portion fills teal. Heights are derived from a
-   deterministic formula (never Math.random) so server and client render
-   byte-identical markup and hydration stays quiet. */
-const WAVE = Array.from({ length: 56 }, (_, i) => {
-  const a = Math.abs(Math.sin(i * 1.31) * Math.cos(i * 0.47));
-  const b = Math.abs(Math.sin(i * 0.19 + 1.2));
-  // Taper the very edges so the silhouette reads as a clip, not a crop.
-  const edge = Math.min(1, Math.min(i, 55 - i) / 5 + 0.45);
-  return Math.round((0.24 + 0.76 * (a * 0.65 + b * 0.35)) * edge * 100);
-});
-
 const SEEK_STEP_SEC = 5;
 
 function fmtTime(sec: number): string {
@@ -76,12 +65,17 @@ function fmtTime(sec: number): string {
 
 export default function PublicVoicePreview({
   compact = false,
+  hideLabel = false,
+  featured = false,
   initialLang = "en",
   id = "voice-preview",
   onLanguageChange,
 }: {
   /** Hero / inline strip: fewer samples, no large section title. */
   compact?: boolean;
+  hideLabel?: boolean;
+  /** Home listening stage: larger play, wave as the visual. */
+  featured?: boolean;
   initialLang?: Lang;
   id?: string;
   /** Fired when the EN/ES chips change so parents (e.g. hero transcript) can match. */
@@ -98,7 +92,6 @@ export default function PublicVoicePreview({
   const [currentTime, setCurrentTime] = useState(0);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const scrubRef = useRef<HTMLDivElement | null>(null);
 
   const setLang = (lang: Lang) => {
     setLanguage(lang);
@@ -185,12 +178,9 @@ export default function PublicVoicePreview({
     setCurrentTime(next);
   };
 
-  const handleScrubClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rail = scrubRef.current;
-    if (!rail || !seekable) return;
-    const rect = rail.getBoundingClientRect();
-    if (rect.width <= 0) return;
-    seekTo(((e.clientX - rect.left) / rect.width) * duration);
+  const handleWaveSeek = (ratio: number) => {
+    if (!seekable) return;
+    seekTo(ratio * duration);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -234,8 +224,8 @@ export default function PublicVoicePreview({
   const samples = SAMPLES;
 
   return (
-    <section id={id}>
-      <div style={{ position: "relative" }}>
+    <section id={id} className={featured ? "epv-featured" : undefined}>
+      <div style={{ position: "relative" }} className={featured ? "epv-featured-stack" : undefined}>
         {/* ── Section head (full page only) */}
         {!compact && (
           <div style={{ marginBottom: 28 }}>
@@ -248,7 +238,7 @@ export default function PublicVoicePreview({
             </div>
           </div>
         )}
-        {compact && (
+        {compact && !hideLabel && (
           <p
             className="lg-fig mb-3"
             style={{
@@ -333,14 +323,16 @@ export default function PublicVoicePreview({
           aria-keyshortcuts="Space ArrowLeft ArrowRight"
           tabIndex={0}
           onKeyDown={handleKeyDown}
-          className="px-4 py-4 sm:px-5"
-          style={{
-            /* Ruled, not glazed: a red top rule over the field, the way
-               every other block in this world is anchored. */
-            borderTop: "2px solid var(--lg-rule)",
-            borderBottom: "1px solid var(--lg-hair)",
-            background: "transparent",
-          }}
+          className={featured ? "epv-stage" : "px-4 py-4 sm:px-5"}
+          style={
+            featured
+              ? undefined
+              : {
+                  borderTop: "2px solid var(--lg-rule)",
+                  borderBottom: "1px solid var(--lg-hair)",
+                  background: "transparent",
+                }
+          }
         >
           {audioUrl && (
             <audio
@@ -363,14 +355,13 @@ export default function PublicVoicePreview({
             />
           )}
 
-          <div className="flex items-center gap-3.5 sm:gap-4">
-            {/* Play / pause — the only saturated element in the bar */}
+          <div className={featured ? "epv-transport" : "flex items-center gap-3.5 sm:gap-4"}>
             <button
               type="button"
               onClick={handleToggle}
               disabled={status === "loading"}
               aria-label={buttonLabel}
-              className="epv-play flex size-11 shrink-0 items-center justify-center"
+              className={`epv-play flex shrink-0 items-center justify-center ${featured ? "epv-play--featured" : "size-11"}`}
               style={{
                 border: status === "error" ? "1px solid var(--lg-ink-3)" : "none",
                 cursor: status === "loading" ? "wait" : "pointer",
@@ -404,39 +395,15 @@ export default function PublicVoicePreview({
             </button>
 
             <div style={{ minWidth: 0, flex: 1 }}>
-              {/* Waveform doubles as the progress track — static bars, teal fill, click to seek */}
-              <div
-                ref={scrubRef}
-                onClick={handleScrubClick}
-                role="progressbar"
-                aria-label={isEs ? "Progreso" : "Playback progress"}
-                aria-valuemin={0}
-                aria-valuemax={Math.max(1, Math.round(duration))}
-                aria-valuenow={Math.round(currentTime)}
-                aria-valuetext={`${fmtTime(currentTime)} / ${fmtTime(duration)}`}
-                className="epv-scrub flex items-center gap-px"
-                data-seekable={seekable}
-                style={{ height: 26, cursor: seekable ? "pointer" : "default" }}
-              >
-                {WAVE.map((h, i) => {
-                  const played = seekable && i / WAVE.length < ratio;
-                  return (
-                    <span
-                      key={i}
-                      className="epv-bar"
-                      style={{
-                        flex: 1,
-                        minWidth: 0,
-                        height: `${h}%`,
-                        borderRadius: 1,
-                        background: played ? FOIL : "var(--epv-rail)",
-                      }}
-                    />
-                  );
-                })}
-              </div>
+              <VoiceWave
+                progress={ratio}
+                playing={status === "playing"}
+                seekable={seekable}
+                label={isEs ? "Progreso" : "Playback progress"}
+                valueText={`${fmtTime(currentTime)} / ${fmtTime(duration)}`}
+                onSeek={handleWaveSeek}
+              />
 
-              {/* Quiet meta + time */}
               <div className="mt-2 flex items-center justify-between gap-3">
                 <span
                   className="truncate"
@@ -513,7 +480,7 @@ export default function PublicVoicePreview({
             </div>
           )}
 
-          {/* Footer: transcript + watermark */}
+          {!featured && (
           <div style={{ marginTop: 16, paddingTop: 14, borderTop: "1px solid var(--lg-hair-2)" }}>
             {text && (
               <p
@@ -534,6 +501,7 @@ export default function PublicVoicePreview({
               {watermark}
             </p>
           </div>
+          )}
         </div>
 
         {/* ── CTAs (full try-esmi page only — hero has its own path under the transcript)

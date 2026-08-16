@@ -8,7 +8,7 @@ import bilingualOperations from "@/public/bilingual-operations.jpg";
 export default function Operators({ t }: { t: Messages }) {
   const o = t.operators;
   return (
-    <Section id="operators" tone="stock">
+    <Section id="operators" tone="stock" scene>
       <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-end">
         <div>
           <SectionTitle tone="stock" max="16ch">

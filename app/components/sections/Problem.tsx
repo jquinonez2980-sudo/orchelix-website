@@ -6,7 +6,7 @@ import type { Messages } from "@/app/i18n/messages/en";
 
 export default function Problem({ t }: { t: Messages }) {
   return (
-    <Section id="problem" tone="stock-2" tight>
+    <Section id="problem" tone="stock-2" tight scene>
       <SectionTitle tone="stock-2" max="24ch">
         {t.home.problemTitle}
       </SectionTitle>

@@ -30,7 +30,15 @@ const SAMPLE_LINES_ES = [
   { who: "Esmi", text: "Jueves a las 9:00 está libre. Lo agendo y le mando confirmación." },
 ] as const;
 
-export default function HeroProof({ locale = "en" }: { locale?: Locale }) {
+export default function HeroProof({
+  locale = "en",
+  playerOnly = false,
+  hideLabel = false,
+}: {
+  locale?: Locale;
+  playerOnly?: boolean;
+  hideLabel?: boolean;
+}) {
   /* Player chips own the sample language; start from the page locale. */
   const [sampleLang, setSampleLang] = useState<SampleLang>(
     locale === "es" ? "es" : "en",
@@ -46,18 +54,20 @@ export default function HeroProof({ locale = "en" }: { locale?: Locale }) {
 
   return (
     <div
-      id="hear-esmi"
-      className="mt-10 max-w-[34rem]"
+      className="max-w-none"
       style={{ scrollMarginTop: "5.5rem" }}
     >
       <PublicVoicePreview
         compact
+        featured
+        hideLabel={hideLabel}
         initialLang={locale === "es" ? "es" : "en"}
         id="hear-esmi-player"
         onLanguageChange={setSampleLang}
       />
 
-      {/* Ruled sample transcript — switches with the player EN/ES chips */}
+      {playerOnly ? null : (
+      <>
       <figure
         className="mt-6 m-0"
         style={{
@@ -162,6 +172,8 @@ export default function HeroProof({ locale = "en" }: { locale?: Locale }) {
           </>
         )}
       </p>
+      </>
+      )}
     </div>
   );
 }

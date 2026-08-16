@@ -6,7 +6,7 @@ import type { Messages } from "@/app/i18n/messages/en";
 
 export default function HowItWorks({ t }: { t: Messages }) {
   return (
-    <Section id="how" tone="stock">
+    <Section id="how" tone="stock" scene>
       <div className="grid gap-x-14 gap-y-6 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
         {/* Sticky wrapper, not a styled heading: the title holds beside the
             stages instead of leaving the column empty once the reader is

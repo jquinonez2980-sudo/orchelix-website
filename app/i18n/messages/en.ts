@@ -23,6 +23,7 @@ const en = {
     about: "About",
     tryEsmi: "Hear Esmi",
     book: "Book a pilot",
+    menu: "Menu",
     openMenu: "Open menu",
     closeMenu: "Close menu",
     home: "Orchelix — Home",
@@ -59,6 +60,27 @@ const en = {
     heroTitle: ["Every call answered.", "Every action on the record."],
     heroBody:
       "Esmi answers, qualifies, and books around the clock — in English and Spanish. Every call closes with a transcript, a reason, and a disposition you can override.",
+    metaLine: "Esmi answers in English and Spanish",
+    metaPlace: "West Palm Beach · Ontario",
+    exploreHint: "Hover to explore",
+    exploreHintTouch: "Tap to explore",
+    exploreEsmi: "Esmi",
+    exploreEsmiBody:
+      "24/7 call handling that books appointments, routes the urgent calls, and sounds human in English and Spanish.",
+    exploreRecord: "The record",
+    exploreRecordBody:
+      "Every call closes with a transcript, a reason, and a disposition you can override.",
+    hearLede: "Press play and hear Esmi pick up in English or Spanish.",
+    rail: {
+      top: "Offer",
+      hear: "Hear Esmi",
+      problem: "Arrears",
+      solutions: "Stack",
+      how: "Pilot",
+      why: "Why",
+      operators: "Operators",
+      book: "Book",
+    },
     registerCaption: "Call register — one night, one line",
     registerWindow: "18:00 – 06:00",
     columns: {
@@ -75,7 +97,7 @@ const en = {
       CLOSED: "CLOSED",
     },
     tallyCalls: "{n} calls",
-    illustrative: "Illustrative entries. Play a real Esmi recording in the column beside this register.",
+    illustrative: "Illustrative entries. A real Esmi recording is in the section below.",
 
     problemTitle: "The work gets done. It's everything that slips while you do it.",
     arrears: [

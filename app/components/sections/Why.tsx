@@ -7,7 +7,7 @@ import editorialLedger from "@/public/editorial-ledger.jpg";
 
 export default function Why({ t }: { t: Messages }) {
   return (
-    <Section id="why" tone="field">
+    <Section id="why" tone="field" scene>
       <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:items-end">
         <SectionTitle max="18ch">{t.home.whyTitle}</SectionTitle>
         <Plate src={editorialLedger} alt={t.visuals.editorialLedger} max={560} />

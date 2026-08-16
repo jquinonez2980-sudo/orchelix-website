@@ -62,7 +62,7 @@ export default async function AcumenPage({ params }: PageProps<"/[locale]">) {
       <Nav locale={locale} t={t} />
       <main id="main-content">
         {/* ── Opening: the pipeline runs beside the offer ── */}
-        <Section tone="field">
+        <Section tone="field" scene>
           <div className="grid gap-x-14 gap-y-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-center">
             <div>
               <PageTitle max="14ch">{p.heading}</PageTitle>

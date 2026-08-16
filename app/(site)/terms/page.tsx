@@ -14,7 +14,7 @@ export default function TermsPage() {
     <>
       <Nav />
       <main id="main-content">
-        <Section tone="field">
+        <Section tone="field" scene>
           <PageTitle max="14ch">Terms of service</PageTitle>
           <Prose size="1.0625rem" max="48ch" style={{ marginTop: "1.5rem" }}>
             These Terms govern access to the Orchelix website and services. By

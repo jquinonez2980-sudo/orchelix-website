@@ -83,7 +83,7 @@ export default async function BlogIndexPage({ params }: PageProps<"/[locale]">) 
       <Nav locale={locale} t={t} />
       <main id="main-content">
         {/* ── Opening ── */}
-        <Section tone="field">
+        <Section tone="field" scene>
           <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.7fr)] lg:items-start">
             <div>
               <PageTitle max="15ch">{p.heading}</PageTitle>

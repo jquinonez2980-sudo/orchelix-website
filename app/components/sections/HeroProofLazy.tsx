@@ -17,6 +17,14 @@ const HeroProof = dynamic(() => import("./HeroProof"), {
   ),
 });
 
-export default function HeroProofLazy({ locale }: { locale?: Locale }) {
-  return <HeroProof locale={locale} />;
+export default function HeroProofLazy({
+  locale,
+  playerOnly = false,
+  hideLabel = false,
+}: {
+  locale?: Locale;
+  playerOnly?: boolean;
+  hideLabel?: boolean;
+}) {
+  return <HeroProof locale={locale} playerOnly={playerOnly} hideLabel={hideLabel} />;
 }

@@ -119,7 +119,7 @@ export default async function ArticlePage({ params }: PageProps<"/[locale]/blog/
       <Nav locale={locale} t={t} />
       <main id="main-content">
         {/* ── Masthead ── */}
-        <Section tone="field">
+        <Section tone="field" scene>
           <div style={{ maxWidth: "46rem" }}>
             <div className="mb-7">
               <QuietAction href={indexHref}>{p.allArticles}</QuietAction>

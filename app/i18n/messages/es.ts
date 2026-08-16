@@ -31,6 +31,7 @@ const es: Messages = {
     about: "Nosotros",
     tryEsmi: "Escucha a Esmi",
     book: "Agenda un piloto",
+    menu: "Menú",
     openMenu: "Abrir menú",
     closeMenu: "Cerrar menú",
     home: "Orchelix — Inicio",
@@ -67,6 +68,27 @@ const es: Messages = {
     heroTitle: ["Cada llamada contestada.", "Cada acción registrada."],
     heroBody:
       "Esmi contesta, califica y agenda a toda hora — en inglés y español. Cada llamada cierra con una transcripción, un motivo y una resolución que puedes revertir.",
+    metaLine: "Esmi contesta en inglés y español",
+    metaPlace: "West Palm Beach · Ontario",
+    exploreHint: "Pasa el cursor para explorar",
+    exploreHintTouch: "Toca para explorar",
+    exploreEsmi: "Esmi",
+    exploreEsmiBody:
+      "Atención de llamadas 24/7 que agenda citas, deriva las urgentes y suena humana en inglés y español.",
+    exploreRecord: "El registro",
+    exploreRecordBody:
+      "Cada llamada cierra con una transcripción, un motivo y una resolución que puedes revertir.",
+    hearLede: "Pulsa reproducir y escucha a Esmi contestar en inglés o español.",
+    rail: {
+      top: "Oferta",
+      hear: "Escucha",
+      problem: "Pendientes",
+      solutions: "Sistema",
+      how: "Piloto",
+      why: "Por qué",
+      operators: "Operadores",
+      book: "Agenda",
+    },
     registerCaption: "Registro de llamadas — una noche, una línea",
     registerWindow: "18:00 – 06:00",
     columns: {
@@ -84,7 +106,7 @@ const es: Messages = {
     },
     tallyCalls: "{n} llamadas",
     illustrative:
-      "Entradas ilustrativas. Reproduce una grabación real de Esmi en la columna de al lado.",
+      "Entradas ilustrativas. La grabación real de Esmi está en la sección siguiente.",
 
     problemTitle: "El trabajo se hace. El problema es todo lo que se cae mientras lo haces.",
     arrears: [

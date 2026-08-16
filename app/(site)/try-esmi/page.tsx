@@ -198,7 +198,7 @@ export default async function TryEsmiPage({
       <JsonLd data={breadcrumbJsonLd} />
       <Nav locale={locale} t={navT} />
       <main id="main-content">
-        <Section tone="field">
+        <Section tone="field" scene>
           <div className="grid gap-x-16 gap-y-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-center">
             <div>
               <PageTitle max="13ch">{copy.title}</PageTitle>

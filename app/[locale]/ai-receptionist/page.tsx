@@ -83,7 +83,7 @@ export default async function AiReceptionistPage({ params }: PageProps<"/[locale
       <Nav locale={locale} t={t} />
       <main id="main-content">
         {/* ── Opening ── */}
-        <Section tone="field">
+        <Section tone="field" scene>
           <div className="grid gap-x-14 gap-y-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:items-center">
             <div>
               <PageTitle max="16ch">{p.heading}</PageTitle>

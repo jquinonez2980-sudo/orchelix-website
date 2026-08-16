@@ -46,9 +46,9 @@ OWN-WORLD: Ruled record — white field, graphite ruling, one magenta stamp,
 tick marks, tabular registers. Archivo condensed caps / Literata / Azeret mono.
 STORY: An operator sees Esmi answering calls in two languages, every row
 timestamped with a reason and a disposition, and books a pilot.
-FIRST VIEWPORT: White ruled field. Left column sets the offer and the stamped
-primary action; right column is the call register at full scale with its own
-notation legend. The register leads, the chrome recedes.
+FIRST VIEWPORT: White ruled field. Collapsed chrome (logo, stamp, menu).
+Stacked poster type on the left with the magenta stamp; the call register
+on the right is the hover-to-explore object. Native scroll, graphite plus marks.
 FORM: The Ruled Record — light rebrand 2026-08-10, seed key 8a1b2873.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the
 finish review, the verdict, and DESIGN.md

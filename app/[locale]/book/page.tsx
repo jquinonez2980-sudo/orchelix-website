@@ -54,7 +54,7 @@ export default async function BookPage({ params }: PageProps<"/[locale]">) {
       <Nav locale={locale} t={t} />
       <main id="main-content">
         {/* ── Opening + the form ── */}
-        <Section tone="field">
+        <Section tone="field" scene>
           <div className="grid gap-x-16 gap-y-14 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
             <div>
               <PageTitle max="14ch">{p.heading}</PageTitle>

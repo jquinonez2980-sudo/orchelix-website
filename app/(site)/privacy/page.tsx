@@ -30,7 +30,7 @@ export default function PrivacyPage() {
     <>
       <Nav />
       <main id="main-content">
-        <Section tone="field" id="privacy" style={{ scrollMarginTop: "5.5rem" }}>
+        <Section tone="field" scene id="privacy" style={{ scrollMarginTop: "5.5rem" }}>
           <PageTitle max="16ch">Privacy, PIPEDA &amp; security</PageTitle>
           <Prose size="1.0625rem" max="48ch" style={{ marginTop: "1.5rem" }}>
             Orchelix AI Consulting Inc. operates across Canada and the United
