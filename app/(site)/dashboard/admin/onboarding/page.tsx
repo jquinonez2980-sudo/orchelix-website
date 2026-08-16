@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import PageTitle, { PageLede } from "../../PageTitle";
 import { auth } from "@clerk/nextjs/server";
 import { ADMIN_ORG_SLUG } from "@/app/lib/platformProxy";
 import AdminOnboarding from "./AdminOnboarding";
@@ -31,14 +32,14 @@ export default async function AdminOnboardingPage() {
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
       <div className="mb-6">
-        <h1 className="font-display text-2xl font-semibold text-ink">
+        <PageTitle>
           Onboarding — Admin
-        </h1>
-        <p className="mt-1 text-sm text-ink-2">
+        </PageTitle>
+        <PageLede>
           Review businesses that signed up themselves. Work the provisioning checklist,
           then approve to let them serve live calls and chats. Nothing here is visible to
           client organizations.
-        </p>
+        </PageLede>
       </div>
       <AdminOnboarding />
     </main>

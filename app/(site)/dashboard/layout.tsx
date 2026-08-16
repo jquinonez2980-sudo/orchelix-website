@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import PageTitle, { PageLede } from "./PageTitle";
 import { ClerkProvider, OrganizationSwitcher } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { ADMIN_ORG_SLUG } from "@/app/lib/platformProxy";
@@ -54,20 +55,15 @@ function OrgGate() {
         className="w-full border border-line bg-surface px-6 py-8"
         style={{ borderTop: "2px solid var(--lg-rule)" }}
       >
-        <p
-          className="lg-fig text-xs uppercase tracking-wide text-ink-3"
-          style={{ letterSpacing: "0.12em" }}
-        >
-          Operator console
-        </p>
-        <h1 className="mt-2 font-display text-2xl font-semibold uppercase tracking-tight text-ink">
-          Choose your business
-        </h1>
-        <p className="mt-2 text-sm leading-6 text-ink-2">
+        {/* No eyebrow above the heading — DESIGN.md forbids the kicker, and
+            "Operator console" was telling the reader where they are on the one
+            screen where the answer is "nowhere yet, pick a business." */}
+        <PageTitle>Choose your business</PageTitle>
+        <PageLede>
           Your account isn&apos;t viewing a business yet. Pick one below — or,
           if you don&apos;t see your business, ask your Orchelix contact for an
           invitation.
-        </p>
+        </PageLede>
         {/* "Create organization" routes to our wizard, not Clerk's dialog —
             see the fuller note at the switcher in DashboardShell. */}
         <div className="mt-6 flex justify-center">

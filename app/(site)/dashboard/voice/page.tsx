@@ -1,6 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
+import PageTitle, { PageLede } from "../PageTitle";
 import { Suspense } from "react";
 import VoiceStudio from "./VoiceStudio";
 import { useDashI18n } from "../i18n";
@@ -13,13 +14,11 @@ function VoicePageInner() {
   return (
     <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
       <div className="mb-6">
-        <span className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-ink-4">
-          {locale === "es" ? "Estudio de voz" : "Voice Studio"}
-        </span>
-        <h1 className="mt-1.5 font-display text-2xl font-semibold uppercase tracking-tight text-ink">
-          {t.pages.voiceTitle}
-        </h1>
-        <p className="mt-1 text-sm text-ink-2">{t.pages.voiceLede}</p>
+        {/* The "Voice Studio" eyebrow is gone — DESIGN.md forbids a kicker
+            above a heading, and it was restating the page title in mono at
+            10px directly above the page title. */}
+        <PageTitle>{t.pages.voiceTitle}</PageTitle>
+        <PageLede>{t.pages.voiceLede}</PageLede>
       </div>
       {onboarded && (
         <div

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import PageTitle, { PageLede } from "../PageTitle";
 import Usage from "./Usage";
 
 export const dynamic = "force-dynamic";
@@ -12,10 +13,10 @@ export default function UsagePage() {
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
       <div className="mb-6">
-        <h1 className="font-display text-2xl font-semibold text-ink">Usage</h1>
-        <p className="mt-1 text-sm text-ink-2">
+        <PageTitle>Usage</PageTitle>
+        <PageLede>
           Calls and voice minutes Esmi has handled this month.
-        </p>
+        </PageLede>
       </div>
       <Usage />
     </main>

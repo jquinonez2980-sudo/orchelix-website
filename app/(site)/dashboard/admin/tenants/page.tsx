@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import PageTitle, { PageLede } from "../../PageTitle";
 import { auth } from "@clerk/nextjs/server";
 import { ADMIN_ORG_SLUG } from "@/app/lib/platformProxy";
 import AdminTenants from "./AdminTenants";
@@ -31,11 +32,11 @@ export default async function AdminTenantsPage() {
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
       <div className="mb-6">
-        <h1 className="font-display text-2xl font-semibold text-ink">Tenants — Admin</h1>
-        <p className="mt-1 text-sm text-ink-2">
+        <PageTitle>Tenants — Admin</PageTitle>
+        <PageLede>
           Assign each tenant&apos;s plan and account status. Internal only — not visible
           to client organizations.
-        </p>
+        </PageLede>
         <p className="mt-1.5 text-sm text-ink-3">
           Setting a tenant to{" "}
           <strong className="font-medium text-ink-2">suspended</strong> or{" "}

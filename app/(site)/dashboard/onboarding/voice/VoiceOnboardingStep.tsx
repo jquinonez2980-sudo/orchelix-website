@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import PageTitle, { PageLede } from "../../PageTitle";
 import { useRouter } from "next/navigation";
 import { Check } from "lucide-react";
 import {
@@ -146,13 +147,13 @@ export default function VoiceOnboardingStep() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl font-semibold tracking-tight text-ink">
+        <PageTitle>
           Make Esmi sound like your front desk
-        </h1>
-        <p className="mt-1.5 text-sm leading-6 text-ink-2">
+        </PageTitle>
+        <PageLede>
           Choose a voice and write a short greeting. Then hit Preview — you&apos;ll hear
           exactly what callers hear.
-        </p>
+        </PageLede>
       </div>
 
       <div className="overflow-hidden rounded-lg border border-line bg-surface shadow-sm">

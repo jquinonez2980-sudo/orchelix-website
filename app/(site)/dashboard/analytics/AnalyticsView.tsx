@@ -120,16 +120,30 @@ const COMING_SOON = [
   { title: "Lead quality score", body: "How promising the leads Esmi escalates to you tend to be." },
 ];
 
+/* An EntryList, not a card row. DESIGN.md: "Don't ship a row of same-size icon
+   + heading + text cards" — this section was three of exactly those, dashed
+   and rounded, and it survived the commit that cleared the card farm off the
+   rest of the surface. The replacement is the documented form: a 2px graphite
+   top rule over stacked rows, each an uppercase entry title with a prose line
+   beneath, hairline-separated. It also stops pretending three unbuilt features
+   are three equal-weight objects. */
 function ComingSoonSection() {
   return (
     <section>
-      <h2 className="font-display text-base font-semibold text-ink">Coming soon</h2>
-      <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
+      <h2 className="font-display text-base font-semibold uppercase tracking-tight text-ink">
+        Coming soon
+      </h2>
+      <div className="mt-3 border-t-2 border-[var(--lg-rule)]">
         {COMING_SOON.map((c) => (
-          <div key={c.title} className="rounded-lg border border-dashed border-line bg-surface p-4">
-            <p className="text-sm font-medium text-ink-2">{c.title}</p>
-            <p className="mt-1 text-xs leading-5 text-ink-4">{c.body}</p>
-          </div>
+          <article
+            key={c.title}
+            className="border-b border-[var(--lg-hair)] py-3 last:border-b-0"
+          >
+            <p className="font-display text-sm font-semibold uppercase tracking-[0.04em] text-ink">
+              {c.title}
+            </p>
+            <p className="mt-0.5 max-w-[60ch] text-xs leading-5 text-ink-2">{c.body}</p>
+          </article>
         ))}
       </div>
     </section>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import PageTitle, { PageLede } from "../PageTitle";
 import SchedulingStatus from "./SchedulingStatus";
 
 export const dynamic = "force-dynamic";
@@ -10,12 +11,12 @@ export const metadata: Metadata = {
 
 export default function SchedulingPage() {
   return (
-    <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
+    <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
       <div className="mb-6">
-        <h1 className="font-display text-2xl font-semibold text-ink">Scheduling</h1>
-        <p className="mt-1 text-sm text-ink-2">
+        <PageTitle>Scheduling</PageTitle>
+        <PageLede>
           Calendar connection and the booking hours Esmi follows.
-        </p>
+        </PageLede>
       </div>
       <SchedulingStatus />
     </main>
