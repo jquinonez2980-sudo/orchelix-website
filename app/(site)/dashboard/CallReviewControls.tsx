@@ -3,9 +3,10 @@
 import { useState } from "react";
 import {
   REVIEW_STATUSES,
-  updateCallReview,
+  updateReview,
   type CallReview,
   type ReviewStatus,
+  type ReviewSubject,
 } from "@/app/lib/esmiPlatform";
 import { track } from "@/app/lib/analytics";
 import { useDashI18n } from "./i18n";
@@ -16,14 +17,20 @@ const LABELS: Record<ReviewStatus, { en: string; es: string }> = {
   needs_followup: { en: "Needs follow-up", es: "Requiere seguimiento" },
 };
 
+/* Shared by the call and chat row expanders. A review is the same fact over
+   either subject, so this is one control with a `subject`, not two components
+   that would drift the way the badge and filter labels already did. */
 export default function CallReviewControls({
   callId,
   initial,
   onChange,
+  subject = "call",
 }: {
+  /** The subject's id — calls.id or chat_sessions.id. */
   callId: string;
   initial?: CallReview | null;
   onChange?: (r: CallReview) => void;
+  subject?: ReviewSubject;
 }) {
   const { locale } = useDashI18n();
   const [status, setStatus] = useState<ReviewStatus>(initial?.status ?? "open");
@@ -37,15 +44,16 @@ export default function CallReviewControls({
     setError(null);
     setSaved(false);
     try {
-      const review = await updateCallReview(callId, {
-        status: nextStatus,
-        note: note.trim() || null,
-      });
+      const review = await updateReview(
+        callId,
+        { status: nextStatus, note: note.trim() || null },
+        subject,
+      );
       setStatus(review.status);
       setNote(review.note ?? "");
       setSaved(true);
       onChange?.(review);
-      track("call_review", { status: review.status });
+      track("call_review", { status: review.status, subject });
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not save review.");
     } finally {

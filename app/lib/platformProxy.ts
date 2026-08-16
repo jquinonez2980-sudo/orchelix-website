@@ -6,7 +6,10 @@ import { auth } from "@clerk/nextjs/server";
    Esmi tenant_id → X-Tenant-Id + X-Platform-Secret injected server-side.
    The browser never sees the secret and can never choose the tenant. */
 
-const RAILWAY_URL =
+/* Exported so callers that talk to the platform directly (app/lib/callReviews)
+   resolve the backend the same way, fallback included, instead of growing a
+   second copy that can drift. */
+export const RAILWAY_URL =
   process.env.RAILWAY_API_URL ??
   "https://ai-receptionist-production-5375.up.railway.app";
 

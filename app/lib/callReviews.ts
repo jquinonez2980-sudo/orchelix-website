@@ -1,18 +1,26 @@
-/* Durable call-review store for the operator console.
+/* Review state for the operator console — calls and chats.
 
-   Primary: Clerk organization privateMetadata (`esmiCallReviews`) so reviews
-   survive refresh and multi-device without a Railway schema change.
+   Storage is Postgres now (`reviews`, migration 0016 in the backend repo),
+   reached through the platform API like every other piece of dashboard data.
 
-   Secondary: when PLATFORM review endpoints exist, callers may try upstream
-   first; this module is the Next-side source of truth until then.
+   IT USED TO BE CLERK ORGANIZATION METADATA, and that mattered: the old store
+   pruned itself to MAX_REVIEWS = 400 to stay under Clerk's metadata size cap,
+   dropping the oldest reviewed entries. That is silent data loss — you mark a
+   call reviewed, and months later it is open again with no error anywhere.
 
-   Metadata size is bounded — we keep at most MAX_REVIEWS (oldest open-status
-   pruned first, then oldest by reviewedAt). */
+   The lift below carries the old metadata across on first read. See its own
+   note for when to delete it. */
 
 import { auth, clerkClient } from "@clerk/nextjs/server";
 
+import { RAILWAY_URL } from "./platformProxy";
+
 export const REVIEW_STATUSES = ["open", "reviewed", "needs_followup"] as const;
 export type ReviewStatus = (typeof REVIEW_STATUSES)[number];
+
+/** 'call' | 'chat' — a review is the same fact over either subject. */
+export const REVIEW_SUBJECTS = ["call", "chat"] as const;
+export type ReviewSubject = (typeof REVIEW_SUBJECTS)[number];
 
 export type CallReview = {
   status: ReviewStatus;
@@ -24,14 +32,18 @@ export type CallReview = {
 
 export type CallReviewsMap = Record<string, CallReview>;
 
-const META_KEY = "esmiCallReviews";
-const MAX_REVIEWS = 400;
+/* ── the legacy Clerk store, read-only, kept only for the lift ───────────── */
+
+const LEGACY_META_KEY = "esmiCallReviews";
+/* Set on the org once its calls have been carried over, so a tenant with
+   genuinely zero reviews doesn't pay a Clerk round-trip on every load. */
+const LIFTED_FLAG = "esmiReviewsLiftedToPostgres";
 
 function isReviewStatus(v: unknown): v is ReviewStatus {
   return typeof v === "string" && (REVIEW_STATUSES as readonly string[]).includes(v);
 }
 
-function parseReviews(raw: unknown): CallReviewsMap {
+function parseLegacy(raw: unknown): CallReviewsMap {
   if (!raw || typeof raw !== "object") return {};
   const out: CallReviewsMap = {};
   for (const [id, val] of Object.entries(raw as Record<string, unknown>)) {
@@ -48,21 +60,6 @@ function parseReviews(raw: unknown): CallReviewsMap {
     };
   }
   return out;
-}
-
-function prune(map: CallReviewsMap): CallReviewsMap {
-  const entries = Object.entries(map);
-  if (entries.length <= MAX_REVIEWS) return map;
-  entries.sort((a, b) => {
-    /* Drop oldest "reviewed" first; keep open / needs_followup longer. */
-    const rank = (s: ReviewStatus) =>
-      s === "open" ? 2 : s === "needs_followup" ? 1 : 0;
-    const dr = rank(a[1].status) - rank(b[1].status);
-    if (dr !== 0) return dr;
-    return (a[1].updated_at || "").localeCompare(b[1].updated_at || "");
-  });
-  const keep = entries.slice(-(MAX_REVIEWS));
-  return Object.fromEntries(keep);
 }
 
 export async function requireOrgAuth(): Promise<
@@ -88,45 +85,104 @@ export async function requireOrgAuth(): Promise<
   return { ok: true, userId, orgId, orgSlug };
 }
 
-export async function getCallReviews(orgId: string): Promise<CallReviewsMap> {
-  const client = await clerkClient();
-  const org = await client.organizations.getOrganization({ organizationId: orgId });
-  const meta = (org.privateMetadata ?? {}) as Record<string, unknown>;
-  return parseReviews(meta[META_KEY]);
+/* ── platform API ───────────────────────────────────────────────────────── */
+
+function platformBase(): string {
+  return RAILWAY_URL.replace(/\/$/, "");
 }
 
-export async function setCallReview(
-  orgId: string,
+function platformHeaders(orgSlug: string): HeadersInit {
+  const secret = process.env.PLATFORM_API_SECRET;
+  if (!secret) throw new Error("PLATFORM_API_SECRET is not configured.");
+  return {
+    "Content-Type": "application/json",
+    "X-Platform-Secret": secret,
+    "X-Tenant-Id": orgSlug,
+  };
+}
+
+export async function getReviews(
+  orgSlug: string,
+  subject: ReviewSubject = "call",
+): Promise<CallReviewsMap> {
+  const res = await fetch(
+    `${platformBase()}/platform/reviews?subject_type=${subject}`,
+    { headers: platformHeaders(orgSlug), cache: "no-store" },
+  );
+  if (!res.ok) throw new Error(`Could not load reviews (${res.status}).`);
+  const body = await res.json();
+  return (body?.reviews ?? {}) as CallReviewsMap;
+}
+
+export async function setReview(
+  orgSlug: string,
   userId: string,
-  callId: string,
+  subject: ReviewSubject,
+  subjectId: string,
   update: { status: ReviewStatus; note?: string | null },
 ): Promise<CallReview> {
-  const client = await clerkClient();
-  const org = await client.organizations.getOrganization({ organizationId: orgId });
-  const meta = { ...((org.privateMetadata ?? {}) as Record<string, unknown>) };
-  const map = parseReviews(meta[META_KEY]);
-  const now = new Date().toISOString();
-  const prev = map[callId];
-  const reviewed =
-    update.status === "reviewed" || update.status === "needs_followup";
+  const res = await fetch(
+    `${platformBase()}/platform/reviews/${subject}/${encodeURIComponent(subjectId)}`,
+    {
+      method: "PUT",
+      headers: platformHeaders(orgSlug),
+      cache: "no-store",
+      body: JSON.stringify({
+        status: update.status,
+        note: update.note ?? null,
+        reviewed_by: userId,
+      }),
+    },
+  );
+  if (!res.ok) {
+    const detail = await res.text().catch(() => "");
+    throw new Error(detail || `Could not save review (${res.status}).`);
+  }
+  return (await res.json()) as CallReview;
+}
 
-  const next: CallReview = {
-    status: update.status,
-    note:
-      update.note !== undefined
-        ? update.note
-        : prev?.note ?? null,
-    reviewed_at: reviewed ? now : null,
-    reviewed_by: reviewed ? userId : null,
-    updated_at: now,
-  };
-  map[callId] = next;
-  meta[META_KEY] = prune(map);
+/* ── one-time lift out of Clerk ──────────────────────────────────────────
 
-  await client.organizations.updateOrganizationMetadata(orgId, {
-    privateMetadata: meta,
-  });
-  return next;
+   TRANSITIONAL. Delete this function, LEGACY_META_KEY, LIFTED_FLAG and
+   parseLegacy once every active org has been read at least once after this
+   deploy — check by confirming no org still has `esmiCallReviews` without
+   `esmiReviewsLiftedToPostgres`.
+
+   Runs on read rather than as a script because the two secrets it needs
+   (Clerk's and the platform's) both already exist in this runtime, and a
+   migration nobody has to remember to run is a migration that actually
+   happens. Writes are idempotent upserts keyed by (tenant, subject, id), so
+   two tabs racing here is harmless. */
+export async function liftLegacyReviewsIfNeeded(
+  orgId: string,
+  orgSlug: string,
+): Promise<CallReviewsMap | null> {
+  try {
+    const client = await clerkClient();
+    const org = await client.organizations.getOrganization({ organizationId: orgId });
+    const meta = { ...((org.privateMetadata ?? {}) as Record<string, unknown>) };
+    if (meta[LIFTED_FLAG]) return null;
+
+    const legacy = parseLegacy(meta[LEGACY_META_KEY]);
+    for (const [callId, review] of Object.entries(legacy)) {
+      await setReview(orgSlug, review.reviewed_by ?? "", "call", callId, {
+        status: review.status,
+        note: review.note,
+      });
+    }
+
+    // Flag even when there was nothing to carry — that is the case worth
+    // short-circuiting, since it is every tenant that never used the feature.
+    meta[LIFTED_FLAG] = new Date().toISOString();
+    await client.organizations.updateOrganizationMetadata(orgId, {
+      privateMetadata: meta,
+    });
+    return Object.keys(legacy).length ? legacy : null;
+  } catch (e) {
+    // Never fail the page over the lift. Worst case it retries next load.
+    console.error("review lift failed", e);
+    return null;
+  }
 }
 
 export function countOpenReviews(map: CallReviewsMap): number {

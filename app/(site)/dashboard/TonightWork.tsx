@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { SectionTitle } from "./PageTitle";
 import Link from "next/link";
 import {
-  fetchCallReviews,
+  fetchReviews,
   fetchLeads,
   type CallReviewsResponse,
 } from "@/app/lib/esmiPlatform";
@@ -27,7 +27,7 @@ export default function TonightWork({
 
   useEffect(() => {
     let active = true;
-    fetchCallReviews()
+    fetchReviews("call")
       .then((r) => active && setReviews(r))
       .catch(() => active && setReviews({ tenant_id: "", reviews: {} }));
     fetchLeads({ status: "new", limit: 1, offset: 0 })

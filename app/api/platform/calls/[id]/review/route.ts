@@ -1,15 +1,20 @@
 import { NextRequest } from "next/server";
 import {
   REVIEW_STATUSES,
-  setCallReview,
+  REVIEW_SUBJECTS,
   requireOrgAuth,
+  setReview,
   type ReviewStatus,
+  type ReviewSubject,
 } from "@/app/lib/callReviews";
 
 export const dynamic = "force-dynamic";
 
-/* PATCH /api/platform/calls/{id}/review
-   Body: { status: "open" | "reviewed" | "needs_followup", note?: string | null } */
+/* PATCH /api/platform/calls/{id}/review?subject=call|chat
+   Body: { status: "open" | "reviewed" | "needs_followup", note?: string | null }
+
+   `subject` defaults to "call" so existing callers are unchanged; the chat
+   row expander passes subject=chat and writes to the same table. */
 
 export async function PATCH(
   req: NextRequest,
@@ -20,7 +25,15 @@ export async function PATCH(
 
   const { id } = await params;
   if (!id?.trim()) {
-    return Response.json({ error: "Missing call id." }, { status: 400 });
+    return Response.json({ error: "Missing subject id." }, { status: 400 });
+  }
+
+  const rawSubject = req.nextUrl.searchParams.get("subject") ?? "call";
+  if (!(REVIEW_SUBJECTS as readonly string[]).includes(rawSubject)) {
+    return Response.json(
+      { error: `subject must be one of: ${REVIEW_SUBJECTS.join(", ")}` },
+      { status: 400 },
+    );
   }
 
   let body: { status?: string; note?: string | null };
@@ -38,12 +51,15 @@ export async function PATCH(
   }
 
   try {
-    const review = await setCallReview(authz.orgId, authz.userId, id, {
-      status: body.status as ReviewStatus,
-      note: body.note,
-    });
+    const review = await setReview(
+      authz.orgSlug,
+      authz.userId,
+      rawSubject as ReviewSubject,
+      id,
+      { status: body.status as ReviewStatus, note: body.note },
+    );
     return Response.json(
-      { tenant_id: authz.orgSlug, call_id: id, review },
+      { tenant_id: authz.orgSlug, subject_type: rawSubject, call_id: id, review },
       { headers: { "Cache-Control": "no-store" } },
     );
   } catch (e) {

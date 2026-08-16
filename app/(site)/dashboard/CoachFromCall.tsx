@@ -2,12 +2,12 @@
 
 /* Persisted HITL coach: saves a knowledge entry the platform will use on
    future calls. Call disposition is not rewritten; knowledge is the override
-   path. Review status is saved via CallReviewControls / updateCallReview. */
+   path. Review status is saved via CallReviewControls / updateReview. */
 
 import { useState } from "react";
 import {
   addKnowledgeEntry,
-  updateCallReview,
+  updateReview,
   type PlatformCall,
 } from "@/app/lib/esmiPlatform";
 import { track } from "@/app/lib/analytics";
@@ -52,7 +52,7 @@ export default function CoachFromCall({
           call.language === "es" ? "es" : call.language === "en" ? "en" : "auto",
       });
       /* Coaching implies the operator handled the call — mark reviewed. */
-      await updateCallReview(call.id, { status: "reviewed" }).catch(() => {
+      await updateReview(call.id, { status: "reviewed" }).catch(() => {
         /* knowledge still saved */
       });
       setStatus("saved");

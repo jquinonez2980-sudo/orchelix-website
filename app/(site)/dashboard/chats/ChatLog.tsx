@@ -11,8 +11,11 @@ import {
   type ChatOutcome,
   type ChatsResponse,
   type PlatformChat,
+  fetchReviews,
+  type CallReview,
 } from "@/app/lib/esmiPlatform";
 import { Badge, type BadgeTone } from "../Badge";
+import CallReviewControls from "../CallReviewControls";
 import { useDashI18n } from "../i18n";
 import { useActiveOrgSlug } from "../useActiveOrgSlug";
 
@@ -270,11 +273,20 @@ function ChatDetailPanel({ chatId }: { chatId: string }) {
 
 /* ── rows / cards ────────────────────────────────────────────────────────── */
 
-function ChatRow({ chat }: { chat: PlatformChat }) {
+function ChatRow({
+  chat,
+  review,
+  onReviewChange,
+}: {
+  chat: PlatformChat;
+  review?: CallReview | null;
+  onReviewChange?: (chatId: string, r: CallReview) => void;
+}) {
   const { t } = useDashI18n();
   const [open, setOpen] = useState(false);
   const started = fmtWhen(chat.started_at);
   const last = fmtWhen(chat.last_at);
+  const reviewStatus = review?.status;
   return (
     <>
       {/* Desktop row */}
@@ -296,6 +308,20 @@ function ChatRow({ chat }: { chat: PlatformChat }) {
         <td className="whitespace-nowrap px-4 py-3">
           <OutcomeBadge outcome={chat.outcome} lastAt={chat.last_at} />
         </td>
+        {/* Same split as Calls: outcome is what Esmi did, review is what the
+            operator still owes it. An em dash for never-reviewed, so finished
+            and never-started stay distinguishable. */}
+        <td className="whitespace-nowrap px-4 py-3">
+          {reviewStatus === "needs_followup" ? (
+            <Badge tone="warning">{t.ui.needsFollowup}</Badge>
+          ) : reviewStatus === "open" ? (
+            <Badge tone="info">{t.ui.needsReview}</Badge>
+          ) : reviewStatus === "reviewed" ? (
+            <Badge tone="neutral">{t.ui.reviewed}</Badge>
+          ) : (
+            <span className="text-sm text-ink-3">&mdash;</span>
+          )}
+        </td>
         <td className="max-w-md px-4 py-3 text-sm text-ink-2">
           <span className="line-clamp-2">{chat.summary || "—"}</span>
         </td>
@@ -316,15 +342,23 @@ function ChatRow({ chat }: { chat: PlatformChat }) {
       </tr>
       {open && (
         <tr className="hidden md:table-row">
-          <td colSpan={6} className="p-0">
+          <td colSpan={7} className="p-0">
             <ChatDetailPanel chatId={chat.id} />
+            <div className="px-4 pb-4 sm:px-6">
+              <CallReviewControls
+                subject="chat"
+                callId={chat.id}
+                initial={review}
+                onChange={(r) => onReviewChange?.(chat.id, r)}
+              />
+            </div>
           </td>
         </tr>
       )}
 
       {/* Mobile card */}
       <tr className="md:hidden">
-        <td colSpan={6} className="border-t border-line p-0">
+        <td colSpan={7} className="border-t border-line p-0">
           <button
             type="button"
             aria-expanded={open}
@@ -363,7 +397,7 @@ function SkeletonRows() {
     <tbody>
       {Array.from({ length: 6 }).map((_, i) => (
         <tr key={i} className="border-t border-line">
-          <td colSpan={6} className="px-4 py-3 sm:px-6">
+          <td colSpan={7} className="px-4 py-3 sm:px-6">
             <div className="flex items-center gap-4">
               <div className="h-4 w-32 rounded bg-surface-2" />
               <div className="h-4 w-28 rounded bg-surface-2" />
@@ -383,7 +417,7 @@ function EmptyState({ filtered }: { filtered: boolean }) {
   return (
     <tbody>
       <tr className="border-t border-line">
-        <td colSpan={6}>
+        <td colSpan={7}>
           <div className="flex flex-col items-center gap-2 px-6 py-16 text-center">
             <p className="font-display text-base font-semibold text-ink">
               {filtered ? t.ui.noChatsFilter : t.ui.noChats}
@@ -403,7 +437,7 @@ function ErrorState({ message, onRetry }: { message: string; onRetry: () => void
   return (
     <tbody>
       <tr className="border-t border-line">
-        <td colSpan={6}>
+        <td colSpan={7}>
           <div className="flex flex-col items-center gap-3 px-6 py-16 text-center">
             <p className="font-display text-base font-semibold text-ink">
               {t.ui.loadChatsFail}
@@ -435,9 +469,13 @@ export default function ChatLog() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
+  const [reviews, setReviews] = useState<Record<string, CallReview>>({});
+  const [reviewFilter, setReviewFilter] = useState<
+    "" | "open" | "reviewed" | "needs_followup"
+  >("");
   const orgSlug = useActiveOrgSlug();
 
-  const filtered = Boolean(outcome || fromDate || toDate);
+  const filtered = Boolean(outcome || fromDate || toDate || reviewFilter);
 
   useEffect(() => {
     let active = true;
@@ -464,6 +502,31 @@ export default function ChatLog() {
       active = false;
     };
   }, [orgSlug, outcome, fromDate, toDate, page, reloadKey]);
+
+  // Keyed by chat id and covering every chat this tenant has, so it is fetched
+  // on tenant change rather than on every filter or page step. A failure here
+  // must not blank the log — the Review column simply reads as unreviewed.
+  useEffect(() => {
+    let active = true;
+    fetchReviews("chat")
+      .then((r) => active && setReviews(r.reviews))
+      .catch(() => active && setReviews({}));
+    return () => {
+      active = false;
+    };
+  }, [orgSlug, reloadKey]);
+
+  const visibleChats = useMemo(() => {
+    if (!data) return [];
+    if (!reviewFilter) return data.chats;
+    return data.chats.filter((c) => {
+      const r = reviews[c.id];
+      if (reviewFilter === "open") {
+        return !r || r.status === "open" || r.status === "needs_followup";
+      }
+      return r?.status === reviewFilter;
+    });
+  }, [data, reviews, reviewFilter]);
 
   const totalPages = useMemo(
     () => (data ? Math.max(1, Math.ceil(data.total / PAGE_SIZE)) : 1),
@@ -501,6 +564,24 @@ export default function ChatLog() {
                 {o === "closed" ? t.ui.closed : OUTCOME_STYLE[o].label}
               </option>
             ))}
+          </select>
+        </label>
+        <label className="flex flex-col gap-1 text-xs font-medium text-ink-3">
+          {t.ui.review}
+          <select
+            value={reviewFilter}
+            onChange={(e) => {
+              setReviewFilter(
+                e.target.value as "" | "open" | "reviewed" | "needs_followup",
+              );
+              setPage(0);
+            }}
+            className={inputCls}
+          >
+            <option value="">{t.ui.allReviews}</option>
+            <option value="open">{t.ui.needsReview}</option>
+            <option value="needs_followup">{t.ui.needsFollowup}</option>
+            <option value="reviewed">{t.ui.reviewed}</option>
           </select>
         </label>
         <label className="flex flex-col gap-1 text-xs font-medium text-ink-3">
@@ -549,6 +630,7 @@ export default function ChatLog() {
               <th className="px-4 py-3">{t.ui.lastActive}</th>
               <th className="px-4 py-3">{t.ui.messages}</th>
               <th className="px-4 py-3">{t.ui.outcome}</th>
+              <th className="px-4 py-3">{t.ui.review}</th>
               <th className="px-4 py-3">{t.ui.summary}</th>
               <th className="px-4 py-3" />
             </tr>
@@ -561,8 +643,15 @@ export default function ChatLog() {
             <EmptyState filtered={filtered} />
           ) : (
             <tbody>
-              {data.chats.map((c) => (
-                <ChatRow key={c.id} chat={c} />
+              {visibleChats.map((c) => (
+                <ChatRow
+                  key={c.id}
+                  chat={c}
+                  review={reviews[c.id]}
+                  onReviewChange={(id, r) =>
+                    setReviews((prev) => ({ ...prev, [id]: r }))
+                  }
+                />
               ))}
             </tbody>
           )}

@@ -1020,18 +1020,29 @@ export type CallReviewsResponse = {
   reviews: Record<string, CallReview>;
 };
 
-export async function fetchCallReviews(): Promise<CallReviewsResponse> {
-  const res = await fetch("/api/platform/calls/reviews", { cache: "no-store" });
+/* A review is the same fact over a call or a chat, so these are subject-scoped
+   rather than call-only. They kept the "Call" names for a while after chats
+   started using them, which is how a shared concept quietly grows two
+   vocabularies — the badges and the filter had already done exactly that. */
+export type ReviewSubject = "call" | "chat";
+
+export async function fetchReviews(
+  subject: ReviewSubject = "call",
+): Promise<CallReviewsResponse> {
+  const res = await fetch(`/api/platform/calls/reviews?subject=${subject}`, {
+    cache: "no-store",
+  });
   if (!res.ok) throw new Error(await readErrorDetail(res));
   return res.json();
 }
 
-export async function updateCallReview(
-  callId: string,
+export async function updateReview(
+  subjectId: string,
   update: { status: ReviewStatus; note?: string | null },
+  subject: ReviewSubject = "call",
 ): Promise<CallReview> {
   const res = await fetch(
-    `/api/platform/calls/${encodeURIComponent(callId)}/review`,
+    `/api/platform/calls/${encodeURIComponent(subjectId)}/review?subject=${subject}`,
     {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },

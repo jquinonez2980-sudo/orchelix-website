@@ -5,7 +5,7 @@ import Action from "../Action";
 import {
   CALL_OUTCOMES,
   fetchCallRecordingExport,
-  fetchCallReviews,
+  fetchReviews,
   fetchCalls,
   type CallLanguage,
   type CallOutcome,
@@ -570,7 +570,7 @@ export default function CallLog() {
         language,
         has_recording: hasRecording === "" ? undefined : hasRecording === "true",
       }),
-      fetchCallReviews().catch(() => ({ tenant_id: "", reviews: {} as Record<string, CallReview> })),
+      fetchReviews("call").catch(() => ({ tenant_id: "", reviews: {} as Record<string, CallReview> })),
     ])
       .then(([d, rev]) => {
         if (!active) return;
