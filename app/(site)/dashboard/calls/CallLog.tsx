@@ -303,6 +303,10 @@ function CallRow({
   defaultOpen?: boolean;
   onReviewChange?: (callId: string, r: CallReview) => void;
 }) {
+  // CallRow had no `t`, which is why the review badges were hardcoded English
+  // on a dashboard that ships Spanish. They reuse the filter's own labels now,
+  // so a badge reads exactly like the filter option that selects it.
+  const { t } = useDashI18n();
   const [open, setOpen] = useState(Boolean(defaultOpen));
   const when = fmtWhen(call.started_at);
   const reviewStatus = review?.status;
@@ -328,14 +332,23 @@ function CallRow({
             {fmtLanguage(call.language)}
           </td>
           <td className="whitespace-nowrap px-4 py-3">
-            <div className="flex flex-wrap items-center gap-1.5">
-              <OutcomeBadge outcome={call.outcome} />
-              {reviewStatus && reviewStatus !== "reviewed" && (
-                <Badge tone={reviewStatus === "needs_followup" ? "warning" : "info"}>
-                  {reviewStatus === "needs_followup" ? "Follow-up" : "Open"}
-                </Badge>
-              )}
-            </div>
+            <OutcomeBadge outcome={call.outcome} />
+          </td>
+          {/* Review is the operator's queue state, not Esmi's disposition, and
+              sharing the Outcome cell made a booked call read as if it had two
+              conflicting outcomes. Its own column, and an em dash rather than a
+              blank when a call has never been reviewed — the register says
+              "nothing here" out loud everywhere else. */}
+          <td className="whitespace-nowrap px-4 py-3">
+            {reviewStatus === "needs_followup" ? (
+              <Badge tone="warning">{t.ui.needsFollowup}</Badge>
+            ) : reviewStatus === "open" ? (
+              <Badge tone="info">{t.ui.needsReview}</Badge>
+            ) : reviewStatus === "reviewed" ? (
+              <Badge tone="neutral">{t.ui.reviewed}</Badge>
+            ) : (
+              <span className="text-sm text-ink-3">&mdash;</span>
+            )}
           </td>
           <td className="max-w-md px-4 py-3 text-sm text-ink-2">
             <span className="line-clamp-2">{call.summary || "—"}</span>
@@ -357,7 +370,7 @@ function CallRow({
         </tr>
         {open && (
           <tr className="hidden md:table-row">
-            <td colSpan={7} className="p-0">
+            <td colSpan={8} className="p-0">
               <CallDetail
                 call={call}
                 review={review}
@@ -371,7 +384,7 @@ function CallRow({
       {/* Mobile card */}
       <tbody className="md:hidden">
         <tr>
-          <td colSpan={7} className="border-t border-line p-0">
+          <td colSpan={8} className="border-t border-line p-0">
             <button
               type="button"
               aria-expanded={open}
@@ -385,7 +398,9 @@ function CallRow({
                   <OutcomeBadge outcome={call.outcome} />
                   {reviewStatus && reviewStatus !== "reviewed" && (
                     <Badge tone={reviewStatus === "needs_followup" ? "warning" : "info"}>
-                      {reviewStatus === "needs_followup" ? "Follow-up" : "Open"}
+                      {reviewStatus === "needs_followup"
+                        ? t.ui.needsFollowup
+                        : t.ui.needsReview}
                     </Badge>
                   )}
                 </div>
@@ -423,7 +438,7 @@ function SkeletonRows() {
     <tbody>
       {Array.from({ length: 6 }).map((_, i) => (
         <tr key={i} className="border-t border-line">
-          <td colSpan={7} className="px-4 py-3 sm:px-6">
+          <td colSpan={8} className="px-4 py-3 sm:px-6">
             <div className="flex items-center gap-4">
               <div className="h-4 w-32 rounded bg-surface-2" />
               <div className="h-4 w-28 rounded bg-surface-2" />
@@ -443,7 +458,7 @@ function EmptyState({ filtered }: { filtered: boolean }) {
   return (
     <tbody>
       <tr className="border-t border-line">
-        <td colSpan={7}>
+        <td colSpan={8}>
           <div className="flex flex-col items-center gap-2 px-6 py-16 text-center">
             <p className="font-display text-base font-semibold text-ink">
               {filtered ? t.ui.noCallsFilter : t.ui.noCalls}
@@ -463,7 +478,7 @@ function ErrorState({ message, onRetry }: { message: string; onRetry: () => void
   return (
     <tbody>
       <tr className="border-t border-line">
-        <td colSpan={7}>
+        <td colSpan={8}>
           <div className="flex flex-col items-center gap-3 px-6 py-16 text-center">
             <p className="font-display text-base font-semibold text-ink">
               {t.ui.loadCallsFail}
@@ -735,6 +750,7 @@ export default function CallLog() {
               <th className="px-4 py-3">{t.ui.duration}</th>
               <th className="px-4 py-3">{t.ui.language}</th>
               <th className="px-4 py-3">{t.ui.outcome}</th>
+              <th className="px-4 py-3">{t.ui.review}</th>
               <th className="px-4 py-3">{t.ui.summary}</th>
               <th className="px-4 py-3" />
             </tr>
