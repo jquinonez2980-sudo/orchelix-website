@@ -27,6 +27,19 @@ function isUnknownOrgError(message: string): boolean {
 
 /* ── call volume (simple CSS bars — no chart library) ───────────────────── */
 
+const dayLabel = (date: string) => dayFmt.format(new Date(`${date}T00:00:00`));
+
+/* The chart used to render the inverse of the data, and it took measuring the
+   live page to see it. Each day column sat directly in a `h-28 items-end` flex
+   row with no height of its own, so `items-end` shrank it to its label — about
+   19px — and a bar asking for `height: 33%` resolved against an indefinite
+   height and computed to 0. The only marks that survived were the zero-call
+   days, which used a literal `2px`. Every visible tick was a day nothing
+   happened, and every day that took a call was invisible.
+
+   The fix is a definite height to resolve against: the bar area is its own
+   fixed-height row, the labels sit below it, and each column is `h-full`
+   inside that row. Percentages mean something again. */
 function VolumeChart({ days }: { days: AnalyticsDayCount[] }) {
   const max = Math.max(1, ...days.map((d) => d.count));
   const total = days.reduce((sum, d) => sum + d.count, 0);
@@ -39,27 +52,57 @@ function VolumeChart({ days }: { days: AnalyticsDayCount[] }) {
         </SectionTitle>
         <span className="text-sm text-ink-3">{total} calls</span>
       </div>
-      <div className="mt-3 rounded-lg border border-line bg-surface p-5 shadow-sm">
-        {total === 0 ? (
-          <p className="text-sm text-ink-3">No calls in the last {days.length} days.</p>
-        ) : (
-          <div className="flex h-28 items-end gap-1">
-            {days.map((d) => (
-              <div key={d.date} className="flex min-w-0 flex-1 flex-col items-center gap-1">
-                <div
-                  title={`${d.date}: ${d.count} call${d.count === 1 ? "" : "s"}`}
-                  className="w-full rounded-t bg-navy-600"
-                  style={{
-                    height: d.count === 0 ? "2px" : `${Math.max(6, (d.count / max) * 100)}%`,
-                    opacity: d.count === 0 ? 0.2 : 1,
-                  }}
-                />
-                <span className="text-[10px] text-ink-4">
-                  {dayFmt.format(new Date(`${d.date}T00:00:00`))}
-                </span>
-              </div>
-            ))}
-          </div>
+      <div className="mt-3 border border-line bg-surface p-5">
+        {/* The ruling is drawn whether or not there is anything on it. An empty
+            register is still a register — dropping to a bare sentence made a
+            quiet fortnight look like a broken page, which is the failure this
+            whole block is here to avoid. */}
+        <div
+          className="flex h-28 items-end gap-1 border-b"
+          style={{ borderColor: "var(--lg-rule)" }}
+          role="img"
+          aria-label={
+            total === 0
+              ? `No calls in the last ${days.length} days.`
+              : `${total} calls over the last ${days.length} days, ` +
+                `busiest day ${max} call${max === 1 ? "" : "s"}.`
+          }
+        >
+          {days.map((d) => (
+            <div key={d.date} className="flex h-full min-w-0 flex-1 items-end">
+              <div
+                title={`${d.date}: ${d.count} call${d.count === 1 ? "" : "s"}`}
+                className="w-full"
+                style={{
+                  // A day with no calls keeps a hairline on the baseline so the
+                  // gap is legible as "nothing that day" and not as a missing
+                  // column. It is a mark, so it is drawn in the ruling.
+                  height:
+                    d.count === 0
+                      ? "1px"
+                      : `${Math.max(6, (d.count / max) * 100)}%`,
+                  background:
+                    d.count === 0 ? "var(--lg-hair)" : "var(--lg-ink)",
+                }}
+              />
+            </div>
+          ))}
+        </div>
+        <div className="flex gap-1 pt-1.5">
+          {days.map((d) => (
+            <span
+              key={d.date}
+              className="min-w-0 flex-1 text-center text-[10px] text-ink-4"
+            >
+              {dayLabel(d.date)}
+            </span>
+          ))}
+        </div>
+        {total === 0 && (
+          <p className="mt-3 max-w-[60ch] text-sm text-ink-2">
+            No calls yet in this window. Esmi is answering — the register fills
+            in as calls come through.
+          </p>
         )}
       </div>
     </section>
@@ -97,10 +140,20 @@ function LanguageMixSection({ mix }: { mix: LanguageMix }) {
                       {count} <span className="text-ink-4">({pct}%)</span>
                     </span>
                   </div>
+                  {/* Every bar here was the accent, on a page with no primary
+                      action — the stamp appeared twice and marked nothing you
+                      can do. DESIGN.md sanctions foil for one thing in this
+                      neighbourhood, "the ES language marker", so Spanish keeps
+                      it and carries real meaning; English and Unknown are
+                      drawn in ink like the volume chart beside them. */}
                   <div className="mt-1 h-1.5 w-full overflow-hidden bg-surface-2">
                     <div
-                      className="h-full bg-navy-600"
-                      style={{ width: `${pct}%` }}
+                      className="h-full"
+                      style={{
+                        width: `${pct}%`,
+                        background:
+                          key === "es" ? "var(--lg-foil)" : "var(--lg-ink)",
+                      }}
                     />
                   </div>
                 </li>
