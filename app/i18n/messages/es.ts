@@ -21,6 +21,10 @@ const es: Messages = {
     localeName: "Español",
     switchTo: "English",
     switchLabel: "Switch to English",
+    language: "Idioma",
+    lighting: "Iluminación",
+    day: "Día",
+    night: "Noche",
   },
 
   nav: {

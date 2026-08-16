@@ -1,0 +1,212 @@
+/* Homepage-only. Loaded exclusively from InscriptionRoot.
+   Other routes never receive [data-inscription] and must not change. */
+
+[data-inscription] {
+  --ins-clear: #f4f5f6;
+  --ins-panel: rgba(244, 245, 246, 0.78);
+  --ins-panel-strong: rgba(247, 247, 246, 0.92);
+  position: relative;
+  isolation: isolate;
+  min-height: 100dvh;
+  background: transparent;
+}
+
+[data-inscription][data-tier="off"] {
+  background: var(--ins-clear);
+}
+
+[data-inscription][data-theme="dark"] {
+  --ins-clear: #05070a;
+  --ins-panel: rgba(8, 10, 14, 0.72);
+  --ins-panel-strong: rgba(10, 13, 18, 0.9);
+  --lg-field: #14171c;
+  --lg-field-2: #181c22;
+  --lg-field-3: #1c2128;
+  --lg-stock: #181c22;
+  --lg-stock-2: #1c2128;
+  --lg-ink: #e8eaee;
+  --lg-ink-2: rgba(232, 234, 238, 0.84);
+  --lg-ink-3: rgba(232, 234, 238, 0.74);
+  --lg-ink-on-stock: #e8eaee;
+  --lg-ink-on-stock-2: rgba(232, 234, 238, 0.84);
+  --lg-rule: rgba(232, 234, 238, 0.42);
+  --lg-rule-quiet: rgba(232, 234, 238, 0.16);
+  --lg-hair: rgba(232, 234, 238, 0.16);
+  --lg-hair-2: rgba(232, 234, 238, 0.09);
+  --lg-rule-text: #e8eaee;
+  --lg-tick-text: #e8eaee;
+  --lg-tick: #8b939e;
+}
+
+[data-inscription] .ins-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--ins-clear);
+}
+
+[data-inscription] .ins-canvas,
+[data-inscription] .ins-canvas canvas {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  pointer-events: none;
+  z-index: 1;
+}
+
+[data-inscription] .ins-content {
+  position: relative;
+  z-index: 1;
+}
+
+[data-inscription] .ins-poster {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+[data-inscription] .ins-poster__slab {
+  position: absolute;
+  top: 22vh;
+  left: 54%;
+  width: min(28rem, 46vw);
+  aspect-ratio: 11 / 15;
+  padding: 6% 7%;
+  background: color-mix(in srgb, var(--ins-clear) 62%, #d5d9de);
+  border: 1px solid color-mix(in srgb, var(--lg-rule) 45%, transparent);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, #ffffff 28%, transparent),
+    0 18px 40px rgba(20, 24, 30, 0.06);
+  transform: translateX(-18%) rotateY(-16deg) rotateX(6deg);
+  transform-origin: center center;
+  opacity: 0.55;
+}
+
+[data-inscription][data-theme="dark"] .ins-poster__slab {
+  background: color-mix(in srgb, var(--ins-clear) 70%, #141820);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, #8aa0b8 12%, transparent),
+    0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+[data-inscription] .ins-poster__page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0;
+  border-left: 1px solid color-mix(in srgb, var(--lg-rule) 70%, transparent);
+  padding-left: 0.7rem;
+}
+
+[data-inscription] .ins-poster__row {
+  display: grid;
+  grid-template-columns: 3.2rem 1.4rem 1fr auto;
+  gap: 0.45rem;
+  align-items: baseline;
+  padding: 0.42rem 0 0.38rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--lg-rule) 45%, transparent);
+  color: var(--lg-ink);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: clamp(0.58rem, 1.1vw, 0.78rem);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+[data-inscription] .ins-poster__row span:nth-child(2) {
+  opacity: 0.72;
+}
+
+[data-inscription] .ins-poster__row span:nth-child(3) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+[data-inscription] .ins-poster__row[data-booked] span:last-child {
+  color: #b7135a;
+  box-shadow: 0 1px 0 #b7135a;
+}
+
+@media (max-width: 768px) {
+  [data-inscription] .ins-poster__slab {
+    top: auto;
+    bottom: 18vh;
+    left: 50%;
+    width: min(18.5rem, 78vw);
+    opacity: 0.34;
+    transform: translateX(-50%) rotateY(-8deg) rotateX(4deg);
+  }
+
+  [data-inscription] #how,
+  [data-inscription] #why {
+    background: color-mix(in srgb, var(--ins-clear) 90%, #ffffff) !important;
+  }
+
+  [data-inscription][data-theme="dark"] #how,
+  [data-inscription][data-theme="dark"] #why {
+    background: color-mix(in srgb, var(--ins-clear) 88%, #141820) !important;
+  }
+}
+
+[data-inscription] .lg-world,
+[data-inscription] .lg-field,
+[data-inscription] .lg-cloth,
+[data-inscription] .lg-cloth-2,
+[data-inscription] .lg-cloth-3,
+[data-inscription] .lg-cloth-vivid {
+  background-color: transparent !important;
+  background: transparent !important;
+}
+
+[data-inscription] .lg-nav {
+  background: var(--ins-panel) !important;
+  backdrop-filter: blur(18px) saturate(1.15);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
+}
+
+[data-inscription] .lg-nav[data-ruled="true"] {
+  background: var(--ins-panel-strong) !important;
+}
+
+[data-inscription] footer.lg-field,
+[data-inscription] footer.lg-cloth {
+  background: var(--ins-panel-strong) !important;
+}
+
+[data-inscription] .lg-hero-register-solid {
+  background: color-mix(in srgb, var(--ins-panel-strong) 72%, transparent);
+  backdrop-filter: blur(10px) saturate(1.08);
+  -webkit-backdrop-filter: blur(10px) saturate(1.08);
+}
+
+[data-inscription] .lg-hero-offer {
+  background: linear-gradient(90deg, var(--ins-panel) 0%, transparent 92%);
+}
+
+[data-inscription] .lg-hear-stage,
+[data-inscription] .lg-inset {
+  background: var(--ins-panel);
+}
+
+/* The day/night control used to live here as `.ins-theme`: a fixed, blurred
+   pill in the bottom-right corner. It was the one element on this surface the
+   No Float Rule did not survive — `position: fixed` plus `backdrop-filter`
+   plus a panel fill is a card, and it sat permanently on top of the record it
+   was lighting. It now reads as a ruled segment in the sticky nav, paired
+   with the language control, under `.lg-conditions` / `.lg-seg` in
+   app/globals.css. See The Inscription Exemption in DESIGN.md. */
+
+@media (prefers-reduced-transparency: reduce) {
+  [data-inscription] .lg-nav,
+  [data-inscription] .lg-nav[data-ruled="true"],
+  [data-inscription] footer.lg-field,
+  [data-inscription] .lg-hero-register-solid {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(--ins-clear) !important;
+  }
+}

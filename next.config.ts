@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  transpilePackages: ["three"],
+
   // Explicitly prefer clean URLs without trailing slashes (e.g. /es instead of /es/).
   // This is the modern Next.js App Router + Vercel recommendation for marketing/SaaS sites.
   // Matches our existing sitemap, all canonical tags, Nav/Footer language switcher, and internal links.
