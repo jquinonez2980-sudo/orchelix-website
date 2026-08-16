@@ -388,13 +388,12 @@ export default function SettingsForm({ onSaved }: { onSaved?: () => void } = {})
           Couldn&apos;t load settings
         </p>
         <p className="mt-2 text-sm text-ink-3">{loadError}</p>
-        <button
-          type="button"
+        <Action
+          weight="secondary"
           onClick={load}
-          className="border border-[var(--lg-rule)] px-4 py-2 font-display text-[0.75rem] uppercase tracking-[0.08em] text-[var(--lg-ink)] transition-colors duration-150 hover:bg-[var(--lg-field-2)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--lg-foil)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--lg-field)]"
         >
           Try again
-        </button>
+        </Action>
       </div>
     );
   }

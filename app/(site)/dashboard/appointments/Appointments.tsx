@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, useEffect, useMemo, useState } from "react";
+import Action from "../Action";
 import {
   fetchAppointments,
   type Appointment,
@@ -267,13 +268,12 @@ export default function Appointments() {
             {t.ui.loadApptsFail}
           </p>
           <p className="max-w-sm text-sm text-ink-3">{error}</p>
-          <button
-            type="button"
+          <Action
+            weight="secondary"
             onClick={() => setReloadKey((k) => k + 1)}
-            className="border border-[var(--lg-rule)] px-4 py-2 font-display text-[0.75rem] uppercase tracking-[0.08em] text-[var(--lg-ink)] transition-colors duration-150 hover:bg-[var(--lg-field-2)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--lg-foil)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--lg-field)]"
           >
             {t.ui.tryAgain}
-          </button>
+          </Action>
         </div>
       ) : !data || data.appointments.length === 0 ? (
         <div className="flex flex-col items-center gap-2 px-6 py-16 text-center">

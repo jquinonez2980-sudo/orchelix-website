@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Action from "../Action";
 import Link from "next/link";
 import { useDashI18n } from "../i18n";
 import {
@@ -423,13 +424,12 @@ function EntriesList({
       {error && (
         <div className="px-4 py-6 text-center sm:px-6">
           <p className="text-sm text-rose-600">{error}</p>
-          <button
-            type="button"
+          <Action
+            weight="secondary"
             onClick={onRetry}
-            className="border border-[var(--lg-rule)] px-4 py-2 font-display text-[0.75rem] uppercase tracking-[0.08em] text-[var(--lg-ink)] transition-colors duration-150 hover:bg-[var(--lg-field-2)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--lg-foil)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--lg-field)]"
           >
             {t.ui.tryAgain}
-          </button>
+          </Action>
         </div>
       )}
       {entries && entries.length === 0 && !loading && !error && (
@@ -578,13 +578,12 @@ function PdfsList({
       {error && (
         <div className="px-4 py-6 text-center sm:px-6">
           <p className="text-sm text-rose-600">{error}</p>
-          <button
-            type="button"
+          <Action
+            weight="secondary"
             onClick={onRetry}
-            className="border border-[var(--lg-rule)] px-4 py-2 font-display text-[0.75rem] uppercase tracking-[0.08em] text-[var(--lg-ink)] transition-colors duration-150 hover:bg-[var(--lg-field-2)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--lg-foil)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--lg-field)]"
           >
             {t.ui.tryAgain}
-          </button>
+          </Action>
         </div>
       )}
       {pdfs && pdfs.length === 0 && !loading && !error && (
@@ -636,14 +635,12 @@ function TestBox() {
           }}
           placeholder="Do you sell gift cards?"
         />
-        <button
-          type="button"
-          disabled={loading || !query.trim()}
+        <Action
+          weight="secondary"
           onClick={run}
-          className="border border-[var(--lg-rule)] px-4 py-2 font-display text-[0.75rem] uppercase tracking-[0.08em] text-[var(--lg-ink)] transition-colors duration-150 hover:bg-[var(--lg-field-2)] disabled:border-[var(--lg-hair)] disabled:text-[var(--lg-ink-3)] disabled:hover:bg-transparent sm:shrink-0"
         >
           {loading ? "Searching…" : "Test"}
-        </button>
+        </Action>
       </div>
       {error && <p className="mt-3 text-sm text-rose-600">{error}</p>}
       {result && (

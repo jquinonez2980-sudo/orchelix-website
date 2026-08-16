@@ -52,9 +52,9 @@ export function MinutesProgress({ minutes, plan }: { minutes: number; plan: Plan
           / {plan.included_minutes.toLocaleString()} min
         </span>
       </p>
-      <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-surface-2">
+      <div className="mt-2 h-1.5 w-full overflow-hidden bg-surface-2">
         <div
-          className={`h-full rounded-full ${STATUS_BAR_COLOR[plan.status]}`}
+          className={`h-full ${STATUS_BAR_COLOR[plan.status]}`}
           style={{ width: `${pct}%` }}
         />
       </div>

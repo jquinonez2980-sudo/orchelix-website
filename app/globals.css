@@ -281,6 +281,13 @@
   --radius-lg: 0px;
   --radius-xl: 0px;
   --radius-2xl: 0px;
+  /* Bare `rounded` is NOT on that ladder. Tailwind emits it as a literal
+     0.25rem, not `var(--radius-*)`, so zeroing the scale above misses it and
+     it stayed 4px on 35 elements across nine dashboard files — measured in
+     the browser, not inferred. It is the same class of leak as the 8px
+     scrollbar thumb and the 4px focus ring this world already hunted down;
+     see DESIGN.md Shapes. Squared as a rule below, since there is no
+     variable to retarget. */
 
   /* No elevation. Blocks are ruled onto the field, never floated above it.
      These four are the project's own aliases, used by inline styles. The
@@ -418,6 +425,15 @@
 .lg-app :focus-visible {
   outline: 2px solid var(--lg-foil);
   outline-offset: 2px;
+  border-radius: 0;
+}
+
+/* The bare `rounded` leak — see the note beside the radius scale in `.lg-app`.
+   Scoped to the class itself rather than `.lg-app *` so it squares the thing
+   that is actually wrong and leaves `rounded-full` alone: that one still has
+   two legitimate jobs here, Clerk's own avatars (the Foreign Mark Rule says a
+   third party's shape is not ours to restyle) and genuinely circular marks. */
+.lg-app .rounded {
   border-radius: 0;
 }
 

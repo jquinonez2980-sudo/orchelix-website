@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Action from "./Action";
 import Link from "next/link";
 import {
   type OverviewBucket,
@@ -166,7 +167,7 @@ function LanguageMixSection({ mix }: { mix: OverviewResponse["current"]["languag
                       {count} <span className="text-ink-4">({pct}%)</span>
                     </span>
                   </div>
-                  <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-surface-2">
+                  <div className="mt-1 h-1.5 w-full overflow-hidden bg-surface-2">
                     <div
                       className="h-full bg-[var(--lg-ink)]"
                       style={{ width: `${pct}%` }}
@@ -385,13 +386,12 @@ export default function Overview() {
             : error}
         </p>
         {!orgIssue && (
-          <button
-            type="button"
+          <Action
+            weight="secondary"
             onClick={() => setReloadKey((k) => k + 1)}
-            className="border border-[var(--lg-rule)] px-4 py-2 font-display text-[0.75rem] uppercase tracking-[0.08em] text-[var(--lg-ink)] transition-colors duration-150 hover:bg-[var(--lg-field-2)]"
           >
             Try again
-          </button>
+          </Action>
         )}
       </div>
     );
