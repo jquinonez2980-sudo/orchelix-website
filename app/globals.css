@@ -1488,6 +1488,98 @@ details[open] > .lg-summary::before {
   }
 }
 
+/* ─── Conditions cluster: language and lighting ──────────────────────────
+   The two facts about how this page is being presented — which language it
+   speaks, and which light it is read under — drawn as ruling rather than as
+   chrome. The hero's meta strip already states the other conditions (place,
+   time, languages carried); these are the same class of fact and are set the
+   same way.
+
+   This replaces a fixed, blurred pill that floated over the bottom-right of
+   the record. That pill was the one element on the homepage the No Float
+   Rule did not survive: `position: fixed` + `backdrop-filter` + a panel fill
+   is a card, and it sat permanently on top of the thing it was lighting.
+
+   State reads as ink weight, never as a filled pill — the selected segment
+   carries `--lg-ink`, its sibling `--lg-ink-3`. Colour is the only property
+   that transitions, at `--lg-dur-state`, so the closed motion vocabulary
+   gains no fifth verb. */
+
+.lg-conditions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.lg-seg {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--lg-rule-quiet);
+}
+
+.lg-seg__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* The inline locale link this replaces measured 17x17px. 44 is the floor,
+     and it is why the cluster gets its own row rather than being squeezed. */
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 0.7rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font-family: var(--font-display);
+  font-stretch: 88%;
+  font-weight: 600;
+  font-size: 0.6875rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--lg-ink-3);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color var(--lg-dur-state) var(--ease-standard);
+}
+
+/* The divider is the ruling itself — no gap, no radius, no second border. */
+.lg-seg__item + .lg-seg__item {
+  border-left: 1px solid var(--lg-rule-quiet);
+}
+
+.lg-seg__item[data-on="true"],
+.lg-seg__item:hover {
+  color: var(--lg-ink);
+}
+
+.lg-seg__item:focus-visible {
+  outline: 2px solid var(--lg-foil);
+  /* Inset so the ring draws inside the segment's own ruling rather than
+     straddling the neighbouring one. */
+  outline-offset: -2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lg-seg__item { transition: none; }
+}
+
+/* Below 900px the bar already carries logo + phone + stamp + menu, which is
+   all one line will hold. The cluster takes its own row inside the sticky
+   header rather than retreating into the drawer: a control that changes what
+   you are looking at should be visible while you look at it.
+
+   Scoped to `[data-inscription]` — the homepage is the only surface that
+   renders the cluster, and scoping the wrap guarantees no other route's
+   chrome can reflow. */
+@media (max-width: 899px) {
+  [data-inscription] .lg-nav__actions { flex-wrap: wrap; }
+  [data-inscription] .lg-conditions {
+    order: 10;
+    width: 100%;
+    padding-top: 0.55rem;
+    border-top: 1px solid var(--lg-hair-2);
+  }
+}
+
 .lg-hero-scene {
   min-height: calc(100dvh - 4.7rem);
 }

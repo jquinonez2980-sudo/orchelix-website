@@ -160,6 +160,8 @@ Density is high and deliberate. Rows are close-set, labels are small caps in mon
 
 **The 2026-08-10 rebrand inverted this world and the inversion is load-bearing.** It ran dark for its first life: a navy buckram field carrying a shipped SVG cloth weave, red column ruling, and a gold foil stamp. All three are gone. The weave was tuned against dark grounds and read as a grey smudge on white, so `.lg-cloth` and its `-2` / `-3` variants are now flat fills that keep their names only because components reference them. Red retired because the brand has one accent and does not spend it on dividers. What survived is the *structure* — the ruling, the density, the registers, the closed ramps — which is the evidence that this world was never really about being dark.
 
+The inversion is load-bearing **for the marketing surface**. The homepage Inscription scene carries a scoped night palette (see The Inscription Exemption under Motion); that is a second light on the same world, not a return to the dark brand. It reaches `/` and `/es` only, through `[data-inscription]`, and no other route can see it.
+
 The build refuses two specific things, and the refusal is durable: the category's centered hero with three identical product cards, and its opposite, the cream editorial broadsheet. Neither one puts the artifact on the page. Note that going light did **not** license the second one; a white field ruled in graphite is not a broadsheet.
 
 **Key Characteristics:**
@@ -358,6 +360,28 @@ Keyframes: `lg-settle`, `lg-strike`, `lg-rule-draw`. Utility classes: `.lg-strik
 **The Reduced Motion Rule.** Fewer and gentler, not zero. Transform- and clip-based movement is dropped so nothing travels or wipes; colour and opacity transitions that aid comprehension stay. Every verb ships its `prefers-reduced-motion` path in the same commit as the verb.
 
 **The Real Cadence Rule.** Where motion represents something happening, it is driven by the real event and not by a timer that imitates one. `/try-esmi` strikes each word group as the backend's SSE stream delivers it, so the pace on screen *is* the model's pace — which is also why there is no "skip" control: there is no artificial queue to skip past. A simulated typing cadence would be a fabrication in motion, and the honesty standard does not stop at copy.
+
+### The Inscription Exemption (homepage only)
+
+The homepage renders a pinned WebGPU/WebGL scene — an optical glass ledger volume written by voice filaments across one night. It is scoped to `/` and `/es` via `[data-inscription]` and reaches no other route.
+
+This is an elevation of the Ruled Record into space, not a relaxation of it. The record is still the composition; the scene renders the same register the DOM states, under two lights.
+
+**The scene may:**
+
+- **Refract and transmit.** Glass is a produced material — manufactured, not named — so it satisfies the Produced Materials Rule rather than escaping it.
+- **Hold a gentle continuous presence.** The volume may drift and relight while idle. It asserts no system state, so the Nothing Loops Rule's decorative exemption covers it.
+- **Bloom on exactly two things:** the voice filament, and the stamp moment. Nowhere else, at no other time.
+- **Write rows on scroll.** Beats are triggered by scroll position, never by a timer imitating one — the Real Cadence Rule applies unchanged.
+- **Carry a second, night palette,** scoped to the homepage.
+
+**Still forbidden, unchanged:**
+
+- **No ambient glow, float, or decorative elevation on any DOM surface.** The No Float Rule is untouched: the scene sits *behind* the record and never lifts it. A floating control panel over the scene is a card and is out of rule — this is why the day/night control is a ruled segment in the nav and not a fixed pill.
+- **Magenta stays scarce.** In the scene it appears on the die and nothing else; the DOM still gets one stamp per view.
+- **No new motion verb for DOM elements.** Rule, Settle, Strike, and Press remain closed. The scene's motion is not a fifth verb — it is scenery.
+- **No content may be gated behind the scene.** The Legible Default Rule governs: the page must read complete with the canvas absent, failed, or refused.
+- **Reduced motion and low-tier devices receive a still frame,** not a degraded animation.
 
 ## Shapes
 

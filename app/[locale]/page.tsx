@@ -11,6 +11,7 @@ import Operators from "@/app/components/sections/Operators";
 import FinalCTA from "@/app/components/sections/FinalCTA";
 import Footer from "@/app/components/sections/Footer";
 import TickRail from "@/app/components/sections/TickRail";
+import InscriptionRoot from "@/app/inscription/InscriptionRoot";
 import { isLocale, localizedHref } from "@/app/i18n/config";
 import { getDictionary } from "@/app/i18n/dictionaries";
 
@@ -33,7 +34,7 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
   const t = await getDictionary(locale);
 
   return (
-    <>
+    <InscriptionRoot>
       <Nav locale={locale} t={t} />
       <main id="main-content">
         <TickRail
@@ -58,6 +59,6 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
         <FinalCTA locale={locale} t={t} />
       </main>
       <Footer locale={locale} t={t} />
-    </>
+    </InscriptionRoot>
   );
 }

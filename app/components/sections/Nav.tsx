@@ -11,6 +11,7 @@ import {
   type Locale,
 } from "@/app/i18n/config";
 import type { Messages } from "@/app/i18n/messages/en";
+import ConditionsControl from "./ConditionsControl";
 
 /* Collapsed chrome: logo, language, stamp, menu. The six destinations
    live in the drawer on every width so the first viewport can be a poster
@@ -34,7 +35,15 @@ const EN_FALLBACK: NavCopy = {
     closeMenu: "Close menu",
     home: "Orchelix — Home",
   },
-  meta: { localeName: "English", switchTo: "Español", switchLabel: "Cambiar a español" },
+  meta: {
+    localeName: "English",
+    switchTo: "Español",
+    switchLabel: "Cambiar a español",
+    language: "Language",
+    lighting: "Lighting",
+    day: "Day",
+    night: "Night",
+  },
   common: { phone: "+1 561 566 1066" },
 };
 
@@ -70,6 +79,10 @@ export default function Nav({
     ? localizedHref(currentPath, other)
     : localizedHref("/", other);
   const bookHref = localizedHref("/book", locale);
+  /* The lighting control drives the Inscription scene, which only the
+     homepage mounts. Everywhere else the language link keeps its existing
+     inline treatment so no other route's chrome moves. */
+  const isHome = currentPath === "/";
 
   useEffect(() => {
     if (!open) return;
@@ -142,7 +155,7 @@ export default function Nav({
           />
         </a>
 
-        <div className="ml-auto flex items-center gap-3 sm:gap-5">
+        <div className="lg-nav__actions ml-auto flex items-center gap-3 sm:gap-5">
           <a
             href="tel:+15615661066"
             className="lg-fig lg-quiet lg-nav-phone"
@@ -150,21 +163,37 @@ export default function Nav({
           >
             {t.common.phone}
           </a>
-          <a
-            href={switchHref}
-            className="lg-fig lg-quiet hidden sm:inline-flex"
-            style={{
-              fontSize: "0.6875rem",
-              letterSpacing: "0.11em",
-              color: "var(--lg-ink-2)",
-              textDecoration: "none",
-            }}
-            lang={other}
-            hrefLang={other}
-            aria-label={t.meta.switchLabel}
-          >
-            {other.toUpperCase()}
-          </a>
+          {isHome ? (
+            <ConditionsControl
+              locale={locale}
+              other={other}
+              switchHref={switchHref}
+              copy={{
+                language: t.meta.language,
+                lighting: t.meta.lighting,
+                day: t.meta.day,
+                night: t.meta.night,
+                switchLabel: t.meta.switchLabel,
+              }}
+              onNavigate={close}
+            />
+          ) : (
+            <a
+              href={switchHref}
+              className="lg-fig lg-quiet hidden sm:inline-flex"
+              style={{
+                fontSize: "0.6875rem",
+                letterSpacing: "0.11em",
+                color: "var(--lg-ink-2)",
+                textDecoration: "none",
+              }}
+              lang={other}
+              hrefLang={other}
+              aria-label={t.meta.switchLabel}
+            >
+              {other.toUpperCase()}
+            </a>
+          )}
 
           <a
             href={bookHref}

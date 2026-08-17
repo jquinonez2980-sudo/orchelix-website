@@ -13,6 +13,13 @@ const en = {
     localeName: "English",
     switchTo: "Español",
     switchLabel: "Cambiar a español",
+    /* Group labels for the nav conditions cluster. Both segments are
+       unlabelled visually — the ruling is the only structure — so the
+       accessible name has to come from here. */
+    language: "Language",
+    lighting: "Lighting",
+    day: "Day",
+    night: "Night",
   },
 
   nav: {
