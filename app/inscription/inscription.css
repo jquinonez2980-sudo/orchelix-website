@@ -223,6 +223,25 @@
   background: var(--ins-panel);
 }
 
+/* The lockup follows the light. The day artwork sets its wordmark in graphite,
+   which is the ink of a white field and disappears against the night ground —
+   so night gets its own lockup with a white wordmark, keeping the magenta
+   helix rather than flattening the whole mark to white.
+
+   Both are in the markup; only `display` moves. Scoped to `[data-inscription]`
+   so the day lockup stays the only one on every other route. */
+[data-inscription] .lg-nav-logo--night {
+  display: none;
+}
+
+[data-inscription][data-theme="dark"] .lg-nav-logo--night {
+  display: block;
+}
+
+[data-inscription][data-theme="dark"] .lg-nav-logo--day {
+  display: none;
+}
+
 [data-inscription] .ins-lamp-plate {
   position: relative;
   display: block;
