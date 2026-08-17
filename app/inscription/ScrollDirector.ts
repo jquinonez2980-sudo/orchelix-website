@@ -53,13 +53,45 @@ export function bindResizeMeasure() {
   return () => window.removeEventListener("resize", onResize);
 }
 
+/* Width alone missed devices: a large phone, or one whose browser reports a
+   wide layout viewport, would clear 768 and get the desktop camera table while
+   still being tall and narrow in shape — the exact case the narrow framing
+   exists for. Portrait aspect is the more reliable signal, so either qualifies. */
 export function isNarrowView() {
-  return typeof window !== "undefined" && window.innerWidth < 768;
+  if (typeof window === "undefined") return false;
+  const portrait = window.innerHeight > 0 && window.innerWidth / window.innerHeight < 1;
+  return window.innerWidth < 768 || portrait;
 }
 
 /* The aspect the CAM tables were framed against. Above it, framing is used as
    authored. */
 const REFERENCE_ASPECT = 1.6;
+
+/* Exponent on the aspect ratio. 1 is a true horizontal-extent lock — the
+   volume occupies the same fraction of the width at any aspect. Below 1 the
+   correction is softened; the first pass used 0.5 and undershot badly on a
+   phone, so this now sits close to the full lock. */
+const DOLLY_EXPONENT = 0.92;
+
+/* Ceiling, so a freak aspect cannot push the volume to a speck. */
+const DOLLY_MAX = 3.4;
+
+/* Temporary: `?dolly=2.6` overrides the computed value at runtime.
+
+   REMOVE BEFORE MERGE. It exists because this environment cannot produce a
+   real mobile viewport — resize_window silently no-ops against a maximised
+   window, and narrowing the canvas alone gives a false reading because
+   isNarrowView keys off window.innerWidth and pairs a phone aspect with the
+   desktop camera table. Tuning by redeploying one constant at a time costs a
+   build and a round trip per guess; this lets the value be found on the device
+   in one sitting and then hardcoded. */
+function dollyOverride(): number | null {
+  if (typeof window === "undefined") return null;
+  const raw = new URLSearchParams(window.location.search).get("dolly");
+  if (!raw) return null;
+  const n = Number(raw);
+  return Number.isFinite(n) && n > 0 && n <= 8 ? n : null;
+}
 
 /* How much further back the camera sits as the viewport narrows.
 
@@ -72,15 +104,13 @@ const REFERENCE_ASPECT = 1.6;
    Widening `fov` to compensate is the obvious move and the wrong one — holding
    horizontal extent constant at that aspect needs an ~86-degree vertical
    field, which distorts the object badly at the edges. Dollying back keeps the
-   lens honest and just puts the camera where it can see the whole subject.
-
-   The exponent softens the correction (a square root rather than the full
-   ratio) and the clamp stops extreme aspects pushing the volume into the
-   distance. */
+   lens honest and just puts the camera where it can see the whole subject. */
 export function dollyForAspect(aspect: number) {
+  const override = dollyOverride();
+  if (override !== null) return override;
   if (!Number.isFinite(aspect) || aspect <= 0) return 1;
   if (aspect >= REFERENCE_ASPECT) return 1;
-  return Math.min(2.1, Math.pow(REFERENCE_ASPECT / aspect, 0.5));
+  return Math.min(DOLLY_MAX, Math.pow(REFERENCE_ASPECT / aspect, DOLLY_EXPONENT));
 }
 
 const CAM = [
