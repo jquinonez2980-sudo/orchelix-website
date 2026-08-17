@@ -142,16 +142,6 @@
     opacity: 0.34;
     transform: translateX(-50%) rotateY(-8deg) rotateX(4deg);
   }
-
-  [data-inscription] #how,
-  [data-inscription] #why {
-    background: color-mix(in srgb, var(--ins-clear) 90%, #ffffff) !important;
-  }
-
-  [data-inscription][data-theme="dark"] #how,
-  [data-inscription][data-theme="dark"] #why {
-    background: color-mix(in srgb, var(--ins-clear) 88%, #141820) !important;
-  }
 }
 
 [data-inscription] .lg-world,
@@ -176,7 +166,13 @@
 
 [data-inscription] footer.lg-field,
 [data-inscription] footer.lg-cloth {
-  background: var(--ins-panel-strong) !important;
+  background: transparent !important;
+}
+
+/* The helix crop is an opaque white bar. Hide it on this page so it
+   cannot slice the ledger at the footer. */
+[data-inscription] footer > div:has(> img[src="/helix-pattern.png"]) {
+  display: none;
 }
 
 [data-inscription] .lg-hero-offer {
@@ -222,7 +218,26 @@
 
 [data-inscription] .lg-hear-stage,
 [data-inscription] .lg-inset {
-  background: var(--ins-panel);
+  background: transparent;
+}
+
+/* Why / Operators stills sit in the same center the ledger occupies.
+   A soft hole in the plate keeps the glass readable as they pass. */
+@media (max-width: 900px) {
+  [data-inscription] .ins-plate {
+    -webkit-mask-image: radial-gradient(
+      ellipse 58% 78% at 50% 48%,
+      rgba(0, 0, 0, 0.18) 0%,
+      rgba(0, 0, 0, 0.18) 38%,
+      #000 76%
+    );
+    mask-image: radial-gradient(
+      ellipse 58% 78% at 50% 48%,
+      rgba(0, 0, 0, 0.18) 0%,
+      rgba(0, 0, 0, 0.18) 38%,
+      #000 76%
+    );
+  }
 }
 
 /* The lockup follows the light. The day artwork sets its wordmark in graphite,

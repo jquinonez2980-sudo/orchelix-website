@@ -28,7 +28,7 @@ export default function ThemePlate({
       alt={alt}
       placeholder="blur"
       sizes={`${max}px`}
-      className="lg-settle-media"
+      className="lg-settle-media ins-plate"
       style={{ width: "100%", maxWidth: max, height: "auto" }}
     />
   );

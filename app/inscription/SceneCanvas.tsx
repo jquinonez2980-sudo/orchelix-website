@@ -17,10 +17,11 @@ export default function SceneCanvas() {
         antialias: inscription.quality.antialias,
         alpha: false,
         powerPreference: "high-performance",
-        /* No `preserveDrawingBuffer`. It forces the driver to keep the
-           backbuffer alive after every composite, which costs fill rate on
-           every device and is memory this scene cannot spare on iOS. Nothing
-           here reads the canvas back — it only mattered for toDataURL. */
+        /* Keep the last frame. Without it, Snipping Tool / Game Bar / a
+           phone screen-record often grab a cleared buffer (or Windows
+           refuses the capture as "blocked for security") the moment the
+           tab blurs. The extra backbuffer is the cost of a recordable page. */
+        preserveDrawingBuffer: true,
       }}
       dpr={dpr}
       camera={{ fov: 26, near: 0.1, far: 48, position: [1.88, 0.38, 5.45] }}

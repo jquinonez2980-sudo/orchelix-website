@@ -43,7 +43,9 @@ export default function ThemeBridge() {
     const onVis = () => {
       const hidden = document.hidden;
       setInscription("hidden", hidden);
-      setFrameloop(hidden ? "never" : "always");
+      /* Keep drawing. Pausing here cleared the buffer the instant a
+         screen-record overlay or snipping tool took focus. */
+      setFrameloop("always");
       if (!hidden) invalidate();
     };
     document.addEventListener("visibilitychange", onVis);
