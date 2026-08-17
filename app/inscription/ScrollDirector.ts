@@ -76,15 +76,19 @@ const DOLLY_EXPONENT = 0.92;
 /* Ceiling, so a freak aspect cannot push the volume to a speck. */
 const DOLLY_MAX = 3.4;
 
-/* Temporary: `?dolly=2.6` overrides the computed value at runtime.
+/* Temporary tuning hatch: `?dolly=2.6` overrides the computed value at runtime.
 
-   REMOVE BEFORE MERGE. It exists because this environment cannot produce a
-   real mobile viewport — resize_window silently no-ops against a maximised
-   window, and narrowing the canvas alone gives a false reading because
-   isNarrowView keys off window.innerWidth and pairs a phone aspect with the
-   desktop camera table. Tuning by redeploying one constant at a time costs a
-   build and a round trip per guess; this lets the value be found on the device
-   in one sitting and then hardcoded. */
+   TEMPORARY — delete once the constants above are settled on a real device.
+   Kept deliberately through the merge rather than stripped, because the
+   framing still needs confirming on hardware and this is what makes that
+   possible without a deploy per guess. It only moves the camera, reads a
+   single clamped number, and does nothing when the parameter is absent.
+
+   It exists because the framing cannot be verified where it is authored: no
+   mobile viewport is available here, and narrowing the canvas alone gives a
+   false reading, since isNarrowView keys off window.innerWidth and so pairs a
+   phone aspect with the desktop camera table — a combination no device
+   produces. */
 function dollyOverride(): number | null {
   if (typeof window === "undefined") return null;
   const raw = new URLSearchParams(window.location.search).get("dolly");
