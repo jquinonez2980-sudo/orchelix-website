@@ -82,7 +82,9 @@ export function detectQuality(): Quality {
     return { ...OFF, reducedMotion: true };
   }
 
-  /* iOS and phones take the poster rather than the live scene.
+  /* iOS takes the poster rather than the live scene. Other phones keep it —
+     Android was verified rendering the volume fine, so disabling every narrow
+     viewport was too blunt and cost the scene on hardware that can run it.
 
      MID — which is what they used to get — keeps transmission and environment
      on. Transmission makes three draw the whole scene a second time into a
@@ -103,11 +105,11 @@ export function detectQuality(): Quality {
      environment on; transmission on at reduced resolution) each failed to
      render the volume on desktop, so the scene has a dependency on the full
      path that needs isolating before a mobile tier can be trusted. */
-  if (narrow || isIOS()) {
+  if (isIOS()) {
     return { ...OFF, reducedMotion };
   }
 
-  if (integrated || cores <= 4 || memory <= 4) {
+  if (narrow || integrated || cores <= 4 || memory <= 4) {
     return { ...MID, reducedMotion };
   }
 
