@@ -5,8 +5,74 @@ import { LIGHT_THEME, type SceneTheme } from "../theme";
 export type LedgerHandle = {
   glass: THREE.MeshPhysicalMaterial;
   pages: THREE.MeshPhysicalMaterial;
+  paperMap: THREE.CanvasTexture | null;
+  paperRough: THREE.CanvasTexture | null;
+  contact: THREE.CanvasTexture | null;
   dispose: () => void;
 };
+
+function makePaperMaps() {
+  if (typeof document === "undefined") {
+    return { map: null, rough: null, contact: null };
+  }
+  const size = 512;
+  const paper = document.createElement("canvas");
+  paper.width = size;
+  paper.height = size;
+  const ctx = paper.getContext("2d");
+  if (!ctx) return { map: null, rough: null, contact: null };
+  const pix = ctx.createImageData(size, size);
+  for (let i = 0; i < pix.data.length; i += 4) {
+    const n = 232 + Math.random() * 14;
+    const laid = ((i / 4) % size) % 11 === 0 ? 4 : 0;
+    pix.data[i] = n + laid;
+    pix.data[i + 1] = n - 1;
+    pix.data[i + 2] = n - 4;
+    pix.data[i + 3] = 255;
+  }
+  ctx.putImageData(pix, 0, 0);
+  const map = new THREE.CanvasTexture(paper);
+  map.colorSpace = THREE.SRGBColorSpace;
+  map.wrapS = map.wrapT = THREE.RepeatWrapping;
+  map.repeat.set(2.4, 3.2);
+  map.anisotropy = 8;
+
+  const roughCanvas = document.createElement("canvas");
+  roughCanvas.width = size;
+  roughCanvas.height = size;
+  const rctx = roughCanvas.getContext("2d");
+  if (rctx) {
+    const rp = rctx.createImageData(size, size);
+    for (let i = 0; i < rp.data.length; i += 4) {
+      const n = 188 + Math.random() * 28;
+      rp.data[i] = n;
+      rp.data[i + 1] = n;
+      rp.data[i + 2] = n;
+      rp.data[i + 3] = 255;
+    }
+    rctx.putImageData(rp, 0, 0);
+  }
+  const rough = new THREE.CanvasTexture(roughCanvas);
+  rough.wrapS = rough.wrapT = THREE.RepeatWrapping;
+  rough.repeat.set(2.4, 3.2);
+
+  const blot = document.createElement("canvas");
+  blot.width = 256;
+  blot.height = 256;
+  const bctx = blot.getContext("2d");
+  if (bctx) {
+    const g = bctx.createRadialGradient(128, 128, 12, 128, 128, 124);
+    g.addColorStop(0, "rgba(0,0,0,0.42)");
+    g.addColorStop(0.45, "rgba(0,0,0,0.14)");
+    g.addColorStop(1, "rgba(0,0,0,0)");
+    bctx.fillStyle = g;
+    bctx.fillRect(0, 0, 256, 256);
+  }
+  const contact = new THREE.CanvasTexture(blot);
+  contact.colorSpace = THREE.SRGBColorSpace;
+
+  return { map, rough, contact };
+}
 
 const GLASS_BASE: THREE.MeshPhysicalMaterialParameters = {
   color: LIGHT_THEME.ledger.tint,
@@ -20,8 +86,8 @@ const GLASS_BASE: THREE.MeshPhysicalMaterialParameters = {
   clearcoat: LIGHT_THEME.ledger.clearcoat,
   clearcoatRoughness: LIGHT_THEME.ledger.clearcoatRoughness,
   specularIntensity: 1,
-  specularColor: "#f4f1ea",
-  envMapIntensity: 1.1,
+  specularColor: "#ffffff",
+  envMapIntensity: 1.8,
   transparent: true,
   opacity: 1,
   side: THREE.FrontSide,
@@ -54,26 +120,86 @@ export function applyLedgerTheme(
   g.attenuationDistance = theme.ledger.attenuationDistance;
   g.clearcoat = theme.ledger.clearcoat;
   g.clearcoatRoughness = theme.ledger.clearcoatRoughness;
-  g.envMapIntensity = theme.envIntensity;
+  g.envMapIntensity = theme.envIntensity < 0.5 ? 4.4 : 1.05;
+  g.specularIntensity = 1;
+  g.specularColor.set("#ffffff");
+  if ("dispersion" in g) {
+    (g as THREE.MeshPhysicalMaterial & { dispersion: number }).dispersion = transmission ? 0.03 : 0;
+  }
   g.needsUpdate = true;
 
   handle.pages.color.set(theme.pages.color);
   handle.pages.roughness = theme.pages.roughness;
-  handle.pages.envMapIntensity = theme.envIntensity * 0.3;
+  handle.pages.envMapIntensity = Math.max(theme.envIntensity * 0.45, 0.12);
   handle.pages.needsUpdate = true;
+}
+
+export function makeRimMaterial() {
+  return new THREE.ShaderMaterial({
+    uniforms: {
+      color: { value: new THREE.Color("#F2F5F8") },
+      power: { value: 2.6 },
+      strength: { value: 0.48 },
+    },
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+    side: THREE.FrontSide,
+    toneMapped: false,
+    vertexShader: `
+      varying vec3 vN;
+      varying vec3 vV;
+      void main() {
+        vec4 w = modelMatrix * vec4(position, 1.0);
+        vN = normalize(mat3(modelMatrix) * normal);
+        vV = cameraPosition - w.xyz;
+        gl_Position = projectionMatrix * viewMatrix * w;
+      }
+    `,
+    fragmentShader: `
+      uniform vec3 color;
+      uniform float power;
+      uniform float strength;
+      varying vec3 vN;
+      varying vec3 vV;
+      void main() {
+        float f = pow(1.0 - abs(dot(normalize(vN), normalize(vV))), power);
+        float a = f * strength;
+        gl_FragColor = vec4(color * a, a);
+      }
+    `,
+  });
+}
+
+export function applyRimTheme(mat: THREE.ShaderMaterial, night: boolean) {
+  mat.uniforms.color.value.set(night ? "#C9D6E4" : "#E8EEF4");
+  mat.uniforms.power.value = night ? 2.15 : 3.4;
+  mat.uniforms.strength.value = night ? 0.95 : 0;
+  mat.visible = night;
 }
 
 export function createLedgerMaterials(_backend: Backend): LedgerHandle {
   /* MeshPhysicalMaterial is mapped to MeshPhysicalNodeMaterial on
      WebGPURenderer, so one authoring path covers both backends. */
   const glass = new THREE.MeshPhysicalMaterial(GLASS_BASE);
-  const pages = new THREE.MeshPhysicalMaterial(PAGE_BASE);
+  const maps = makePaperMaps();
+  const pages = new THREE.MeshPhysicalMaterial({
+    ...PAGE_BASE,
+    map: maps.map ?? undefined,
+    roughnessMap: maps.rough ?? undefined,
+  });
   return {
     glass,
     pages,
+    paperMap: maps.map,
+    paperRough: maps.rough,
+    contact: maps.contact,
     dispose() {
       glass.dispose();
       pages.dispose();
+      maps.map?.dispose();
+      maps.rough?.dispose();
+      maps.contact?.dispose();
     },
   };
 }

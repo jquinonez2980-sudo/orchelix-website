@@ -6,19 +6,21 @@ import * as THREE from "three";
 import { writing } from "../writing/WritingDirector";
 import { currentTheme } from "../relight";
 import { inscription } from "../store";
-import { ENTRY_COUNT, FACE_Z, rowX0, rowX1, rowY } from "./volumeLayout";
+import { ENTRY_COUNT, FACE_Z, VOLUME, rowTextY, rowX0, rowX1 } from "./volumeLayout";
 
-const SEGMENTS = 36;
+const SEGMENTS = 28;
 const POOL = 3;
+const HALF = 0.00135;
+const AXIS = new THREE.Vector3(1, 0, 0);
 
 function makeCurve(index: number) {
-  const y = rowY(index);
+  const y = rowTextY(index);
   const x0 = rowX0();
   const x1 = rowX1();
+  const left = -VOLUME.w / 2;
   return new THREE.CatmullRomCurve3([
-    new THREE.Vector3(-1.9, y + 0.07, 1.18),
-    new THREE.Vector3(-1.02, y + 0.03, 0.46),
-    new THREE.Vector3(x0 - 0.05, y + 0.008, 0.12),
+    new THREE.Vector3(left - 0.82, y, FACE_Z),
+    new THREE.Vector3(left - 0.06, y, FACE_Z),
     new THREE.Vector3(x0, y, FACE_Z),
     new THREE.Vector3(x1, y, FACE_Z),
   ]);
@@ -67,10 +69,7 @@ export default function VoiceFilaments() {
   const light = useRef<THREE.PointLight>(null);
   const point = useMemo(() => new THREE.Vector3(), []);
   const tangent = useMemo(() => new THREE.Vector3(), []);
-  const normal = useMemo(() => new THREE.Vector3(0, 0, 1), []);
-  const side = useMemo(() => new THREE.Vector3(), []);
   const tint = useMemo(() => new THREE.Color(), []);
-  const clock = useRef(0);
 
   useEffect(() => {
     return () => {
@@ -79,8 +78,7 @@ export default function VoiceFilaments() {
     };
   }, [geos, mats]);
 
-  useFrame((_, dt) => {
-    clock.current += dt;
+  useFrame(() => {
     const theme = currentTheme();
     tint.set(theme.filament.color);
     const night = inscription.mode === "dark";
@@ -97,49 +95,38 @@ export default function VoiceFilaments() {
 
       const row = writing.rows[index];
       const tHead = headT(row.approach, row.write);
-      const tailLen = 0.22 + (1 - row.write) * 0.28;
+      const tailLen = 0.16 + (1 - row.write) * 0.12;
       const tTail = Math.max(0, tHead - tailLen);
       const geo = geos[slot];
       const pos = geo.attributes.position as THREE.BufferAttribute;
       const col = geo.attributes.color as THREE.BufferAttribute;
-      const wave = (1 - row.write) * 0.011;
       const curve = curves[index];
 
       for (let s = 0; s < SEGMENTS; s++) {
         const u = s / (SEGMENTS - 1);
         const t = tTail + (tHead - tTail) * u;
         curve.getPoint(t, point);
-        curve.getTangent(t, tangent).normalize();
-        if (wave > 0.001 && t < 0.52) {
-          const w = Math.sin(t * 22 + clock.current * 7) * wave * (1 - t / 0.52);
-          point.y += w;
-          point.z += Math.cos(t * 15 + clock.current * 5) * wave * 0.55;
-        }
-        side.crossVectors(tangent, normal);
-        if (side.lengthSq() < 1e-6) side.set(0, 1, 0);
-        else side.normalize();
-        const half = 0.0025 + u * u * 0.012;
-        const fade = u * u;
-        pos.setXYZ(s * 2, point.x + side.x * half, point.y + side.y * half, point.z + side.z * half);
-        pos.setXYZ(s * 2 + 1, point.x - side.x * half, point.y - side.y * half, point.z - side.z * half);
+        const fade = u;
+        pos.setXYZ(s * 2, point.x, point.y + HALF, point.z);
+        pos.setXYZ(s * 2 + 1, point.x, point.y - HALF, point.z);
         col.setXYZ(s * 2, tint.r * fade, tint.g * fade, tint.b * fade);
         col.setXYZ(s * 2 + 1, tint.r * fade, tint.g * fade, tint.b * fade);
       }
       pos.needsUpdate = true;
       col.needsUpdate = true;
       geo.computeBoundingSphere();
-      mats[slot].opacity = night ? 0.96 : 0.82;
+      mats[slot].opacity = night ? 0.88 : 0.74;
 
       curve.getPoint(tHead, point);
-      if (wave > 0.001 && tHead < 0.52) {
-        point.y += Math.sin(tHead * 22 + clock.current * 7) * wave;
-      }
+      curve.getTangent(tHead, tangent).normalize();
       if (head) {
         head.position.copy(point);
-        head.scale.set(1.5, 0.65, 1.15);
+        if (tangent.lengthSq() > 1e-8) {
+          head.quaternion.setFromUnitVectors(AXIS, tangent);
+        }
         const hm = head.material as THREE.MeshBasicMaterial;
         hm.color.copy(tint);
-        hm.opacity = night ? 1 : 0.9;
+        hm.opacity = night ? 0.95 : 0.82;
       }
     }
 
@@ -147,7 +134,7 @@ export default function VoiceFilaments() {
     if (light.current) {
       const on = night && lead !== undefined;
       light.current.visible = on;
-      light.current.intensity = on ? theme.filament.emission * 0.85 : 0;
+      light.current.intensity = on ? theme.filament.emission * 0.7 : 0;
       if (on && heads.current[live.length - 1]) {
         light.current.position.copy(heads.current[live.length - 1]!.position);
       }
@@ -177,7 +164,7 @@ export default function VoiceFilaments() {
           visible={false}
           renderOrder={4}
         >
-          <sphereGeometry args={[0.016, 14, 14]} />
+          <boxGeometry args={[0.018, 0.0042, 0.0024]} />
           <meshBasicMaterial
             color={currentTheme().filament.color}
             transparent
@@ -188,8 +175,8 @@ export default function VoiceFilaments() {
       ))}
       <pointLight
         ref={light}
-        color="#dce6f2"
-        distance={3.4}
+        color="#c8d0d8"
+        distance={1.4}
         decay={2}
         intensity={0}
         visible={false}

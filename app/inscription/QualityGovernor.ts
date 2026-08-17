@@ -80,8 +80,10 @@ export function applyQuality(next: Quality) {
 
 export function dropQualityStep() {
   const current = inscription.quality.tier;
+  /* Mid is the live floor. Off is detect-only (reduced motion / save-data).
+     Auto-dropping mid → off unmounted the canvas after a janky scroll and
+     left the faint poster — the volume looked like it died at rest. */
   if (current === "high") applyQuality({ ...MID, reducedMotion: inscription.quality.reducedMotion });
-  else if (current === "mid") applyQuality({ ...OFF, reducedMotion: inscription.quality.reducedMotion });
 }
 
 export function tierRank(tier: QualityTier) {

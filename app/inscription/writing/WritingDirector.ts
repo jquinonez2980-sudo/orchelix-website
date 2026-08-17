@@ -52,27 +52,29 @@ function smooth(v: number) {
 
 function playFromLocal(local: number): RowPlay {
   return {
-    approach: smooth(remap(local, 0, 0.28)),
-    write: smooth(remap(local, 0.1, 0.9)),
+    approach: smooth(remap(local, 0, 0.22)),
+    write: smooth(remap(local, 0.06, 0.78)),
   };
 }
 
-/* Press verb: gather, fall with weight, strike, settle. */
+let intro = 0;
+
+/* Press verb: hold, then fall with weight, strike, settle. */
 function pressCurve(t: number) {
   const x = clamp01(t);
-  if (x < 0.42) return x * 0.06;
-  if (x < 0.78) {
-    const u = (x - 0.42) / 0.36;
-    return 0.06 + u * u * u * 0.86;
+  if (x < 0.52) return x * 0.035;
+  if (x < 0.74) {
+    const u = (x - 0.52) / 0.22;
+    return 0.035 + u * u * u * u * 0.945;
   }
-  if (x < 0.9) {
-    const u = (x - 0.78) / 0.12;
-    return 0.92 + Math.sin(u * Math.PI) * 0.09;
+  if (x < 0.86) {
+    const u = (x - 0.74) / 0.12;
+    return 0.98 + Math.sin(u * Math.PI) * 0.055;
   }
   return 1;
 }
 
-export function updateWriting() {
+export function updateWriting(dt = 0) {
   const p = inscription.progress;
   const reduced = inscription.quality.reducedMotion;
 
@@ -89,23 +91,28 @@ export function updateWriting() {
     return writing;
   }
 
-  const { p2, p3, p4, p5 } = windows;
+  intro = Math.min(1, intro + dt / 2.1);
 
-  writing.rows[0] = playFromLocal(remap(p, p2, p3));
+  const { p4, p5 } = windows;
 
-  const fill = remap(p, p3, p4);
+  writing.rows[0] = playFromLocal(intro);
+
+  const queued = ENTRY_COUNT - 1;
+  const from = 0.002;
+  const span = Math.max(0.08, p4 - from);
   for (let i = 1; i < ENTRY_COUNT; i++) {
-    const slot = (i - 1) / Math.max(1, ENTRY_COUNT - 2);
-    const start = slot * 0.52;
-    writing.rows[i] = playFromLocal(remap(fill, start, start + 0.4));
+    const slot = (i - 1) / queued;
+    const start = from + slot * span * 0.78;
+    const end = start + span * 0.28;
+    writing.rows[i] = playFromLocal(remap(p, start, end));
   }
 
   writing.stamp = remap(p, p4, Math.min(p5, p4 + 0.09));
   writing.press = pressCurve(writing.stamp);
-  writing.impact = writing.stamp > 0.76 && writing.stamp < 0.92
-    ? Math.sin(remap(writing.stamp, 0.76, 0.92) * Math.PI)
+  writing.impact = writing.stamp > 0.7 && writing.stamp < 0.88
+    ? Math.sin(remap(writing.stamp, 0.7, 0.88) * Math.PI)
     : 0;
-  writing.stamped = writing.press > 0.88;
+  writing.stamped = writing.press > 0.9;
 
   writing.active = [];
   for (let i = 0; i < ENTRY_COUNT; i++) {

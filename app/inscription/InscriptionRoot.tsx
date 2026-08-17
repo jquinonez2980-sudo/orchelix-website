@@ -4,6 +4,7 @@ import { useEffect, type ReactNode } from "react";
 import { useSyncExternalStore } from "react";
 import "./inscription.css";
 import CanvasRoot from "./CanvasRoot";
+import LampPlates from "./LampPlates";
 import { applyQuality, detectQuality } from "./QualityGovernor";
 import {
   getInscriptionSnapshot,
@@ -57,6 +58,7 @@ export default function InscriptionRoot({ children }: { children: ReactNode }) {
     >
       <div hidden aria-hidden="true" dangerouslySetInnerHTML={{ __html: CONTRACT }} />
       <CanvasRoot />
+      <LampPlates />
       <div className="ins-content">{children}</div>
     </div>
   );

@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { writing, FIRST_BOOKED } from "../writing/WritingDirector";
 import { inscription } from "../store";
-import { FACE_Z, rowX1, rowY } from "./volumeLayout";
+import { setLampFromWorld } from "../lampScreen";
+import { SURFACE_Z, rowX1, rowY } from "./volumeLayout";
 
 const STEEL = "#9B184C";
 const STEEL_LIT = "#D24A7C";
@@ -34,8 +35,11 @@ function makeDieGeometry() {
 
 export const dieRoot = { current: null as THREE.Group | null };
 
+const lampPoint = new THREE.Vector3();
+
 export default function StampDie() {
   const group = useRef<THREE.Group>(null);
+  const camera = useThree((s) => s.camera);
   const body = useRef<THREE.Group>(null);
   const stain = useRef<THREE.Mesh>(null);
   const flash = useRef<THREE.PointLight>(null);
@@ -92,15 +96,15 @@ export default function StampDie() {
     const row = FIRST_BOOKED < 0 ? 0 : FIRST_BOOKED;
     const y = rowY(row);
     const x = rowX1() - 0.14;
-    const hover = y + 0.26;
-    const pressed = y + 0.046;
+    const hover = y + 0.4;
+    const pressed = y + 0.04;
     const goalY = hover + (pressed - hover) * t;
-    const squash = writing.impact > 0 ? 1 - writing.impact * 0.06 : 1;
+    const squash = writing.impact > 0 ? 1 - writing.impact * 0.13 : 1;
 
     g.position.x = x;
-    g.position.z = FACE_Z + 0.036 + (1 - t) * 0.07;
-    g.position.y += (goalY - g.position.y) * Math.min(1, dt * 28);
-    g.rotation.z = 0.008 * (1 - t);
+    g.position.z = SURFACE_Z + 0.02 + (1 - t) * 0.08;
+    g.position.y += (goalY - g.position.y) * Math.min(1, dt * (t > 0.5 ? 38 : 22));
+    g.rotation.z = 0.014 * (1 - t);
     g.scale.set(1, squash, 1);
 
     if (body.current) {
@@ -108,10 +112,10 @@ export default function StampDie() {
     }
 
     if (stain.current) {
-      const show = writing.stamped ? 1 : Math.max(0, t - 0.86) / 0.14;
+      const show = writing.stamped ? 1 : Math.max(0, t - 0.78) / 0.1;
       stain.current.visible = show > 0.02;
       const mat = stain.current.material as THREE.MeshBasicMaterial;
-      mat.opacity = show * 0.55;
+      mat.opacity = show * 0.88;
     }
     const night = inscription.mode === "dark";
     metal.color.set(night ? "#C43A72" : STEEL);
@@ -124,15 +128,25 @@ export default function StampDie() {
 
     if (flash.current) {
       const hold = night && live ? 0.7 : 0;
-      flash.current.intensity = Math.max(writing.impact * 3.4, hold);
+      flash.current.intensity = Math.max(writing.impact * 6.2, hold);
       flash.current.visible = flash.current.intensity > 0.04;
-      flash.current.position.set(x, goalY, FACE_Z + 0.1);
+      flash.current.position.set(x, goalY, SURFACE_Z + 0.1);
+    }
+
+    if (night && live) {
+      lampPoint.set(x, goalY + 0.12, SURFACE_Z + 0.04);
+      const parent = g.parent;
+      if (parent) {
+        parent.updateWorldMatrix(true, false);
+        lampPoint.applyMatrix4(parent.matrixWorld);
+      }
+      setLampFromWorld(camera, lampPoint, 1);
     }
   });
 
   return (
     <group>
-      <group ref={group} visible={false} position={[0, 0.8, FACE_Z]} renderOrder={6}>
+      <group ref={group} visible={false} position={[0, 0.8, SURFACE_Z]} renderOrder={6}>
         <group ref={body} rotation={[0.32, 0, 0]}>
           <mesh geometry={geo} material={metal} />
           <mesh position={[0, 0.0006, 0]} rotation={[Math.PI / 2, 0, 0]} material={face}>
@@ -166,11 +180,11 @@ export default function StampDie() {
         position={[
           rowX1() - 0.14,
           rowY(FIRST_BOOKED < 0 ? 0 : FIRST_BOOKED) - 0.004,
-          FACE_Z + 0.001,
+          SURFACE_Z + 0.001,
         ]}
         visible={false}
       >
-        <circleGeometry args={[0.042, 32]} />
+        <circleGeometry args={[0.058, 40]} />
         <meshBasicMaterial
           color="#B7135A"
           transparent

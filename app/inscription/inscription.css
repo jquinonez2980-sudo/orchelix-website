@@ -177,19 +177,91 @@
   background: var(--ins-panel-strong) !important;
 }
 
-[data-inscription] .lg-hero-register-solid {
-  background: color-mix(in srgb, var(--ins-panel-strong) 72%, transparent);
-  backdrop-filter: blur(10px) saturate(1.08);
-  -webkit-backdrop-filter: blur(10px) saturate(1.08);
+[data-inscription] .lg-hero-offer {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--ins-panel) 38%, transparent) 0%,
+    transparent 88%
+  );
 }
 
-[data-inscription] .lg-hero-offer {
-  background: linear-gradient(90deg, var(--ins-panel) 0%, transparent 92%);
+[data-inscription] .lg-hero-meta {
+  margin-bottom: 2.85rem;
+  padding-bottom: 1.15rem;
+}
+
+@media (min-width: 1024px) {
+  [data-inscription] .lg-hero-meta {
+    margin-bottom: 3.25rem;
+  }
+}
+
+[data-inscription] .lg-hero-scene .lg-poster {
+  font-weight: 600;
+  font-stretch: 86%;
+  font-size: clamp(2.05rem, 8.2vw, 2.75rem);
+  letter-spacing: -0.028em;
+  color: var(--lg-ink-2);
+}
+
+@media (min-width: 1024px) {
+  [data-inscription] .lg-hero-scene .lg-poster {
+    font-size: clamp(2.15rem, 3.05vw, 3.05rem);
+  }
+
+  [data-inscription] .lg-hero-grid--inscription {
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  }
+}
+
+[data-inscription] .lg-hero-body {
+  color: var(--lg-ink-2);
 }
 
 [data-inscription] .lg-hear-stage,
 [data-inscription] .lg-inset {
   background: var(--ins-panel);
+}
+
+[data-inscription] .ins-lamp-plate {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
+[data-inscription] .ins-lamp-plate img {
+  display: block;
+}
+
+[data-inscription][data-theme="dark"] .ins-lamp-plate img {
+  transition: filter 200ms ease;
+}
+
+[data-inscription] .ins-lamp-wash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    130% 120% at var(--ins-lx, 50%) var(--ins-ly, 40%),
+    rgba(255, 244, 228, 0.55) 0%,
+    rgba(255, 236, 210, 0.18) 38%,
+    transparent 72%
+  );
+  mix-blend-mode: overlay;
+  transition: opacity 200ms ease;
+}
+
+[data-inscription][data-theme="dark"] .ins-lamp-wash {
+  opacity: var(--ins-lift, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-inscription][data-theme="dark"] .ins-lamp-plate img,
+  [data-inscription] .ins-lamp-wash {
+    transition: none;
+  }
 }
 
 /* The day/night control used to live here as `.ins-theme`: a fixed, blurred
@@ -204,9 +276,8 @@
   [data-inscription] .lg-nav,
   [data-inscription] .lg-nav[data-ruled="true"],
   [data-inscription] footer.lg-field,
-  [data-inscription] .lg-hero-register-solid {
+  [data-inscription] .lg-hero-offer {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    background: var(--ins-clear) !important;
   }
 }

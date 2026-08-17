@@ -3,13 +3,30 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
-import { NIGHT_ENTRIES } from "../data/nightRegister";
-import { writing } from "../writing/WritingDirector";
+import { FIRST_BOOKED, NIGHT_ENTRIES } from "../data/nightRegister";
+import { windows, writing } from "../writing/WritingDirector";
+import { inscription } from "../store";
 import { currentTheme, onRelightSnap } from "../relight";
-import { FACE_Z, rowX0, rowX1, rowY } from "./volumeLayout";
+import { FACE_Z, rowPitch, rowTextY, rowX0, rowX1 } from "./volumeLayout";
 
 const TEX_W = 2560;
 const TEX_H = 192;
+
+function typeAlpha(index: number, write: number, stamped: boolean) {
+  if (write <= 0) return 0;
+  const beat = inscription.beat;
+  const booked = stamped && index === FIRST_BOOKED;
+  if (beat <= 2) return 0.62;
+  if (beat === 3) return 0.32;
+  if (beat >= 4) {
+    const span = Math.max(0.04, windows.p5 - windows.p4);
+    const recede = Math.min(1, Math.max(0, (inscription.progress - windows.p4) / span));
+    const t = recede * recede;
+    const peak = booked ? 0.22 : 0.07;
+    return peak + (0.04 - peak) * t;
+  }
+  return 0.18;
+}
 
 function paint(
   ctx: CanvasRenderingContext2D,
@@ -35,49 +52,46 @@ function paint(
   ctx.miterLimit = 2;
 
   const draw = (text: string, x: number, y: number) => {
-    ctx.lineWidth = 1.15;
-    ctx.strokeStyle = ctx.fillStyle as string;
-    ctx.strokeText(text, x, y);
     ctx.fillText(text, x, y);
   };
 
-  ctx.font = '600 92px "Azeret Mono", ui-monospace, monospace';
+  ctx.font = '600 78px "Azeret Mono", ui-monospace, monospace';
   ctx.fillStyle = ink;
   draw(entry.time, 32, h / 2);
 
   ctx.fillStyle = ink2;
-  draw("·", 292, h / 2);
+  draw("·", 248, h / 2);
 
   ctx.font =
     entry.lang === "ES"
-      ? '700 84px "Azeret Mono", ui-monospace, monospace'
-      : '500 84px "Azeret Mono", ui-monospace, monospace';
+      ? '700 72px "Azeret Mono", ui-monospace, monospace'
+      : '500 72px "Azeret Mono", ui-monospace, monospace';
   ctx.fillStyle = ink;
-  draw(entry.lang, 338, h / 2);
+  draw(entry.lang, 292, h / 2);
   if (entry.lang === "ES") {
-    ctx.fillRect(338, h / 2 + 38, 92, 4);
+    ctx.fillRect(292, h / 2 + 30, 68, 3);
   }
 
   ctx.fillStyle = ink2;
-  ctx.font = '600 92px "Azeret Mono", ui-monospace, monospace';
-  draw("·", 458, h / 2);
+  ctx.font = '600 78px "Azeret Mono", ui-monospace, monospace';
+  draw("·", 400, h / 2);
 
   ctx.save();
   ctx.beginPath();
-  ctx.rect(500, 0, w - 500 - 360, h);
+  ctx.rect(448, 0, w - 448 - 300, h);
   ctx.clip();
-  ctx.font = '500 78px "Azeret Mono", ui-monospace, monospace';
+  ctx.font = '500 68px "Azeret Mono", ui-monospace, monospace';
   ctx.fillStyle = ink;
-  draw(entry.reason, 508, h / 2);
+  draw(entry.reason, 456, h / 2);
   ctx.restore();
 
   ctx.textAlign = "right";
-  ctx.font = '600 76px "Azeret Mono", ui-monospace, monospace';
+  ctx.font = '600 64px "Azeret Mono", ui-monospace, monospace';
   ctx.fillStyle = ink;
-  draw(entry.disposition, w - 36, h / 2);
+  draw(entry.disposition, w - 28, h / 2);
   if (stamped && entry.disposition === "BOOKED") {
     ctx.fillStyle = "#B7135A";
-    ctx.fillRect(w - 292, h / 2 + 38, 250, 5);
+    ctx.fillRect(w - 248, h / 2 + 30, 216, 4);
   }
   ctx.restore();
 }
@@ -124,7 +138,7 @@ export default function InscribedRows() {
       paint(ctx, i, quant, theme.type.ink, theme.type.ink2, stamped);
       textures[i].needsUpdate = true;
       const mat = mats.current[i];
-      if (mat) mat.opacity = quant > 0 ? 1 : 0;
+      if (mat) mat.opacity = typeAlpha(i, quant, stamped);
     }
   };
 
@@ -145,6 +159,8 @@ export default function InscribedRows() {
     for (let i = 0; i < NIGHT_ENTRIES.length; i++) {
       const write = writing.rows[i]?.write ?? 0;
       const quant = write < 0.01 ? 0 : write > 0.98 ? 1 : Math.round(write * 28) / 28;
+      const mat = mats.current[i];
+      if (mat) mat.opacity = typeAlpha(i, quant, stamped);
       const key = `${quant}|${theme.type.ink}|${stamped ? 1 : 0}`;
       if (key === last.current[i]) continue;
       last.current[i] = key;
@@ -152,8 +168,6 @@ export default function InscribedRows() {
       if (!ctx) continue;
       paint(ctx, i, quant, theme.type.ink, theme.type.ink2, stamped);
       textures[i].needsUpdate = true;
-      const mat = mats.current[i];
-      if (mat) mat.opacity = quant > 0 ? 1 : 0;
     }
   });
 
@@ -161,12 +175,13 @@ export default function InscribedRows() {
   const x1 = rowX1();
   const width = x1 - x0;
   const mid = (x0 + x1) / 2;
+  const h = rowPitch() * 0.92;
 
   return (
     <group>
       {NIGHT_ENTRIES.map((_, i) => (
-        <mesh key={i} position={[mid, rowY(i), FACE_Z]} renderOrder={2}>
-          <planeGeometry args={[width, 0.12]} />
+        <mesh key={i} position={[mid, rowTextY(i), FACE_Z]} renderOrder={2}>
+          <planeGeometry args={[width, h]} />
           <meshBasicMaterial
             ref={(el) => {
               mats.current[i] = el;

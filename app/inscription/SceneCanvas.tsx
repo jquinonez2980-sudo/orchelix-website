@@ -20,7 +20,7 @@ export default function SceneCanvas() {
         preserveDrawingBuffer: true,
       }}
       dpr={dpr}
-      camera={{ fov: 28, near: 0.1, far: 48, position: [2.15, 0.62, 6.4] }}
+      camera={{ fov: 26, near: 0.1, far: 48, position: [1.88, 0.38, 5.45] }}
       frameloop="always"
       linear={false}
       flat={false}

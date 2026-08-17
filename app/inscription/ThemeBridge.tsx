@@ -53,13 +53,13 @@ export default function ThemeBridge() {
   useFrame((state, dt) => {
     tickRelight(dt);
     sampleScroll();
-    updateWriting();
+    updateWriting(dt);
     const cam = cameraForProgress(inscription.progress);
     const strike = inscription.beat === 4 || writing.stamp > 0.02;
     const impact = writing.impact > 0.2;
     const k = inscription.quality.reducedMotion
       ? 1
-      : 1 - Math.exp(-dt * (impact ? 22 : strike ? 16 : 4.6));
+      : 1 - Math.exp(-dt * (impact ? 30 : strike ? 16 : 4.6));
     goal.current.set(cam.position[0], cam.position[1], cam.position[2]);
     lookGoal.current.set(cam.target[0], cam.target[1], cam.target[2]);
     look.current.lerp(lookGoal.current, k);

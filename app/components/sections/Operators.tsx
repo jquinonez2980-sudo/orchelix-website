@@ -1,9 +1,11 @@
 /* Named operators from PRODUCT.md — names and plain facts only.
    No quotes, logos, or outcome metrics unless assets and numbers are real. */
 
-import { Section, SectionTitle, Prose, Plate } from "@/app/components/ledger";
+import { Section, SectionTitle, Prose } from "@/app/components/ledger";
 import type { Messages } from "@/app/i18n/messages/en";
+import ThemePlate from "@/app/inscription/ThemePlate";
 import bilingualOperations from "@/public/bilingual-operations.jpg";
+import bilingualOperationsNight from "@/public/bilingual-operations-night.jpg";
 
 export default function Operators({ t }: { t: Messages }) {
   const o = t.operators;
@@ -18,7 +20,12 @@ export default function Operators({ t }: { t: Messages }) {
             {o.lede}
           </Prose>
         </div>
-        <Plate src={bilingualOperations} alt={t.visuals.bilingualOperations} max={560} />
+        <ThemePlate
+          day={bilingualOperations}
+          night={bilingualOperationsNight}
+          alt={t.visuals.bilingualOperations}
+          max={560}
+        />
       </div>
       <ul
         className="mt-12 m-0 grid list-none gap-0 p-0 sm:grid-cols-3"

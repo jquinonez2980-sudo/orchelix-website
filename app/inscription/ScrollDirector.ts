@@ -58,7 +58,7 @@ export function isNarrowView() {
 }
 
 const CAM = [
-  { pos: [2.15, 0.62, 6.4], target: [0.3, 0.08, 0], fov: 28 },
+  { pos: [1.88, 0.38, 5.45], target: [0.66, 0.04, 0], fov: 26 },
   { pos: [1.42, 0.58, 4.85], target: [0.05, 0.32, 0], fov: 26 },
   { pos: [1.72, 0.48, 5.35], target: [0.18, 0.06, 0], fov: 27 },
   { pos: [1.14, 0.7, 3.05], target: [0.48, 0.62, 0.08], fov: 20 },
@@ -67,7 +67,7 @@ const CAM = [
 ] as const;
 
 const CAM_NARROW = [
-  { pos: [0.72, 0.78, 7.85], target: [-0.02, 0.16, 0], fov: 32 },
+  { pos: [0.62, 0.48, 6.7], target: [0.0, 0.04, 0], fov: 30 },
   { pos: [0.58, 0.74, 6.55], target: [-0.04, 0.3, 0], fov: 30 },
   { pos: [0.64, 0.68, 7.05], target: [0.0, 0.14, 0], fov: 31 },
   { pos: [0.42, 0.92, 5.35], target: [0.12, 0.52, 0.06], fov: 29 },
@@ -86,7 +86,7 @@ export function cameraForProgress(progress: number) {
   const a = table[Math.max(0, beat - 1)];
   const b = table[Math.min(5, beat)];
   const t = 1 - Math.pow(1 - Math.min(1, progress), 1.05);
-  const mix = beat >= 6 ? 1 : 0.35 + t * 0.25;
+  const mix = beat >= 6 ? 1 : beat === 1 ? 0.1 + t * 0.12 : 0.35 + t * 0.25;
   const base = {
     position: [
       a.pos[0] + (b.pos[0] - a.pos[0]) * mix,
@@ -101,6 +101,13 @@ export function cameraForProgress(progress: number) {
     fov: a.fov + (b.fov - a.fov) * mix,
   };
 
+  if (beat === 1) {
+    const slide = writing.rows[0]?.write ?? 0;
+    const shift = narrow ? 0.06 : 0.12;
+    base.target[0] += shift * slide;
+    base.position[0] += shift * 0.7 * slide;
+  }
+
   const strike = Math.max(writing.stamp, beat === 4 ? 1 : 0);
   if (strike <= 0.01) return base;
 
@@ -109,7 +116,9 @@ export function cameraForProgress(progress: number) {
   const lockTarget: [number, number, number] = narrow
     ? [0.08 + dieX * 0.42, 0.28 + rowY(row) + 0.1, FACE_Z + 0.04]
     : [0.32 + dieX * 0.7, 0.08 + rowY(row) + 0.14, FACE_Z + 0.05];
-  const dolly = narrow ? 4.55 - writing.press * 0.1 : 2.42 - writing.press * 0.16;
+  const dolly = narrow
+    ? 4.55 - writing.press * 0.1
+    : 2.42 - writing.press * 0.16 - writing.impact * 0.12;
   const lockPos: [number, number, number] = narrow
     ? [lockTarget[0] + 0.32, lockTarget[1] + 0.28, lockTarget[2] + dolly]
     : [lockTarget[0] + 0.22, lockTarget[1] + 0.14, lockTarget[2] + dolly];

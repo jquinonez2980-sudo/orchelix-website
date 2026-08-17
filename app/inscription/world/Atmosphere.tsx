@@ -8,24 +8,89 @@ import { getInscriptionSnapshot, inscription, subscribeInscription } from "../st
 import { applyBoundRoom, bindRelightScene, currentTheme } from "../relight";
 import { themeFor } from "../theme";
 
-function StudioShell({ mode }: { mode: "light" | "dark" }) {
-  const wall = mode === "dark" ? "#080b10" : "#d8dbe0";
-  const lamp = mode === "dark" ? "#8aa0b8" : "#ffffff";
-  const bounce = mode === "dark" ? "#141820" : "#9aa0a8";
+function roomPalette(mode: "light" | "dark") {
+  const night = mode === "dark";
+  return {
+    wall: night ? "#07090d" : "#e4e6ea",
+    lamp: night ? "#f0d7b0" : "#fffdf8",
+    window: night ? "#b4c6d8" : "#ffffff",
+    bounce: night ? "#1a1e26" : "#b4b8be",
+    floor: night ? "#10141a" : "#e8eaed",
+  };
+}
 
+function fillStudio(scene: THREE.Scene, mode: "light" | "dark") {
+  const p = roomPalette(mode);
+  const night = mode === "dark";
+  const added: THREE.Object3D[] = [];
+  const wall = new THREE.Mesh(
+    new THREE.SphereGeometry(40, 24, 24),
+    new THREE.MeshBasicMaterial({ color: p.wall, side: THREE.BackSide }),
+  );
+  scene.add(wall);
+  added.push(wall);
+
+  const window = new THREE.Mesh(
+    new THREE.PlaneGeometry(night ? 9 : 16, night ? 5.2 : 10),
+    new THREE.MeshBasicMaterial({ color: p.window }),
+  );
+  window.position.set(-11, night ? 5.2 : 6.5, 3.5);
+  window.lookAt(0, 1, 0);
+  scene.add(window);
+  added.push(window);
+
+  const lamp = new THREE.Mesh(
+    new THREE.SphereGeometry(night ? 1.35 : 4.2, 16, 16),
+    new THREE.MeshBasicMaterial({ color: p.lamp }),
+  );
+  lamp.position.set(night ? -1.4 : -6.5, night ? 4.6 : 10.2, night ? 3.2 : 3.4);
+  scene.add(lamp);
+  added.push(lamp);
+
+  const bounce = new THREE.Mesh(
+    new THREE.SphereGeometry(1.6, 16, 16),
+    new THREE.MeshBasicMaterial({ color: p.bounce }),
+  );
+  bounce.position.set(6.2, 1.1, -4.2);
+  scene.add(bounce);
+  added.push(bounce);
+
+  const floor = new THREE.Mesh(
+    new THREE.PlaneGeometry(70, 70),
+    new THREE.MeshBasicMaterial({ color: p.floor }),
+  );
+  floor.rotation.x = -Math.PI / 2;
+  floor.position.y = -8;
+  scene.add(floor);
+  added.push(floor);
+
+  return added;
+}
+
+function StudioShell({ mode }: { mode: "light" | "dark" }) {
+  const p = roomPalette(mode);
+  const night = mode === "dark";
   return (
     <group>
       <mesh scale={80}>
         <sphereGeometry args={[1, 24, 24]} />
-        <meshBasicMaterial color={wall} side={THREE.BackSide} />
+        <meshBasicMaterial color={p.wall} side={THREE.BackSide} />
       </mesh>
-      <mesh position={[-7.5, 9.5, 3]}>
-        <sphereGeometry args={[mode === "dark" ? 1.4 : 3.4, 16, 16]} />
-        <meshBasicMaterial color={lamp} />
+      <mesh position={[-11, night ? 5.2 : 6.5, 3.5]} lookAt={[0, 1, 0]}>
+        <planeGeometry args={[night ? 9 : 16, night ? 5.2 : 10]} />
+        <meshBasicMaterial color={p.window} />
       </mesh>
-      <mesh position={[6.5, 1.2, -4.5]}>
-        <sphereGeometry args={[1.5, 16, 16]} />
-        <meshBasicMaterial color={bounce} />
+      <mesh position={[night ? -1.4 : -6.5, night ? 4.6 : 10.2, night ? 3.2 : 3.4]}>
+        <sphereGeometry args={[night ? 1.35 : 4.2, 16, 16]} />
+        <meshBasicMaterial color={p.lamp} />
+      </mesh>
+      <mesh position={[6.2, 1.1, -4.2]}>
+        <sphereGeometry args={[1.6, 16, 16]} />
+        <meshBasicMaterial color={p.bounce} />
+      </mesh>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -8, 0]}>
+        <planeGeometry args={[70, 70]} />
+        <meshBasicMaterial color={p.floor} />
       </mesh>
     </group>
   );
@@ -36,34 +101,15 @@ function bakeStudio(
   mode: "light" | "dark",
 ) {
   const env = new THREE.Scene();
-  const wall = new THREE.Mesh(
-    new THREE.SphereGeometry(40, 24, 24),
-    new THREE.MeshBasicMaterial({
-      color: mode === "dark" ? "#080b10" : "#d8dbe0",
-      side: THREE.BackSide,
-    }),
-  );
-  env.add(wall);
-  const lamp = new THREE.Mesh(
-    new THREE.SphereGeometry(mode === "dark" ? 1.4 : 3.4, 16, 16),
-    new THREE.MeshBasicMaterial({ color: mode === "dark" ? "#8aa0b8" : "#ffffff" }),
-  );
-  lamp.position.set(-7.5, 9.5, 3);
-  env.add(lamp);
-  const bounce = new THREE.Mesh(
-    new THREE.SphereGeometry(1.5, 16, 16),
-    new THREE.MeshBasicMaterial({ color: mode === "dark" ? "#141820" : "#9aa0a8" }),
-  );
-  bounce.position.set(6.5, 1.2, -4.5);
-  env.add(bounce);
+  const added = fillStudio(env, mode);
   const pmrem = new THREE.PMREMGenerator(gl);
-  const tex = pmrem.fromScene(env, 0.04).texture;
-  wall.geometry.dispose();
-  (wall.material as THREE.Material).dispose();
-  lamp.geometry.dispose();
-  (lamp.material as THREE.Material).dispose();
-  bounce.geometry.dispose();
-  (bounce.material as THREE.Material).dispose();
+  const tex = pmrem.fromScene(env, 0.06).texture;
+  for (const obj of added) {
+    env.remove(obj);
+    const mesh = obj as THREE.Mesh;
+    mesh.geometry.dispose();
+    (mesh.material as THREE.Material).dispose();
+  }
   pmrem.dispose();
   return tex;
 }
@@ -83,6 +129,8 @@ export default function Atmosphere() {
   const fill = useRef<THREE.AmbientLight>(null);
   const hemi = useRef<THREE.HemisphereLight>(null);
   const desk = useRef<THREE.SpotLight>(null);
+  const rim = useRef<THREE.DirectionalLight>(null);
+  const table = useRef<THREE.MeshStandardMaterial>(null);
   const bg = useMemo(() => new THREE.Color("#F4F5F6"), []);
   const gl = useThree((s) => s.gl);
   const scene = useThree((s) => s.scene);
@@ -107,9 +155,18 @@ export default function Atmosphere() {
       hemi.current.intensity = theme.hemi.intensity;
     }
     if (desk.current) {
-      desk.current.visible = night;
-      desk.current.intensity = night ? 0.45 : 0;
-      desk.current.color.set("#8aa0b8");
+      desk.current.visible = true;
+      desk.current.intensity = night ? 2.6 : 0.32;
+      desk.current.color.set(night ? "#e0cba8" : "#fff8ee");
+    }
+    if (rim.current) {
+      rim.current.visible = night;
+      rim.current.intensity = night ? 0.9 : 0;
+      rim.current.color.set(night ? "#b7c8d8" : "#eef2f6");
+    }
+    if (table.current) {
+      table.current.color.set(night ? "#0C1016" : "#E8EAED");
+      table.current.roughness = night ? 0.9 : 0.82;
     }
   };
 
@@ -189,13 +246,24 @@ export default function Atmosphere() {
     }
     if (desk.current) {
       const night = inscription.mode === "dark";
-      desk.current.visible = night;
-      desk.current.intensity = night ? 0.45 : 0;
-      desk.current.color.set("#8aa0b8");
+      desk.current.visible = true;
+      desk.current.intensity = night ? 2.6 : 0.32;
+      desk.current.color.set(night ? "#e0cba8" : "#fff8ee");
+    }
+    if (rim.current) {
+      const night = inscription.mode === "dark";
+      rim.current.visible = night;
+      rim.current.intensity = night ? 0.9 : 0;
+      rim.current.color.set(night ? "#b7c8d8" : "#eef2f6");
+    }
+    if (table.current) {
+      const night = inscription.mode === "dark";
+      table.current.color.set(night ? "#0C1016" : "#E8EAED");
+      table.current.roughness = night ? 0.9 : 0.82;
     }
     if ("environmentIntensity" in scene) {
       (scene as THREE.Scene & { environmentIntensity: number }).environmentIntensity =
-        theme.envIntensity;
+        Math.max(theme.envIntensity, 0.28);
     }
   });
 
@@ -204,17 +272,29 @@ export default function Atmosphere() {
       <hemisphereLight ref={hemi} args={["#F2F4F6", "#C5C8CD", 0.52]} />
       <ambientLight ref={fill} intensity={0.26} />
       <directionalLight ref={key} position={[-3.1, 5.4, 2.2]} intensity={2.7} />
+      <directionalLight ref={rim} position={[3.4, 1.4, -2.1]} intensity={0} color="#8fa3bb" />
       <spotLight
         ref={desk}
-        position={[-0.55, 2.9, 1.35]}
-        angle={0.36}
-        penumbra={0.88}
-        distance={6}
+        position={[0.55, 2.55, 1.7]}
+        angle={0.46}
+        penumbra={0.82}
+        distance={7}
         decay={2}
-        intensity={0}
-        color="#8aa0b8"
-        visible={false}
-      />
+        intensity={0.55}
+        color="#f2efe8"
+      >
+        <object3D attach="target" position={[1.02, -0.2, 0]} />
+      </spotLight>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0.7, -1.16, 0.15]} receiveShadow={false}>
+        <planeGeometry args={[14, 10]} />
+        <meshStandardMaterial
+          ref={table}
+          color="#c5c9cf"
+          roughness={0.72}
+          metalness={0}
+          envMapIntensity={0.35}
+        />
+      </mesh>
       {backend === "webgpu" && inscription.quality.env ? (
         <Environment key={mode} frames={1} resolution={256} environmentIntensity={1}>
           <StudioShell mode={mode} />
