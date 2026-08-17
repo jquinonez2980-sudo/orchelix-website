@@ -2,6 +2,12 @@
    all read from here so rows land on the same ruling. */
 
 export const VOLUME = { w: 1.46, h: 1.98, d: 0.34 };
+
+/* Where the ledger stands in world space. Shared because the camera has to
+   know it: the shots are authored to sit the volume right of centre so the
+   desktop copy can hold the left half, and a narrow viewport has to undo that
+   offset to bring the object back to the middle of the screen. */
+export const VOLUME_ORIGIN = { x: 1.02, y: -0.13, z: 0 };
 export const PAGE = { w: VOLUME.w * 0.88, h: VOLUME.h * 0.86 };
 export const RULE_ROWS = 14;
 export const ENTRY_COUNT = 10;

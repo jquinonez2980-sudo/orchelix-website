@@ -1,6 +1,6 @@
 import { inscription, setScroll } from "./store";
 import { beatFromProgress, setWindowsFromSections, writing } from "./writing/WritingDirector";
-import { FACE_Z, rowX1, rowY } from "./world/volumeLayout";
+import { FACE_Z, VOLUME_ORIGIN, rowX1, rowY } from "./world/volumeLayout";
 import { FIRST_BOOKED } from "./data/nightRegister";
 
 /* Native document scroll. No hijack, no window listener, no React state.
@@ -135,12 +135,47 @@ const CAM_NARROW = [
   { pos: [0.7, 0.68, 7.25], target: [0.02, 0.12, 0], fov: 31 },
 ] as const;
 
+type Shot = {
+  position: [number, number, number];
+  target: [number, number, number];
+  fov: number;
+};
+
+/* Every shot is authored to sit the volume right of centre, because on a wide
+   screen the copy holds the left half and the object holds the right. The
+   camera aims at x≈0 while the ledger stands at VOLUME_ORIGIN.x — a full unit
+   to its right.
+
+   On a phone the copy is full width and there is no left half to protect, so
+   that same offset just shoves the object off the right edge and crops it.
+   This trucks the shot sideways — camera and target move together by the same
+   amount — until the aim lands on the volume's own x. Trucking rather than
+   panning keeps the viewing angle each beat was composed at; only the framing
+   moves. Applied to every return path, including the stamp lock, so no beat
+   drifts back off-screen. */
+function recentre(shot: Shot, narrow: boolean): Shot {
+  if (!narrow) return shot;
+  const dx = VOLUME_ORIGIN.x - shot.target[0];
+  return {
+    position: [shot.position[0] + dx, shot.position[1], shot.position[2]],
+    target: [shot.target[0] + dx, shot.target[1], shot.target[2]],
+    fov: shot.fov,
+  };
+}
+
 export function cameraForProgress(progress: number) {
   const narrow = isNarrowView();
   const table = narrow ? CAM_NARROW : CAM;
   if (inscription.quality.reducedMotion) {
     const c = table[0];
-    return { position: [...c.pos] as [number, number, number], target: [...c.target] as [number, number, number], fov: c.fov };
+    return recentre(
+      {
+        position: [...c.pos] as [number, number, number],
+        target: [...c.target] as [number, number, number],
+        fov: c.fov,
+      },
+      narrow,
+    );
   }
   const beat = inscription.beat;
   const a = table[Math.max(0, beat - 1)];
@@ -169,7 +204,7 @@ export function cameraForProgress(progress: number) {
   }
 
   const strike = Math.max(writing.stamp, beat === 4 ? 1 : 0);
-  if (strike <= 0.01) return base;
+  if (strike <= 0.01) return recentre(base, narrow);
 
   const row = FIRST_BOOKED < 0 ? 0 : FIRST_BOOKED;
   const dieX = rowX1() - 0.14;
@@ -188,19 +223,22 @@ export function cameraForProgress(progress: number) {
       ? 0.55 + writing.press * 0.45
       : Math.min(1, writing.press);
   const fov = narrow ? 29.2 - writing.press * 0.35 : 20 - writing.press * 0.8;
-  return {
-    position: [
-      base.position[0] + (lockPos[0] - base.position[0]) * w,
-      base.position[1] + (lockPos[1] - base.position[1]) * w,
-      base.position[2] + (lockPos[2] - base.position[2]) * w,
-    ] as [number, number, number],
-    target: [
-      base.target[0] + (lockTarget[0] - base.target[0]) * w,
-      base.target[1] + (lockTarget[1] - base.target[1]) * w,
-      base.target[2] + (lockTarget[2] - base.target[2]) * w,
-    ] as [number, number, number],
-    fov: base.fov + (fov - base.fov) * w,
-  };
+  return recentre(
+    {
+      position: [
+        base.position[0] + (lockPos[0] - base.position[0]) * w,
+        base.position[1] + (lockPos[1] - base.position[1]) * w,
+        base.position[2] + (lockPos[2] - base.position[2]) * w,
+      ] as [number, number, number],
+      target: [
+        base.target[0] + (lockTarget[0] - base.target[0]) * w,
+        base.target[1] + (lockTarget[1] - base.target[1]) * w,
+        base.target[2] + (lockTarget[2] - base.target[2]) * w,
+      ] as [number, number, number],
+      fov: base.fov + (fov - base.fov) * w,
+    },
+    narrow,
+  );
 }
 
 export { inscription };

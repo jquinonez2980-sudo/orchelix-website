@@ -17,7 +17,15 @@ import { themeFor } from "../theme";
 import { writing } from "../writing/WritingDirector";
 import { isNarrowView } from "../ScrollDirector";
 import { dimLamp, setLampFromWorld } from "../lampScreen";
-import { FACE_Z, PAGE, VOLUME, rowTextY, rowX0, rowX1 } from "./volumeLayout";
+import {
+  FACE_Z,
+  PAGE,
+  VOLUME,
+  VOLUME_ORIGIN,
+  rowTextY,
+  rowX0,
+  rowX1,
+} from "./volumeLayout";
 import VoiceFilaments from "./VoiceFilament";
 import InscribedRows from "./InscribedRows";
 import StampDie, { dieRoot } from "./StampDie";
@@ -159,7 +167,7 @@ export default function InscriptionVolume() {
   });
 
   return (
-    <group ref={group} position={[1.02, -0.13, 0]}>
+    <group ref={group} position={[VOLUME_ORIGIN.x, VOLUME_ORIGIN.y, VOLUME_ORIGIN.z]}>
       <mesh
         geometry={pageGeo}
         material={handle.pages}
