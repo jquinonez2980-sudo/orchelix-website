@@ -70,8 +70,9 @@ const REFERENCE_ASPECT = 1.6;
 /* Exponent on the aspect ratio. 1 is a true horizontal-extent lock — the
    volume occupies the same fraction of the width at any aspect. Below 1 the
    correction is softened; the first pass used 0.5 and undershot badly on a
-   phone, so this now sits close to the full lock. */
-const DOLLY_EXPONENT = 0.92;
+   phone, so this now sits close to the full lock.
+   0.68 keeps it a background object but large enough to read on a phone. */
+const DOLLY_EXPONENT = 0.68;
 
 /* Ceiling, so a freak aspect cannot push the volume to a speck. */
 const DOLLY_MAX = 3.4;

@@ -516,6 +516,11 @@ html {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   overflow-y: auto !important;          /* prevent Clerk modal scroll-lock on <html> */
+  /* Clip, not hidden: the closed drawer is translated off-screen and
+     Chromium still counts that box in scrollWidth (~408px). clip stops
+     the sideways scroll without turning <html> into a second scroller
+     that would break position:sticky. */
+  overflow-x: clip;
 }
 
 body {
@@ -1430,15 +1435,6 @@ details[open] > .lg-summary::before {
   overflow: auto;
   visibility: hidden;
   pointer-events: none;
-}
-/* Closed, the translated 24.5rem pane still expands document scrollWidth
-   in Chromium (~408px). Collapse the box so it cannot. visibility:hidden
-   also drops it from the tab order. */
-.lg-menu:not([data-open="true"]) {
-  width: 0;
-  min-width: 0;
-  border: 0;
-  overflow: hidden;
 }
 .lg-menu[data-open="true"] {
   transform: translateX(0);
