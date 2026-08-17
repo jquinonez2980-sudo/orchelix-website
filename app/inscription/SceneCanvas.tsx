@@ -37,9 +37,20 @@ export default function SceneCanvas() {
            frame; at 0.34 that second pass costs about a ninth of the pixels.
            Set here rather than in createRenderer because R3F owns the renderer
            instance when `gl` is a props object. */
+        /* Only write a reduced scale. The default is 1, and assigning the
+           property on the first frame (before Three has a real viewport)
+           has produced a 0×0 transmission target that then draws nothing
+           — including on desktop HIGH, where the scale is identity anyway.
+           Reduced values stay for MID; HIGH leaves the renderer default. */
+        const scale = inscription.quality.transmissionScale;
         const renderer = state.gl as { transmissionResolutionScale?: number };
-        if ("transmissionResolutionScale" in renderer) {
-          renderer.transmissionResolutionScale = inscription.quality.transmissionScale;
+        if (
+          "transmissionResolutionScale" in renderer &&
+          typeof scale === "number" &&
+          scale > 0 &&
+          scale < 1
+        ) {
+          renderer.transmissionResolutionScale = scale;
         }
 
         setInscription("ready", true);

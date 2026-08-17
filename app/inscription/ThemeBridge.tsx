@@ -9,7 +9,9 @@ import {
   cameraForProgress,
   bindResizeMeasure,
   dollyForAspect,
+  isNarrowView,
 } from "./ScrollDirector";
+import { volumeWorldX } from "./world/volumeLayout";
 import { dropQualityStep } from "./QualityGovernor";
 import { tickRelight } from "./relight";
 import { updateWriting, writing } from "./writing/WritingDirector";
@@ -88,6 +90,23 @@ export default function ThemeBridge() {
         persp.fov = next;
         persp.updateProjectionMatrix();
       }
+    }
+
+    const root = document.querySelector("[data-inscription]");
+    if (root instanceof HTMLElement) {
+      const vx = volumeWorldX({
+        beat: inscription.beat,
+        progress: inscription.progress,
+        firstWrite: writing.rows[0]?.write ?? 0,
+        narrow: isNarrowView(),
+      });
+      root.dataset.insFrame = [
+        isNarrowView() ? "n" : "d",
+        camera.position.x.toFixed(2),
+        look.current.x.toFixed(2),
+        vx.toFixed(2),
+        dolly.toFixed(2),
+      ].join(",");
     }
 
     if (inscription.quality.tier !== "off") {

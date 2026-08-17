@@ -40,3 +40,16 @@ export function rowX1() {
 
 export const FACE_Z = 0.024;
 export const SURFACE_Z = VOLUME.d / 2 - 0.018;
+
+/* The group's x is animated per beat. Camera recentre and the mesh itself
+   both read this so they cannot disagree. */
+export function volumeWorldX(opts: {
+  beat: number;
+  progress: number;
+  firstWrite: number;
+  narrow: boolean;
+}) {
+  const { beat, progress, firstWrite, narrow } = opts;
+  const heroX = narrow ? 0.36 + firstWrite * 0.1 : 1.02 + firstWrite * 0.16;
+  return beat === 1 ? heroX : narrow ? -0.04 : 0.35 - progress * 0.16;
+}

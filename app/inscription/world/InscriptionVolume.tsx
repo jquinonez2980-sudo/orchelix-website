@@ -17,7 +17,7 @@ import { themeFor } from "../theme";
 import { writing } from "../writing/WritingDirector";
 import { isNarrowView } from "../ScrollDirector";
 import { dimLamp, setLampFromWorld } from "../lampScreen";
-import { FACE_Z, PAGE, VOLUME, rowTextY, rowX0, rowX1 } from "./volumeLayout";
+import { FACE_Z, PAGE, VOLUME, rowTextY, rowX0, rowX1, volumeWorldX } from "./volumeLayout";
 import VoiceFilaments from "./VoiceFilament";
 import InscribedRows from "./InscribedRows";
 import StampDie, { dieRoot } from "./StampDie";
@@ -123,10 +123,9 @@ export default function InscriptionVolume() {
     g.rotation.y = lerp(g.rotation.y, yaw, k);
     g.rotation.x = lerp(g.rotation.x, pitch, k);
     const first = writing.rows[0]?.write ?? 0;
-    const heroX = narrow ? 0.36 + first * 0.1 : 1.02 + first * 0.16;
     g.position.x = lerp(
       g.position.x,
-      beat === 1 ? heroX : narrow ? -0.04 : 0.35 - p * 0.16,
+      volumeWorldX({ beat, progress: p, firstWrite: first, narrow }),
       k,
     );
     g.position.y = lerp(

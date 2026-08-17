@@ -1431,6 +1431,15 @@ details[open] > .lg-summary::before {
   visibility: hidden;
   pointer-events: none;
 }
+/* Closed, the translated 24.5rem pane still expands document scrollWidth
+   in Chromium (~408px). Collapse the box so it cannot. visibility:hidden
+   also drops it from the tab order. */
+.lg-menu:not([data-open="true"]) {
+  width: 0;
+  min-width: 0;
+  border: 0;
+  overflow: hidden;
+}
 .lg-menu[data-open="true"] {
   transform: translateX(0);
   visibility: visible;

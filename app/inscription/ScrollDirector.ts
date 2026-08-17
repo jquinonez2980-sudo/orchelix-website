@@ -1,6 +1,6 @@
 import { inscription, setScroll } from "./store";
 import { beatFromProgress, setWindowsFromSections, writing } from "./writing/WritingDirector";
-import { FACE_Z, rowX1, rowY } from "./world/volumeLayout";
+import { FACE_Z, rowX1, rowY, volumeWorldX } from "./world/volumeLayout";
 import { FIRST_BOOKED } from "./data/nightRegister";
 
 /* Native document scroll. No hijack, no window listener, no React state.
@@ -76,27 +76,6 @@ const DOLLY_EXPONENT = 0.92;
 /* Ceiling, so a freak aspect cannot push the volume to a speck. */
 const DOLLY_MAX = 3.4;
 
-/* Temporary tuning hatch: `?dolly=2.6` overrides the computed value at runtime.
-
-   TEMPORARY — delete once the constants above are settled on a real device.
-   Kept deliberately through the merge rather than stripped, because the
-   framing still needs confirming on hardware and this is what makes that
-   possible without a deploy per guess. It only moves the camera, reads a
-   single clamped number, and does nothing when the parameter is absent.
-
-   It exists because the framing cannot be verified where it is authored: no
-   mobile viewport is available here, and narrowing the canvas alone gives a
-   false reading, since isNarrowView keys off window.innerWidth and so pairs a
-   phone aspect with the desktop camera table — a combination no device
-   produces. */
-function dollyOverride(): number | null {
-  if (typeof window === "undefined") return null;
-  const raw = new URLSearchParams(window.location.search).get("dolly");
-  if (!raw) return null;
-  const n = Number(raw);
-  return Number.isFinite(n) && n > 0 && n <= 8 ? n : null;
-}
-
 /* How much further back the camera sits as the viewport narrows.
 
    `fov` in three is the *vertical* angle, so a tall phone does not simply see
@@ -110,8 +89,6 @@ function dollyOverride(): number | null {
    field, which distorts the object badly at the edges. Dollying back keeps the
    lens honest and just puts the camera where it can see the whole subject. */
 export function dollyForAspect(aspect: number) {
-  const override = dollyOverride();
-  if (override !== null) return override;
   if (!Number.isFinite(aspect) || aspect <= 0) return 1;
   if (aspect >= REFERENCE_ASPECT) return 1;
   return Math.min(DOLLY_MAX, Math.pow(REFERENCE_ASPECT / aspect, DOLLY_EXPONENT));
@@ -135,12 +112,44 @@ const CAM_NARROW = [
   { pos: [0.7, 0.68, 7.25], target: [0.02, 0.12, 0], fov: 31 },
 ] as const;
 
+type Shot = {
+  position: [number, number, number];
+  target: [number, number, number];
+  fov: number;
+};
+
+/* On a phone the copy is full-width, so the desktop "object on the right"
+   offset just crops the ledger. Truck camera and target together until the
+   aim lands on the volume's live x (the same function the mesh uses). */
+function recentre(shot: Shot, narrow: boolean): Shot {
+  if (!narrow) return shot;
+  const x = volumeWorldX({
+    beat: inscription.beat,
+    progress: inscription.progress,
+    firstWrite: writing.rows[0]?.write ?? 0,
+    narrow: true,
+  });
+  const dx = x - shot.target[0];
+  return {
+    position: [shot.position[0] + dx, shot.position[1], shot.position[2]],
+    target: [shot.target[0] + dx, shot.target[1], shot.target[2]],
+    fov: shot.fov,
+  };
+}
+
 export function cameraForProgress(progress: number) {
   const narrow = isNarrowView();
   const table = narrow ? CAM_NARROW : CAM;
   if (inscription.quality.reducedMotion) {
     const c = table[0];
-    return { position: [...c.pos] as [number, number, number], target: [...c.target] as [number, number, number], fov: c.fov };
+    return recentre(
+      {
+        position: [...c.pos] as [number, number, number],
+        target: [...c.target] as [number, number, number],
+        fov: c.fov,
+      },
+      narrow,
+    );
   }
   const beat = inscription.beat;
   const a = table[Math.max(0, beat - 1)];
@@ -169,12 +178,20 @@ export function cameraForProgress(progress: number) {
   }
 
   const strike = Math.max(writing.stamp, beat === 4 ? 1 : 0);
-  if (strike <= 0.01) return base;
+  if (strike <= 0.01) return recentre(base, narrow);
 
   const row = FIRST_BOOKED < 0 ? 0 : FIRST_BOOKED;
   const dieX = rowX1() - 0.14;
+  const vx = narrow
+    ? volumeWorldX({
+        beat,
+        progress,
+        firstWrite: writing.rows[0]?.write ?? 0,
+        narrow: true,
+      })
+    : 0;
   const lockTarget: [number, number, number] = narrow
-    ? [0.08 + dieX * 0.42, 0.28 + rowY(row) + 0.1, FACE_Z + 0.04]
+    ? [vx + 0.08 + dieX * 0.42, 0.28 + rowY(row) + 0.1, FACE_Z + 0.04]
     : [0.32 + dieX * 0.7, 0.08 + rowY(row) + 0.14, FACE_Z + 0.05];
   const dolly = narrow
     ? 4.55 - writing.press * 0.1
