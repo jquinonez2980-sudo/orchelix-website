@@ -6,7 +6,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { getInscriptionSnapshot, inscription, subscribeInscription } from "../store";
 import { applyBoundRoom, bindRelightScene, currentTheme } from "../relight";
-import { themeFor } from "../theme";
+import { DARK_THEME, themeFor } from "../theme";
 
 function roomPalette(mode: "light" | "dark") {
   const night = mode === "dark";
@@ -118,7 +118,7 @@ export default function Atmosphere() {
   const mode = useSyncExternalStore(
     subscribeInscription,
     () => getInscriptionSnapshot().mode,
-    () => "light" as const,
+    () => "dark" as const,
   );
   const backend = useSyncExternalStore(
     subscribeInscription,
@@ -131,7 +131,9 @@ export default function Atmosphere() {
   const desk = useRef<THREE.SpotLight>(null);
   const rim = useRef<THREE.DirectionalLight>(null);
   const table = useRef<THREE.MeshStandardMaterial>(null);
-  const bg = useMemo(() => new THREE.Color("#F4F5F6"), []);
+  /* Seeded from the dark rig's clear so the very first frame is already night.
+     A light seed shows one paper-white frame before the effect below runs. */
+  const bg = useMemo(() => new THREE.Color(DARK_THEME.clear), []);
   const gl = useThree((s) => s.gl);
   const scene = useThree((s) => s.scene);
   const camera = useThree((s) => s.camera);

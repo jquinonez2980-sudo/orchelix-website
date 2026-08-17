@@ -142,16 +142,49 @@ export default function Nav({
           aria-label={t.nav.home}
           style={{ display: "flex", alignItems: "center", textDecoration: "none", flexShrink: 0 }}
         >
+          {/* Two lockups, swapped by CSS rather than by state.
+
+              Switching `src` on a theme change would mean the wrong lockup is
+              painted first and then replaced — a visible flicker on every
+              toggle, and a graphite wordmark on a black nav for the length of
+              one network request. Both are in the markup and `display` picks
+              one, so the swap costs nothing at runtime.
+
+              The night lockup only renders on the homepage, since that is the
+              only surface with a dark mode; every other route ships exactly
+              the one image it did before.
+
+              Both carry `alt=""`: the anchor above already has an accessible
+              name, and labelling the image too made screen readers announce
+              the link twice. */}
+          {isHome ? (
+            <Image
+              src="/orchelix-logo-night.png"
+              alt=""
+              aria-hidden="true"
+              width={1383}
+              height={580}
+              sizes="122px"
+              quality={90}
+              preload
+              className="lg-nav-logo lg-nav-logo--night"
+              style={{ height: 50, width: "auto" }}
+            />
+          ) : null}
           <Image
             src="/orchelix-logo-full-color.png"
-            alt={t.nav.home}
+            alt=""
+            aria-hidden="true"
             width={1383}
             height={569}
             sizes="122px"
             quality={90}
-            preload
-            className="lg-nav-logo"
-            style={{ display: "block", height: 50, width: "auto" }}
+            /* On the homepage night is the opening light, so the day lockup is
+               the one that is not on screen first and must not take the
+               preload slot from it. */
+            preload={!isHome}
+            className="lg-nav-logo lg-nav-logo--day"
+            style={{ height: 50, width: "auto" }}
           />
         </a>
 

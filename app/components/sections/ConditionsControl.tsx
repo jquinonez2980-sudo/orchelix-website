@@ -54,7 +54,7 @@ export default function ConditionsControl({
   const mode = useSyncExternalStore(
     subscribeInscription,
     () => getInscriptionSnapshot().mode,
-    () => "light" as const,
+    () => "dark" as const,
   );
 
   return (

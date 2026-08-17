@@ -12,6 +12,14 @@ export type Quality = {
   dpr: [number, number];
   antialias: boolean;
   transmission: boolean;
+  /* Resolution of the transmission pass relative to the canvas, 0-1.
+     Transmission is the scene's dominant per-frame cost: a material with
+     transmission > 0 makes three draw the whole scene a second time into a
+     separate target, every frame. Scaling that target down is close to free
+     visually — what it renders is refracted through rough glass and blurred
+     anyway — and quadratic in savings. It is the lever that lets a phone keep
+     real glass instead of an opaque slab. */
+  transmissionScale: number;
   env: boolean;
   allowWebGPU: boolean;
   reducedMotion: boolean;
@@ -60,12 +68,17 @@ function emit() {
 }
 
 export const inscription: InscriptionState = {
-  mode: "light",
+  /* Night is the homepage's opening light — see readStoredMode in theme.ts.
+     This has to match every `getServerSnapshot` in the tree, or the first
+     client render disagrees with the server's and React re-renders the whole
+     surface from light to dark in front of the visitor. */
+  mode: "dark",
   quality: {
     tier: "high",
     dpr: [1, 1.5],
     antialias: true,
     transmission: true,
+    transmissionScale: 1,
     env: true,
     allowWebGPU: true,
     reducedMotion: false,

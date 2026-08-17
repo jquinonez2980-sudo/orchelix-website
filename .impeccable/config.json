@@ -5,6 +5,31 @@
       "app/api/contact/route.ts",
       "app/api/leads/meta/route.ts"
     ],
-    "ignoreValues": []
+    "ignoreValues": [
+      {
+        "rule": "design-system-font-size",
+        "value": "2.05rem",
+        "createdAt": "2026-08-17T02:12:14.773Z",
+        "reason": "User confirmed 2.05rem is intentional"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "2.15rem",
+        "createdAt": "2026-08-17T02:12:17.522Z",
+        "reason": "User confirmed 2.15rem is intentional"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#8aa0b8",
+        "createdAt": "2026-08-17T02:14:11.959Z",
+        "reason": "User confirmed #8aa0b8 is intentional"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "0.58rem",
+        "createdAt": "2026-08-17T02:14:16.179Z",
+        "reason": "User confirmed 0.58rem is intentional"
+      }
+    ]
   }
 }

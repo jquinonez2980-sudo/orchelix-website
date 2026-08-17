@@ -4,7 +4,12 @@ import { useEffect, useRef, useSyncExternalStore } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { inscription, setInscription, subscribeInscription } from "./store";
-import { sampleScroll, cameraForProgress, bindResizeMeasure } from "./ScrollDirector";
+import {
+  sampleScroll,
+  cameraForProgress,
+  bindResizeMeasure,
+  dollyForAspect,
+} from "./ScrollDirector";
 import { dropQualityStep } from "./QualityGovernor";
 import { tickRelight } from "./relight";
 import { updateWriting, writing } from "./writing/WritingDirector";
@@ -23,7 +28,7 @@ export default function ThemeBridge() {
   const mode = useSyncExternalStore(
     subscribeInscription,
     () => inscription.mode,
-    () => "light" as const,
+    () => "dark" as const,
   );
 
   useEffect(() => {
@@ -60,7 +65,18 @@ export default function ThemeBridge() {
     const k = inscription.quality.reducedMotion
       ? 1
       : 1 - Math.exp(-dt * (impact ? 30 : strike ? 16 : 4.6));
-    goal.current.set(cam.position[0], cam.position[1], cam.position[2]);
+    /* Push the camera back along its own view axis when the viewport is
+       narrower than the framing was authored for, so a phone sees the whole
+       volume instead of a close-up of its middle. Applied to the goal rather
+       than to the camera so it still lerps, and measured from the shot's own
+       target so every beat keeps its composition. */
+    const aspect = "aspect" in state.camera ? (state.camera as { aspect: number }).aspect : 1;
+    const dolly = dollyForAspect(aspect);
+    goal.current.set(
+      cam.target[0] + (cam.position[0] - cam.target[0]) * dolly,
+      cam.target[1] + (cam.position[1] - cam.target[1]) * dolly,
+      cam.target[2] + (cam.position[2] - cam.target[2]) * dolly,
+    );
     lookGoal.current.set(cam.target[0], cam.target[1], cam.target[2]);
     look.current.lerp(lookGoal.current, k);
     camera.position.lerp(goal.current, k);

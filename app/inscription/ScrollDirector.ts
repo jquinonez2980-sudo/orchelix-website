@@ -53,8 +53,68 @@ export function bindResizeMeasure() {
   return () => window.removeEventListener("resize", onResize);
 }
 
+/* Width alone missed devices: a large phone, or one whose browser reports a
+   wide layout viewport, would clear 768 and get the desktop camera table while
+   still being tall and narrow in shape — the exact case the narrow framing
+   exists for. Portrait aspect is the more reliable signal, so either qualifies. */
 export function isNarrowView() {
-  return typeof window !== "undefined" && window.innerWidth < 768;
+  if (typeof window === "undefined") return false;
+  const portrait = window.innerHeight > 0 && window.innerWidth / window.innerHeight < 1;
+  return window.innerWidth < 768 || portrait;
+}
+
+/* The aspect the CAM tables were framed against. Above it, framing is used as
+   authored. */
+const REFERENCE_ASPECT = 1.6;
+
+/* Exponent on the aspect ratio. 1 is a true horizontal-extent lock — the
+   volume occupies the same fraction of the width at any aspect. Below 1 the
+   correction is softened; the first pass used 0.5 and undershot badly on a
+   phone, so this now sits close to the full lock. */
+const DOLLY_EXPONENT = 0.92;
+
+/* Ceiling, so a freak aspect cannot push the volume to a speck. */
+const DOLLY_MAX = 3.4;
+
+/* Temporary tuning hatch: `?dolly=2.6` overrides the computed value at runtime.
+
+   TEMPORARY — delete once the constants above are settled on a real device.
+   Kept deliberately through the merge rather than stripped, because the
+   framing still needs confirming on hardware and this is what makes that
+   possible without a deploy per guess. It only moves the camera, reads a
+   single clamped number, and does nothing when the parameter is absent.
+
+   It exists because the framing cannot be verified where it is authored: no
+   mobile viewport is available here, and narrowing the canvas alone gives a
+   false reading, since isNarrowView keys off window.innerWidth and so pairs a
+   phone aspect with the desktop camera table — a combination no device
+   produces. */
+function dollyOverride(): number | null {
+  if (typeof window === "undefined") return null;
+  const raw = new URLSearchParams(window.location.search).get("dolly");
+  if (!raw) return null;
+  const n = Number(raw);
+  return Number.isFinite(n) && n > 0 && n <= 8 ? n : null;
+}
+
+/* How much further back the camera sits as the viewport narrows.
+
+   `fov` in three is the *vertical* angle, so a tall phone does not simply see
+   a letterboxed version of the desktop shot — it sees the same vertical extent
+   through a much narrower horizontal one, and the subject grows to fill the
+   width. At 393x852 the aspect is 0.46, which turns a 30-degree vertical field
+   into roughly 14 degrees horizontally: the volume ends up enormous.
+
+   Widening `fov` to compensate is the obvious move and the wrong one — holding
+   horizontal extent constant at that aspect needs an ~86-degree vertical
+   field, which distorts the object badly at the edges. Dollying back keeps the
+   lens honest and just puts the camera where it can see the whole subject. */
+export function dollyForAspect(aspect: number) {
+  const override = dollyOverride();
+  if (override !== null) return override;
+  if (!Number.isFinite(aspect) || aspect <= 0) return 1;
+  if (aspect >= REFERENCE_ASPECT) return 1;
+  return Math.min(DOLLY_MAX, Math.pow(REFERENCE_ASPECT / aspect, DOLLY_EXPONENT));
 }
 
 const CAM = [

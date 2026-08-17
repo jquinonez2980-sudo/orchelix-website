@@ -1479,6 +1479,11 @@ details[open] > .lg-summary::before {
     letter-spacing: 0.04em;
   }
 }
+/* Declared here rather than inline on the element: the homepage carries two
+   lockups and swaps them with `display`, and an inline style would outrank
+   the stylesheet rule that does the swapping. */
+.lg-nav-logo { display: block; }
+
 @media (max-width: 479px) {
   .lg-nav-logo { height: 38px !important; }
   .lg-nav__bar { gap: 0.55rem; }
