@@ -90,13 +90,7 @@ export default function InscriptionVolume() {
     const beat = inscription.beat;
     const narrow = isNarrowView();
     const yaw = narrow
-      ? beat === 1
-        ? 0.4
-        : beat === 2
-          ? 0.26
-          : beat === 4
-            ? 0.2
-            : 0.36 - p * 0.08
+      ? 0.16
       : beat === 1
         ? 0.52
         : beat === 2
@@ -105,13 +99,7 @@ export default function InscriptionVolume() {
             ? 0.36
             : 0.72 - p * 0.26;
     const pitch = narrow
-      ? beat === 1
-        ? -0.08
-        : beat === 2
-          ? -0.08
-          : beat === 4
-            ? -0.06
-            : -0.1 + p * 0.03
+      ? -0.06
       : beat === 1
         ? -0.12
         : beat === 2
@@ -120,20 +108,16 @@ export default function InscriptionVolume() {
             ? -0.1
             : -0.2 + p * 0.06;
     const k = 1 - Math.exp(-dt * 5.2);
-    g.rotation.y = lerp(g.rotation.y, yaw, k);
-    g.rotation.x = lerp(g.rotation.x, pitch, k);
+    g.rotation.y = narrow ? yaw : lerp(g.rotation.y, yaw, k);
+    g.rotation.x = narrow ? pitch : lerp(g.rotation.x, pitch, k);
     const first = writing.rows[0]?.write ?? 0;
-    g.position.x = lerp(
-      g.position.x,
-      volumeWorldX({ beat, progress: p, firstWrite: first, narrow }),
-      k,
-    );
-    g.position.y = lerp(
-      g.position.y,
-      (narrow ? (beat === 4 ? 0.46 : beat === 1 ? 0.05 : 0.22) : beat === 1 ? -0.13 : 0.08) -
-        writing.impact * 0.045,
-      k,
-    );
+    const x = volumeWorldX({ beat, progress: p, firstWrite: first, narrow });
+    /* Narrow must snap. A lerp from the desktop start (1.02) leaves the
+       ledger sitting to the right of the camera aim, then further right
+       as beats change. */
+    g.position.x = narrow ? x : lerp(g.position.x, x, k);
+    const y = (narrow ? 0.04 : beat === 1 ? -0.13 : 0.08) - writing.impact * 0.045;
+    g.position.y = narrow ? y : lerp(g.position.y, y, k);
 
     if (inscription.mode !== "dark") {
       dimLamp();

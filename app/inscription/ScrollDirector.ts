@@ -59,8 +59,14 @@ export function bindResizeMeasure() {
    exists for. Portrait aspect is the more reliable signal, so either qualifies. */
 export function isNarrowView() {
   if (typeof window === "undefined") return false;
-  const portrait = window.innerHeight > 0 && window.innerWidth / window.innerHeight < 1;
-  return window.innerWidth < 768 || portrait;
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  const aspect = h > 0 ? w / h : 2;
+  /* 900 catches large phones and “desktop site” layout viewports that
+     still have no left-hand copy column. Aspect < 1.2 catches portrait
+     and near-portrait that would otherwise get the desktop right-hand
+     shot and hang the ledger off the right edge. */
+  return w < 900 || aspect < 1.2;
 }
 
 /* The aspect the CAM tables were framed against. Above it, framing is used as
@@ -104,53 +110,41 @@ const CAM = [
   { pos: [1.88, 0.52, 5.55], target: [0.24, 0.06, 0], fov: 27 },
 ] as const;
 
-const CAM_NARROW = [
-  { pos: [0.62, 0.48, 6.7], target: [0.0, 0.04, 0], fov: 30 },
-  { pos: [0.58, 0.74, 6.55], target: [-0.04, 0.3, 0], fov: 30 },
-  { pos: [0.64, 0.68, 7.05], target: [0.0, 0.14, 0], fov: 31 },
-  { pos: [0.42, 0.92, 5.35], target: [0.12, 0.52, 0.06], fov: 29 },
-  { pos: [0.66, 0.64, 6.85], target: [0.0, 0.14, 0], fov: 31 },
-  { pos: [0.7, 0.68, 7.25], target: [0.02, 0.12, 0], fov: 31 },
-] as const;
-
 type Shot = {
   position: [number, number, number];
   target: [number, number, number];
   fov: number;
 };
 
-/* On a phone the copy is full-width, so the desktop "object on the right"
-   offset just crops the ledger. Truck camera and target together until the
-   aim lands on the volume's live x (the same function the mesh uses). */
-function recentre(shot: Shot, narrow: boolean): Shot {
-  if (!narrow) return shot;
+/* One on-axis shot for the whole page. The desktop table looks from the
+   right so copy can hold the left; on a phone that same offset (then
+   magnified by dolly) parks the ledger on the right edge and walks it
+   further off as beats change. Sit in front, stay there. */
+function narrowBackgroundShot(): Shot {
   const x = volumeWorldX({
     beat: inscription.beat,
     progress: inscription.progress,
     firstWrite: writing.rows[0]?.write ?? 0,
     narrow: true,
   });
-  const dx = x - shot.target[0];
   return {
-    position: [shot.position[0] + dx, shot.position[1], shot.position[2]],
-    target: [shot.target[0] + dx, shot.target[1], shot.target[2]],
-    fov: shot.fov,
+    position: [x, 0.32, 6.5],
+    target: [x, 0.06, 0],
+    fov: 30,
   };
 }
 
 export function cameraForProgress(progress: number) {
   const narrow = isNarrowView();
-  const table = narrow ? CAM_NARROW : CAM;
+  if (narrow) return narrowBackgroundShot();
+  const table = CAM;
   if (inscription.quality.reducedMotion) {
     const c = table[0];
-    return recentre(
-      {
-        position: [...c.pos] as [number, number, number],
-        target: [...c.target] as [number, number, number],
-        fov: c.fov,
-      },
-      narrow,
-    );
+    return {
+      position: [...c.pos] as [number, number, number],
+      target: [...c.target] as [number, number, number],
+      fov: c.fov,
+    };
   }
   const beat = inscription.beat;
   const a = table[Math.max(0, beat - 1)];
@@ -171,15 +165,14 @@ export function cameraForProgress(progress: number) {
     fov: a.fov + (b.fov - a.fov) * mix,
   };
 
-  if (beat === 1) {
+  if (beat === 1 && !narrow) {
     const slide = writing.rows[0]?.write ?? 0;
-    const shift = narrow ? 0.06 : 0.12;
-    base.target[0] += shift * slide;
-    base.position[0] += shift * 0.7 * slide;
+    base.target[0] += 0.12 * slide;
+    base.position[0] += 0.12 * 0.7 * slide;
   }
 
   const strike = Math.max(writing.stamp, beat === 4 ? 1 : 0);
-  if (strike <= 0.01) return recentre(base, narrow);
+  if (strike <= 0.01) return base;
 
   const row = FIRST_BOOKED < 0 ? 0 : FIRST_BOOKED;
   const dieX = rowX1() - 0.14;

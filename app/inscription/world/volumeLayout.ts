@@ -50,6 +50,9 @@ export function volumeWorldX(opts: {
   narrow: boolean;
 }) {
   const { beat, progress, firstWrite, narrow } = opts;
-  const heroX = narrow ? 0.36 + firstWrite * 0.1 : 1.02 + firstWrite * 0.16;
-  return beat === 1 ? heroX : narrow ? -0.04 : 0.35 - progress * 0.16;
+  /* Phones have no left-hand copy column. The ledger is a centred
+     background for the whole page — x never leaves 0. */
+  if (narrow) return 0;
+  const heroX = 1.02 + firstWrite * 0.16;
+  return beat === 1 ? heroX : 0.35 - progress * 0.16;
 }

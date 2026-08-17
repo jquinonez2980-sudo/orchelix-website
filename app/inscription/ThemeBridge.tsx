@@ -64,7 +64,7 @@ export default function ThemeBridge() {
     const cam = cameraForProgress(inscription.progress);
     const strike = inscription.beat === 4 || writing.stamp > 0.02;
     const impact = writing.impact > 0.2;
-    const k = inscription.quality.reducedMotion
+    const k = inscription.quality.reducedMotion || isNarrowView()
       ? 1
       : 1 - Math.exp(-dt * (impact ? 30 : strike ? 16 : 4.6));
     /* Push the camera back along its own view axis when the viewport is
