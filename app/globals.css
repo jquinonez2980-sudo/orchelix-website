@@ -1567,22 +1567,47 @@ details[open] > .lg-summary::before {
   .lg-seg__item { transition: none; }
 }
 
-/* Below 900px the bar already carries logo + phone + stamp + menu, which is
-   all one line will hold. The cluster takes its own row inside the sticky
-   header rather than retreating into the drawer: a control that changes what
-   you are looking at should be visible while you look at it.
+/* The mobile bar collapses to logo + stamp + menu.
 
-   Scoped to `[data-inscription]` — the homepage is the only surface that
-   renders the cluster, and scoping the wrap guarantees no other route's
-   chrome can reflow. */
+   An earlier pass let `.lg-nav__actions` wrap so the conditions cluster could
+   take its own row. On a real phone that failed badly: the actions box is
+   `ml-auto`, so once it wrapped, the phone number and the stamp broke onto a
+   line *above* the wordmark and the header ate roughly a quarter of the
+   viewport. Six things — logo, phone, EN|ES, DAY|NIGHT, stamp, menu — do not
+   fit across 390px, and no amount of wrapping makes them.
+
+   So below 900px the bar carries only what has to be reachable from any
+   scroll position: the wordmark, the one primary action, and the way into
+   everything else. The phone number and both conditions controls move into
+   the drawer, which is what the drawer is for.
+
+   The cost is real and worth naming: the lighting toggle is no longer visible
+   beside the scene it controls on a phone. Nothing else fit without the
+   header dominating the first viewport, which would be the worse trade on the
+   surface whose whole argument is the artifact in the first screen. */
 @media (max-width: 899px) {
-  [data-inscription] .lg-nav__actions { flex-wrap: wrap; }
-  [data-inscription] .lg-conditions {
-    order: 10;
-    width: 100%;
-    padding-top: 0.55rem;
-    border-top: 1px solid var(--lg-hair-2);
+  .lg-nav__actions {
+    /* No wrapping. This is the rule the previous pass got wrong. */
+    flex-wrap: nowrap;
   }
+  .lg-nav__actions .lg-nav-phone,
+  .lg-nav__actions .lg-conditions {
+    display: none;
+  }
+}
+
+/* The same three controls, restated inside the drawer where they now live. */
+.lg-menu__conditions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 1.15rem;
+  margin-top: 0.35rem;
+  border-top: 1px solid var(--lg-rule);
+}
+@media (min-width: 900px) {
+  .lg-menu__conditions { display: none; }
 }
 
 .lg-hero-scene {
