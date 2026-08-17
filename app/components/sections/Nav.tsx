@@ -344,6 +344,40 @@ export default function Nav({
           >
             {t.common.phone}
           </a>
+
+          {/* Lighting lives here on a phone, because six controls do not fit
+              across 390px of bar. Language is already stated above as a word,
+              so only the lighting segment is repeated. Hidden at 900px and up,
+              where the cluster is back in the bar and this would be a second
+              copy of a control already on screen. */}
+          {isHome ? (
+            <div className="lg-menu__conditions">
+              <span
+                className="lg-fig"
+                style={{
+                  fontSize: "0.625rem",
+                  letterSpacing: "0.13em",
+                  textTransform: "uppercase",
+                  color: "var(--lg-ink-3)",
+                }}
+              >
+                {t.meta.lighting}
+              </span>
+              <ConditionsControl
+                parts="lighting"
+                locale={locale}
+                other={other}
+                switchHref={switchHref}
+                copy={{
+                  language: t.meta.language,
+                  lighting: t.meta.lighting,
+                  day: t.meta.day,
+                  night: t.meta.night,
+                  switchLabel: t.meta.switchLabel,
+                }}
+              />
+            </div>
+          ) : null}
         </div>
       </nav>
     </header>

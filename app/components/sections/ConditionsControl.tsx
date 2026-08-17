@@ -41,12 +41,17 @@ export default function ConditionsControl({
   switchHref,
   copy,
   onNavigate,
+  /* The drawer already states the language as a full word ("Español"), so the
+     copy of this control that lives there renders the lighting segment alone
+     rather than offering the same choice twice under two different labels. */
+  parts = "both",
 }: {
   locale: Locale;
   other: Locale;
   switchHref: string;
   copy: ConditionsCopy;
   onNavigate?: () => void;
+  parts?: "both" | "lighting";
 }) {
   /* Server snapshot is "light" to match InscriptionRoot's own default, so the
      first paint agrees with the wrapper's `data-theme` and nothing flips
@@ -59,23 +64,25 @@ export default function ConditionsControl({
 
   return (
     <div className="lg-conditions">
-      <div className="lg-seg" role="group" aria-label={copy.language}>
-        {/* The current locale is a state, not a destination — it must not be a
-            link to the page you are already on. */}
-        <span className="lg-seg__item" data-on="true" aria-current="true">
-          {locale.toUpperCase()}
-        </span>
-        <a
-          className="lg-seg__item"
-          href={switchHref}
-          onClick={onNavigate}
-          lang={other}
-          hrefLang={other}
-          aria-label={copy.switchLabel}
-        >
-          {other.toUpperCase()}
-        </a>
-      </div>
+      {parts === "both" ? (
+        <div className="lg-seg" role="group" aria-label={copy.language}>
+          {/* The current locale is a state, not a destination — it must not be
+              a link to the page you are already on. */}
+          <span className="lg-seg__item" data-on="true" aria-current="true">
+            {locale.toUpperCase()}
+          </span>
+          <a
+            className="lg-seg__item"
+            href={switchHref}
+            onClick={onNavigate}
+            lang={other}
+            hrefLang={other}
+            aria-label={copy.switchLabel}
+          >
+            {other.toUpperCase()}
+          </a>
+        </div>
+      ) : null}
 
       <div className="lg-seg" role="group" aria-label={copy.lighting}>
         <button
