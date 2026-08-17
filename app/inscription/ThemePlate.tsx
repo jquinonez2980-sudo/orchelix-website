@@ -18,7 +18,7 @@ export default function ThemePlate({
   const mode = useSyncExternalStore(
     subscribeInscription,
     () => getInscriptionSnapshot().mode,
-    () => "light" as const,
+    () => "dark" as const,
   );
   const src = mode === "dark" ? night : day;
 

@@ -63,13 +63,22 @@ export function themeFor(mode: "light" | "dark"): SceneTheme {
   return mode === "dark" ? DARK_THEME : LIGHT_THEME;
 }
 
+/* Night is the homepage's default light, not a preference the visitor is
+   assumed to hold. The scene is one night being written, and the register
+   reads as a lit object against a dark room — so the first viewport opens at
+   02:18 rather than at 09:00, and the system's `prefers-color-scheme` is
+   deliberately not consulted for the initial state. It is an art direction
+   choice on one surface, the way a film opens on the shot it wants.
+
+   An explicit choice still wins: a visitor who has pressed DAY gets day back
+   on their next visit. Only the absence of a choice defaults to night. */
 export function readStoredMode(): "light" | "dark" {
-  if (typeof window === "undefined") return "light";
+  if (typeof window === "undefined") return "dark";
   try {
     const stored = localStorage.getItem("orchelix-inscription-theme");
     if (stored === "light" || stored === "dark") return stored;
   } catch {
     /* private mode */
   }
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  return "dark";
 }

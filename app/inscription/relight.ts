@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { inscription, lerp } from "./store";
-import { LIGHT_THEME, themeFor, type SceneTheme } from "./theme";
+import { DARK_THEME, themeFor, type SceneTheme } from "./theme";
 
 type RelightGL = {
   setClearColor?: (color: THREE.ColorRepresentation, alpha?: number) => void;
@@ -32,7 +32,11 @@ export function onRelightSnap(fn: () => void) {
 /* Mutable current theme. Sampled by the scene every frame so a mode
    change is a 600ms physical relight, not a remount. */
 
-const current: SceneTheme = structuredClone(LIGHT_THEME);
+/* Seeded from the dark rig because night is the opening light. Seeding this
+   from LIGHT_THEME would make every first paint a 600ms crossfade out of a
+   daylight studio nobody asked to see — the relight is for a visitor pressing
+   DAY/NIGHT, not for arrival. */
+const current: SceneTheme = structuredClone(DARK_THEME);
 const from = new THREE.Color();
 const to = new THREE.Color();
 const mixed = new THREE.Color();

@@ -60,7 +60,11 @@ function emit() {
 }
 
 export const inscription: InscriptionState = {
-  mode: "light",
+  /* Night is the homepage's opening light — see readStoredMode in theme.ts.
+     This has to match every `getServerSnapshot` in the tree, or the first
+     client render disagrees with the server's and React re-renders the whole
+     surface from light to dark in front of the visitor. */
+  mode: "dark",
   quality: {
     tier: "high",
     dpr: [1, 1.5],

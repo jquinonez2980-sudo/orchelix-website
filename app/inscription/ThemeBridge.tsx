@@ -23,7 +23,7 @@ export default function ThemeBridge() {
   const mode = useSyncExternalStore(
     subscribeInscription,
     () => inscription.mode,
-    () => "light" as const,
+    () => "dark" as const,
   );
 
   useEffect(() => {

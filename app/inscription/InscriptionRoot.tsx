@@ -28,7 +28,7 @@ export default function InscriptionRoot({ children }: { children: ReactNode }) {
   const mode = useSyncExternalStore(
     subscribeInscription,
     () => getInscriptionSnapshot().mode,
-    () => "light" as const,
+    () => "dark" as const,
   );
   const backend = useSyncExternalStore(
     subscribeInscription,
