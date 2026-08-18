@@ -15,20 +15,29 @@ const SceneCanvas = dynamic(() => import("./SceneCanvas"), {
 function InscriptionPoster() {
   return (
     <div className="ins-poster" data-poster="">
-      <div className="ins-poster__slab">
-        <div className="ins-poster__page">
-          {NIGHT_ENTRIES.slice(0, 8).map((row) => (
-            <div
-              key={row.time}
-              className="ins-poster__row"
-              data-booked={row.disposition === "BOOKED" ? "" : undefined}
-            >
-              <span>{row.time}</span>
-              <span>{row.lang}</span>
-              <span>{row.reason}</span>
-              <span>{row.disposition}</span>
+      <div className="ins-poster__room" />
+      <div className="ins-poster__desk" />
+      <div className="ins-poster__volume">
+        <div className="ins-poster__glass">
+          <div className="ins-poster__page">
+            <div className="ins-poster__head">
+              <span>02:18</span>
+              <span>Night register</span>
             </div>
-          ))}
+            {NIGHT_ENTRIES.slice(0, 8).map((row) => (
+              <div
+                key={row.time}
+                className="ins-poster__row"
+                data-booked={row.disposition === "BOOKED" ? "" : undefined}
+              >
+                <span>{row.time}</span>
+                <span>{row.lang}</span>
+                <span>{row.reason}</span>
+                <span>{row.disposition}</span>
+              </div>
+            ))}
+          </div>
+          <span className="ins-poster__die" aria-hidden="true" />
         </div>
       </div>
     </div>
