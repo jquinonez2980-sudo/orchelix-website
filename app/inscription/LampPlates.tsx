@@ -103,25 +103,20 @@ export default function LampPlates() {
     const syncLoop = () => {
       if (shouldLoop()) {
         if (!loop) loop = window.requestAnimationFrame(pump);
-      } else if (loop) {
+        return;
+      }
+      if (loop) {
         window.cancelAnimationFrame(loop);
         loop = 0;
-        const plates = root.querySelectorAll<HTMLElement>("[data-ins-lamp]");
-        for (const plate of plates) {
-          plate.style.setProperty("--ins-lift", "0");
-          const img = plate.querySelector("img");
-          if (img) img.style.filter = "";
-        }
-      } else {
-        request();
       }
+      /* Do not measure on first paint. Reading layout here while React is
+         still committing is the desktop forced-reflow audit. */
     };
 
     window.addEventListener("scroll", request, { passive: true });
     window.addEventListener("resize", request, { passive: true });
     document.addEventListener("visibilitychange", syncLoop);
     const unsub = subscribeInscription(syncLoop);
-    bindNew();
     syncLoop();
 
     return () => {

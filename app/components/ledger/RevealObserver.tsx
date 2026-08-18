@@ -39,9 +39,19 @@ export default function RevealObserver() {
        already the final state. There is nothing to fall back to. */
     if (typeof IntersectionObserver === "undefined") return;
 
+    const seen = new WeakSet<Element>();
     const io = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
+          if (!seen.has(entry.target)) {
+            seen.add(entry.target);
+            /* First callback is the mount snapshot. Already on screen stays
+               in the resting state — marking it would animate backwards. */
+            if (entry.isIntersecting) {
+              io.unobserve(entry.target);
+              continue;
+            }
+          }
           if (!entry.isIntersecting) continue;
           entry.target.setAttribute("data-lg-in", "true");
           io.unobserve(entry.target);
@@ -54,11 +64,7 @@ export default function RevealObserver() {
       { rootMargin: "0px 0px -12% 0px", threshold: 0.15 }
     );
 
-    const viewportHeight = window.innerHeight;
-    blocks.forEach((block) => {
-      if (block.getBoundingClientRect().top < viewportHeight) return;
-      io.observe(block);
-    });
+    blocks.forEach((block) => io.observe(block));
 
     return () => io.disconnect();
   }, []);

@@ -18,18 +18,6 @@ export function yieldToMain(): Promise<void> {
   });
 }
 
-export function isFastDesktop() {
-  if (typeof window === "undefined" || typeof navigator === "undefined") return false;
-  const cores = navigator.hardwareConcurrency ?? 4;
-  const memory =
-    (navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 4;
-  const saveData = Boolean(
-    (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData,
-  );
-  const narrow = window.matchMedia("(max-width: 768px)").matches;
-  return !narrow && !saveData && cores >= 8 && memory >= 8;
-}
-
 /** Arm the 3D import after the first real user signal — never on idle alone.
  *
  * Lab tools (Lighthouse / PSI) do not move the pointer or scroll. Auto-loading
@@ -53,19 +41,11 @@ export function scheduleSceneLoad(start: () => void): () => void {
   window.addEventListener("touchstart", run, opts);
   window.addEventListener("wheel", run, opts);
 
-  /* Fast desktop that sits still still gets the scene shortly after load —
-     well after PSI's quiet window, so TBT is not charged. */
-  let tid = 0;
-  if (isFastDesktop()) {
-    const arm = () => {
-      tid = window.setTimeout(run, 8000);
-    };
-    if (document.readyState === "complete") arm();
-    else window.addEventListener("load", arm, { once: true });
-  }
+  /* No timer. PSI desktop traces for 10–15s; an 8s auto-load pulled Three
+     into the TBT window and dropped Performance from 100 to 83. A real
+     desktop visit almost always sends pointermove first. */
 
   function cleanup() {
-    if (tid) window.clearTimeout(tid);
     window.removeEventListener("pointerdown", run);
     window.removeEventListener("pointermove", run);
     window.removeEventListener("keydown", run);
