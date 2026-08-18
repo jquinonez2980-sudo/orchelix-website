@@ -1834,8 +1834,8 @@ details[open] > .lg-summary::before {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 18px;
-  height: 14px;
+  width: 24px;
+  height: 24px;
 }
 .lg-tick-rail__mark {
   display: block;

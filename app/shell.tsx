@@ -1,6 +1,6 @@
 import "./globals.css";
 import { Archivo, Literata, Azeret_Mono } from "next/font/google";
-import { Analytics } from "@vercel/analytics/react";
+import DeferredAnalytics from "./components/DeferredAnalytics";
 import JsonLd from "./components/JsonLd";
 import RevealObserver from "./components/ledger/RevealObserver";
 
@@ -18,6 +18,7 @@ const archivo = Archivo({
   axes: ["wdth"],
   variable: "--font-display",
   display: "swap",
+  preload: true,
 });
 
 /* Body: a screen serif built for long reading — document texture, not UI gloss. */
@@ -25,6 +26,8 @@ const literata = Literata({
   subsets: ["latin"],
   variable: "--font-body",
   display: "swap",
+  /* Hero body is the LCP element on mobile — preload the face it paints in. */
+  preload: true,
 });
 
 /* Figures: real tabular numerals for the register. Measurement, not costume. */
@@ -32,7 +35,8 @@ const azeret = Azeret_Mono({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   variable: "--font-mono",
-  display: "swap",
+  display: "optional",
+  preload: false,
 });
 
 export const SITE_URL = "https://www.orchelix.com";
@@ -142,7 +146,7 @@ export default function Shell({
         {/* The site's only scroll-driven mechanism. Mounted once at the root
             so no page brings its own observer. */}
         <RevealObserver />
-        <Analytics />
+        <DeferredAnalytics />
       </body>
     </html>
   );

@@ -88,6 +88,8 @@ export default function Footer({
           src="/helix-pattern.png"
           alt=""
           aria-hidden="true"
+          loading="lazy"
+          decoding="async"
           style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }}
         />
       </div>

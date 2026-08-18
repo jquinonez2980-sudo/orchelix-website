@@ -5,7 +5,7 @@
    sampled inside useFrame so the React tree never re-renders on scroll. */
 
 export type Backend = "none" | "webgpu" | "webgl";
-export type QualityTier = "high" | "mid" | "off";
+export type QualityTier = "high" | "mid" | "low" | "off";
 
 export type Quality = {
   tier: QualityTier;
@@ -23,6 +23,10 @@ export type Quality = {
   env: boolean;
   allowWebGPU: boolean;
   reducedMotion: boolean;
+  /* Demand-loop cap. 0 means the canvas is not mounted. */
+  fps: number;
+  /* Canvas-texture budget for paper maps and inscribed rows. */
+  texScale: number;
 };
 
 export type SceneTheme = {
@@ -82,6 +86,8 @@ export const inscription: InscriptionState = {
     env: true,
     allowWebGPU: true,
     reducedMotion: false,
+    fps: 60,
+    texScale: 1,
   },
   backend: "none",
   ready: false,

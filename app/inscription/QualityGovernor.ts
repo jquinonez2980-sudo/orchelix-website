@@ -9,6 +9,8 @@ const HIGH: Quality = {
   env: true,
   allowWebGPU: true,
   reducedMotion: false,
+  fps: 60,
+  texScale: 1,
 };
 
 const MID: Quality = {
@@ -16,10 +18,25 @@ const MID: Quality = {
   dpr: [1, 1.15],
   antialias: false,
   transmission: true,
-  transmissionScale: 0.6,
+  transmissionScale: 0.55,
   env: true,
   allowWebGPU: true,
   reducedMotion: false,
+  fps: 45,
+  texScale: 0.7,
+};
+
+const LOW: Quality = {
+  tier: "low",
+  dpr: [1, 1],
+  antialias: false,
+  transmission: true,
+  transmissionScale: 0.38,
+  env: false,
+  allowWebGPU: false,
+  reducedMotion: false,
+  fps: 30,
+  texScale: 0.45,
 };
 
 const OFF: Quality = {
@@ -31,6 +48,8 @@ const OFF: Quality = {
   env: false,
   allowWebGPU: false,
   reducedMotion: true,
+  fps: 0,
+  texScale: 0.35,
 };
 
 /* iPadOS 13+ reports itself as "Macintosh", so the UA test alone misses iPads;
@@ -45,23 +64,6 @@ function isIOS(): boolean {
   );
 }
 
-function readGpuRenderer(): string {
-  try {
-    const canvas = document.createElement("canvas");
-    const gl =
-      canvas.getContext("webgl2", { failIfMajorPerformanceCaveat: true }) ||
-      canvas.getContext("webgl");
-    if (!gl) return "";
-    const ext = gl.getExtension("WEBGL_debug_renderer_info");
-    const info = ext ? String(gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) || "") : "";
-    const lose = gl.getExtension("WEBGL_lose_context");
-    lose?.loseContext();
-    return info;
-  } catch {
-    return "";
-  }
-}
-
 export function detectQuality(): Quality {
   if (typeof window === "undefined") return HIGH;
 
@@ -73,43 +75,20 @@ export function detectQuality(): Quality {
   const memory =
     (navigator as Navigator & { deviceMemory?: number }).deviceMemory ?? 8;
   const narrow = window.matchMedia("(max-width: 768px)").matches;
-  const gpu = readGpuRenderer();
-  const integrated = /intel|uhd|iris|mali|adreno|swiftshader|llvmpipe/i.test(gpu);
+
+  /* No WebGL probe here. Creating a context just to read the GPU string is a
+     long task and races the real renderer. Heuristics are enough to pick a
+     live tier; context-lost still falls back to the poster. */
 
   if (saveData) return { ...OFF, reducedMotion };
 
-  if (reducedMotion && (narrow || integrated || cores <= 4)) {
-    return { ...OFF, reducedMotion: true };
+  /* Reduced motion keeps the volume, frozen. The poster is only for
+     save-data / missing WebGL — never the only experience on a capable phone. */
+  if (isIOS() || narrow || cores <= 4 || memory <= 4) {
+    return { ...LOW, reducedMotion };
   }
 
-  /* iOS takes the poster rather than the live scene. Other phones keep it —
-     Android was verified rendering the volume fine, so disabling every narrow
-     viewport was too blunt and cost the scene on hardware that can run it.
-
-     MID — which is what they used to get — keeps transmission and environment
-     on. Transmission makes three draw the whole scene a second time into a
-     full-resolution target every frame, and iOS Safari has the tightest WebGL
-     memory ceiling of the mainstream browsers. When it cannot service that it
-     does not raise: it draws nothing, which is the blank canvas being
-     reported on iPhone.
-
-     iOS cannot be caught by the `integrated` test above, because Safari
-     removed WEBGL_debug_renderer_info for fingerprinting reasons — so
-     readGpuRenderer() returns "" there and every iPhone reads as a desktop
-     GPU. The device test has to be explicit.
-
-     This is deliberately the conservative fix: the poster is a real, readable
-     frame of the register, so a phone gets correct content instead of a black
-     void. A cheaper *live* tier is the better answer and is worth building,
-     but three attempts at one (transmission off; transmission off with
-     environment on; transmission on at reduced resolution) each failed to
-     render the volume on desktop, so the scene has a dependency on the full
-     path that needs isolating before a mobile tier can be trusted. */
-  if (isIOS()) {
-    return { ...OFF, reducedMotion };
-  }
-
-  if (narrow || integrated || cores <= 4 || memory <= 4) {
+  if (cores <= 6 || memory <= 8) {
     return { ...MID, reducedMotion };
   }
 
@@ -121,13 +100,14 @@ export function applyQuality(next: Quality) {
 }
 
 export function dropQualityStep() {
+  const motion = inscription.quality.reducedMotion;
   const current = inscription.quality.tier;
-  /* Mid is the live floor. Off is detect-only (reduced motion / save-data).
-     Auto-dropping mid → off unmounted the canvas after a janky scroll and
-     left the faint poster — the volume looked like it died at rest. */
-  if (current === "high") applyQuality({ ...MID, reducedMotion: inscription.quality.reducedMotion });
+  /* Low is the live floor. Off is detect-only (save-data) or a lost context.
+     Auto-dropping to off unmounted the canvas after a janky scroll. */
+  if (current === "high") applyQuality({ ...MID, reducedMotion: motion });
+  else if (current === "mid") applyQuality({ ...LOW, reducedMotion: motion });
 }
 
 export function tierRank(tier: QualityTier) {
-  return tier === "high" ? 2 : tier === "mid" ? 1 : 0;
+  return tier === "high" ? 3 : tier === "mid" ? 2 : tier === "low" ? 1 : 0;
 }

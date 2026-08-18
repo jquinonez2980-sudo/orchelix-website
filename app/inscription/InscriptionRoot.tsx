@@ -13,7 +13,6 @@ import {
   subscribeInscription,
 } from "./store";
 import { readStoredMode } from "./theme";
-import { applyModeNow } from "./relight";
 
 const CONTRACT = `<!--
 THESIS: The night is written into optical glass. Refuses the AI orb, the DNA helix, and the category hero of three identical cards.
@@ -42,10 +41,11 @@ export default function InscriptionRoot({ children }: { children: ReactNode }) {
   );
 
   useEffect(() => {
+    /* detectQuality is cheap (no WebGL probe). Theme is CSS + store only —
+       relight/Three stay out of this module so first paint never parses the
+       3D stack. The scene snaps to `inscription.mode` when it hydrates. */
     applyQuality(detectQuality());
-    const initial = readStoredMode();
-    applyModeNow(initial);
-    setMode(initial);
+    setMode(readStoredMode());
     setInscription("hidden", document.hidden);
   }, []);
 

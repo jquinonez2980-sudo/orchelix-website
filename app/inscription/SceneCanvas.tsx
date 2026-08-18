@@ -17,15 +17,15 @@ export default function SceneCanvas() {
         antialias: inscription.quality.antialias,
         alpha: false,
         powerPreference: "high-performance",
-        /* Keep the last frame. Without it, Snipping Tool / Game Bar / a
-           phone screen-record often grab a cleared buffer (or Windows
-           refuses the capture as "blocked for security") the moment the
-           tab blurs. The extra backbuffer is the cost of a recordable page. */
-        preserveDrawingBuffer: true,
+        stencil: false,
+        depth: true,
+        /* Extra backbuffer is a copy every frame. Screen-record can live
+           without it; TBT cannot. */
+        preserveDrawingBuffer: false,
       }}
       dpr={dpr}
       camera={{ fov: 26, near: 0.1, far: 48, position: [1.88, 0.38, 5.45] }}
-      frameloop="always"
+      frameloop="demand"
       linear={false}
       flat={false}
       onCreated={(state) => {
@@ -33,42 +33,41 @@ export default function SceneCanvas() {
         if (inscription.backend === "none") {
           setInscription("backend", gl.isWebGPURenderer ? "webgpu" : "webgl");
         }
-        /* The single biggest lever on a phone. Three renders the whole scene a
-           second time into this target for every transmissive material, every
-           frame; at 0.34 that second pass costs about a ninth of the pixels.
-           Set here rather than in createRenderer because R3F owns the renderer
-           instance when `gl` is a props object. */
-        /* Only write a reduced scale. The default is 1, and assigning the
-           property on the first frame (before Three has a real viewport)
-           has produced a 0×0 transmission target that then draws nothing
-           — including on desktop HIGH, where the scale is identity anyway.
-           Reduced values stay for MID; HIGH leaves the renderer default. */
+
+        const renderer = state.gl as {
+          transmissionResolutionScale?: number;
+          shadowMap?: { enabled: boolean };
+        };
+        if (renderer.shadowMap) renderer.shadowMap.enabled = false;
+
+        /* Assign transmission scale only after the renderer has a real
+           viewport. Writing it on the first frame has produced a 0×0
+           target that then draws nothing. */
         const scale = inscription.quality.transmissionScale;
-        const renderer = state.gl as { transmissionResolutionScale?: number };
-        if (
-          "transmissionResolutionScale" in renderer &&
-          typeof scale === "number" &&
-          scale > 0 &&
-          scale < 1
-        ) {
-          renderer.transmissionResolutionScale = scale;
-        }
+        const applyScale = () => {
+          if (
+            "transmissionResolutionScale" in renderer &&
+            typeof scale === "number" &&
+            scale > 0 &&
+            scale < 1
+          ) {
+            renderer.transmissionResolutionScale = scale;
+          }
+          setInscription("ready", true);
+          state.invalidate();
+        };
+        requestAnimationFrame(() => requestAnimationFrame(applyScale));
 
-        setInscription("ready", true);
-
-        /* A lost context is the difference between a static poster and a black
-           rectangle where the record should be. iOS drops contexts under
-           memory pressure and on backgrounding, and without this the canvas
-           stays mounted and paints nothing. Dropping the tier to "off" swaps
-           in the poster, which is a real, readable fallback. */
         const canvas = state.gl.domElement;
         const onLost = (event: Event) => {
           event.preventDefault();
+          setInscription("ready", false);
           setInscription("quality", {
             ...inscription.quality,
             tier: "off",
             transmission: false,
             env: false,
+            fps: 0,
           });
         };
         canvas.addEventListener("webglcontextlost", onLost, { passive: false });

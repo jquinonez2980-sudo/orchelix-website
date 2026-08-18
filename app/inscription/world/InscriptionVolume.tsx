@@ -12,7 +12,7 @@ import {
   makeRimMaterial,
 } from "../materials/ledger";
 import { inscription, lerp } from "../store";
-import { currentTheme, setRelightMaterials } from "../relight";
+import { currentTheme, isRelighting, setRelightMaterials } from "../relight";
 import { themeFor } from "../theme";
 import { writing } from "../writing/WritingDirector";
 import { isNarrowView } from "../ScrollDirector";
@@ -31,19 +31,22 @@ export default function InscriptionVolume() {
   const rulingMat = useRef<THREE.LineBasicMaterial>(null);
   const contactMat = useRef<THREE.MeshBasicMaterial>(null);
   const camera = useThree((s) => s.camera);
-  const handle = useMemo(() => createLedgerMaterials(inscription.backend), []);
+  const handle = useMemo(
+    () => createLedgerMaterials(inscription.backend, inscription.quality.texScale),
+    [],
+  );
   const rulingGeo = useMemo(
     () => buildRulingGeometry(PAGE.w, PAGE.h, FACE_Z * 2),
     [],
   );
-  const glassGeo = useMemo(
-    () => new RoundedBoxGeometry(SIZE.w, SIZE.h, SIZE.d, 4, 0.03),
-    [],
-  );
-  const pageGeo = useMemo(
-    () => new RoundedBoxGeometry(SIZE.w * 0.76, SIZE.h * 0.8, 0.042, 2, 0.008),
-    [],
-  );
+  const glassGeo = useMemo(() => {
+    const segs = inscription.quality.tier === "low" ? 2 : 4;
+    return new RoundedBoxGeometry(SIZE.w, SIZE.h, SIZE.d, segs, 0.03);
+  }, []);
+  const pageGeo = useMemo(() => {
+    const segs = inscription.quality.tier === "low" ? 1 : 2;
+    return new RoundedBoxGeometry(SIZE.w * 0.76, SIZE.h * 0.8, 0.042, segs, 0.008);
+  }, []);
   const rimMat = useMemo(() => makeRimMaterial(), []);
 
   useLayoutEffect(() => {
@@ -72,16 +75,18 @@ export default function InscriptionVolume() {
   }, [handle, rulingGeo, glassGeo, pageGeo, rimMat]);
 
   useFrame((_, dt) => {
-    const theme = currentTheme();
-    applyLedgerTheme(handle, theme, inscription.quality.transmission);
-    if (rulingMat.current) {
-      rulingMat.current.color.set(theme.ruling.color);
-      rulingMat.current.opacity = theme.ruling.opacity;
+    if (isRelighting()) {
+      const theme = currentTheme();
+      applyLedgerTheme(handle, theme, inscription.quality.transmission);
+      if (rulingMat.current) {
+        rulingMat.current.color.set(theme.ruling.color);
+        rulingMat.current.opacity = theme.ruling.opacity;
+      }
+      if (contactMat.current) {
+        contactMat.current.opacity = inscription.mode === "dark" ? 0.4 : 0.16;
+      }
+      applyRimTheme(rimMat, inscription.mode === "dark");
     }
-    if (contactMat.current) {
-      contactMat.current.opacity = inscription.mode === "dark" ? 0.4 : 0.16;
-    }
-    applyRimTheme(rimMat, inscription.mode === "dark");
 
     const g = group.current;
     if (!g) return;

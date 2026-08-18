@@ -11,9 +11,8 @@ import {
   dollyForAspect,
   isNarrowView,
 } from "./ScrollDirector";
-import { volumeWorldX } from "./world/volumeLayout";
 import { dropQualityStep } from "./QualityGovernor";
-import { tickRelight } from "./relight";
+import { isRelighting, snapToMode, tickRelight } from "./relight";
 import { updateWriting, writing } from "./writing/WritingDirector";
 
 const SLOW_WINDOW = 30;
@@ -27,14 +26,25 @@ export default function ThemeBridge() {
   const goal = useRef(new THREE.Vector3());
   const look = useRef(new THREE.Vector3(0.3, 0.08, 0));
   const lookGoal = useRef(new THREE.Vector3());
+  const pending = useRef(0);
   const mode = useSyncExternalStore(
     subscribeInscription,
     () => inscription.mode,
     () => "dark" as const,
   );
 
+  const requestFrame = (fps: number) => {
+    if (pending.current || document.hidden) return;
+    const wait = Math.max(0, 1000 / Math.max(12, fps));
+    pending.current = window.setTimeout(() => {
+      pending.current = 0;
+      if (!document.hidden) invalidate();
+    }, wait);
+  };
+
   useEffect(() => {
-    setFrameloop("always");
+    snapToMode(inscription.mode);
+    setFrameloop("demand");
     invalidate();
   }, [mode, setFrameloop, invalidate]);
 
@@ -43,23 +53,38 @@ export default function ThemeBridge() {
     const onVis = () => {
       const hidden = document.hidden;
       setInscription("hidden", hidden);
-      /* Keep drawing. Pausing here cleared the buffer the instant a
-         screen-record overlay or snipping tool took focus. */
-      setFrameloop("always");
-      if (!hidden) invalidate();
+      if (hidden) {
+        setFrameloop("never");
+        if (pending.current) {
+          window.clearTimeout(pending.current);
+          pending.current = 0;
+        }
+        return;
+      }
+      setFrameloop("demand");
+      invalidate();
+    };
+    const onScroll = () => {
+      if (!document.hidden) invalidate();
     };
     document.addEventListener("visibilitychange", onVis);
+    window.addEventListener("scroll", onScroll, { passive: true });
     if (document.visibilityState === "visible") {
       setInscription("hidden", false);
-      setFrameloop("always");
+      setFrameloop("demand");
+      invalidate();
     }
     return () => {
       unbind();
       document.removeEventListener("visibilitychange", onVis);
+      window.removeEventListener("scroll", onScroll);
+      if (pending.current) window.clearTimeout(pending.current);
     };
   }, [invalidate, setFrameloop]);
 
   useFrame((state, dt) => {
+    if (document.hidden) return;
+
     tickRelight(dt);
     sampleScroll();
     updateWriting(dt);
@@ -69,11 +94,6 @@ export default function ThemeBridge() {
     const k = inscription.quality.reducedMotion || isNarrowView()
       ? 1
       : 1 - Math.exp(-dt * (impact ? 30 : strike ? 16 : 4.6));
-    /* Push the camera back along its own view axis when the viewport is
-       narrower than the framing was authored for, so a phone sees the whole
-       volume instead of a close-up of its middle. Applied to the goal rather
-       than to the camera so it still lerps, and measured from the shot's own
-       target so every beat keeps its composition. */
     const aspect = "aspect" in state.camera ? (state.camera as { aspect: number }).aspect : 1;
     const dolly = dollyForAspect(aspect);
     goal.current.set(
@@ -94,23 +114,6 @@ export default function ThemeBridge() {
       }
     }
 
-    const root = document.querySelector("[data-inscription]");
-    if (root instanceof HTMLElement) {
-      const vx = volumeWorldX({
-        beat: inscription.beat,
-        progress: inscription.progress,
-        firstWrite: writing.rows[0]?.write ?? 0,
-        narrow: isNarrowView(),
-      });
-      root.dataset.insFrame = [
-        isNarrowView() ? "n" : "d",
-        camera.position.x.toFixed(2),
-        look.current.x.toFixed(2),
-        vx.toFixed(2),
-        dolly.toFixed(2),
-      ].join(",");
-    }
-
     if (inscription.quality.tier !== "off") {
       const ms = dt * 1000;
       if (ms > SLOW_MS) slow.current.hits += 1;
@@ -122,6 +125,16 @@ export default function ThemeBridge() {
         slow.current.hits = 0;
       }
     }
+
+    const moving =
+      camera.position.distanceToSquared(goal.current) > 4e-6 ||
+      (!inscription.quality.reducedMotion &&
+        ((writing.rows[0]?.write ?? 1) < 0.99 ||
+          (writing.stamp > 0.01 && writing.stamp < 0.99) ||
+          writing.impact > 0.01)) ||
+      isRelighting();
+
+    if (moving) requestFrame(inscription.quality.fps || 30);
   });
 
   return null;

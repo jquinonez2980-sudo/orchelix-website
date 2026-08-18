@@ -50,6 +50,7 @@ const nextConfig: NextConfig = {
   // <link> — removes the CSS round trip for first-time visitors (FCP/LCP win).
   experimental: {
     inlineCss: true,
+    optimizePackageImports: ["three", "@react-three/drei"],
   },
 
   /* Disable webpack's persistent filesystem cache for production builds.

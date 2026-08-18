@@ -8,7 +8,7 @@ import { currentTheme } from "../relight";
 import { inscription } from "../store";
 import { ENTRY_COUNT, FACE_Z, VOLUME, rowTextY, rowX0, rowX1 } from "./volumeLayout";
 
-const SEGMENTS = 28;
+const SEGMENTS = inscription.quality.tier === "high" ? 28 : inscription.quality.tier === "mid" ? 20 : 14;
 const POOL = 3;
 const HALF = 0.00135;
 const AXIS = new THREE.Vector3(1, 0, 0);
@@ -114,7 +114,6 @@ export default function VoiceFilaments() {
       }
       pos.needsUpdate = true;
       col.needsUpdate = true;
-      geo.computeBoundingSphere();
       mats[slot].opacity = night ? 0.88 : 0.74;
 
       curve.getPoint(tHead, point);

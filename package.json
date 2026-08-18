@@ -24,7 +24,10 @@
     "three": "^0.185.1"
   },
   "browserslist": [
-    ">1%, last 2 versions, not dead"
+    "chrome 111",
+    "edge 111",
+    "firefox 111",
+    "safari 16.4"
   ],
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

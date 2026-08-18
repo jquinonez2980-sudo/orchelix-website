@@ -100,6 +100,11 @@ export function currentTheme() {
   return current;
 }
 
+export function isRelighting() {
+  const target = themeFor(inscription.mode);
+  return Math.abs(current.exposure - target.exposure) > 0.006;
+}
+
 export function bindRelightScene(next: RelightBind | null) {
   if (next === null) {
     bind = null;

@@ -11,11 +11,10 @@ export type LedgerHandle = {
   dispose: () => void;
 };
 
-function makePaperMaps() {
+function makePaperMaps(size = 256) {
   if (typeof document === "undefined") {
     return { map: null, rough: null, contact: null };
   }
-  const size = 512;
   const paper = document.createElement("canvas");
   paper.width = size;
   paper.height = size;
@@ -56,17 +55,19 @@ function makePaperMaps() {
   rough.wrapS = rough.wrapT = THREE.RepeatWrapping;
   rough.repeat.set(2.4, 3.2);
 
+  const blotSize = Math.max(64, Math.round(size * 0.5));
   const blot = document.createElement("canvas");
-  blot.width = 256;
-  blot.height = 256;
+  blot.width = blotSize;
+  blot.height = blotSize;
   const bctx = blot.getContext("2d");
   if (bctx) {
-    const g = bctx.createRadialGradient(128, 128, 12, 128, 128, 124);
+    const mid = blotSize / 2;
+    const g = bctx.createRadialGradient(mid, mid, blotSize * 0.05, mid, mid, mid - 2);
     g.addColorStop(0, "rgba(0,0,0,0.42)");
     g.addColorStop(0.45, "rgba(0,0,0,0.14)");
     g.addColorStop(1, "rgba(0,0,0,0)");
     bctx.fillStyle = g;
-    bctx.fillRect(0, 0, 256, 256);
+    bctx.fillRect(0, 0, blotSize, blotSize);
   }
   const contact = new THREE.CanvasTexture(blot);
   contact.colorSpace = THREE.SRGBColorSpace;
@@ -178,11 +179,12 @@ export function applyRimTheme(mat: THREE.ShaderMaterial, night: boolean) {
   mat.visible = night;
 }
 
-export function createLedgerMaterials(_backend: Backend): LedgerHandle {
+export function createLedgerMaterials(_backend: Backend, texScale = 1): LedgerHandle {
   /* MeshPhysicalMaterial is mapped to MeshPhysicalNodeMaterial on
      WebGPURenderer, so one authoring path covers both backends. */
   const glass = new THREE.MeshPhysicalMaterial(GLASS_BASE);
-  const maps = makePaperMaps();
+  const size = texScale >= 0.9 ? 256 : texScale >= 0.6 ? 160 : 96;
+  const maps = makePaperMaps(size);
   const pages = new THREE.MeshPhysicalMaterial({
     ...PAGE_BASE,
     map: maps.map ?? undefined,

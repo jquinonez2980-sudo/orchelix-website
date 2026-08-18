@@ -30,7 +30,8 @@ function makeDieGeometry() {
     [0.096, 0.0],
     [0.0, 0.0],
   ].map(([x, y]) => new THREE.Vector2(x, y));
-  return new THREE.LatheGeometry(profile, 96);
+  const segs = inscription.quality.tier === "high" ? 64 : inscription.quality.tier === "mid" ? 40 : 24;
+  return new THREE.LatheGeometry(profile, segs);
 }
 
 export const dieRoot = { current: null as THREE.Group | null };
@@ -150,10 +151,10 @@ export default function StampDie() {
         <group ref={body} rotation={[0.32, 0, 0]}>
           <mesh geometry={geo} material={metal} />
           <mesh position={[0, 0.0006, 0]} rotation={[Math.PI / 2, 0, 0]} material={face}>
-            <circleGeometry args={[0.086, 48]} />
+            <circleGeometry args={[0.086, inscription.quality.tier === "low" ? 24 : 40]} />
           </mesh>
           <mesh position={[0, 0.0003, 0]} rotation={[Math.PI / 2, 0, 0]}>
-            <ringGeometry args={[0.078, 0.092, 48]} />
+            <ringGeometry args={[0.078, 0.092, inscription.quality.tier === "low" ? 24 : 40]} />
             <meshPhysicalMaterial
               color={STEEL_LIT}
               metalness={1}
@@ -184,7 +185,7 @@ export default function StampDie() {
         ]}
         visible={false}
       >
-        <circleGeometry args={[0.058, 40]} />
+        <circleGeometry args={[0.058, inscription.quality.tier === "low" ? 20 : 32]} />
         <meshBasicMaterial
           color="#B7135A"
           transparent

@@ -1,12 +1,18 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect, useLayoutEffect, useMemo, useRef, useSyncExternalStore } from "react";
-import { Environment } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { getInscriptionSnapshot, inscription, subscribeInscription } from "../store";
-import { applyBoundRoom, bindRelightScene, currentTheme } from "../relight";
+import { applyBoundRoom, bindRelightScene, currentTheme, isRelighting } from "../relight";
+import { yieldToMain } from "../scheduler";
 import { DARK_THEME, themeFor } from "../theme";
+
+const WebGPUEnvironment = dynamic(() => import("./WebGPUEnvironment"), {
+  ssr: false,
+  loading: () => null,
+});
 
 function roomPalette(mode: "light" | "dark") {
   const night = mode === "dark";
@@ -67,35 +73,6 @@ function fillStudio(scene: THREE.Scene, mode: "light" | "dark") {
   return added;
 }
 
-function StudioShell({ mode }: { mode: "light" | "dark" }) {
-  const p = roomPalette(mode);
-  const night = mode === "dark";
-  return (
-    <group>
-      <mesh scale={80}>
-        <sphereGeometry args={[1, 24, 24]} />
-        <meshBasicMaterial color={p.wall} side={THREE.BackSide} />
-      </mesh>
-      <mesh position={[-11, night ? 5.2 : 6.5, 3.5]} lookAt={[0, 1, 0]}>
-        <planeGeometry args={[night ? 9 : 16, night ? 5.2 : 10]} />
-        <meshBasicMaterial color={p.window} />
-      </mesh>
-      <mesh position={[night ? -1.4 : -6.5, night ? 4.6 : 10.2, night ? 3.2 : 3.4]}>
-        <sphereGeometry args={[night ? 1.35 : 4.2, 16, 16]} />
-        <meshBasicMaterial color={p.lamp} />
-      </mesh>
-      <mesh position={[6.2, 1.1, -4.2]}>
-        <sphereGeometry args={[1.6, 16, 16]} />
-        <meshBasicMaterial color={p.bounce} />
-      </mesh>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -8, 0]}>
-        <planeGeometry args={[70, 70]} />
-        <meshBasicMaterial color={p.floor} />
-      </mesh>
-    </group>
-  );
-}
-
 function bakeStudio(
   gl: THREE.WebGLRenderer,
   mode: "light" | "dark",
@@ -137,7 +114,8 @@ export default function Atmosphere() {
   const gl = useThree((s) => s.gl);
   const scene = useThree((s) => s.scene);
   const camera = useThree((s) => s.camera);
-  const envMaps = useRef<{ light: THREE.Texture; dark: THREE.Texture } | null>(null);
+  const invalidate = useThree((s) => s.invalidate);
+  const envMaps = useRef<{ light?: THREE.Texture; dark?: THREE.Texture } | null>(null);
 
   const applyLights = (nextMode: "light" | "dark" = inscription.mode) => {
     const theme = currentTheme();
@@ -173,12 +151,13 @@ export default function Atmosphere() {
   };
 
   useLayoutEffect(() => {
+    const pair = envMaps.current;
     bindRelightScene({
       gl: gl as THREE.WebGLRenderer,
       scene,
       camera,
       applyLights,
-      env: envMaps.current ?? undefined,
+      env: pair?.light && pair.dark ? { light: pair.light, dark: pair.dark } : undefined,
     });
     applyBoundRoom(mode, false);
     return () => {
@@ -189,33 +168,62 @@ export default function Atmosphere() {
   useEffect(() => {
     if (backend === "webgpu" || !inscription.quality.env) return;
     const webgl = gl as THREE.WebGLRenderer;
-    if (!envMaps.current) {
-      envMaps.current = {
-        light: bakeStudio(webgl, "light"),
-        dark: bakeStudio(webgl, "dark"),
-      };
-      webgl.setRenderTarget(null);
-    }
-    bindRelightScene({
-      gl: webgl,
-      scene,
-      camera,
-      applyLights,
-      env: envMaps.current,
-    });
-    scene.environment = envMaps.current[mode];
-  }, [backend, gl, scene, camera, mode]);
+    let cancelled = false;
+
+    const bake = async () => {
+      await yieldToMain();
+      if (cancelled) return;
+      if (!envMaps.current) {
+        const first = bakeStudio(webgl, mode);
+        webgl.setRenderTarget(null);
+        if (cancelled) {
+          first.dispose();
+          return;
+        }
+        envMaps.current = { [mode]: first };
+        scene.environment = first;
+        invalidate();
+
+        await yieldToMain();
+        if (cancelled) return;
+        const otherMode = mode === "dark" ? "light" : "dark";
+        const second = bakeStudio(webgl, otherMode);
+        webgl.setRenderTarget(null);
+        if (cancelled) {
+          second.dispose();
+          return;
+        }
+        envMaps.current[otherMode] = second;
+      }
+      const pair = envMaps.current;
+      bindRelightScene({
+        gl: webgl,
+        scene,
+        camera,
+        applyLights,
+        env: pair?.light && pair.dark ? { light: pair.light, dark: pair.dark } : undefined,
+      });
+      if (envMaps.current[mode]) scene.environment = envMaps.current[mode]!;
+      invalidate();
+    };
+
+    void bake();
+    return () => {
+      cancelled = true;
+    };
+  }, [backend, gl, scene, camera, mode, invalidate]);
 
   useEffect(() => {
     return () => {
       if (!envMaps.current) return;
-      envMaps.current.light.dispose();
-      envMaps.current.dark.dispose();
+      envMaps.current.light?.dispose();
+      envMaps.current.dark?.dispose();
       envMaps.current = null;
     };
   }, []);
 
   useFrame(() => {
+    if (!isRelighting() && scene.background) return;
     const theme = currentTheme();
     const clear = themeFor(inscription.mode).clear;
     scene.fog ??= new THREE.FogExp2(theme.fog, theme.fogDensity);
@@ -297,11 +305,7 @@ export default function Atmosphere() {
           envMapIntensity={0.35}
         />
       </mesh>
-      {backend === "webgpu" && inscription.quality.env ? (
-        <Environment key={mode} frames={1} resolution={256} environmentIntensity={1}>
-          <StudioShell mode={mode} />
-        </Environment>
-      ) : null}
+      {backend === "webgpu" && inscription.quality.env ? <WebGPUEnvironment /> : null}
     </>
   );
 }

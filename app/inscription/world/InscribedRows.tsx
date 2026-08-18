@@ -9,8 +9,12 @@ import { inscription } from "../store";
 import { currentTheme, onRelightSnap } from "../relight";
 import { FACE_Z, rowPitch, rowTextY, rowX0, rowX1 } from "./volumeLayout";
 
-const TEX_W = 2560;
-const TEX_H = 192;
+function rowTexSize() {
+  const scale = inscription.quality.texScale;
+  if (scale >= 0.9) return { w: 2048, h: 128 };
+  if (scale >= 0.6) return { w: 1280, h: 96 };
+  return { w: 1024, h: 80 };
+}
 
 function typeAlpha(index: number, write: number, stamped: boolean) {
   if (write <= 0) return 0;
@@ -37,8 +41,8 @@ function paint(
   stamped: boolean,
 ) {
   const entry = NIGHT_ENTRIES[index];
-  const w = TEX_W;
-  const h = TEX_H;
+  const w = ctx.canvas.width;
+  const h = ctx.canvas.height;
   ctx.clearRect(0, 0, w, h);
   if (write <= 0.01) return;
   ctx.save();
@@ -51,47 +55,50 @@ function paint(
   ctx.lineJoin = "round";
   ctx.miterLimit = 2;
 
-  const draw = (text: string, x: number, y: number) => {
-    ctx.fillText(text, x, y);
+  const s = w / 2560;
+  const fs = (px: number) => Math.max(18, Math.round(px * s));
+  const x = (n: number) => n * s;
+  const draw = (text: string, px: number, py: number) => {
+    ctx.fillText(text, px, py);
   };
 
-  ctx.font = '600 78px "Azeret Mono", ui-monospace, monospace';
+  ctx.font = `600 ${fs(78)}px "Azeret Mono", ui-monospace, monospace`;
   ctx.fillStyle = ink;
-  draw(entry.time, 32, h / 2);
+  draw(entry.time, x(32), h / 2);
 
   ctx.fillStyle = ink2;
-  draw("·", 248, h / 2);
+  draw("·", x(248), h / 2);
 
   ctx.font =
     entry.lang === "ES"
-      ? '700 72px "Azeret Mono", ui-monospace, monospace'
-      : '500 72px "Azeret Mono", ui-monospace, monospace';
+      ? `700 ${fs(72)}px "Azeret Mono", ui-monospace, monospace`
+      : `500 ${fs(72)}px "Azeret Mono", ui-monospace, monospace`;
   ctx.fillStyle = ink;
-  draw(entry.lang, 292, h / 2);
+  draw(entry.lang, x(292), h / 2);
   if (entry.lang === "ES") {
-    ctx.fillRect(292, h / 2 + 30, 68, 3);
+    ctx.fillRect(x(292), h / 2 + x(30), x(68), Math.max(2, x(3)));
   }
 
   ctx.fillStyle = ink2;
-  ctx.font = '600 78px "Azeret Mono", ui-monospace, monospace';
-  draw("·", 400, h / 2);
+  ctx.font = `600 ${fs(78)}px "Azeret Mono", ui-monospace, monospace`;
+  draw("·", x(400), h / 2);
 
   ctx.save();
   ctx.beginPath();
-  ctx.rect(448, 0, w - 448 - 300, h);
+  ctx.rect(x(448), 0, w - x(448) - x(300), h);
   ctx.clip();
-  ctx.font = '500 68px "Azeret Mono", ui-monospace, monospace';
+  ctx.font = `500 ${fs(68)}px "Azeret Mono", ui-monospace, monospace`;
   ctx.fillStyle = ink;
-  draw(entry.reason, 456, h / 2);
+  draw(entry.reason, x(456), h / 2);
   ctx.restore();
 
   ctx.textAlign = "right";
-  ctx.font = '600 64px "Azeret Mono", ui-monospace, monospace';
+  ctx.font = `600 ${fs(64)}px "Azeret Mono", ui-monospace, monospace`;
   ctx.fillStyle = ink;
-  draw(entry.disposition, w - 28, h / 2);
+  draw(entry.disposition, w - x(28), h / 2);
   if (stamped && entry.disposition === "BOOKED") {
     ctx.fillStyle = "#B7135A";
-    ctx.fillRect(w - 248, h / 2 + 30, 216, 4);
+    ctx.fillRect(w - x(248), h / 2 + x(30), x(216), Math.max(2, x(4)));
   }
   ctx.restore();
 }
@@ -101,9 +108,10 @@ export default function InscribedRows() {
   const canvases = useMemo(
     () =>
       NIGHT_ENTRIES.map(() => {
+        const { w, h } = rowTexSize();
         const c = document.createElement("canvas");
-        c.width = TEX_W;
-        c.height = TEX_H;
+        c.width = w;
+        c.height = h;
         return c;
       }),
     [],
