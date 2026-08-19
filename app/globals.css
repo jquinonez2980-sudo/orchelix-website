@@ -350,6 +350,128 @@
   color: var(--lg-ink);
 }
 
+/* ─── Esmi Dashboard: dark, Esmi-branded ──────────────────────────────────
+   2026-08-19. Jorge asked for the marketing site's new look and feel on the
+   Esmi dashboard specifically — not on `/app` (AcumenAI's console), which
+   shares `.lg-app` with it and stays exactly as it is. `.esmi-dashboard` is
+   the extra marker (set alongside `.lg-app` on DashboardShell's root and
+   the org gate in dashboard/layout.tsx) that scopes this to Esmi alone.
+
+   Esmi's mark is a blue-violet-to-cyan gradient, not a single hue, so cyan
+   carries the accent role (links, active nav, primary fills) here in place
+   of Orchelix magenta; purple is kept as `--esmi-app-purple` for anything
+   that wants a second note, unused by default.
+
+   These four field/foil values are copied verbatim from `.esmi-dark` below
+   (the /try-esmi world), not reinvented — same product, same colours.
+   `.esmi-dark`'s own comment says that palette is "namespaced so the dark
+   surface stays confined to the Esmi experience" — the dashboard IS that
+   experience, so this is the same boundary holding, not a leak.
+
+   Redeclaring `--lg-field` / `--lg-foil` / `--lg-ink` and their family is
+   enough: every rule below `.lg-app` already reads through those, so the
+   whole retargeted Tailwind scale (teal/navy/gold → foil, shadows off,
+   radius 0, Clerk widgets, status colours) goes dark and cyan for this
+   scope alone, without touching a rule that `.lg-app` bare still needs.
+
+   Per Jorge's call: colour and type only. No panel pop-outs or hover lift
+   here — the dashboard stays flat and dense; that discipline is
+   unchanged, only what it's drawn in moves. */
+.lg-app.esmi-dashboard {
+  --lg-field:       #0A0F1C;
+  --lg-field-2:     #0D1526;
+  --lg-field-3:     #111B30;
+  --lg-field-vivid: #111B30;
+
+  --lg-foil:        #00F0FF;
+  --lg-foil-lift:   #38BDF8;
+  /* Cyan is bright enough that white-on-foil (the light world's choice)
+     fails outright; dark ink on the fill is what actually reads. */
+  --lg-foil-ink:    #04141A;
+  --esmi-app-purple: #A855F7;
+
+  /* Status colours were graphite-on-white; on a dark field they need to be
+     light enough to read as text, not just as a mark. Same four-way
+     vocabulary DESIGN.md documents for this surface (rule red/foil/tick
+     green/ink-3 = failure/pending/success/inert) — only the literal values
+     move. */
+  --lg-rule:        rgba(255, 110, 104, 0.6);
+  --lg-rule-quiet:  rgba(234, 242, 255, 0.16);
+  --lg-rule-text:   #FF6E68;
+  --lg-tick:        #34D399;
+  --lg-tick-text:   #34D399;
+
+  --lg-ink:         #EAF2FF;
+  --lg-ink-2:       rgba(234, 242, 255, 0.72);
+  --lg-ink-3:       rgba(234, 242, 255, 0.54);
+  --lg-hair:        rgba(234, 242, 255, 0.14);
+  --lg-hair-2:      rgba(234, 242, 255, 0.08);
+
+  --lg-ink-on-stock:   #EAF2FF;
+  --lg-ink-on-stock-2: rgba(234, 242, 255, 0.72);
+
+  /* Same three scales `.lg-app` already collapses to foil, recomputed so
+     `var(--lg-foil)` etc. above are picked up, plus the steps that were
+     unmapped in the light world and got away with it (Tailwind's literal
+     light teal/navy tints are survivable on white; on this field they'd
+     read as a hole punched in the page). -teal-200/400, -navy-50 fix
+     exactly that — see call sites in DashboardShell, AdminOnboarding,
+     QualityStudio, VoiceStudio, SettingsForm, CallLog. */
+  --color-teal-50:     rgba(0, 240, 255, 0.10);
+  --color-teal-200:    rgba(0, 240, 255, 0.35);
+  --color-teal-300:    var(--lg-foil-lift);
+  --color-teal-400:    var(--lg-foil-lift);
+  --color-teal-500:    var(--lg-foil);
+  --color-teal-600:    var(--lg-foil);
+  --color-teal-700:    var(--lg-foil);
+
+  --color-navy-50:     rgba(0, 240, 255, 0.12);
+  --color-navy-500:    var(--lg-foil-lift);
+  --color-navy-600:    var(--lg-foil);
+  --color-navy-900:    var(--lg-field);
+
+  --color-gold-50:     rgba(0, 240, 255, 0.10);
+  --color-gold-100:    rgba(0, 240, 255, 0.35);
+  --color-gold-500:    var(--lg-foil);
+  --color-gold-600:    var(--lg-foil);
+  --color-gold-700:    var(--lg-foil-lift);
+
+  --paper:       var(--lg-field);
+  --surface:     var(--lg-field);
+  --surface-2:   var(--lg-field-2);
+
+  --ink:         var(--lg-ink);
+  --ink-2:       var(--lg-ink-2);
+  --ink-3:       var(--lg-ink-3);
+  --ink-4:       var(--lg-ink-3);
+
+  --line:        var(--lg-hair);
+  --line-strong: var(--lg-rule-quiet);
+
+  --teal-50:     rgba(0, 240, 255, 0.10);
+  --teal-200:    rgba(0, 240, 255, 0.35);
+  --teal-300:    var(--lg-foil-lift);
+  --teal-400:    var(--lg-foil-lift);
+  --teal-500:    var(--lg-foil);
+  --teal-600:    var(--lg-foil);
+  --teal-700:    var(--lg-foil);
+
+  --navy-50:     rgba(0, 240, 255, 0.12);
+  --navy-500:    var(--lg-foil-lift);
+  --navy-600:    var(--lg-foil);
+  --navy-700:    var(--lg-field);
+  --navy-900:    var(--lg-field);
+
+  --gold-50:     rgba(0, 240, 255, 0.10);
+  --gold-100:    rgba(0, 240, 255, 0.35);
+  --gold-500:    var(--lg-foil);
+  --gold-600:    var(--lg-foil);
+  --gold-700:    var(--lg-foil-lift);
+
+  background: var(--lg-field);
+  color: var(--lg-ink);
+}
+
 /* Primary/accent fills alias to `--lg-foil`. Text on them must be
    `--lg-foil-ink` (white, 6.45:1) — never graphite ink and never the retired
    gold-brown. Cover the fill itself and descendants that still carry
@@ -391,10 +513,12 @@
   box-shadow: none;
 }
 
-/* The success banner in QualityStudio reads its colour from teal, which the
-   scope collapses to foil — the same value warning uses. Success is tick
-   green here so the two states stay distinguishable in the same component. */
-.lg-app .text-teal-900 { color: var(--lg-tick-text); }
+/* The success banner in QualityStudio and the selected-chip label in
+   SettingsForm read their colour from teal, which the scope collapses to
+   foil — the same value warning uses. Success/selected is tick green here
+   so those states stay distinguishable from the cyan accent. */
+.lg-app .text-teal-900,
+.lg-app .text-teal-800 { color: var(--lg-tick-text); }
 
 /* ── Clerk widgets on the field ───────────────────────────────────────────
    A backstop for the appearance object in app/lib/clerkAppearance.ts.

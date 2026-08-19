@@ -25,11 +25,15 @@ const TONES: Record<BadgeTone, ToneStyle> = {
     background: "var(--lg-hair-2)",
     borderColor: "var(--lg-hair)",
   },
-  /* Attention / booked — the only foil-tinted state. */
+  /* Attention / booked — the only foil-tinted state. Literal rather than a
+     var() because there's no `--lg-foil-tint` token; kept in step with
+     `--lg-foil` by hand. Cyan on the Esmi dashboard (was Orchelix magenta —
+     this file is dashboard-only, never imported by /app, so it doesn't
+     need the `.esmi-dashboard` scoping the shared token file uses). */
   warning: {
     color: "var(--lg-foil)",
-    background: "rgba(183, 19, 90, 0.10)",
-    borderColor: "rgba(183, 19, 90, 0.34)",
+    background: "rgba(0, 240, 255, 0.10)",
+    borderColor: "rgba(0, 240, 255, 0.34)",
   },
   /* Failure / missed — heavier graphite rule, not red. */
   negative: {

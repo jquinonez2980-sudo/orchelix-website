@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
-import { clerkWidgetAppearance } from "@/app/lib/clerkAppearance";
+import { dashboardClerkAppearance } from "@/app/lib/clerkAppearance";
 import { Menu, X } from "lucide-react";
 import DraftModeBanner from "./DraftModeBanner";
 import InstallControl from "@/app/components/pwa/InstallControl";
@@ -188,7 +188,7 @@ export default function DashboardShell({
   }, [open]);
 
   return (
-    <div className="lg-app min-h-screen bg-paper">
+    <div className="lg-app esmi-dashboard min-h-screen bg-paper">
       {/* Desktop sidebar */}
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col border-r border-line bg-surface lg:flex">
         <div className="flex h-16 items-center border-b border-line px-4">
@@ -247,9 +247,9 @@ export default function DashboardShell({
               createOrganizationMode="navigation"
               createOrganizationUrl="/get-started"
               afterSelectOrganizationUrl="/dashboard"
-              appearance={clerkWidgetAppearance}
+              appearance={dashboardClerkAppearance}
             />
-            <UserButton appearance={clerkWidgetAppearance} />
+            <UserButton appearance={dashboardClerkAppearance} />
           </div>
         </header>
 

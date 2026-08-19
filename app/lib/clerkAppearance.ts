@@ -87,4 +87,71 @@ export const clerkWidgetAppearance = {
   },
 };
 
+/* 2026-08-19: the Esmi dashboard's variant of the same object, for the same
+   reason the light one exists — Clerk portals dropdowns/modals to the
+   document root, outside `.lg-app.esmi-dashboard`, so CSS can't reach them
+   and the literals have to be duplicated here. Used only by
+   DashboardShell.tsx and the org gate in dashboard/layout.tsx; every other
+   Clerk mount (`/app`, `/get-started`, `/sign-in`, `/sign-up`) keeps
+   `clerkWidgetAppearance` above untouched — AcumenAI's console is not
+   part of this rebrand. Values are the same four constants as
+   `.lg-app.esmi-dashboard` in app/globals.css; keep the two in sync. */
+const ESMI_INK = "#EAF2FF"; // --lg-ink in .esmi-dashboard
+const ESMI_INK_2 = "rgba(234, 242, 255, 0.72)"; // --lg-ink-2
+const ESMI_FIELD = "#0A0F1C"; // --lg-field
+const ESMI_FIELD_2 = "#0D1526"; // --lg-field-2
+const ESMI_FOIL = "#00F0FF"; // --lg-foil
+const ESMI_FOIL_INK = "#04141A"; // --lg-foil-ink
+
+export const dashboardClerkAppearance = {
+  variables: {
+    colorBackground: ESMI_FIELD,
+    colorText: ESMI_INK,
+    colorTextSecondary: ESMI_INK_2,
+    colorPrimary: ESMI_FOIL,
+    colorInputBackground: ESMI_FIELD_2,
+    colorInputText: ESMI_INK,
+    colorNeutral: ESMI_INK,
+    borderRadius: "0px",
+  },
+  elements: {
+    rootBox: { width: "100%" },
+    card: {
+      boxShadow: "none",
+      border: "none",
+      background: "transparent",
+    },
+    headerTitle: { color: ESMI_INK, fontFamily: "inherit" },
+    headerSubtitle: { color: ESMI_INK_2 },
+    socialButtonsBlockButton: {
+      border: `1px solid rgba(234, 242, 255, 0.14)`,
+      color: ESMI_INK,
+      background: ESMI_FIELD,
+    },
+    formButtonPrimary: {
+      background: ESMI_FOIL,
+      color: ESMI_FOIL_INK,
+      boxShadow: "none",
+      borderRadius: "0px",
+    },
+    formFieldInput: {
+      borderRadius: "0px",
+      color: ESMI_INK,
+      background: ESMI_FIELD_2,
+    },
+    footerActionLink: { color: ESMI_FOIL },
+    identityPreviewText: { color: ESMI_INK },
+    identityPreviewEditButton: { color: ESMI_FOIL },
+    formFieldLabel: { color: ESMI_INK_2 },
+    dividerText: { color: ESMI_INK_2 },
+    organizationSwitcherTrigger: "text-ink hover:bg-surface-2",
+    organizationPreviewMainIdentifier: { color: ESMI_INK },
+    organizationPreviewSecondaryIdentifier: { color: ESMI_INK_2 },
+    organizationSwitcherTriggerIcon: { color: ESMI_INK_2 },
+    userButtonOuterIdentifier: { color: ESMI_INK },
+    userPreviewMainIdentifier: { color: ESMI_INK },
+    userPreviewSecondaryIdentifier: { color: ESMI_INK_2 },
+  },
+};
+
 export default clerkWidgetAppearance;

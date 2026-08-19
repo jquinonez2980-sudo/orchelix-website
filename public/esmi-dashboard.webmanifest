@@ -10,8 +10,8 @@
     "browser"
   ],
   "orientation": "any",
-  "background_color": "#FFFFFF",
-  "theme_color": "#FFFFFF",
+  "background_color": "#0A0F1C",
+  "theme_color": "#0A0F1C",
   "lang": "en",
   "dir": "ltr",
   "prefer_related_applications": false,
