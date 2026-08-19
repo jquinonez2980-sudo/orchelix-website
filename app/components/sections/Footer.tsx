@@ -12,9 +12,13 @@ import enMessages, { type Messages } from "@/app/i18n/messages/en";
 export default function Footer({
   locale = "en",
   t = enMessages,
+  home = false,
 }: {
   locale?: Locale;
   t?: Messages;
+  /* Homepage is night-first and swaps lockups with the lighting control.
+     Other routes keep the single day mark. */
+  home?: boolean;
 } = {}) {
   const L = (path: string) => localizedHref(path, locale);
   const other = otherLocale(locale);
@@ -100,20 +104,31 @@ export default function Footer({
         <div className="grid gap-x-12 gap-y-12 lg:grid-cols-[minmax(0,1.25fr)_repeat(3,minmax(0,1fr))]">
           <div>
             <a href={L("/")} aria-label={t.nav.home} style={{ display: "inline-flex" }}>
-              {/* Same lockup, same two fixes as Nav: a real <Image> so the
-                  1383px source is resampled server-side instead of being
-                  crushed 11x by the browser, and the true 2.431 intrinsic
-                  ratio rather than the 128x45 (2.844) that was declared here.
-                  Matched to Nav's 50px so the mark is one size across the
-                  chrome. No `preload` — this sits below the fold. */}
+              {/* Same pair as Nav. Inline `display` would beat the theme
+                  swap in inscription.css, so visibility lives on the class. */}
+              {home ? (
+                <Image
+                  src="/orchelix-logo-night.png"
+                  alt=""
+                  aria-hidden="true"
+                  width={1383}
+                  height={580}
+                  sizes="122px"
+                  quality={90}
+                  className="lg-nav-logo lg-nav-logo--night"
+                  style={{ height: 50, width: "auto" }}
+                />
+              ) : null}
               <Image
                 src="/orchelix-logo-full-color.png"
-                alt={t.nav.home}
+                alt=""
+                aria-hidden="true"
                 width={1383}
                 height={569}
                 sizes="122px"
                 quality={90}
-                style={{ display: "block", height: 50, width: "auto" }}
+                className="lg-nav-logo lg-nav-logo--day"
+                style={{ height: 50, width: "auto" }}
               />
             </a>
 

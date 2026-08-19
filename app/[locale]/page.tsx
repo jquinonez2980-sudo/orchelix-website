@@ -58,7 +58,7 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
         <Operators t={t} />
         <FinalCTA locale={locale} t={t} />
       </main>
-      <Footer locale={locale} t={t} />
+      <Footer locale={locale} t={t} home />
     </InscriptionRoot>
   );
 }
