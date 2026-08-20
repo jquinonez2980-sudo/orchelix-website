@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import PageTitle, { PageLede } from "./PageTitle";
 import { ClerkProvider, OrganizationSwitcher } from "@clerk/nextjs";
+import { ui } from "@clerk/ui";
 import { auth } from "@clerk/nextjs/server";
 import { ADMIN_ORG_SLUG } from "@/app/lib/platformProxy";
 import DashboardShell from "./DashboardShell";
@@ -100,7 +101,7 @@ export default async function EsmiDashboardLayout({
   const isOrchelixStaff = orgSlug === ADMIN_ORG_SLUG;
 
   return (
-    <ClerkProvider afterSignOutUrl="/" appearance={dashboardClerkAppearance}>
+    <ClerkProvider ui={ui} afterSignOutUrl="/" appearance={dashboardClerkAppearance}>
       <DashI18nProvider>
         <DashboardShell isOrchelixStaff={isOrchelixStaff}>
           {orgSlug ? children : <OrgGate />}

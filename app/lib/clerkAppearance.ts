@@ -154,4 +154,73 @@ export const dashboardClerkAppearance = {
   },
 };
 
+/* 2026-08-19: the auth door (/sign-in, /sign-up).
+
+   WHY A THIRD OBJECT rather than reusing `dashboardClerkAppearance`. That one
+   dresses Clerk widgets sitting INSIDE the console chrome — an org switcher
+   and a user button in a header, small and quiet. This one dresses the whole
+   sign-in form as the only thing on the screen, over glass rather than over
+   the flat `--lg-field`. Same six colour constants, different job: the
+   surfaces here are transparent so the aurora shows through, and the form
+   needs the larger type and targets that a full-page form earns.
+
+   WHY SO FEW `elements` COMPARED TO THE OTHER TWO. Those objects fight the
+   portal problem — Clerk moves dropdowns and modals to the document root
+   where `.lg-app` cannot reach them, so the colours must be JS literals. A
+   signed-out auth route renders no portalled widget at all, so the shape of
+   the fix is inverted: `variables` below carries the palette (Clerk resolves
+   these in JS to derive its own hover and border shades, so they must stay
+   literals), and the `.esmi-auth .cl-` block in app/globals.css carries
+   everything with a state or a media query. Anything added here that also
+   appears there will lose — the CSS is two class levels deep, Clerk's
+   generated class is one.
+
+   The values are the same `.lg-app.esmi-dashboard` constants declared above;
+   keep all three objects in sync with that block in app/globals.css. */
+export const esmiAuthAppearance = {
+  variables: {
+    colorBackground: ESMI_FIELD,
+    colorText: ESMI_INK,
+    colorTextSecondary: ESMI_INK_2,
+    colorPrimary: ESMI_FOIL,
+    colorInputBackground: "rgba(234, 242, 255, 0.04)",
+    colorInputText: ESMI_INK,
+    colorNeutral: ESMI_INK,
+    /* Failure/success come from the console's four-way status vocabulary
+       rather than Clerk's defaults, so a wrong password reads in the same
+       red the call register uses for a failed call. */
+    colorDanger: "#FF6E68",
+    colorSuccess: "#34D399",
+    colorWarning: ESMI_FOIL,
+    borderRadius: "0px",
+  },
+  elements: {
+    rootBox: { width: "100%" },
+    /* The glass panel is ours (`.esmi-auth-card`); Clerk's card is the
+       transparent contents inside it. */
+    card: {
+      boxShadow: "none",
+      border: "none",
+      background: "transparent",
+      width: "100%",
+      padding: "0",
+    },
+    /* Clerk renders its own lockup slot above the title. Ours is already in
+       the layout masthead, and two lockups stacked is the tell of a template
+       that was themed rather than designed. */
+    logoBox: { display: "none" },
+    header: { textAlign: "left" as const },
+    headerTitle: { color: ESMI_INK, fontFamily: "inherit" },
+    headerSubtitle: { color: ESMI_INK_2 },
+    formFieldInput: { color: ESMI_INK },
+    formFieldLabel: { color: ESMI_INK_2 },
+    formButtonPrimary: { background: ESMI_FOIL, color: ESMI_FOIL_INK },
+    socialButtonsBlockButton: { color: ESMI_INK },
+    dividerText: { color: ESMI_INK_2 },
+    footerActionLink: { color: ESMI_FOIL },
+    identityPreviewText: { color: ESMI_INK },
+    identityPreviewEditButton: { color: ESMI_FOIL },
+  },
+};
+
 export default clerkWidgetAppearance;
