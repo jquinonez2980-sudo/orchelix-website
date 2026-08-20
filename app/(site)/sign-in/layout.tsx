@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ClerkProvider } from "@clerk/nextjs";
-import { clerkWidgetAppearance } from "@/app/lib/clerkAppearance";
+import { ui } from "@clerk/ui";
+import { esmiAuthAppearance } from "@/app/lib/clerkAppearance";
 
 /* Hosted-on-our-domain sign-in — replaces Clerk's Account Portal redirect.
    The dev Clerk instance can only redirect back to *.accounts.dev after a
@@ -13,7 +14,36 @@ import { clerkWidgetAppearance } from "@/app/lib/clerkAppearance";
 
    Appearance is set on the provider so every Clerk surface (form, modal,
    dropdown) gets readable ink-on-field tokens. The page shell is always
-   painted so a slow Clerk load never looks like a blank white void. */
+   painted so a slow Clerk load never looks like a blank void.
+
+   2026-08-19 — THE DOOR MATCHES THE ROOM. This was a white card on light grey
+   with the magenta house stamp, which is what /dashboard looked like until
+   d67582e turned the Esmi console dark and cyan. The two surfaces are one
+   navigation apart, so the seam was visible on every single sign-in. The
+   shell now carries `lg-app esmi-dashboard` — the console's own token scope,
+   not a copy of it — so this page cannot drift from the console again: any
+   future change to those tokens moves both.
+
+   `esmi-auth` adds only what a full-page door needs on top of the console
+   scope (aurora, ruled field, glass card). See app/globals.css.
+
+   WHY `ui={ui}`. The `.esmi-auth .cl-` block in app/globals.css styles Clerk
+   by its internal class names, and clerk-js warns at runtime that those
+   depend on a DOM it may change in any deployed update — a silent, remote
+   breakage with no commit of ours attached to it. `@clerk/ui` serves the
+   components from this bundle instead of from Clerk's CDN, so the markup
+   moves only when the dependency is upgraded here, in a diff, behind the
+   normal build. That is the point: it converts an unversioned remote risk
+   into a normal dependency bump. Applied to the two auth routes only; the
+   other three ClerkProvider mounts (/app, /dashboard, /get-started) still
+   load the remote build and still carry the original risk.
+
+   SHARED DOOR, ONE COAT. /sign-in also fronts AcumenAI's console at /app,
+   which keeps its navy-and-gold world. Dressing this page as Esmi is a
+   deliberate call, not an oversight — Esmi is the self-serve product and the
+   overwhelming majority of arrivals here. If AcumenAI ever needs its own
+   door, branch on the already-parsed and allowlisted `redirect_url` in
+   page.tsx rather than adding a second route. */
 
 export const dynamic = "force-dynamic";
 
@@ -28,65 +58,41 @@ export default function SignInLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider afterSignOutUrl="/" appearance={clerkWidgetAppearance}>
+    <ClerkProvider ui={ui} afterSignOutUrl="/" appearance={esmiAuthAppearance}>
       <div
-        className="flex min-h-screen flex-col items-center justify-center px-4 py-16"
+        className="lg-app esmi-dashboard esmi-auth flex flex-col items-center justify-center px-4 py-16"
         style={{
-          background: "var(--lg-field-2, #F1F3F5)",
-          color: "var(--lg-ink, #2E323E)",
+          /* `svh` rather than `vh`: on mobile the URL bar collapsing while a
+             field is focused must not shove the footnote under the fold. */
+          minHeight: "100svh",
+          paddingLeft: "max(1rem, env(safe-area-inset-left))",
+          paddingRight: "max(1rem, env(safe-area-inset-right))",
+          paddingBottom: "max(4rem, env(safe-area-inset-bottom))",
+          color: "var(--lg-ink)",
         }}
       >
-        <div className="mb-8 flex flex-col items-center gap-3">
+        <div className="esmi-auth-settle esmi-auth-settle-1 mb-8 flex flex-col items-center gap-3">
           <Link href="/" aria-label="Orchelix home">
             <Image
               src="/esmi-logo.png"
               alt="Esmi"
               width={160}
               height={77}
-              priority
+              /* Next 16 deprecated `priority` in favour of `preload`. This is
+                 the LCP element on the route either way. */
+              preload
               style={{ height: 36, width: "auto" }}
             />
           </Link>
-          <p
-            className="lg-fig"
-            style={{
-              fontSize: "0.6875rem",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              color: "var(--lg-ink-3, rgba(46,50,62,0.72))",
-              margin: 0,
-            }}
-          >
-            Sign in to your console
-          </p>
+          <p className="esmi-auth-kicker">Sign in to your console</p>
         </div>
 
-        <div
-          className="w-full max-w-md"
-          style={{
-            background: "var(--lg-field, #FFFFFF)",
-            border: "1px solid var(--lg-hair, rgba(46,50,62,0.14))",
-            borderTop: "2px solid var(--lg-rule, rgba(46,50,62,0.55))",
-            padding: "1.5rem 1.25rem 1.75rem",
-          }}
-        >
+        <div className="esmi-auth-card esmi-auth-settle esmi-auth-settle-2">
           {children}
         </div>
 
-        <p
-          style={{
-            marginTop: "1.5rem",
-            fontSize: "0.8125rem",
-            color: "var(--lg-ink-3, rgba(46,50,62,0.72))",
-          }}
-        >
-          No account yet?{" "}
-          <Link
-            href="/sign-up"
-            style={{ color: "var(--lg-ink, #2E323E)", textDecoration: "underline" }}
-          >
-            Apply to get started
-          </Link>
+        <p className="esmi-auth-footnote esmi-auth-settle esmi-auth-settle-3" style={{ marginTop: "1.5rem" }}>
+          No account yet? <Link href="/sign-up">Apply to get started</Link>
         </p>
       </div>
     </ClerkProvider>

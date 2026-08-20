@@ -1,4 +1,5 @@
 import { ClerkProvider } from "@clerk/nextjs";
+import { ui } from "@clerk/ui";
 import { clerkWidgetAppearance } from "@/app/lib/clerkAppearance";
 import ScrollUnlocker from "./ScrollUnlocker";
 
@@ -17,6 +18,7 @@ export default function AcumenAppLayout({ children }: { children: React.ReactNod
        The modal buttons also set it themselves; this catches the ones that
        do not, including any added in future. */
     <ClerkProvider
+      ui={ui}
       afterSignOutUrl="/"
       signInFallbackRedirectUrl="/app"
       signUpFallbackRedirectUrl="/app"

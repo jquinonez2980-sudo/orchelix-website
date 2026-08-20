@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
+import { ui } from "@clerk/ui";
 import { clerkWidgetAppearance } from "@/app/lib/clerkAppearance";
 
 /* /get-started — self-serve onboarding application (Phase 4 ticket 4.1).
@@ -33,7 +34,7 @@ export default function GetStartedLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider afterSignOutUrl="/" appearance={clerkWidgetAppearance}>
+    <ClerkProvider ui={ui} afterSignOutUrl="/" appearance={clerkWidgetAppearance}>
       <div className="lg-app lg-world min-h-screen bg-paper">{children}</div>
     </ClerkProvider>
   );

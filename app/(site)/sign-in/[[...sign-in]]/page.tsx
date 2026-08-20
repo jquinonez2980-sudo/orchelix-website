@@ -1,7 +1,7 @@
 import { SignIn } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { clerkWidgetAppearance } from "@/app/lib/clerkAppearance";
+import { esmiAuthAppearance } from "@/app/lib/clerkAppearance";
 
 /* Where a completed sign-in lands.
 
@@ -92,7 +92,7 @@ export default async function SignInPage({
       routing="path"
       forceRedirectUrl={target}
       fallbackRedirectUrl={target}
-      appearance={clerkWidgetAppearance}
+      appearance={esmiAuthAppearance}
       signUpUrl="/sign-up"
     />
   );

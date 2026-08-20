@@ -2309,3 +2309,486 @@ details[open] > .lg-summary::before {
 }
 
 /* rebuild touch */
+
+/* ─── Esmi auth door (/sign-in, /sign-up) — 2026-08-19 ────────────────────
+   The shell around Clerk's widget on the two auth routes. Rides on
+   `.lg-app.esmi-dashboard`, so it introduces ZERO new colour tokens: the
+   field, foil, ink, and status values are the same ones the Esmi console
+   shipped with in d67582e. That is the whole point — the door and the room
+   behind it are the same room.
+
+   WHY NOT A NEW PALETTE. A fresh accent (teal/violet) was proposed, away
+   from the magenta. But magenta is `--lg-foil`, the Orchelix house stamp,
+   and Esmi moved to cyan one commit earlier. A third accent would have made
+   this page agree with neither surface. Cyan is not a new colour here — it
+   is the colour of the thing you are signing in to.
+
+   WHY NO ANIMATION LIBRARY. Framer Motion and Radix were proposed; neither
+   is a dependency of this project, and the auth door is the worst place to
+   add runtime JS to a codebase whose recent history is about keeping JS off
+   the critical path. Every motion below is CSS on the world's existing
+   duration and easing tokens, and every one is a one-shot — nothing loops
+   except the aurora, which stops outright under reduced motion. */
+.esmi-auth {
+  /* The Ruled Record is a zero-radius world and the console behind this door
+     is too, so the glass is squared rather than pill-soft. One variable, in
+     case that judgement is ever revisited — changing it here moves the card,
+     the inputs, the buttons, and the focus ring together. */
+  --esmi-auth-radius: 0px;
+
+  /* The same glass values `.esmi-dark` uses on /try-esmi, restated locally
+     so this scope does not depend on a class it never carries. */
+  --esmi-auth-glass:        rgba(255, 255, 255, 0.045);
+  --esmi-auth-glass-strong: rgba(255, 255, 255, 0.075);
+  --esmi-auth-glass-border: rgba(255, 255, 255, 0.10);
+
+  /* Depth without a float: the card is lit from inside and bedded into the
+     field, it does not hover above it. */
+  --esmi-auth-lift:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
+    0 40px 90px -30px rgba(0, 0, 0, 0.85),
+    0 0 60px -20px rgba(0, 240, 255, 0.18);
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: var(--lg-field);
+}
+
+/* Aurora. Three soft masses on the brand's own three hues (foil cyan, the
+   console purple, the lifted blue), at an alpha low enough that they read as
+   a lit room rather than as a gradient. Drifts once every ~40s — slow enough
+   that it is never the thing you are looking at. */
+.esmi-auth::before {
+  content: "";
+  position: absolute;
+  inset: -35%;
+  z-index: -2;
+  background:
+    radial-gradient(38% 42% at 22% 20%, rgba(0, 240, 255, 0.17), transparent 70%),
+    radial-gradient(34% 38% at 80% 26%, rgba(168, 85, 247, 0.15), transparent 72%),
+    radial-gradient(48% 46% at 60% 92%, rgba(56, 189, 248, 0.11), transparent 70%);
+  filter: blur(30px);
+  animation: esmi-auth-drift 40s var(--ease-standard) infinite alternate;
+  will-change: transform;
+}
+
+/* The ruling. A faint 88px grid, masked to fade out well before the edges, so
+   the dark field still reads as ledger stock rather than as generic space.
+   This is the detail that keeps the page inside its own world. */
+.esmi-auth::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(to bottom, rgba(234, 242, 255, 0.055) 0 1px, transparent 1px 88px),
+    repeating-linear-gradient(to right,  rgba(234, 242, 255, 0.040) 0 1px, transparent 1px 88px);
+  -webkit-mask-image: radial-gradient(120% 90% at 50% 42%, #000 8%, transparent 76%);
+  mask-image: radial-gradient(120% 90% at 50% 42%, #000 8%, transparent 76%);
+}
+
+@keyframes esmi-auth-drift {
+  from { transform: translate3d(-2.5%, -1.5%, 0) scale(1);    }
+  to   { transform: translate3d( 2.5%,  2%,   0) scale(1.08); }
+}
+
+/* ── The card ─────────────────────────────────────────────────────────── */
+.esmi-auth-card {
+  position: relative;
+  width: 100%;
+  max-width: 27rem;
+  border: 1px solid var(--esmi-auth-glass-border);
+  border-radius: var(--esmi-auth-radius);
+  background: linear-gradient(180deg, var(--esmi-auth-glass-strong), var(--esmi-auth-glass));
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  box-shadow: var(--esmi-auth-lift);
+  padding: 1.75rem 1.5rem 1.5rem;
+}
+
+/* The world's top rule, kept — in foil rather than graphite. It draws itself
+   once on load: the Rule verb, the same gesture the call register uses. */
+.esmi-auth-card::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: calc(100% + 2px);
+  height: 2px;
+  background: linear-gradient(90deg, var(--lg-foil), rgba(0, 240, 255, 0.15));
+  transform-origin: left center;
+  animation: lg-rule-draw var(--lg-dur-rule) var(--ease-emphasized) 120ms both;
+}
+
+/* Masthead, card, and footnote settle in sequence, once, on the world's own
+   stagger. */
+.esmi-auth-settle {
+  animation: lg-settle var(--lg-dur-settle) var(--ease-emphasized) both;
+}
+.esmi-auth-settle-1 { animation-delay: 0ms; }
+.esmi-auth-settle-2 { animation-delay: var(--lg-stagger); }
+.esmi-auth-settle-3 { animation-delay: calc(var(--lg-stagger) * 2); }
+
+/* The kicker over the lockup — mono, tracked: the register's column head. */
+.esmi-auth-kicker {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--lg-ink-3);
+  margin: 0;
+}
+
+.esmi-auth-footnote {
+  font-size: 0.8125rem;
+  color: var(--lg-ink-3);
+}
+.esmi-auth-footnote a {
+  color: var(--lg-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color var(--lg-dur-state) var(--ease-standard);
+}
+.esmi-auth-footnote a:hover { color: var(--lg-foil); }
+
+/* ── Clerk's widget on the glass ──────────────────────────────────────────
+   Static colour lives in `esmiAuthAppearance` (app/lib/clerkAppearance.ts);
+   everything below is what an appearance object cannot express — hover,
+   focus-visible, ::placeholder, and the media queries. Two class levels beat
+   Clerk's own single generated class, so none of this needs !important.
+
+   Unlike the `.lg-app .cl-` backstop above, nothing here has to survive
+   being portalled to the document root: the org switcher and user button
+   (the widgets Clerk portals) do not exist on a signed-out auth route. */
+
+/* Clerk draws its own card chrome; ours is the glass panel around it. */
+.esmi-auth .cl-card,
+.esmi-auth .cl-cardBox {
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  width: 100%;
+}
+.esmi-auth .cl-rootBox { width: 100%; }
+
+/* Clerk's footer carries its own ground colour, which otherwise paints a
+   light slab across the bottom of the glass. */
+.esmi-auth .cl-footer,
+.esmi-auth .cl-footerAction {
+  background: transparent;
+  border: none;
+}
+
+/* The sign-in <-> sign-up swap, which the layout already renders as its own
+   footnote below the card. Clerk renders it a second time inside the card:
+   on /sign-up the two were verbatim identical, same words and same href, and
+   on /sign-in they disagreed ("Sign up" against "Apply to get started")
+   while pointing at the same page. One route out, stated once.
+
+   The layout keeps the surviving copy because it sits outside the glass —
+   the card is for the act of signing in, and the way out of it is not part
+   of that act. It also lets /sign-in say "Apply to get started", which is
+   what /get-started actually is, rather than Clerk's generic "Sign up".
+
+   Only the two top-level variants. `.cl-footerAction` on its own is the base
+   class for footer actions inside sub-flows too — the "Back to sign in" on
+   password reset and verification — and the footnote below the card does not
+   speak for those, so hiding the bare class would strand them.
+
+   `display: none` and not visually-hidden: this is a duplicate of a link
+   that remains in the page, so removing it from the accessibility tree is
+   the point. A screen reader should hear one way out, like everyone else. */
+.esmi-auth .cl-footerAction__signIn,
+.esmi-auth .cl-footerAction__signUp {
+  display: none;
+}
+
+.esmi-auth .cl-headerTitle {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  font-size: 1.375rem;
+}
+.esmi-auth .cl-headerSubtitle { font-size: 0.875rem; }
+
+/* Fields. Squared and inset, lit by foil on focus rather than ringed by the
+   browser default. */
+.esmi-auth .cl-formFieldInput,
+.esmi-auth .cl-otpCodeFieldInput,
+.esmi-auth .cl-phoneInputBox {
+  border-radius: var(--esmi-auth-radius);
+  border: 1px solid var(--lg-hair);
+  background: rgba(234, 242, 255, 0.04);
+  color: var(--lg-ink);
+  transition:
+    border-color var(--lg-dur-state) var(--ease-standard),
+    box-shadow   var(--lg-dur-state) var(--ease-standard),
+    background   var(--lg-dur-state) var(--ease-standard);
+}
+.esmi-auth .cl-formFieldInput::placeholder { color: var(--lg-ink-3); }
+.esmi-auth .cl-formFieldInput:hover:not(:focus) { border-color: rgba(234, 242, 255, 0.26); }
+.esmi-auth .cl-formFieldInput:focus,
+.esmi-auth .cl-formFieldInput:focus-visible,
+.esmi-auth .cl-otpCodeFieldInput:focus {
+  outline: none;
+  border-color: var(--lg-foil);
+  background: rgba(0, 240, 255, 0.05);
+  box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.16);
+}
+
+.esmi-auth .cl-formFieldLabel {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--lg-ink-2);
+}
+
+/* Primary action. Solid foil with dark ink on it — white fails outright on
+   this cyan, which is the reason `--lg-foil-ink` exists. Press is the
+   120ms stamp. */
+.esmi-auth .cl-formButtonPrimary {
+  border-radius: var(--esmi-auth-radius);
+  background: var(--lg-foil);
+  color: var(--lg-foil-ink);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  text-shadow: none;
+  box-shadow: none;
+  min-height: 2.75rem;
+  transition:
+    filter     var(--lg-dur-state) var(--ease-standard),
+    box-shadow var(--lg-dur-state) var(--ease-standard),
+    transform  var(--lg-dur-press) var(--ease-standard);
+}
+.esmi-auth .cl-formButtonPrimary:hover:not(:disabled) {
+  filter: brightness(1.08);
+  box-shadow: 0 0 28px -6px rgba(0, 240, 255, 0.55);
+}
+.esmi-auth .cl-formButtonPrimary:active:not(:disabled) { transform: translateY(1px); }
+.esmi-auth .cl-formButtonPrimary:disabled { opacity: 0.55; }
+
+/* The secondary routes in: social providers, and the alternative-methods
+   list that carries the passkey option. Quiet glass, foil only on approach. */
+.esmi-auth .cl-socialButtonsBlockButton,
+.esmi-auth .cl-socialButtonsIconButton,
+.esmi-auth .cl-alternativeMethodsBlockButton,
+.esmi-auth .cl-backLink,
+.esmi-auth .cl-formButtonReset {
+  border-radius: var(--esmi-auth-radius);
+  border: 1px solid var(--lg-hair);
+  background: var(--esmi-auth-glass);
+  color: var(--lg-ink);
+  min-height: 2.75rem;
+  transition:
+    border-color var(--lg-dur-state) var(--ease-standard),
+    background   var(--lg-dur-state) var(--ease-standard);
+}
+.esmi-auth .cl-socialButtonsBlockButton:hover,
+.esmi-auth .cl-socialButtonsIconButton:hover,
+.esmi-auth .cl-alternativeMethodsBlockButton:hover {
+  border-color: rgba(0, 240, 255, 0.42);
+  background: var(--esmi-auth-glass-strong);
+}
+.esmi-auth .cl-socialButtonsBlockButtonText,
+.esmi-auth .cl-alternativeMethodsBlockButtonText { color: var(--lg-ink); }
+
+/* Passkey gets the one lit edge among the alternatives, so the recommended
+   route is the one the eye lands on. Clerk keys this modifier off the
+   strategy, so it survives the list being reordered. */
+.esmi-auth .cl-alternativeMethodsBlockButton__passkey {
+  border-color: rgba(0, 240, 255, 0.34);
+  background: rgba(0, 240, 255, 0.06);
+}
+.esmi-auth .cl-alternativeMethodsBlockButton__passkey:hover {
+  border-color: var(--lg-foil);
+  background: rgba(0, 240, 255, 0.11);
+}
+
+.esmi-auth .cl-dividerLine { background: var(--lg-hair); }
+.esmi-auth .cl-dividerText {
+  color: var(--lg-ink-3);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+
+.esmi-auth .cl-footerActionText { color: var(--lg-ink-3); }
+.esmi-auth .cl-footerActionLink,
+.esmi-auth .cl-identityPreviewEditButton,
+.esmi-auth .cl-formResendCodeLink {
+  color: var(--lg-foil);
+  text-underline-offset: 3px;
+}
+.esmi-auth .cl-footerActionLink:hover { color: var(--lg-foil-lift); }
+
+/* Failures read in the console's own failure colour, not Clerk's default
+   red — same four-way status vocabulary the dashboard documents. */
+.esmi-auth .cl-formFieldErrorText,
+.esmi-auth .cl-formFieldWarningText,
+.esmi-auth .cl-alert,
+.esmi-auth .cl-alertText { color: var(--lg-rule-text); }
+.esmi-auth .cl-formFieldInput[data-invalid="true"] {
+  border-color: var(--lg-rule-text);
+  box-shadow: 0 0 0 3px rgba(255, 110, 104, 0.15);
+}
+
+.esmi-auth .cl-identityPreview {
+  border-radius: var(--esmi-auth-radius);
+  background: var(--esmi-auth-glass);
+  border: 1px solid var(--lg-hair);
+}
+
+/* Clerk's own focus ring is a light halo built for a white card. Foil, and
+   squared, like every other focusable thing in this world. */
+.esmi-auth :focus-visible {
+  outline: 2px solid var(--lg-foil);
+  outline-offset: 2px;
+  border-radius: var(--esmi-auth-radius);
+}
+
+/* Clerk's spinner inherits currentColor in most nodes but not the one inside
+   the primary button, which is the one that is actually seen. */
+.esmi-auth .cl-spinner { color: var(--lg-foil-ink); }
+
+/* ── Accessibility and degraded environments ─────────────────────────────
+   Three separate opt-outs, because they are three different needs: motion
+   sensitivity, transparency-induced legibility loss, and forced contrast.
+   `backdrop-filter` also fails silently on some Android WebViews, so the
+   card never depends on blur alone to separate itself from the field. */
+@media (prefers-reduced-motion: reduce) {
+  .esmi-auth::before,
+  .esmi-auth-card::before,
+  .esmi-auth-settle { animation: none; }
+  .esmi-auth .cl-formFieldInput,
+  .esmi-auth .cl-formButtonPrimary,
+  .esmi-auth .cl-socialButtonsBlockButton,
+  .esmi-auth .cl-alternativeMethodsBlockButton { transition: none; }
+  .esmi-auth .cl-formButtonPrimary:active:not(:disabled) { transform: none; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .esmi-auth::before,
+  .esmi-auth::after { display: none; }
+  .esmi-auth-card {
+    background: var(--lg-field-2);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .esmi-auth-card { border-color: var(--lg-ink-2); }
+  .esmi-auth .cl-formFieldInput,
+  .esmi-auth .cl-socialButtonsBlockButton,
+  .esmi-auth .cl-alternativeMethodsBlockButton { border-color: var(--lg-ink-2); }
+  .esmi-auth .cl-dividerText,
+  .esmi-auth .cl-footerActionText,
+  .esmi-auth .cl-formFieldLabel { color: var(--lg-ink); }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .esmi-auth-card { background: var(--lg-field-2); }
+}
+
+/* ── Mobile ───────────────────────────────────────────────────────────────
+   The card goes edge-to-edge below 30rem rather than sitting as a small
+   floating slab inside a margin, and the ruling tightens so the grid still
+   reads at that width. */
+@media (max-width: 30rem) {
+  .esmi-auth-card {
+    padding: 1.5rem 1.125rem 1.25rem;
+    border-left: none;
+    border-right: none;
+    max-width: none;
+  }
+  .esmi-auth::after {
+    background-image:
+      repeating-linear-gradient(to bottom, rgba(234, 242, 255, 0.055) 0 1px, transparent 1px 56px),
+      repeating-linear-gradient(to right,  rgba(234, 242, 255, 0.040) 0 1px, transparent 1px 56px);
+  }
+}
+
+/* ── Clerk's inherited ink ────────────────────────────────────────────────
+   Verified in the browser, not assumed: `.cl-card` computes to
+   rgb(33, 33, 38) — Clerk's near-black, tuned for its own light card — and
+   19 nodes inside the form inherit it. Every node this stylesheet does not
+   name therefore arrives dark-on-dark and disappears. Two were doing exactly
+   that: the "Last used" provider badge above the Google button (near-black
+   text at 0.65 alpha over #0A0F1C, which reads as a black rectangle) and the
+   "Secured by" footer beside Clerk's wordmark.
+
+   Setting the inherited colour on the card inverts the default. A node Clerk
+   adds in a future release now arrives readable and has to be opted OUT of,
+   instead of arriving invisible and waiting to be discovered. Same defect
+   class as the navy-header organization name documented beside the `.lg-app
+   .cl-` backstop above, closed at the root rather than one node at a time.
+
+   `variables.colorText` in the appearance object does NOT cover this in
+   clerk-js 6 — the card still computes near-black with it set. That key
+   looks stale, which is worth knowing for the other two appearance objects
+   in app/lib/clerkAppearance.ts as well. CSS does not care either way, which
+   is the reason the fix lives here. */
+/* `.cl-cardBox` and not `.cl-card`: the footer (with the "Secured by" item)
+   is a SIBLING of the card, not a child, so carding the fix to `.cl-card`
+   alone leaves the bottom of the form on the old near-black. */
+.esmi-auth .cl-cardBox,
+.esmi-auth .cl-card { color: var(--lg-ink); }
+
+.esmi-auth .cl-lastAuthenticationStrategyBadge {
+  color: var(--lg-ink-2);
+  background: var(--lg-field-3);
+  border: 1px solid var(--lg-hair);
+  border-radius: var(--esmi-auth-radius);
+
+  /* Clerk pushes this badge 10px PAST the button's right edge and relies on
+     the padding of its own card to leave room. Ours is a glass panel that
+     supplies that padding itself, so Clerk's card padding is zeroed in the
+     appearance object — which left the badge overhanging into
+     `.cl-cardBox`, and that box clips (`overflow: hidden`). The "d" of
+     "Last used" was being cut off.
+
+     Pinning it to the button edge is the fix that does not touch Clerk's
+     overflow: `overflow: visible` on the card box would un-clip the badge
+     but also un-clip the slide transition between form steps. The vertical
+     straddle is kept as a percentage so it tracks the badge's own height
+     rather than restating Clerk's pixel value. */
+  right: 0;
+  transform: translateY(-50%);
+}
+
+/* The wordmark and "Secured by" label. "Development mode" is a sibling
+   carrying foil of its own and is deliberately left alone. */
+.esmi-auth .cl-footerItem { color: var(--lg-ink-3); }
+
+/* Clerk sets a colour on the "Secured by" node directly, so it does not take
+   the inherited value above. It arrives as near-black at 0.65 alpha —
+   invisible on this field.
+
+   Every descendant, rather than a named node: this element was a
+   `p[data-color="inherit"]` under the remotely-served clerk-js build and an
+   unclassed `div` wrapper under `@clerk/ui`, which is precisely the DOM
+   churn `ui={ui}` exists to stop — and a reminder that a selector aimed at
+   one shape of this subtree will not survive the other. The subtree holds
+   only Clerk's branding, so coloring all of it is safe.
+
+   The logo keeps its shape and only gains a legible colour (its SVG paints
+   from `currentColor`) — the Foreign Mark Rule is about not restyling
+   another party's mark, not about leaving it unreadable. */
+.esmi-auth .cl-footerItem,
+.esmi-auth .cl-footerItem * {
+  color: var(--lg-ink-3);
+}
+
+/* `[data-clerk-dev-mode-overlay]` is development-only and does not ship;
+   it keeps its foil so the dev badge still reads as a badge. */
+.esmi-auth .cl-footerItem [data-clerk-dev-mode-overlay],
+.esmi-auth .cl-footerItem [data-clerk-dev-mode-overlay] * {
+  color: var(--lg-foil);
+}

@@ -1,7 +1,7 @@
 import { SignUp } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { clerkWidgetAppearance } from "@/app/lib/clerkAppearance";
+import { esmiAuthAppearance } from "@/app/lib/clerkAppearance";
 
 /* Redirects into /get-started rather than /dashboard: a fresh sign-up has no
    Clerk organization yet, so landing on /dashboard would only show the
@@ -18,7 +18,7 @@ export default async function SignUpPage() {
       routing="path"
       forceRedirectUrl="/get-started"
       fallbackRedirectUrl="/get-started"
-      appearance={clerkWidgetAppearance}
+      appearance={esmiAuthAppearance}
       signInUrl="/sign-in"
     />
   );
