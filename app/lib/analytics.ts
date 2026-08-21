@@ -2,6 +2,7 @@
    Uses Vercel Analytics when available; always no-ops safely. */
 
 type EventName =
+  | "calc_interact"
   | "hear_play"
   | "book_submit"
   | "get_started_submit"

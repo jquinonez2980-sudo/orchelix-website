@@ -2,6 +2,8 @@ import { MetadataRoute } from "next";
 import { getPosts, postHref } from "@/app/i18n/posts";
 import { LOCALES, LOCALIZED_PATHS, TRANSLATED_PATHS, localizedHref } from "@/app/i18n/config";
 import { INDUSTRY_SLUGS } from "@/app/i18n/industries";
+import { LOCATION_SLUGS } from "@/app/i18n/locations";
+import { COMPARE_SLUGS } from "@/app/i18n/compare";
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.orchelix.com";
 
@@ -79,6 +81,29 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: 0.8,
       }))
     ),
+    /* Metro pages. Both locales, because the Spanish set is written for the
+       same eight slugs — see app/i18n/locations/es.ts. Priority sits below the
+       sector pages: these are the newer, less-linked family, and telling a
+       crawler that is more useful than flattening everything to 0.8. */
+    ...LOCATION_SLUGS.flatMap((slug) =>
+      LOCALES.filter((l) => l === "en" || TRANSLATED_PATHS.has("/locations")).map((l) => ({
+        url: `${BASE}${localizedHref(`/locations/${slug}`, l)}`,
+        lastModified: now,
+        changeFrequency: "monthly" as const,
+        priority: 0.7,
+      }))
+    ),
+
+    /* Comparison pages. Same shape, same reasoning. */
+    ...COMPARE_SLUGS.flatMap((slug) =>
+      LOCALES.filter((l) => l === "en" || TRANSLATED_PATHS.has("/compare")).map((l) => ({
+        url: `${BASE}${localizedHref(`/compare/${slug}`, l)}`,
+        lastModified: now,
+        changeFrequency: "monthly" as const,
+        priority: 0.7,
+      }))
+    ),
+
     ...blogPosts,
   ];
 }

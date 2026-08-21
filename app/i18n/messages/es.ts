@@ -768,7 +768,7 @@ const es: Messages = {
       description:
         "Esmi contesta cada llamada 24/7, califica a quien llama, agenda la cita y transfiere a una persona cuando hace falta — en inglés y español, con transcripción y motivo en cada llamada.",
       heading: "El teléfono se contesta, y la llamada queda escrita",
-      lede: "Esmi es la recepcionista que no se va a casa. Contesta, califica, agenda en tu calendario real y deja un registro que puedes leer después — en inglés o español, según hable quien llama.",
+      lede: "Esmi es una recepcionista con IA que no se va a casa. Contesta, califica, agenda en tu calendario real y deja un registro que puedes leer después — en inglés o español, según hable quien llama.",
       facts: [
         ["Estado", "En producción, contestando llamadas hoy"],
         ["Idiomas", "Inglés y español, de forma nativa"],

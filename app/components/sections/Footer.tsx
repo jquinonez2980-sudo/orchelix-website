@@ -23,6 +23,21 @@ export default function Footer({
   const L = (path: string) => localizedHref(path, locale);
   const other = otherLocale(locale);
 
+  const R =
+    locale === "es"
+      ? {
+          head: "Recursos",
+          calculator: "Calculadora de llamadas perdidas",
+          compare: "Comparaciones",
+          locations: "Dónde trabajamos",
+        }
+      : {
+          head: "Resources",
+          calculator: "Missed call calculator",
+          compare: "Comparisons",
+          locations: "Where we work",
+        };
+
   const columns = [
     {
       head: t.footer.products,
@@ -42,8 +57,27 @@ export default function Footer({
         { label: t.footer.links.howItWorks, href: L("/how-it-works") },
         { label: t.footer.links.pricing, href: L("/pricing") },
         { label: t.footer.links.about, href: L("/about") },
-        { label: t.footer.links.blog, href: locale === "es" ? "/es/blog" : "/blog" },
         { label: t.footer.links.book, href: L("/book") },
+      ],
+    },
+    /* Resources.
+
+       This column exists because the three page families added on 2026-08-20
+       — the calculator, the comparisons, and the metro pages — had no route
+       in from the site chrome. A page nothing links to is a page a crawler
+       reaches once from the sitemap and then has no reason to revisit, and
+       these are precisely the pages meant to accumulate authority.
+
+       The labels are inline rather than in the catalogues because these are
+       five strings against a 52 KB file that every page imports; the same
+       trade the industries and locations modules make. */
+    {
+      head: R.head,
+      links: [
+        { label: R.calculator, href: L("/missed-call-calculator") },
+        { label: R.compare, href: L("/compare") },
+        { label: R.locations, href: L("/locations") },
+        { label: t.footer.links.blog, href: locale === "es" ? "/es/blog" : "/blog" },
       ],
     },
     {
@@ -101,7 +135,7 @@ export default function Footer({
       </div>
 
       <div className="mx-auto max-w-[1320px] px-5 py-16 sm:px-8 lg:px-10 lg:py-20">
-        <div className="grid gap-x-12 gap-y-12 lg:grid-cols-[minmax(0,1.25fr)_repeat(3,minmax(0,1fr))]">
+        <div className="grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.1fr)_repeat(4,minmax(0,0.85fr))]">
           <div>
             <a href={L("/")} aria-label={t.nav.home} style={{ display: "inline-flex" }}>
               {/* Same pair as Nav. Inline `display` would beat the theme

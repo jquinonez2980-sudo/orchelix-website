@@ -1,5 +1,19 @@
 User-agent: *
 Allow: /
+
+# API routes return JSON, never a page worth indexing.
 Disallow: /api/
 
-Sitemap: https://orchelix.com/sitemap.xml
+# Authenticated surfaces. These are behind Clerk and return a sign-in
+# redirect to a crawler, which is a soft-404 in Google's eyes — one per
+# route, spent out of the same crawl budget the marketing pages need.
+Disallow: /app
+Disallow: /dashboard
+Disallow: /sign-in
+Disallow: /sign-up
+Disallow: /get-started
+
+# The canonical host is www. next.config.ts 301s the apex to it, so an
+# apex-hosted sitemap URL here would send every crawler through a redirect
+# before it read the first line.
+Sitemap: https://www.orchelix.com/sitemap.xml

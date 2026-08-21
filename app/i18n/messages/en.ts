@@ -799,7 +799,7 @@ const en = {
       description:
         "Esmi answers every call 24/7, qualifies the caller, books the appointment, and hands off to a person when it matters — in English and Spanish, with a transcript and a reason on every call.",
       heading: "The phone is answered, and the call is written down",
-      lede: "Esmi is the receptionist that does not go home. It answers, qualifies, books into your real calendar, and leaves a record you can read afterwards — in English or Spanish, whichever the caller uses.",
+      lede: "Esmi is an AI receptionist that does not go home. It answers, qualifies, books into your real calendar, and leaves a record you can read afterwards — in English or Spanish, whichever the caller uses.",
       facts: [
         ["Status", "In production, answering calls today"],
         ["Languages", "English and Spanish, natively"],

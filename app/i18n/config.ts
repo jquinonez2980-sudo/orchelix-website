@@ -32,6 +32,12 @@ export const LOCALIZED_PATHS = [
   "/blog",
   "/acumen",
   "/missed-calls",
+  /* Added 2026-08-20 with the acquisition pass. The calculator is the free
+     tool that earns links; /locations and /compare are the two page families
+     that target buyer-intent queries the head terms cannot reach. */
+  "/missed-call-calculator",
+  "/locations",
+  "/compare",
 ] as const;
 
 /* Which paths actually have Spanish copy today.
@@ -57,6 +63,9 @@ export const TRANSLATED_PATHS = new Set<string>([
   "/blog",
   "/acumen",
   "/missed-calls",
+  "/missed-call-calculator",
+  "/locations",
+  "/compare",
 ]);
 
 export function localesFor(path: string): Locale[] {

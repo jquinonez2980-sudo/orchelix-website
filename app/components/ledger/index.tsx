@@ -592,3 +592,103 @@ export function EntryList({
     </div>
   );
 }
+
+/* A two-sided comparison register.
+
+   Built here rather than inline on /compare because the alternative — a real
+   <table> with a header row — collapses badly on a phone: either it scrolls
+   sideways, or the header scrolls out of view and the second column loses its
+   meaning halfway down. This keeps the semantics (a definition per row, two
+   values) and restates the two side labels inside every row, hidden on wide
+   screens and shown on narrow ones, so a value is never orphaned from what it
+   describes.
+
+   Column widths are Tailwind classes rather than an inline
+   `gridTemplateColumns`, because an inline style cannot be overridden at the
+   `lg:` breakpoint — the first version of this stacked correctly on desktop
+   and nowhere else.
+
+   The left side is always ours and carries the foil rule. Saying which side
+   is which in the markup, rather than implying it with colour, is the honest
+   version and the accessible one. */
+export function CompareRows({
+  rows,
+  leftLabel,
+  rightLabel,
+  tone = "field",
+}: {
+  rows: { label: string; esmi: string; other: string }[];
+  leftLabel: string;
+  rightLabel: string;
+  tone?: Tone;
+}) {
+  const COLS =
+    "grid grid-cols-1 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)_minmax(0,1fr)]";
+
+  const sideLabel: CSSProperties = {
+    display: "block",
+    fontFamily: "var(--font-mono)",
+    fontSize: "0.625rem",
+    letterSpacing: "0.14em",
+    textTransform: "uppercase",
+    color: isStock(tone) ? "var(--lg-ink-on-stock-2)" : "var(--lg-ink-3)",
+    marginBottom: "0.45rem",
+  };
+
+  return (
+    <div className="lg-anchor" style={{ "--lg-anchor-w": "2px" } as CSSProperties}>
+      {/* Column heads. Decorative on wide screens — every row repeats them
+          for narrow ones — so they are hidden from the accessibility tree
+          rather than announced twice. */}
+      <div
+        aria-hidden="true"
+        className="hidden gap-x-10 lg:grid lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1fr)_minmax(0,1fr)]"
+        style={{ padding: "0 0 0.9rem", borderBottom: `1px solid ${hairFor(tone)}` }}
+      >
+        <span />
+        <span style={{ ...sideLabel, marginBottom: 0, color: "var(--lg-foil)" }}>{leftLabel}</span>
+        <span style={{ ...sideLabel, marginBottom: 0 }}>{rightLabel}</span>
+      </div>
+
+      {rows.map((r, i) => (
+        <dl
+          key={r.label}
+          className={`lg-settle-item m-0 gap-x-10 gap-y-4 ${COLS}`}
+          style={{ "--i": i, padding: "1.35rem 0", borderBottom: `1px solid ${hairFor(tone)}` } as CSSProperties}
+        >
+          <dt
+            style={{
+              fontFamily: "var(--font-display)",
+              fontStretch: "86%",
+              fontWeight: 600,
+              fontSize: "1rem",
+              letterSpacing: "-0.005em",
+              textTransform: "uppercase",
+              color: inkFor(tone),
+            }}
+          >
+            {r.label}
+          </dt>
+
+          <dd style={{ margin: 0, borderLeft: "2px solid var(--lg-foil)", paddingLeft: "1rem" }}>
+            <span className="lg:hidden" style={{ ...sideLabel, color: "var(--lg-foil)" }}>
+              {leftLabel}
+            </span>
+            <Prose tone={tone} size="0.9375rem" max="46ch">
+              {r.esmi}
+            </Prose>
+          </dd>
+
+          <dd style={{ margin: 0, borderLeft: `2px solid ${hairFor(tone)}`, paddingLeft: "1rem" }}>
+            <span className="lg:hidden" style={sideLabel}>
+              {rightLabel}
+            </span>
+            <Prose tone={tone} size="0.9375rem" max="46ch">
+              {r.other}
+            </Prose>
+          </dd>
+        </dl>
+      ))}
+    </div>
+  );
+}

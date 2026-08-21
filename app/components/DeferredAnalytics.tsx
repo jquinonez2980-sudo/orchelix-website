@@ -8,20 +8,25 @@ const Analytics = dynamic(
   { ssr: false },
 );
 
-/* Analytics is not LCP. Keep it off the first-load JS budget. */
+/* Client-only, but mounted on the first effect after hydration.
+
+   This used to wait for requestIdleCallback (4s timeout, 2.5s setTimeout
+   fallback) to keep analytics off the first-load JS budget. That traded
+   away more than it bought: Vercel records the page view when this
+   component mounts, so every visitor who left inside ~2.5s was never
+   counted at all. Traffic read low and bounce rate read flattering,
+   because the fastest bounces were invisible.
+
+   The script is ~1KB and loads async, so it is not the LCP risk the
+   delay was defending against. ssr:false already keeps it out of the
+   server bundle, which is the part that actually mattered. */
 export default function DeferredAnalytics() {
   const [on, setOn] = useState(false);
 
   useEffect(() => {
     const host = window.location.hostname;
     if (host === "localhost" || host === "127.0.0.1") return;
-    const start = () => setOn(true);
-    if (typeof requestIdleCallback === "function") {
-      const id = requestIdleCallback(start, { timeout: 4000 });
-      return () => cancelIdleCallback(id);
-    }
-    const id = window.setTimeout(start, 2500);
-    return () => window.clearTimeout(id);
+    setOn(true);
   }, []);
 
   if (!on) return null;

@@ -66,3 +66,10 @@ design-sources/
 liquid-glass-js/
 liquid-glass-react/
 liquid-logo/
+
+# local scratch and large media - never deploy these
+.tmp-*.html
+sales-pilot.html
+/showcase/
+/public/WhatsApp*
+C:Users*

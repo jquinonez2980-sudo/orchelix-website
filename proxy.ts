@@ -84,6 +84,11 @@ export const config = {
     "/blog/:path*",
     "/acumen",
     "/missed-calls",
+    "/missed-call-calculator",
+    "/locations",
+    "/locations/:path*",
+    "/compare",
+    "/compare/:path*",
     /* Clerk surfaces. */
     "/app(.*)",
     "/dashboard(.*)",
