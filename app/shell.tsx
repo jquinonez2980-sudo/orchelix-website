@@ -3,6 +3,7 @@ import { Archivo, Literata, Azeret_Mono } from "next/font/google";
 import DeferredAnalytics from "./components/DeferredAnalytics";
 import JsonLd from "./components/JsonLd";
 import RevealObserver from "./components/ledger/RevealObserver";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 /* Shared root-layout shell.
 
@@ -147,6 +148,7 @@ export default function Shell({
             so no page brings its own observer. */}
         <RevealObserver />
         <DeferredAnalytics />
+        <SpeedInsights />
       </body>
     </html>
   );
