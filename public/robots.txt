@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://orchelix.com/sitemap.xml
+Sitemap: https://www.orchelix.com/sitemap.xml

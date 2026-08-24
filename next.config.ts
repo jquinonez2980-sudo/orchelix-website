@@ -46,10 +46,10 @@ const nextConfig: NextConfig = {
     ];
   },
 
-  // Inline Tailwind's atomic CSS into <head> instead of a render-blocking
-  // <link> — removes the CSS round trip for first-time visitors (FCP/LCP win).
+  // Linked stylesheet instead of inlining Tailwind into HTML. inlineCss: true
+  // produced ~440KB documents (38 @font-face blocks) and blocked HTML cache.
   experimental: {
-    inlineCss: true,
+    inlineCss: false,
     optimizePackageImports: ["three", "@react-three/drei"],
   },
 
@@ -96,8 +96,8 @@ const nextConfig: NextConfig = {
        here — the optimizer returns 400 for anything else, so this is not
        optional decoration. 90 exists for the Nav lockup: its "AI CONSULTING"
        tagline renders at roughly 4px on a 1x screen, and at the default q75
-       the ringing around those hairline letterforms is a large fraction of
-       the stroke itself. 75 stays first; everything else should use it. */
+       the ringing around those hairline letterforms is a large fraction of the
+       stroke itself. 75 stays first; everything else should use it. */
     qualities: [75, 90],
   },
   async headers() {
