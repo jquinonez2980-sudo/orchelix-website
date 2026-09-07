@@ -1,14 +1,19 @@
 /* Poster first viewport. The DOM register chart is gone — the Inscription
-   occupies that column. The offer type stays. */
+   occupies that column. The offer type stays.
+   React Bits: BlurText on headline + low-opacity DotGrid behind hero. */
 
 import { Stamp, QuietAction } from "@/app/components/ledger";
 import { localizedHref, type Locale } from "@/app/i18n/config";
 import type { Messages } from "@/app/i18n/messages/en";
 import LiveClock from "./LiveClock";
+import BlurText from "@/app/components/react-bits/BlurText";
+import DotGrid from "@/app/components/react-bits/DotGrid";
 
 export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
   return (
     <section id="top" className="lg-world lg-field lg-cloth-vivid lg-hero-scene relative">
+      <DotGrid className="lg-hero-dotgrid" opacity={0.28} />
+
       <div
         aria-hidden="true"
         className="lg-ticks pointer-events-none absolute inset-y-0 left-0 hidden w-[7px] lg:block"
@@ -75,8 +80,26 @@ function PosterTitle({ lines }: { lines: string[] }) {
         const { lead, last } = splitPoster(line);
         return (
           <span className="lg-poster-block" key={line}>
-            {lead ? <span className="lg-poster-lead">{lead}</span> : null}
-            <span className="lg-poster-last">{last}</span>
+            {lead ? (
+              <BlurText
+                text={lead}
+                animateBy="words"
+                direction="top"
+                delay={70}
+                stepDuration={0.24}
+                className="lg-poster-lead"
+                as="span"
+              />
+            ) : null}
+            <BlurText
+              text={last}
+              animateBy="words"
+              direction="top"
+              delay={70}
+              stepDuration={0.24}
+              className="lg-poster-last"
+              as="span"
+            />
           </span>
         );
       })}

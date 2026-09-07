@@ -23,10 +23,10 @@
   --color-teal-200: #8AE5D7;
   --color-teal-300: #4FD3BF;
   --color-teal-400: #22C2A8;
-  --color-teal-500: #14B8A6;
-  --color-teal-600: #0F9989;
-  --color-teal-700: #0C7A6E;
-  --color-teal-800: #095C53;
+  --color-teal-500: #0d5c63;
+  --color-teal-600: #0a4f55;
+  --color-teal-700: #0d5c63;
+  --color-teal-800: #08464b;
   --color-teal-900: #053D37;
 
   /* Gold — AcumenAI signature accent (the accounting & finance product).
@@ -43,16 +43,16 @@
   --color-gold-800: #6B450F;
   --color-gold-900: #4A2F0A;
 
-  /* Neutrals + surfaces */
-  --color-paper:        #FBFBFC;
-  --color-surface:      #FFFFFF;
-  --color-surface-2:    #F4F6F9;
-  --color-line:         #E4E8EE;
-  --color-line-strong:  #C9D1DC;
-  --color-ink:          #0A2540;
-  --color-ink-2:        #3F5570;
-  --color-ink-3:        #6D7F95;
-  --color-ink-4:        #A9B7C7;
+  /* Neutrals + surfaces — calm B2B dwell palette */
+  --color-paper:        #f5f1ea;
+  --color-surface:      #faf7f2;
+  --color-surface-2:    #efe9e0;
+  --color-line:         #e0d8cc;
+  --color-line-strong:  #c9bfb0;
+  --color-ink:          #12141a;
+  --color-ink-2:        #3d424c;
+  --color-ink-3:        #6a707c;
+  --color-ink-4:        #9aa1ad;
 
   /* Radii */
   --radius-xs:   4px;
@@ -154,53 +154,41 @@
      is not a background move (magenta backgrounds "lose impact when
      overused"), so the old bright fourth field-vivid stop is retired to a
      light neutral rather than a saturated highlight. */
-  --lg-field:      #FFFFFF;
-  --lg-field-2:    #F1F3F5;
-  --lg-field-3:    #E4E7EB;
-  --lg-field-vivid: #E4E7EB;
+  /* Calm B2B dwell palette (2026-09): warm paper, warm near-black ink,
+     one deep-teal accent for CTAs. No neon magenta / cyber gradients. */
+  --lg-field:      #f5f1ea;
+  --lg-field-2:    #efe9e0;
+  --lg-field-3:    #e6dfd4;
+  --lg-field-vivid: #e6dfd4;
 
-  /* Ledger stock — previously the one light surface against a dark field;
-     now just another light neutral in the same family, kept distinct from
-     `field`/`field-2` only where a page needs a third alternation step. */
-  --lg-stock:      #F1F3F5;
-  --lg-stock-2:    #E4E7EB;
+  /* Ledger stock — warm paper alternates for section rhythm. */
+  --lg-stock:      #f8f4ed;
+  --lg-stock-2:    #efe9e0;
 
-  /* The single sharp accent. Named `foil` for the stamp it used to be;
-     it is Magenta now — reserved for CTAs, links, and the one outcome
-     per view that should read as the "AI moment," never a fill. */
-  --lg-foil:       #B7135A;
-  --lg-foil-lift:  #D42670;
-  /* Ink for text sitting ON the accent, not beside it — the CTA stamps.
-     White measures 6.42:1 on `--lg-foil`; `--lg-ink` would be 2.1:1 and
-     fail outright, so this cannot just inherit the body ink. It exists as
-     a token because the rebrand left the value hardcoded in both Nav CTAs,
-     which is how a palette quietly grows a second, unmanaged white. */
+  /* Single accent: deep teal for trust/ops CTAs (Book a pilot / Hear a real call). */
+  --lg-foil:       #0d5c63;
+  --lg-foil-lift:  #127a82;
+  /* Ink for text sitting ON the accent — white clears WCAG on deep teal. */
   --lg-foil-ink:   #FFFFFF;
 
-  /* Structural ruling. The brand has one accent colour, and it is not
-     spent on dividers — rules are Graphite at low opacity, not a second
-     hue. `--lg-rule-text` keeps its own name for compatibility but is now
-     the same Graphite family, just a readable step for status words. */
-  --lg-rule:       rgba(46, 50, 62, 0.55);
-  --lg-rule-quiet: rgba(46, 50, 62, 0.18);
-  --lg-rule-text:  #2E323E;
-  --lg-tick-text:  #2E323E;
+  /* Structural ruling — warm ink at low opacity, not a second hue. */
+  --lg-rule:       rgba(18, 20, 26, 0.45);
+  --lg-rule-quiet: rgba(18, 20, 26, 0.16);
+  --lg-rule-text:  #12141a;
+  --lg-tick-text:  #12141a;
 
-  /* Ink on the field. Graphite is the brand's primary colour for exactly
-     this — body copy and headlines on a light ground. */
-  --lg-ink:        #2E323E;
-  /* Ink Floor Rule (WCAG AA 4.5:1). Previous alphas 0.68 / 0.48 were tuned
-     for the dark field and failed on white: ink-3 2.71:1, ink-2 on field-3
-     4.24:1. Raised 2026-08-12 so every word-carrying ink clears the floor. */
-  --lg-ink-2:      rgba(46, 50, 62, 0.80);
-  --lg-ink-3:      rgba(46, 50, 62, 0.72);
-  --lg-hair:       rgba(46, 50, 62, 0.14);
-  --lg-hair-2:     rgba(46, 50, 62, 0.08);
+  /* Near-black warm ink on paper. */
+  --lg-ink:        #12141a;
+  /* Ink Floor Rule (WCAG AA 4.5:1) on warm paper. */
+  --lg-ink-2:      rgba(18, 20, 26, 0.72);
+  --lg-ink-3:      rgba(18, 20, 26, 0.58);
+  --lg-hair:       rgba(18, 20, 26, 0.12);
+  --lg-hair-2:     rgba(18, 20, 26, 0.07);
 
   /* Ink on stock — stock is light now too, so this converges with `ink`
      rather than needing its own darker/lighter pair. */
-  --lg-ink-on-stock:   #2E323E;
-  --lg-ink-on-stock-2: rgba(46, 50, 62, 0.80);
+  --lg-ink-on-stock:   #12141a;
+  --lg-ink-on-stock-2: rgba(18, 20, 26, 0.72);
 
   --lg-tick:       #ADB5BD;
 
@@ -1305,24 +1293,25 @@ body {
   z-index: -1;
   pointer-events: none;
   background-image:
-    linear-gradient(to right,  rgba(46, 50, 62, 0.09) 0, rgba(46, 50, 62, 0) 92px),
-    linear-gradient(to bottom, rgba(46, 50, 62, 0.07) 0, rgba(46, 50, 62, 0) 68px);
+    linear-gradient(to right,  rgba(18, 20, 26, 0.08) 0, rgba(46, 50, 62, 0) 92px),
+    linear-gradient(to bottom, rgba(18, 20, 26, 0.06) 0, rgba(46, 50, 62, 0) 68px);
 }
 
 /* The stamped CTA surface: a reflection ramp across the block, a bright top
    lip and a dark bottom lip so it still reads as pressed rather than flat —
    just in the brand's Magenta now instead of gold. */
 .lg-foil-surface {
+  /* Deep teal stamp — calm, high-contrast CTA (no magenta ramp). */
   background-image: linear-gradient(
     100deg,
-    #7C0C3C 0%, #A81050 14%, #E14A88 31%, #C81E63 44%,
-    #93104C 58%, #D6266F 74%, #A81050 88%, #7C0C3C 100%
+    #08464b 0%, #0d5c63 14%, #1a7f88 31%, #0f6a72 44%,
+    #0a5056 58%, #14848d 74%, #0d5c63 88%, #08464b 100%
   );
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.4),
-    inset 0 -1px 0 rgba(50, 4, 22, 0.6),
-    0 1px 0 rgba(0, 0, 0, 0.12),
-    0 14px 26px -16px rgba(183, 19, 90, 0.55);
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -1px 0 rgba(4, 30, 34, 0.55),
+    0 1px 0 rgba(0, 0, 0, 0.10),
+    0 14px 26px -16px rgba(13, 92, 99, 0.45);
 }
 
 /* The wordmark, stamped. The lockup art becomes a mask so the foil ramp
@@ -1925,7 +1914,7 @@ details[open] > .lg-summary::before {
   inset: -8% -4%;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 78% 72% at 50% 50%, transparent 62%, rgba(46, 50, 62, 0.09) 63%, transparent 64%),
+    radial-gradient(ellipse 78% 72% at 50% 50%, transparent 62%, rgba(18, 20, 26, 0.08) 63%, transparent 64%),
     radial-gradient(ellipse 96% 90% at 50% 50%, transparent 68%, rgba(46, 50, 62, 0.06) 69%, transparent 70%);
 }
 .lg-explore[data-focus="esmi"] .lg-reg-row:not([data-mark="esmi"]) {
@@ -2791,4 +2780,21 @@ details[open] > .lg-summary::before {
 .esmi-auth .cl-footerItem [data-clerk-dev-mode-overlay],
 .esmi-auth .cl-footerItem [data-clerk-dev-mode-overlay] * {
   color: var(--lg-foil);
+}
+
+
+/* React Bits hero helpers */
+.lg-hero-dotgrid {
+  z-index: 0;
+}
+.lg-poster-blur {
+  display: inline;
+}
+.lg-poster .blur-text {
+  display: inline;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lg-hero-dotgrid canvas {
+    pointer-events: none !important;
+  }
 }
