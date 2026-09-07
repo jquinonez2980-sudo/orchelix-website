@@ -159,26 +159,26 @@ export default function Nav({
               the link twice. */}
           {isHome ? (
             <Image
-              src="/orchelix-logo-night.png"
+              src="/orchelix-logo-night.svg"
               alt=""
               aria-hidden="true"
-              width={1383}
-              height={580}
-              sizes="122px"
-              quality={90}
+              width={720}
+              height={280}
+              sizes="140px"
+              unoptimized
               preload
               className="lg-nav-logo lg-nav-logo--night"
               style={{ height: 50, width: "auto" }}
             />
           ) : null}
           <Image
-            src="/orchelix-logo-full-color.png"
+            src="/orchelix-logo.svg"
             alt=""
             aria-hidden="true"
-            width={1383}
-            height={569}
-            sizes="122px"
-            quality={90}
+            width={720}
+            height={280}
+            sizes="140px"
+            unoptimized
             /* On the homepage night is the opening light, so the day lockup is
                the one that is not on screen first and must not take the
                preload slot from it. */

@@ -108,25 +108,25 @@ export default function Footer({
                   swap in inscription.css, so visibility lives on the class. */}
               {home ? (
                 <Image
-                  src="/orchelix-logo-night.png"
+                  src="/orchelix-logo-night.svg"
                   alt=""
                   aria-hidden="true"
-                  width={1383}
-                  height={580}
-                  sizes="122px"
-                  quality={90}
+                  width={720}
+                  height={280}
+                  sizes="140px"
+                  unoptimized
                   className="lg-nav-logo lg-nav-logo--night"
                   style={{ height: 50, width: "auto" }}
                 />
               ) : null}
               <Image
-                src="/orchelix-logo-full-color.png"
+                src="/orchelix-logo.svg"
                 alt=""
                 aria-hidden="true"
-                width={1383}
-                height={569}
-                sizes="122px"
-                quality={90}
+                width={720}
+                height={280}
+                sizes="140px"
+                unoptimized
                 className="lg-nav-logo lg-nav-logo--day"
                 style={{ height: 50, width: "auto" }}
               />
