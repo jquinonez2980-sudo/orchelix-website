@@ -17,20 +17,20 @@
   --color-navy-800: #061626;
   --color-navy-900: #040E1A;
 
-  /* Teal */
-  --color-teal-50:  #E6FAF7;
-  --color-teal-100: #C2F2EA;
-  --color-teal-200: #8AE5D7;
-  --color-teal-300: #4FD3BF;
-  --color-teal-400: #22C2A8;
-  --color-teal-500: #0d5c63;
-  --color-teal-600: #0a4f55;
-  --color-teal-700: #0d5c63;
-  --color-teal-800: #08464b;
-  --color-teal-900: #053D37;
+  /* Royal blue (house accent; token names keep teal-* for Tailwind back-compat) */
+  --color-teal-50:  #EEF2FB;
+  --color-teal-100: #D5DEF5;
+  --color-teal-200: #A8BCEB;
+  --color-teal-300: #6B8BE3;
+  --color-teal-400: #4B72DC;
+  --color-teal-500: #3657b1;
+  --color-teal-600: #2D4A96;
+  --color-teal-700: #3657b1;
+  --color-teal-800: #274085;
+  --color-teal-900: #1C2F63;
 
   /* Gold — AcumenAI signature accent (the accounting & finance product).
-     Teal is the shared Orchelix house accent; gold differentiates AcumenAI
+     Royal blue is the shared Orchelix house accent; gold differentiates AcumenAI
      (navy + gold = premium-finance / ledger / audit). */
   --color-gold-50:  #FBF3DD;
   --color-gold-100: #F6E4B8;
@@ -155,7 +155,7 @@
      overused"), so the old bright fourth field-vivid stop is retired to a
      light neutral rather than a saturated highlight. */
   /* Calm B2B dwell palette (2026-09): warm paper, warm near-black ink,
-     one deep-teal accent for CTAs. No neon magenta / cyber gradients. */
+     one royal-blue accent for CTAs. No neon magenta / cyber gradients. */
   --lg-field:      #f5f1ea;
   --lg-field-2:    #efe9e0;
   --lg-field-3:    #e6dfd4;
@@ -165,10 +165,10 @@
   --lg-stock:      #f8f4ed;
   --lg-stock-2:    #efe9e0;
 
-  /* Single accent: deep teal for trust/ops CTAs (Book a pilot / Hear a real call). */
-  --lg-foil:       #0d5c63;
-  --lg-foil-lift:  #127a82;
-  /* Ink for text sitting ON the accent — white clears WCAG on deep teal. */
+  /* Single accent: royal blue from Jorge fabric swatch (Book a pilot / Hear a real call). */
+  --lg-foil:       #3657b1;
+  --lg-foil-lift:  #4b72dc;
+  /* Ink for text sitting ON the accent — white clears WCAG on royal blue. */
   --lg-foil-ink:   #FFFFFF;
 
   /* Structural ruling — warm ink at low opacity, not a second hue. */
@@ -1301,17 +1301,17 @@ body {
    lip and a dark bottom lip so it still reads as pressed rather than flat —
    just in the brand's Magenta now instead of gold. */
 .lg-foil-surface {
-  /* Deep teal stamp — calm, high-contrast CTA (no magenta ramp). */
+  /* Royal blue stamp — calm, high-contrast CTA (Jorge fabric swatch). */
   background-image: linear-gradient(
     100deg,
-    #08464b 0%, #0d5c63 14%, #1a7f88 31%, #0f6a72 44%,
-    #0a5056 58%, #14848d 74%, #0d5c63 88%, #08464b 100%
+    #274085 0%, #3657b1 14%, #4b72dc 31%, #3d63c4 44%,
+    #2d4a96 58%, #5a7ee0 74%, #3657b1 88%, #274085 100%
   );
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.28),
-    inset 0 -1px 0 rgba(4, 30, 34, 0.55),
+    inset 0 -1px 0 rgba(20, 35, 80, 0.55),
     0 1px 0 rgba(0, 0, 0, 0.10),
-    0 14px 26px -16px rgba(13, 92, 99, 0.45);
+    0 14px 26px -16px rgba(54, 87, 177, 0.45);
 }
 
 /* The wordmark, stamped. The lockup art becomes a mask so the foil ramp
