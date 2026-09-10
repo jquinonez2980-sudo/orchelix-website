@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import { dashboardClerkAppearance } from "@/app/lib/clerkAppearance";
-import { Menu, X } from "lucide-react";
+import { Menu, PhoneCall, X } from "lucide-react";
 import DraftModeBanner from "./DraftModeBanner";
 import InstallControl from "@/app/components/pwa/InstallControl";
 import { track } from "@/app/lib/analytics";
@@ -30,12 +30,36 @@ import {
    is ported from the marketing site's Nav.tsx, rebuilt in Tailwind classes
    to match this shell's existing styling approach rather than its inline
    styles. Purely chrome — Gate/org-check logic stays in layout.tsx and is
-   passed in as `children`, so this component doesn't need to know about it. */
+   passed in as `children`, so this component doesn't need to know about it.
+
+   2026-09-10: the shell carries `esmi-console` alongside `lg-app
+   esmi-dashboard`. That class is the whole console treatment and it is
+   opt-in — see the "Esmi Line Console" block in app/globals.css for what it
+   suspends and why. Remove the one class and this is the previous shell. */
 
 // Source asset is a 566×273 wordmark, not a square icon — size by height
 // and derive width from its real aspect ratio (matches how the marketing
 // site's Nav.tsx handles the Orchelix lockup) so it's never squashed.
 const ESMI_LOGO_RATIO = 566 / 273;
+
+/* Console chrome copy. Deliberately NOT in ./i18n — these strings belong to
+   the shell's own furniture, and i18n.tsx is the page-content catalogue. If
+   the deck grows past a handful of strings, move them there rather than
+   letting this map spread. */
+const CONSOLE_COPY = {
+  en: {
+    lineLive: "Line live",
+    covered: "Covered",
+    coveredValue: "24/7",
+    testLine: "Test the line",
+  },
+  es: {
+    lineLive: "Línea activa",
+    covered: "Cubierta",
+    coveredValue: "24/7",
+    testLine: "Probar la línea",
+  },
+} as const;
 
 function Logo({ compact = false }: { compact?: boolean }) {
   const { t } = useDashI18n();
@@ -58,6 +82,23 @@ function Logo({ compact = false }: { compact?: boolean }) {
   );
 }
 
+/* The line's state, as a held mark. Not a pulsing dot: an indicator that
+   loops is a claim that stays on screen after it stops being true, which is
+   the rule three loops were removed from this codebase for on 2026-08-08.
+   The drawn swatch comes from `.esmi-key` in the console styles. */
+function LineState({ label }: { label: string }) {
+  return (
+    <div className="esmi-livecard mx-3 px-3 py-2.5">
+      <span
+        className="esmi-key lg-fig text-[10.5px] font-semibold uppercase"
+        style={{ color: "var(--lg-foil)", letterSpacing: "0.12em" }}
+      >
+        {label}
+      </span>
+    </div>
+  );
+}
+
 function NavLink({
   item,
   active,
@@ -73,11 +114,10 @@ function NavLink({
     <Link
       href={item.href}
       onClick={onNavigate}
+      data-console-nav
       aria-current={active ? "page" : undefined}
       className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-150 ${
-        active
-          ? "bg-navy-50 text-navy-600"
-          : "text-ink-2 hover:bg-surface-2 hover:text-ink"
+        active ? "text-ink" : "text-ink-2 hover:bg-surface-2 hover:text-ink"
       }`}
     >
       <Icon className="h-[18px] w-[18px] shrink-0" strokeWidth={1.75} />
@@ -155,6 +195,49 @@ function SidebarNav({
   );
 }
 
+/* The command deck. Global state and the one global action, fixed to the
+   bottom at every width, so neither moves as you change page. The page slot
+   reserves its height (`.esmi-deck-pad`) so the deck never covers a
+   register's last row. Only facts the shell actually holds go here — it
+   carries no counts it would have to invent. */
+function CommandDeck({ copy }: { copy: (typeof CONSOLE_COPY)["en"] }) {
+  return (
+    <div className="esmi-deck">
+      <div className="esmi-deck-seg">
+        <span
+          className="esmi-key lg-fig text-xs font-semibold uppercase"
+          style={{ color: "var(--lg-foil)", letterSpacing: "0.12em" }}
+        >
+          {copy.lineLive}
+        </span>
+      </div>
+      <div className="esmi-deck-seg hidden sm:flex">
+        <span
+          className="text-[10px] font-medium uppercase text-ink-3"
+          style={{ letterSpacing: "0.14em" }}
+        >
+          {copy.covered}
+        </span>
+        <span className="lg-fig text-xs text-ink">{copy.coveredValue}</span>
+      </div>
+      <div className="ml-auto flex items-center gap-3">
+        <Link
+          href="/dashboard/voice"
+          className="inline-flex items-center gap-2 rounded px-3 py-1.5 text-xs font-semibold uppercase"
+          style={{
+            background: "var(--esmi-brass)",
+            color: "#0B1119",
+            letterSpacing: "0.08em",
+          }}
+        >
+          <PhoneCall className="h-3.5 w-3.5" strokeWidth={2} />
+          {copy.testLine}
+        </Link>
+      </div>
+    </div>
+  );
+}
+
 export default function DashboardShell({
   isOrchelixStaff,
   children,
@@ -168,6 +251,7 @@ export default function DashboardShell({
   const orgSlug = useActiveOrgSlug();
   const close = () => setOpen(false);
   const groups = visibleNavGroups(isOrchelixStaff);
+  const copy = CONSOLE_COPY[locale === "es" ? "es" : "en"];
 
   useEffect(() => {
     registerDashboardSW();
@@ -188,13 +272,16 @@ export default function DashboardShell({
   }, [open]);
 
   return (
-    <div className="lg-app esmi-dashboard min-h-screen bg-paper">
+    <div className="lg-app esmi-dashboard esmi-console min-h-screen bg-paper">
       {/* Desktop sidebar */}
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col border-r border-line bg-surface lg:flex">
         <div className="flex h-16 items-center border-b border-line px-4">
           <Link href="/dashboard" aria-label="Esmi — Overview">
             <Logo />
           </Link>
+        </div>
+        <div className="pt-3">
+          <LineState label={copy.lineLive} />
         </div>
         <SidebarNav groups={groups} pathname={pathname} />
       </aside>
@@ -222,6 +309,7 @@ export default function DashboardShell({
                 setLocale(next);
                 track("lang_switch_dash", { to: next });
               }}
+              data-lang={locale === "es" ? "es" : undefined}
               className="lg-fig hidden text-xs font-medium uppercase tracking-wide text-ink-3 hover:text-ink sm:inline"
               style={{ letterSpacing: "0.1em" }}
               aria-label={t.switchTo}
@@ -241,7 +329,12 @@ export default function DashboardShell({
                 is only 'navigation' | 'modal'. Whether the entry appears at
                 all is governed by the "users can create organizations"
                 setting in the Clerk Dashboard; this redirect is what makes it
-                safe either way. */}
+                safe either way.
+
+                The console dresses this trigger rather than replacing it:
+                Clerk already renders each organisation's own logo, which is
+                exactly the tenant mark the switcher wants. See the Clerk
+                block in the console styles. */}
             <OrganizationSwitcher
               hidePersonal
               createOrganizationMode="navigation"
@@ -285,6 +378,9 @@ export default function DashboardShell({
                   {t.switchTo}
                 </button>
               </div>
+              <div className="pt-3">
+                <LineState label={copy.lineLive} />
+              </div>
               <SidebarNav groups={groups} pathname={pathname} onNavigate={close} />
             </div>
           </>
@@ -293,7 +389,7 @@ export default function DashboardShell({
         {/* Not <main> — every page inside already renders its own <main>
             landmark (see e.g. dashboard/usage/page.tsx); this is just the
             layout slot, avoiding a duplicate/nested landmark. */}
-        <div className="min-w-0 flex-1">
+        <div className="esmi-deck-pad min-w-0 flex-1">
           {/* Above the page content, below the top bar: a tenant still in
               onboarding sees this on every page, not just Overview. Renders
               nothing once the tenant can actually serve traffic. */}
@@ -301,6 +397,8 @@ export default function DashboardShell({
           {children}
         </div>
       </div>
+
+      <CommandDeck copy={copy} />
     </div>
   );
 }
