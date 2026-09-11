@@ -198,7 +198,14 @@ function UsageMeterSection({ usage }: { usage: UsageResponse }) {
   );
 }
 
-function AfterHoursHero({
+/* THE LINE — the console's centre-stage object, and the first thing on the
+   screen. State on the left, the view's one hero figure on the right.
+
+   What it deliberately does NOT carry: a 24-hour "who has the phone" bar.
+   That needs the tenant's business hours per weekday and `/overview` returns
+   only `business_tz`, so the bar would have been decoration shaped like
+   information. It comes back when settings hours reach this view. */
+function LineBlock({
   value,
   prev,
   quiet,
@@ -207,38 +214,64 @@ function AfterHoursHero({
   prev: number;
   quiet: boolean;
 }) {
-  const { t } = useDashI18n();
+  const { t, locale } = useDashI18n();
   return (
-    <section
-      className="border-t-2 bg-[var(--lg-field-2)] p-6 sm:p-8"
-      style={{ borderTopColor: "var(--lg-rule)" }}
-    >
-      <p className="font-mono text-[0.625rem] uppercase tracking-[0.13em] text-[var(--lg-ink-3)]">
-        {t.overview.afterHours}
-      </p>
-      <div className="mt-3 flex flex-wrap items-end gap-x-6 gap-y-2">
-        <p className="font-display text-[3.25rem] font-bold leading-[0.94] tracking-[-0.028em] text-[var(--lg-ink)] tabular-nums sm:text-[4rem]">
-          {value}
+    <section className="esmi-line">
+      <div className="flex flex-col justify-center gap-3">
+        {/* A held mark, not a pulsing dot — see the Nothing Loops Rule. */}
+        <span
+          className="esmi-key lg-fig text-[10.5px] font-semibold uppercase"
+          style={{ color: "var(--lg-foil)", letterSpacing: "0.12em" }}
+        >
+          {locale === "es" ? "Línea activa" : "Line live"}
+        </span>
+        <h2 className="esmi-line-state">
+          {locale === "es" ? (
+            <>
+              La línea está <em>cubierta</em>
+            </>
+          ) : (
+            <>
+              The line is <em>covered</em>
+            </>
+          )}
+        </h2>
+        <p className="max-w-[46ch] text-sm leading-6 text-ink-2">
+          {t.overview.lede}
         </p>
-        <div className="pb-2">
-          <DeltaLine delta={computeDelta(value, prev)} />
-        </div>
       </div>
-      <p className="mt-3 max-w-xl text-sm leading-6 text-[var(--lg-ink-2)]">
-        {quiet
-          ? "Esmi is on duty around the clock. The moment someone calls while you're closed, it's answered — and counted here."
-          : value > 0
-            ? "Calls Esmi picked up while your doors were closed — customers who would otherwise have reached voicemail or a competitor."
-            : "No after-hours calls this week — and if one comes in at 2am, Esmi has it covered."}
-      </p>
+
+      <div className="flex flex-col justify-center gap-2">
+        <p className="lg-fig text-[0.625rem] uppercase tracking-[0.13em] text-ink-3">
+          {t.overview.afterHours}
+        </p>
+        <p className="esmi-hero-figure">{value}</p>
+        <DeltaLine delta={computeDelta(value, prev)} />
+        <p className="mt-1 max-w-[42ch] text-xs leading-5 text-ink-2">
+          {quiet
+            ? "Esmi is on duty around the clock. The moment someone calls while you're closed, it's answered — and counted here."
+            : value > 0
+              ? "Calls Esmi picked up while your doors were closed — customers who would otherwise have reached voicemail or a competitor."
+              : "No after-hours calls this week — and if one comes in at 2am, Esmi has it covered."}
+        </p>
+      </div>
     </section>
   );
 }
 
-/* The week, ruled. Rows are close-set, the figure is tabular and right-set
-   against its own column, and a quiet week reads as a legible zero rather
-   than an empty box. */
-function WeekRegister({ cur, prev }: { cur: OverviewBucket; prev: OverviewBucket }) {
+/* The week's four figures as a Band — label above value, `rule-quiet`
+   verticals between columns only, reading across the page.
+
+   NO SPARKLINES, and the absence is the honest answer rather than an
+   oversight: `/overview` returns `current` and `previous`, two points. A
+   ten-point trend line drawn from two numbers is a fabricated picture of
+   someone's business. The figure carries the delta and a plain sentence
+   instead; a daily series on the overview endpoint is what would light a
+   real one up.
+
+   `esmi-lift` marks the one tile that carries money. One lifted thing on a
+   screen is a hierarchy; two is a card deck. */
+function WeekBand({ cur, prev }: { cur: OverviewBucket; prev: OverviewBucket }) {
   const rows = [
     {
       label: "Calls answered",
@@ -268,50 +301,29 @@ function WeekRegister({ cur, prev }: { cur: OverviewBucket; prev: OverviewBucket
   const quiet = rows.every((r) => r.value === 0);
 
   return (
-    <section
-      className="border border-[var(--lg-hair)] bg-[var(--lg-field)]"
-      style={{ borderTop: "2px solid var(--lg-rule)" }}
-    >
-      <div className="flex items-baseline justify-between px-5 pt-4">
-        <SectionTitle>
-          This week
-        </SectionTitle>
-        <p className="font-mono text-[0.625rem] uppercase tracking-[0.13em] text-[var(--lg-ink-3)]">
+    <section>
+      <div className="mb-2 flex items-baseline justify-between gap-3">
+        <SectionTitle>This week</SectionTitle>
+        <p className="lg-fig text-[0.625rem] uppercase tracking-[0.13em] text-ink-3">
           vs prior 7 days
         </p>
       </div>
 
-      <dl className="mt-3">
-        {rows.map((row) => (
-          <div
-            key={row.label}
-            className="flex items-baseline gap-4 border-t border-[var(--lg-hair-2)] px-5 py-3"
-          >
-            <dt className="min-w-0 flex-1">
-              <span className="font-mono text-[0.6875rem] uppercase tracking-[0.13em] text-[var(--lg-ink-2)]">
-                {row.label}
-              </span>
-              <span className="ml-3 hidden text-xs text-[var(--lg-ink-3)] sm:inline">
-                {row.note}
-              </span>
-            </dt>
-            <dd className="shrink-0 text-right">
-              <span className="font-display text-[1.5rem] font-bold leading-none tabular-nums text-[var(--lg-ink)]">
-                {row.value}
-              </span>
-            </dd>
-            <dd className="w-28 shrink-0 text-right">
-              <DeltaLine delta={row.delta} />
-            </dd>
+      <div className="esmi-band">
+        {rows.map((row, i) => (
+          <div key={row.label} className={i === 1 ? "esmi-lift" : undefined}>
+            <span className="lg-fig text-[0.625rem] uppercase tracking-[0.13em] text-ink-3">
+              {row.label}
+            </span>
+            <span className="esmi-band-value">{row.value}</span>
+            <DeltaLine delta={row.delta} />
+            <span className="text-xs leading-5 text-ink-3">{row.note}</span>
           </div>
         ))}
-      </dl>
+      </div>
 
       {quiet && (
-        <p
-          className="border-t px-5 py-3 text-xs text-[var(--lg-ink-2)]"
-          style={{ borderTopColor: "var(--lg-rule)" }}
-        >
+        <p className="mt-2 text-xs leading-5 text-ink-2">
           A quiet week on the line. Esmi is answering — these fill in as calls
           and chats come through.
         </p>
@@ -404,14 +416,19 @@ export default function Overview() {
   const quiet = cur.calls_answered === 0 && prev.calls_answered === 0;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <SetupChecklistSection checklist={data.setup_checklist} />
 
-      <AfterHoursHero
+      {/* The line first — the console's whole argument is that an operator
+          opens this at 6am to ask one question, and it is answered above
+          the fold. */}
+      <LineBlock
         value={cur.after_hours_calls}
         prev={prev.after_hours_calls}
         quiet={quiet}
       />
+
+      <WeekBand cur={cur} prev={prev} />
 
       <TonightWork
         afterHours={cur.after_hours_calls}
@@ -420,13 +437,6 @@ export default function Overview() {
 
       {/* Primary surface: dense live register from calls + chats APIs */}
       <NightRegister />
-
-      {/* The week's figures as a ruled register, not a tile row. Four
-          identical boxes of label-number-caption is the card farm the whole
-          world refuses — and on a quiet week it renders as four zeros in
-          four boxes, which reads as broken rather than ready. A ledger rules
-          its figures into a column and tallies at the foot. */}
-      <WeekRegister cur={cur} prev={prev} />
 
       <div className="grid gap-4 lg:grid-cols-2">
         <LanguageMixSection mix={cur.language_mix} />

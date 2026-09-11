@@ -3028,3 +3028,184 @@ details[open] > .lg-summary::before {
 .esmi-console [data-lang="es"] {
   color: var(--esmi-brass);
 }
+
+/* ─── Esmi Line Console: Overview components ─────────────────────────────
+   2026-09-10, second commit of the console port. The shell landed first;
+   these are the pieces inside it. Same `.esmi-console` scope, same opt-in.
+
+   THREE THINGS THE PROTOTYPE FAKED, AND WHAT SHIPPED INSTEAD.
+
+   1. Sparklines. The prototype drew a ten-point trend under every figure.
+      `/overview` returns two buckets — `current` and `previous` — so there is
+      no series to draw. Two points is a delta, not a trend, and inventing the
+      eight in between would be a fabricated picture of the business. The
+      tiles carry the figure, the signed delta and a plain-English note; the
+      graphic is missing because the data is. Adding a daily series to the
+      overview endpoint is what lights them up.
+
+   2. The 24-hour coverage bar. It needs the tenant's business hours per
+      weekday. The overview response carries `business_tz` and nothing else,
+      so the bar would have been decoration shaped like information. Cut
+      until `/settings` hours are wired into this view.
+
+   3. Green and red status. `Badge.tsx` retired green/red fills on
+      2026-08-12 on purpose, and it is the shared badge for Calls, Leads,
+      Team, Billing and Admin. Recolouring it for the console would change
+      five other surfaces to win one. Left alone.
+
+   What did survive is the structure: the line first, the figures beside it,
+   the register grouped by day underneath. */
+
+/* ── THE LINE ────────────────────────────────────────────────────────────
+   The console's centre-stage object. Not a hero banner: a state readout with
+   the one hero figure this view is allowed beside it. */
+.esmi-console .esmi-line {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) minmax(200px, 0.8fr);
+  border: 1px solid color-mix(in oklab, var(--lg-foil) 18%, var(--lg-hair));
+  border-radius: 3px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--lg-foil) 6%, var(--lg-field-3)) 0%,
+    var(--lg-field-2) 78%
+  );
+  overflow: hidden;
+}
+@media (max-width: 900px) {
+  .esmi-console .esmi-line { grid-template-columns: 1fr; }
+}
+.esmi-console .esmi-line > * { padding: 18px 20px; min-width: 0; }
+.esmi-console .esmi-line > * + * { border-left: 1px solid var(--lg-hair); }
+@media (max-width: 900px) {
+  .esmi-console .esmi-line > * + * {
+    border-left: none;
+    border-top: 1px solid var(--lg-hair);
+  }
+}
+
+/* The state sentence. Archivo condensed, one step under the retired page
+   title — the console is worked, not looked at, so the opener is a label on
+   an instrument rather than a poster. */
+.esmi-console .esmi-line-state {
+  font-family: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  font-variation-settings: "wdth" 88;
+  font-size: clamp(1.1875rem, 2.2vw, 1.5rem);
+  line-height: 1.06;
+  letter-spacing: -0.022em;
+  text-transform: uppercase;
+  color: var(--lg-ink);
+  text-wrap: balance;
+}
+.esmi-console .esmi-line-state em {
+  font-style: normal;
+  color: var(--lg-foil);
+}
+
+/* The one hero figure per view. */
+.esmi-console .esmi-hero-figure {
+  font-family: "Azeret Mono", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "zero" 1;
+  font-size: clamp(2.25rem, 5vw, 3.25rem);
+  font-weight: 500;
+  line-height: 0.94;
+  letter-spacing: -0.03em;
+  color: var(--lg-ink);
+}
+
+/* ── Figure band ─────────────────────────────────────────────────────────
+   Label above value, `rule-quiet` verticals between columns only, no
+   horizontal separators — the Band device, reading across. */
+.esmi-console .esmi-band {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  border: 1px solid var(--lg-hair);
+  border-top: 2px solid var(--lg-ink-3);
+  border-radius: 3px;
+  background: var(--lg-field-2);
+  overflow: hidden;
+}
+.esmi-console .esmi-band > div {
+  padding: 13px 15px;
+  display: grid;
+  gap: 4px;
+  align-content: start;
+  min-width: 0;
+}
+.esmi-console .esmi-band > div + div {
+  border-left: 1px solid var(--lg-rule-quiet);
+}
+.esmi-console .esmi-band-value {
+  font-family: "Azeret Mono", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "zero" 1;
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.05;
+  color: var(--lg-ink);
+}
+/* The tile that carries money gets the console's one lifted surface —
+   `.esmi-lift` from the shell commit, reused rather than redefined. */
+
+/* ── Register, grouped by day ────────────────────────────────────────────
+   The shipping register ran one flat list from today back to last month.
+   Grouping by day gives the run a spine and lets each day tally itself. */
+.esmi-console .esmi-dayhead {
+  position: sticky;
+  /* clears the 64px topbar; the deck is at the other end of the page */
+  top: 64px;
+  z-index: 5;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 9px 0 5px;
+  background: var(--lg-field);
+  border-bottom: 1px solid var(--lg-hair);
+  border-top: 1px solid var(--lg-hair-2);
+}
+.esmi-console .esmi-dayhead-count { margin-left: auto; }
+
+/* Foot rule. The tally is derived from the rendered rows, never typed. */
+.esmi-console .esmi-footrule {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  flex-wrap: wrap;
+  padding: 9px 0 0;
+  border-top: 2px solid var(--lg-ink-3);
+}
+
+/* Rows sit closer than the stock dashboard: this is an operating surface. */
+.esmi-console .esmi-regrow {
+  transition: background-color var(--lg-dur-state, 180ms) ease;
+}
+.esmi-console .esmi-regrow:hover { background: var(--lg-field-2); }
+/* Desktop-only alternating band — the Register Degradation Rule keeps it
+   above 901px so the record reads as a continuous ruled run below that. */
+@media (min-width: 901px) {
+  .esmi-console .esmi-regrow:nth-child(even) {
+    background: rgba(234, 242, 255, 0.022);
+  }
+  .esmi-console .esmi-regrow:nth-child(even):hover { background: var(--lg-field-2); }
+}
+
+/* Settle: rows land from 6px, staggered, from an already-legible default.
+   Removing the animation leaves the finished state on screen. */
+@media (prefers-reduced-motion: no-preference) {
+  .esmi-console .esmi-regrow {
+    animation: lg-settle var(--lg-dur-settle, 380ms)
+      cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
+/* ── Tonight's work ──────────────────────────────────────────────────────
+   Kept as a queue, not a KPI row. No 01/02/03 numbering: the items are not
+   a sequence, and DESIGN.md forbids the numbered marker where it isn't. */
+.esmi-console .esmi-queue-item {
+  border: 1px solid var(--lg-hair);
+  border-radius: 3px;
+  background: var(--lg-field-2);
+  transition: border-color var(--lg-dur-state, 180ms) ease;
+}
+.esmi-console .esmi-queue-item:hover { border-color: var(--lg-foil); }

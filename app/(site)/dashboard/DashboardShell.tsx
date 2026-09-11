@@ -61,6 +61,10 @@ const CONSOLE_COPY = {
   },
 } as const;
 
+/* Either locale's map — the deck renders whichever one `locale` picks, so
+   pinning the prop to the `en` literal types would reject the `es` one. */
+type ConsoleCopy = (typeof CONSOLE_COPY)[keyof typeof CONSOLE_COPY];
+
 function Logo({ compact = false }: { compact?: boolean }) {
   const { t } = useDashI18n();
   const height = compact ? 22 : 28;
@@ -200,7 +204,7 @@ function SidebarNav({
    reserves its height (`.esmi-deck-pad`) so the deck never covers a
    register's last row. Only facts the shell actually holds go here — it
    carries no counts it would have to invent. */
-function CommandDeck({ copy }: { copy: (typeof CONSOLE_COPY)["en"] }) {
+function CommandDeck({ copy }: { copy: ConsoleCopy }) {
   return (
     <div className="esmi-deck">
       <div className="esmi-deck-seg">
