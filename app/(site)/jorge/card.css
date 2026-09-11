@@ -1,0 +1,196 @@
+/* Digital card — orchelix.com/jorge. Scoped to .dc; nothing here leaks.
+   Night ground and the ring's night blue are the brand's "On night" values. */
+
+.dc {
+  --dc-ground: #121317;
+  --dc-ink: #edece8;
+  --dc-ink-2: #c9c8c4;   /* 11.6:1 on ground */
+  --dc-ink-3: #a3a29e;   /* 7.5:1 */
+  --dc-hair: #2a2c33;
+  --dc-blue: #7b8cff;    /* ring + primary action; 6.6:1 on ground */
+  --dc-blue-ink: #121317;
+  min-height: 100dvh;
+  background: var(--dc-ground);
+  color: var(--dc-ink);
+  display: grid;
+  place-items: center;
+  padding: max(2.5rem, env(safe-area-inset-top)) 1.5rem max(2rem, env(safe-area-inset-bottom));
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-stretch: var(--lg-stretch, 125%);
+}
+
+.dc__card {
+  width: 100%;
+  max-width: 24rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.dc__ring {
+  width: 4.5rem;
+  height: auto;
+  color: var(--dc-blue);
+  overflow: visible;
+}
+/* The ring draws once and holds. Paths are normalized to pathLength=1. */
+@media (prefers-reduced-motion: no-preference) {
+  .dc__ring path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: dc-draw 900ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: calc(var(--i) * 25ms);
+  }
+}
+@keyframes dc-draw { to { stroke-dashoffset: 0; } }
+
+.dc__org {
+  margin: 1.6rem 0 0;
+  font-size: 0.8125rem;
+  font-weight: 300;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dc-ink);
+}
+.dc__org span {
+  display: block;
+  margin-top: 0.45rem;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.34em;
+  color: var(--dc-ink-3);
+}
+
+.dc__name {
+  margin: 3.2rem 0 0;
+  font-size: clamp(1.6rem, 7vw, 2rem);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.dc__title {
+  margin: 0.7rem 0 0;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--dc-ink-2);
+}
+
+.dc__save {
+  margin-top: 2.4rem;
+  display: block;
+  text-align: center;
+  padding: 1.05rem 1.25rem;
+  background: var(--dc-blue);
+  color: var(--dc-blue-ink);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: filter 160ms ease;
+}
+.dc__save:hover { filter: brightness(1.08); }
+
+.dc__rows {
+  list-style: none;
+  margin: 2rem 0 0;
+  padding: 0;
+  border-top: 1px solid var(--dc-hair);
+}
+.dc__rows a {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  align-items: baseline;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--dc-hair);
+  color: var(--dc-ink);
+  text-decoration: none;
+}
+.dc__label {
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--dc-ink-3);
+}
+.dc__value {
+  font-size: 0.9375rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  overflow-wrap: anywhere;
+}
+.dc__rows a:hover .dc__value { color: var(--dc-blue); }
+
+.dc__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+.dc__actions button,
+.dc__qr button {
+  appearance: none;
+  background: transparent;
+  border: 1px solid var(--dc-hair);
+  color: var(--dc-ink);
+  padding: 0.85rem 0.5rem;
+  font: inherit;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.dc__actions button:hover { border-color: var(--dc-ink-3); }
+
+.dc a:focus-visible,
+.dc button:focus-visible {
+  outline: 2px solid var(--dc-blue);
+  outline-offset: 3px;
+}
+
+.dc__foot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 2.2rem 0 0;
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dc-ink-3);
+}
+
+/* Show QR — a native dialog.
+
+   `margin: auto` is not decoration and must not be dropped. A modal <dialog>
+   is centred by the UA stylesheet's own `margin: auto` against `inset: 0`,
+   and Tailwind's preflight resets `*, ::backdrop, ::after, ::before` to
+   `margin: 0`, which beats the UA rule and pins the dialog to the top-left
+   corner. Measured before this line: the QR sat at (0, 0) in a 390x844
+   viewport instead of centred. Restoring it here puts the platform's own
+   centring back rather than reimplementing it with transforms. */
+.dc__qr {
+  margin: auto;
+  border: 0;
+  padding: 1.75rem;
+  width: min(22rem, calc(100vw - 2rem));
+  max-height: calc(100dvh - 2rem);
+  overflow: auto;
+  background: #f6f1ea;
+  color: #1c1c1c;
+  text-align: center;
+}
+.dc__qr::backdrop { background: rgba(18, 19, 23, 0.86); }
+.dc__qr svg { display: block; width: 100%; height: auto; }
+.dc__qr p {
+  margin: 1rem 0 1.25rem;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #5f5f5b;
+}
+.dc__qr button { color: #1c1c1c; border-color: #cfc8be; width: 100%; }
