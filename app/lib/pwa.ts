@@ -2,7 +2,12 @@
    prompt capture, and standalone / iOS detection. No network, no secrets. */
 
 export const INSTALL_DISMISS_KEY = "esmi:install-dismissed";
-export const SW_URL = "/sw.js";
+/* `?dev=1` outside production tells the worker its build mode — it cannot
+   read NODE_ENV itself, and dev build assets are not content-hashed, so it
+   must not cache them. The query does not affect the worker's max scope,
+   and next.config's no-store header on /sw.js matches on pathname. */
+export const SW_URL =
+  process.env.NODE_ENV === "production" ? "/sw.js" : "/sw.js?dev=1";
 export const SW_SCOPE = "/dashboard";
 
 export type BeforeInstallPromptEvent = Event & {

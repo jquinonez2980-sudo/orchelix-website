@@ -11,7 +11,16 @@
  */
 "use strict";
 
-const CACHE_VERSION = "esmi-dashboard-v1";
+const CACHE_VERSION = "esmi-dashboard-v2";
+
+/* Build mode, handed in on the script URL because a worker cannot read
+   NODE_ENV. `registerDashboardSW` appends `?dev=1` outside production.
+   In dev, Turbopack reuses chunk filenames across edits — the same
+   `/_next/static/...` URL serves different bytes after every change — so
+   the cache-first branch below would pin the first bundle a browser ever
+   saw and keep serving it. Production filenames really are content-hashed,
+   so the branch stays on there. */
+const IS_DEV = new URL(self.location.href).searchParams.get("dev") === "1";
 const OFFLINE_URL = "/esmi-offline.html";
 const PRECACHE_URLS = [
   OFFLINE_URL,
@@ -36,7 +45,8 @@ function isDashboardPath(url) {
   return url.pathname === "/dashboard" || url.pathname.startsWith("/dashboard/");
 }
 
-function isHashedNextAsset(url) {
+/* Content-hashed ONLY in a production build — see IS_DEV above. */
+function isNextStaticAsset(url) {
   return url.pathname.startsWith("/_next/static/");
 }
 
@@ -109,8 +119,11 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  /* Content-hashed webpack/turbopack assets. Safe to cache-first. */
-  if (request.method === "GET" && isHashedNextAsset(url)) {
+  /* Build assets. Cache-first is only sound when the filename is a content
+     hash, which is a production-build property. In dev we do not intercept
+     at all and let the browser talk to the dev server. */
+  if (request.method === "GET" && isNextStaticAsset(url)) {
+    if (IS_DEV) return;
     event.respondWith(cacheFirst(request));
     return;
   }
