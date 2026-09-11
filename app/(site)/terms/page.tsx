@@ -13,7 +13,7 @@ export default function TermsPage() {
   return (
     <>
       <Nav />
-      <main id="main-content">
+      <main id="main-content" data-surface="site">
         <Section tone="field" scene>
           <PageTitle max="14ch">Terms of service</PageTitle>
           <Prose size="1.0625rem" max="48ch" style={{ marginTop: "1.5rem" }}>

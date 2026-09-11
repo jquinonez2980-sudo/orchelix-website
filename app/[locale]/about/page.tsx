@@ -126,7 +126,7 @@ export default async function AboutPage({ params }: PageProps<"/[locale]">) {
         </Section>
 
         {/* ── Close ── */}
-        <Section tone="field-3" style={{ borderTop: "2px solid var(--lg-foil)" }}>
+        <Section tone="night" style={{ borderTop: "2px solid var(--lg-foil)" }}>
           <div className="grid items-end gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
             <div>
               <SectionTitle scale="display" max="16ch">

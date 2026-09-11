@@ -8,9 +8,11 @@
 
 import Image, { type StaticImageData } from "next/image";
 import type { CSSProperties, ReactNode } from "react";
-import { PlusFrame } from "@/app/components/sections/PlusMark";
 
-type Tone = "field" | "field-2" | "field-3" | "stock" | "stock-2";
+/* Six tones. `night` was added 2026-09-11 so the page can alternate dark and
+   light bands; it is a step on this ladder, not a theme, and it is the only
+   mechanism by which anything on this surface goes dark. */
+export type Tone = "field" | "field-2" | "field-3" | "stock" | "stock-2" | "night";
 
 const TONE_CLASS: Record<Tone, string> = {
   field: "lg-field lg-cloth",
@@ -18,6 +20,11 @@ const TONE_CLASS: Record<Tone, string> = {
   "field-3": "lg-field lg-cloth lg-cloth-3",
   stock: "",
   "stock-2": "",
+  /* `.lg-night` redeclares the whole `--lg-*` family on the band element.
+     That is deliberately all it takes: the three helpers below keep handing
+     back the same variable names they hand back on every light tone, and the
+     cascade resolves them dark inside this subtree. */
+  night: "lg-night",
 };
 
 const TONE_STYLE: Record<Tone, CSSProperties> = {
@@ -26,15 +33,37 @@ const TONE_STYLE: Record<Tone, CSSProperties> = {
   "field-3": {},
   stock: { background: "var(--lg-stock)", color: "var(--lg-ink-on-stock)" },
   "stock-2": { background: "var(--lg-stock-2)", color: "var(--lg-ink-on-stock)" },
+  /* Ground and ink both come from the class, so nothing is set inline here —
+     an inline background would have to be repeated by every future caller
+     that wants a night band for a reason the ladder has not met yet. */
+  night: {},
 };
 
 const isStock = (t: Tone) => t === "stock" || t === "stock-2";
 
+/** True where the band paints a dark ground. Primitives that choose a
+    treatment rather than a colour — which artwork, which ruling weight —
+    ask this; anything choosing a colour must go through the helpers. */
+export const isNight = (t: Tone) => t === "night";
+
+/* The three ink helpers. A call site never names a colour: it names a tone
+   and gets a variable, and on `night` that variable has already been
+   retargeted by `.lg-night` on the band above it. This is why adding the
+   sixth tone changed no call site — inkFor("night") and inkFor("field") both
+   return `var(--lg-ink)`, and the band decides what that is. */
 export function inkFor(tone: Tone) {
   return isStock(tone) ? "var(--lg-ink-on-stock)" : "var(--lg-ink)";
 }
 export function ink2For(tone: Tone) {
   return isStock(tone) ? "var(--lg-ink-on-stock-2)" : "var(--lg-ink-2)";
+}
+/** The quietest ink that is still text — column heads, terms, meta, dated
+    margins. Four primitives below open-coded this same ternary, and three
+    call sites outside this file reached for `--lg-rule` instead, which is a
+    ruling colour and composited to 2.9:1 as text. Named once, it is the
+    thing a call site asks for and the thing the audit can check. */
+export function ink3For(tone: Tone) {
+  return isStock(tone) ? "var(--lg-ink-on-stock-2)" : "var(--lg-ink-3)";
 }
 export function hairFor(tone: Tone) {
   /* Graphite hair on every tone — navy alpha was a pre-rebrand leftover. */
@@ -83,7 +112,7 @@ export function Section({
   );
 }
 
-/** Page-opening headline. Condensed caps — the ledger's column-head voice. */
+/** Page-opening headline. Wide, light caps — the site's one display voice. */
 /* The decorative visual in a page's opening column.
 
    Six pages carried this as a hand-written <img> with `width: 100%` and no
@@ -131,6 +160,33 @@ export function PageVisual({
   );
 }
 
+/** A still that follows the band it sits in.
+
+    Two of the marketing stills were shot under both lights and shipped as a
+    day/night pair. They used to be chosen at runtime by a client component
+    reading the Inscription scene's theme store — which meant a
+    `"use client"` boundary, a `useSyncExternalStore` subscription, and a
+    hydration flip, all to answer a question the markup already knows the
+    answer to. The band's tone is the answer. This is a server component and
+    picks the plate at render.
+
+    Same reason as `inkFor`: a call site states the tone, not the artwork. */
+export function TonePlate({
+  day,
+  night,
+  alt,
+  max,
+  tone = "field",
+}: {
+  day: StaticImageData;
+  night: StaticImageData;
+  alt: string;
+  max: number;
+  tone?: Tone;
+}) {
+  return <Plate src={isNight(tone) ? night : day} alt={alt} max={max} />;
+}
+
 /** A named editorial still. Unlike PageVisual, this carries an alt. */
 export function Plate({
   src,
@@ -163,19 +219,19 @@ export function PageTitle({
   max?: string;
 }) {
   return (
-    <PlusFrame className="w-fit max-w-full">
-      <h1
-        className="lg-poster"
-        style={{
-          color: inkFor(tone),
-          maxWidth: max,
-          textWrap: "balance",
-          margin: 0,
-        }}
-      >
-        {children}
-      </h1>
-    </PlusFrame>
+    /* The registration-mark frame that sat around every page title is gone
+       (2026-09-11) — four drawn plus signs read as a targeting reticle. */
+    <h1
+      className="lg-poster"
+      style={{
+        color: inkFor(tone),
+        maxWidth: max,
+        textWrap: "balance",
+        margin: 0,
+      }}
+    >
+      {children}
+    </h1>
   );
 }
 
@@ -205,13 +261,15 @@ export function SectionTitle({
     <Tag
       style={{
         fontFamily: "var(--font-display)",
-        fontStretch: "82%",
-        fontWeight: 700,
+        fontStretch: "var(--lg-stretch)",
+        fontWeight: "var(--lg-w-display)",
+        /* Same clamps as `.lg-poster` and the headline step, brought down
+           with the move to wide, light caps. */
         fontSize: display
-          ? "clamp(2.5rem, 5.4vw, 4.25rem)"
-          : "clamp(1.85rem, 3.2vw, 2.9rem)",
-        lineHeight: display ? 0.94 : 1.02,
-        letterSpacing: display ? "-0.028em" : "-0.022em",
+          ? "clamp(1.9rem, 4.6vw, 3.5rem)"
+          : "clamp(1.5rem, 2.7vw, 2.4rem)",
+        lineHeight: display ? 1.08 : 1.12,
+        letterSpacing: "var(--lg-track-display)",
         textTransform: "uppercase",
         color: inkFor(tone),
         maxWidth: max,
@@ -236,10 +294,10 @@ export function EntryTitle({
     <h3
       style={{
         fontFamily: "var(--font-display)",
-        fontStretch: "86%",
-        fontWeight: 600,
+        fontStretch: "var(--lg-stretch)",
+        fontWeight: "var(--lg-w-title)",
         fontSize: size,
-        letterSpacing: "-0.008em",
+        letterSpacing: "var(--lg-track-title)",
         textTransform: "uppercase",
         color: inkFor(tone),
         margin: 0,
@@ -295,13 +353,19 @@ export function Stamp({
   return (
     <a
       href={href}
-      className="lg-stamp lg-foil-surface inline-flex items-center whitespace-nowrap"
+      /* Allowed to wrap. At the wide setting a long Spanish label ("Empieza
+         un piloto de 14 días") runs past 400px, and a nowrap button pushed
+         three pages sideways at 375px. `max-w-full` + a balanced wrap keeps
+         it one line wherever it fits and two even lines where it does not. */
+      className="lg-stamp lg-foil-surface inline-flex max-w-full items-center justify-center text-center"
       style={{
         fontFamily: "var(--font-display)",
-        fontStretch: "88%",
-        fontWeight: 700,
+        fontStretch: "var(--lg-stretch)",
+        fontWeight: "var(--lg-w-ui)",
         fontSize: size,
-        letterSpacing: "0.08em",
+        letterSpacing: "0.12em",
+        lineHeight: 1.35,
+        textWrap: "balance",
         textTransform: "uppercase",
         /* Same role as the Nav stamps: text ON the accent, not beside it.
            `--lg-foil-ink` is 6.42:1 on the magenta; `--lg-ink` would be
@@ -332,8 +396,8 @@ export function QuietAction({
       className="lg-quiet"
       style={{
         fontFamily: "var(--font-display)",
-        fontStretch: "88%",
-        fontWeight: 600,
+        fontStretch: "var(--lg-stretch)",
+        fontWeight: "var(--lg-w-ui)",
         fontSize: "0.9375rem",
         letterSpacing: "0.04em",
         color: inkFor(tone),
@@ -406,7 +470,7 @@ export function RuledList({
               fontSize: "0.625rem",
               letterSpacing: "0.13em",
               textTransform: "uppercase",
-              color: isStock(tone) ? "var(--lg-ink-on-stock-2)" : "var(--lg-ink-3)",
+              color: ink3For(tone),
             }}
           >
             {term}
@@ -468,7 +532,7 @@ export function Band({
               fontSize: "0.625rem",
               letterSpacing: "0.15em",
               textTransform: "uppercase",
-              color: isStock(tone) ? "var(--lg-ink-on-stock-2)" : "var(--lg-ink-3)",
+              color: ink3For(tone),
               marginBottom: "0.5rem",
             }}
           >
@@ -520,8 +584,8 @@ export function Disclosure({
             className="lg-summary"
             style={{
               fontFamily: "var(--font-display)",
-              fontStretch: "88%",
-              fontWeight: 600,
+              fontStretch: "var(--lg-stretch)",
+              fontWeight: "var(--lg-w-ui)",
               fontSize: "1rem",
               letterSpacing: "0.005em",
               color: inkFor(tone),
@@ -577,7 +641,7 @@ export function EntryList({
                   fontSize: "0.625rem",
                   letterSpacing: "0.12em",
                   textTransform: "uppercase",
-                  color: isStock(tone) ? "var(--lg-ink-on-stock-2)" : "var(--lg-ink-3)",
+                  color: ink3For(tone),
                 }}
               >
                 {e.meta}

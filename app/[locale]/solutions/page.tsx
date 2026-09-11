@@ -66,12 +66,6 @@ export default async function SolutionsPage({ params }: PageProps<"/[locale]">) 
           "AI agents that qualify pipeline, follow up across HubSpot, Salesforce, Pipedrive, and Zoho, and close the loop on every lead.",
         serviceType: "AI Sales Automation",
       },
-      {
-        name: "AcumenAI — Accounting & Finance",
-        description:
-          "Multi-agent operations with financial automation built in — bookkeeping, financial close, and reporting with human oversight.",
-        serviceType: "AI Financial Operations",
-      },
     ].map((s, i) => ({
       "@type": "ListItem",
       position: i + 1,
@@ -85,7 +79,7 @@ export default async function SolutionsPage({ params }: PageProps<"/[locale]">) 
       <Nav locale={locale} t={t} />
       <main id="main-content">
         {/* ── Opening ── */}
-        <Section tone="field" scene>
+        <Section tone="night" scene>
           <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] lg:items-start">
             <div>
               <PageTitle max="17ch">{p.heading}</PageTitle>
@@ -149,22 +143,20 @@ export default async function SolutionsPage({ params }: PageProps<"/[locale]">) 
             {t.common.inDevelopment}
           </p>
 
-          <div className="grid gap-x-14 gap-y-16 lg:grid-cols-2">
-            <div id="agent-revops">
+          {/* One product in development since AcumenAI was retired
+              (2026-09-11), so the two-up grid becomes the page's usual
+              title-left, register-right split. */}
+          <div
+            id="agent-revops"
+            className="grid gap-x-14 gap-y-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start"
+          >
+            <div>
               <EntryTitle size="1.25rem">{t.home.inDev[0].title}</EntryTitle>
-              <Prose size="0.9375rem" max="46ch" style={{ marginTop: "1rem", marginBottom: "1.8rem" }}>
+              <Prose size="0.9375rem" max="46ch" style={{ marginTop: "1rem" }}>
                 {t.home.inDev[0].desc}
               </Prose>
-              <RuledList items={p.revopsCapabilities} labelWidth="7.5rem" topRule="var(--lg-hair)" />
             </div>
-
-            <div id="agent-finance">
-              <EntryTitle size="1.25rem">{t.home.inDev[1].title}</EntryTitle>
-              <Prose size="0.9375rem" max="46ch" style={{ marginTop: "1rem", marginBottom: "1.8rem" }}>
-                {t.home.inDev[1].desc}
-              </Prose>
-              <RuledList items={p.acumenCapabilities} labelWidth="7.5rem" topRule="var(--lg-hair)" />
-            </div>
+            <RuledList items={p.revopsCapabilities} labelWidth="7.5rem" topRule="var(--lg-hair)" />
           </div>
 
           <p
@@ -199,7 +191,7 @@ export default async function SolutionsPage({ params }: PageProps<"/[locale]">) 
         </Section>
 
         {/* ── Close ── */}
-        <Section tone="field-3" style={{ borderTop: "2px solid var(--lg-foil)" }}>
+        <Section tone="night" style={{ borderTop: "2px solid var(--lg-foil)" }}>
           <div className="grid items-end gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
             <div>
               <SectionTitle scale="display" max="16ch">

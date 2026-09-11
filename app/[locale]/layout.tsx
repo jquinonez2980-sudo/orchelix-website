@@ -66,7 +66,11 @@ export default async function LocaleLayout({ children, params }: LayoutProps<"/[
   if (!isLocale(locale)) notFound();
 
   return (
-    <Shell lang={locale} skipLabel={locale === "es" ? "Ir al contenido" : "Skip to main content"}>
+    <Shell
+      lang={locale}
+      surface="site"
+      skipLabel={locale === "es" ? "Ir al contenido" : "Skip to main content"}
+    >
       {children}
     </Shell>
   );

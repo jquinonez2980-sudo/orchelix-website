@@ -83,7 +83,7 @@ export default async function AiReceptionistPage({ params }: PageProps<"/[locale
       <Nav locale={locale} t={t} />
       <main id="main-content">
         {/* ── Opening ── */}
-        <Section tone="field" scene>
+        <Section tone="night" scene>
           <div className="grid gap-x-14 gap-y-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:items-center">
             <div>
               <PageTitle max="16ch">{p.heading}</PageTitle>
@@ -147,10 +147,10 @@ export default async function AiReceptionistPage({ params }: PageProps<"/[locale
                       <span
                         style={{
                           fontFamily: "var(--font-display)",
-                          fontStretch: "86%",
-                          fontWeight: 600,
+                          fontStretch: "var(--lg-stretch)",
+                          fontWeight: "var(--lg-w-title)",
                           fontSize: "1.0625rem",
-                          letterSpacing: "-0.008em",
+                          letterSpacing: "var(--lg-track-title)",
                           textTransform: "uppercase",
                         }}
                       >
@@ -184,7 +184,7 @@ export default async function AiReceptionistPage({ params }: PageProps<"/[locale
         </Section>
 
         {/* ── Close ── */}
-        <Section tone="field-3" style={{ borderTop: "2px solid var(--lg-foil)" }}>
+        <Section tone="night" style={{ borderTop: "2px solid var(--lg-foil)" }}>
           <div className="grid items-end gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
             <div>
               <SectionTitle scale="display" max="16ch">

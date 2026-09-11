@@ -34,7 +34,12 @@ const labelStyle: React.CSSProperties = {
   fontWeight: 500,
   letterSpacing: "0.1em",
   textTransform: "uppercase",
-  color: "rgba(234,242,255,0.5)",
+  /* Was `rgba(234,242,255,0.5)` — the pre-conversion `.esmi-dark` ink, left
+     behind when this page moved off the cyan-on-navy world. On the paper
+     field it composited to 1.00:1: the three labels on the lead-capture form
+     were, literally, invisible. `--lg-ink-3` is the label ink everywhere
+     else on this surface and clears AA on every tone. */
+  color: "var(--lg-ink-3)",
   marginBottom: 6,
 };
 

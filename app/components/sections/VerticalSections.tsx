@@ -48,7 +48,7 @@ export default function VerticalPage({
   return (
     <main id="main-content">
       {/* ── Opening: the offer, and the facts that qualify it ── */}
-      <Section tone="field" scene>
+      <Section tone="night" scene>
         {/* Centered rather than bottom-aligned: the right column here is a
             data block, not the short action group the other pages put there,
             and end-alignment left a viewport-tall void beside the headline. */}
@@ -89,7 +89,7 @@ export default function VerticalPage({
       </Section>
 
       {/* ── Close ── */}
-      <Section tone="field-3" style={{ borderTop: "2px solid var(--lg-foil)" }}>
+      <Section tone="night" style={{ borderTop: "2px solid var(--lg-foil)" }}>
         <div className="grid items-end gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
           <div>
             <SectionTitle scale="display" max="16ch">

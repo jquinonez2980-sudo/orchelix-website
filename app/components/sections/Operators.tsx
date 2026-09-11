@@ -1,9 +1,8 @@
 /* Named operators from PRODUCT.md — names and plain facts only.
    No quotes, logos, or outcome metrics unless assets and numbers are real. */
 
-import { Section, SectionTitle, Prose } from "@/app/components/ledger";
+import { Section, SectionTitle, Prose, TonePlate } from "@/app/components/ledger";
 import type { Messages } from "@/app/i18n/messages/en";
-import ThemePlate from "@/app/inscription/ThemePlate";
 import bilingualOperations from "@/public/bilingual-operations.jpg";
 import bilingualOperationsNight from "@/public/bilingual-operations-night.jpg";
 
@@ -20,7 +19,8 @@ export default function Operators({ t }: { t: Messages }) {
             {o.lede}
           </Prose>
         </div>
-        <ThemePlate
+        <TonePlate
+          tone="stock"
           day={bilingualOperations}
           night={bilingualOperationsNight}
           alt={t.visuals.bilingualOperations}
@@ -58,10 +58,10 @@ export default function Operators({ t }: { t: Messages }) {
                 rel="noopener noreferrer"
                 style={{
                   fontFamily: "var(--font-display)",
-                  fontStretch: "88%",
-                  fontWeight: 600,
+                  fontStretch: "var(--lg-stretch)",
+                  fontWeight: "var(--lg-w-title)",
                   fontSize: "1.0625rem",
-                  letterSpacing: "-0.01em",
+                  letterSpacing: "var(--lg-track-title)",
                   textTransform: "uppercase",
                   color: "var(--lg-ink)",
                   textDecoration: "none",
@@ -73,10 +73,10 @@ export default function Operators({ t }: { t: Messages }) {
               <p
                 style={{
                   fontFamily: "var(--font-display)",
-                  fontStretch: "88%",
-                  fontWeight: 600,
+                  fontStretch: "var(--lg-stretch)",
+                  fontWeight: "var(--lg-w-title)",
                   fontSize: "1.0625rem",
-                  letterSpacing: "-0.01em",
+                  letterSpacing: "var(--lg-track-title)",
                   textTransform: "uppercase",
                   color: "var(--lg-ink)",
                   margin: 0,

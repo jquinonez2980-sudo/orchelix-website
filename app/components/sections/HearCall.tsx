@@ -8,7 +8,7 @@ import HeroProof from "./HeroProofLazy";
 
 export default function HearCall({ locale, t }: { locale: Locale; t: Messages }) {
   return (
-    <Section id="hear-esmi" tone="field-2" scene className="lg-hear">
+    <Section id="hear-esmi" tone="field" scene className="lg-hear">
       <SectionTitle scale="display" max="14ch">
         {t.common.hearRealCall}
       </SectionTitle>

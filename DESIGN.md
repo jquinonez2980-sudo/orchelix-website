@@ -1,27 +1,33 @@
 ---
 name: Orchelix Marketing — The Ruled Record
-description: A ruled-record world for the marketing site — white field, graphite ruling, one magenta stamp, tabular registers.
+description: A ruled-record world for the marketing site — warm paper, near-black night bands, graphite ruling, one flat royal-blue stamp, one wide light display face.
 colors:
-  field: "#FFFFFF"
-  field-2: "#F1F3F5"
-  field-3: "#E4E7EB"
-  stock: "#F1F3F5"
-  stock-2: "#E4E7EB"
-  foil: "#B7135A"
-  foil-lift: "#D42670"
+  field: "#F5F1EA"
+  field-2: "#EFE9E0"
+  field-3: "#E6DFD4"
+  stock: "#F8F4ED"
+  stock-2: "#EFE9E0"
+  foil: "#3657B1"
+  foil-lift: "#4B72DC"
   foil-ink: "#FFFFFF"
-  rule: "rgba(46, 50, 62, 0.55)"
-  rule-quiet: "rgba(46, 50, 62, 0.18)"
-  rule-text: "#2E323E"
-  tick-text: "#2E323E"
+  rule: "rgba(18, 20, 26, 0.45)"
+  rule-quiet: "rgba(18, 20, 26, 0.16)"
+  rule-text: "#12141A"
+  tick-text: "#12141A"
   tick: "#ADB5BD"
-  ink: "#2E323E"
-  ink-2: "rgba(46, 50, 62, 0.80)"
-  ink-3: "rgba(46, 50, 62, 0.72)"
-  hair: "rgba(46, 50, 62, 0.14)"
-  hair-2: "rgba(46, 50, 62, 0.08)"
-  ink-on-stock: "#2E323E"
-  ink-on-stock-2: "rgba(46, 50, 62, 0.80)"
+  ink: "#12141A"
+  ink-2: "rgba(18, 20, 26, 0.72)"
+  ink-3: "rgba(18, 20, 26, 0.62)"
+  hair: "rgba(18, 20, 26, 0.12)"
+  hair-2: "rgba(18, 20, 26, 0.07)"
+  ink-on-stock: "#12141A"
+  ink-on-stock-2: "rgba(18, 20, 26, 0.72)"
+  night-field: "#14171C"
+  night-ink: "#E8EAEE"
+  night-ink-2: "rgba(232, 234, 238, 0.84)"
+  night-ink-3: "rgba(232, 234, 238, 0.74)"
+  night-foil: "#6484DB"
+  night-foil-ink: "#12141A"
 typography:
   scale:
     micro: "0.625rem"
@@ -37,27 +43,27 @@ typography:
     figure: "1.5rem"
   display:
     fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "clamp(2.5rem, 5.4vw, 4.25rem)"
-    fontWeight: 700
-    lineHeight: 0.94
-    letterSpacing: "-0.028em"
-    fontVariation: "wdth 82"
+    fontSize: "clamp(1.9rem, 4.6vw, 3.5rem)"
+    fontWeight: 300
+    lineHeight: 1.08
+    letterSpacing: "0.07em"
+    fontVariation: "wdth 125"
     textTransform: "uppercase"
   headline:
     fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "clamp(1.85rem, 3.2vw, 2.9rem)"
-    fontWeight: 700
-    lineHeight: 1.02
-    letterSpacing: "-0.022em"
-    fontVariation: "wdth 82"
+    fontSize: "clamp(1.5rem, 2.7vw, 2.4rem)"
+    fontWeight: 300
+    lineHeight: 1.12
+    letterSpacing: "0.07em"
+    fontVariation: "wdth 125"
     textTransform: "uppercase"
   title:
     fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
     fontSize: "1.1875rem"
-    fontWeight: 600
+    fontWeight: 400
     lineHeight: 1.2
-    letterSpacing: "-0.008em"
-    fontVariation: "wdth 86"
+    letterSpacing: "0.06em"
+    fontVariation: "wdth 125"
     textTransform: "uppercase"
   body:
     fontFamily: "Literata, Georgia, serif"
@@ -66,20 +72,21 @@ typography:
     lineHeight: 1.62
     letterSpacing: "normal"
   label:
-    fontFamily: "Azeret Mono, ui-monospace, monospace"
+    fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
     fontSize: "0.625rem"
     fontWeight: 400
     lineHeight: 1.2
     letterSpacing: "0.13em"
-    fontFeature: "\"tnum\" 1, \"zero\" 1"
+    fontVariation: "wdth 125"
+    fontFeature: "\"tnum\" 1"
     textTransform: "uppercase"
   action:
     fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
     fontSize: "0.9375rem"
-    fontWeight: 700
-    lineHeight: 1
-    letterSpacing: "0.08em"
-    fontVariation: "wdth 88"
+    fontWeight: 500
+    lineHeight: 1.35
+    letterSpacing: "0.12em"
+    fontVariation: "wdth 125"
     textTransform: "uppercase"
 rounded:
   none: "0px"
@@ -106,6 +113,7 @@ components:
     rounded: "{rounded.none}"
     padding: "0.6rem 1.05rem"
     size: "0.75rem"
+    letterSpacing: "0.16em"
   quiet-action:
     backgroundColor: "transparent"
     textColor: "{colors.ink}"
@@ -117,7 +125,8 @@ components:
     textColor: "{colors.ink-2}"
     typography: "{typography.action}"
     rounded: "{rounded.none}"
-    size: "0.8125rem"
+    size: "0.6875rem"
+    letterSpacing: "0.12em"
   register-row:
     backgroundColor: "transparent"
     textColor: "{colors.ink}"
@@ -142,13 +151,26 @@ components:
 
 > **Scope.** This document records the marketing surface: `/`, `/pricing`, `/solutions`, `/how-it-works`, `/industries`, `/about`, `/book`, `/try-esmi`, `/privacy`, `/terms`, plus shared `Nav` and `Footer`.  
 > **Operate:** `/dashboard/*` uses the same graphite/magenta tokens via `.lg-app` remaps and is an Operate surface (denser, review/coach verbs) — not a second brand.  
-> **Acumen `/app`:** remains a separate product shell (navy/gold finance language allowed for that product only). Do not force Ruled Record density onto Acumen until Acumen ships its own DESIGN.md; do not reintroduce gold into Esmi marketing.
+> **AcumenAI is retired (2026-09-11).** `/acumen`, `/es/acumen`, and the `/app` operator console were removed and 301 to `/solutions`. The navy/gold finance language that was allowed "for that product only" has no remaining home — do not reintroduce it anywhere.
 >
 > **The token file is deliberately split.** `app/globals.css` holds three unrelated systems in one file: the Tailwind `@theme` navy/teal/gold scales and their `:root` aliases (product surfaces — dashboard, forms, legacy marketing routes), the `--lg-*` block (this system), and the `.esmi-dark` block (`/try-esmi` only). Do not "unify" them. The `--lg-*` block is additive and is the only source of truth for anything documented here.
 >
 > **Two files are exempt from the detector, and the exemption is recorded here because it cannot be recorded where it is configured.** `.impeccable/config.json` holds `detector.ignoreFiles` as bare globs with no room for a reason, so: `app/api/contact/route.ts` and `app/api/leads/meta/route.ts` are transactional **email** templates, not web UI. Inline hex, table layout, and rounded corners are the only styling mail clients render reliably, and a design system for the web surface has no business governing them. They accounted for 41 of the 74 findings outstanding at the end of the conversion. Nothing else is ignored; every remaining finding is a real one on an unconverted surface.
 >
-> **The site is mostly converted; residual mixed systems remain.** Core marketing routes (`/`, `/pricing`, `/solutions`, `/how-it-works`, `/industries`, `/about`, `/book`) and shared chrome use this system. Residual mixed systems: `/get-started` (navy/teal wizard), product dashboard under `.lg-app` remaps (Operate surface, not a marketing twin), `/acumen` showcase gold language, blog article bodies, and privacy/terms. Anything new on public routes should be built in this system.
+> **The site is mostly converted; residual mixed systems remain.** Core marketing routes (`/`, `/pricing`, `/solutions`, `/how-it-works`, `/industries`, `/about`, `/book`) and shared chrome use this system. Residual mixed systems: `/get-started` (navy/teal wizard), product dashboard under `.lg-app` remaps (Operate surface, not a marketing twin), blog article bodies, and privacy/terms. Anything new on public routes should be built in this system.
+
+## Current direction (2026-09-11) — read this first
+
+This document was written across three rebrands and much of it still describes the earlier ones. **Where anything below conflicts with this section, this section wins,** and the conflicting passage is history rather than instruction.
+
+- **Ground.** Warm paper (`#F5F1EA` and its two steps), not white. Near-black **night** bands (`#14171C`) alternate with it: `night` is the sixth tone on the `Section` ladder, and it works by redeclaring the whole `--lg-*` family on the band, so `inkFor` / `ink2For` / `ink3For` / `hairFor` return the same variable names on every tone and the cascade resolves them. No call site picks a colour. Night lands on the homepage hero, the proof band, and the closing CTA; `/book` and the `/missed-calls` lead form stay light.
+- **Accent.** One royal blue (`#3657B1` on paper, `#6484DB` on night). The stamp is a **flat** fill — the eight-stop metallic ramp, its lips, and its tinted drop shadow are retired, because a shimmering glowing button read as a game control. White on the paper stamp is 6.42:1; ink on the night stamp clears 4.5:1.
+- **Type.** One display voice: **Archivo at the top of its width axis (`wdth` 125), light, uppercase, tracked open.** It replaced condensed heavy caps with negative tracking. All of it comes from tokens in `:root` — `--lg-stretch` (125%), `--lg-w-display` (300), `--lg-w-title` (400), `--lg-w-ui` (500), `--lg-track-display` (0.07em), `--lg-track-title` (0.06em), `--lg-track-ui` (0.16em), `--lg-track-label` (0.2em). Nothing hand-sets a width, a display weight, or a display tracking.
+- **One family on the marketing surface.** `body[data-surface="site"]` (set by `app/[locale]/layout.tsx` through `Shell`) retargets `--font-mono` to Archivo, so the label voice, keys, and figures set in the same wide face — tabular via `"tnum"`. Azeret Mono remains only on the app surfaces (`/dashboard`, `/try-esmi`, onboarding), which never carry that attribute.
+- **The lockup.** `app/components/sections/Lockup.tsx`: the helix mark as artwork, the name as **live text in the hero wordmark's setting** (Archivo, `--lg-stretch`, `--lg-w-display`, tracking 0.14em; the tagline at `--lg-w-ui`, 0.34em). Nav and Footer both render it. The old `orchelix-logo.svg` set its name in SVG `<text>` Inter, which an `<img>` cannot load, so it rendered in whatever system sans the visitor had.
+- **Retired devices — do not reintroduce.** Registration plus marks around titles (`PlusFrame`), the right-edge tick rail, the live clock under the hero, the four-square Menu icon, the DAY/NIGHT control, the foil shimmer and glow, the Inscription WebGL scene on the homepage (unmounted; `app/inscription/` is on disk and unimported). Together they read as a game HUD, which is the one thing the owner has said this site must not look like.
+- **Nav.** The six destinations sit in the bar from 1280px (Spanish from 1440px — its labels run ~180px longer); the Menu button hides where they arrive, and the phone number leaves the bar there (it is in the footer). Below that, the drawer.
+- **Stamps wrap.** `Stamp` is `max-w-full` with a balanced wrap, because at the wide setting long Spanish labels run past 400px and a nowrap button pushed pages sideways at 375px.
 
 ## Overview
 
@@ -165,11 +187,11 @@ The inversion is load-bearing **for the marketing surface**. The homepage Inscri
 The build refuses two specific things, and the refusal is durable: the category's centered hero with three identical product cards, and its opposite, the cream editorial broadsheet. Neither one puts the artifact on the page. Note that going light did **not** license the second one; a white field ruled in graphite is not a broadsheet.
 
 **Key Characteristics:**
-- Flat white field in three near-adjacent tonal steps — no texture, no gradient, no material tile.
+- Flat warm-paper field in three near-adjacent tonal steps, alternating with near-black night bands — no texture, no gradient, no material tile.
 - Graphite ruling at low alpha as the primary structural device; it is a rule, not a warning.
-- Magenta reserved for the primary action, and for nothing else.
+- One flat royal-blue stamp reserved for the primary action, and for nothing else.
 - Zero corner radius everywhere; every edge is a ruled edge.
-- Archivo condensed caps / Literata / Azeret Mono tabular figures.
+- Archivo wide light caps (display, labels, figures) / Literata body. Azeret Mono on app surfaces only.
 - Registers, bands, and rate schedules built as real ruled tables and definition lists.
 
 ## Colors
@@ -213,7 +235,7 @@ Do not reintroduce sub-floor alphas. New ink steps are alphas of Graphite `#2E32
 
 **The Ruling Is Structure Rule.** The ruling is a structural colour. It draws column verticals, section top rules, ticks, and separators. It never carries error, danger, destructive, or "urgent" meaning on this surface. This survived the rebrand intact and got stronger: the ruling is now the ink's own colour at low alpha, so there is no longer even a distinct hue that could be mistaken for an alert. On the marketing surface an error is drawn with a device — a margin annotation of a heavy ink rule and a mono label — not by borrowing the rule; `/book` and `/try-esmi` both do this.
 
-**The Foreign Mark Rule.** A third party's brand is not ours to restyle, and the conversion stops at its edge. `/app`'s "Sign in with Google" buttons carry Google's own dark button spec — ground `#131314`, border `#8E918F`, label `#E3E3E3` — because Google's branding guidelines permit only light (`#FFFFFF`), neutral (`#F2F2F2`), or dark (`#131314`) grounds beneath the multicolour mark. The four logo colours (`#4285F4`, `#34A853`, `#FBBC05`, `#EA4335`) are likewise fixed. These seven values are the only colours on a converted surface that are outside this palette on purpose; the detector is right to flag them and this note is the answer. Any future third-party mark gets the same treatment: use their sanctioned form, document it here, and change nothing else.
+**The Foreign Mark Rule.** A third party's brand is not ours to restyle, and the conversion stops at its edge. The sign-in surfaces' "Sign in with Google" buttons carry Google's own dark button spec — ground `#131314`, border `#8E918F`, label `#E3E3E3` — because Google's branding guidelines permit only light (`#FFFFFF`), neutral (`#F2F2F2`), or dark (`#131314`) grounds beneath the multicolour mark. The four logo colours (`#4285F4`, `#34A853`, `#FBBC05`, `#EA4335`) are likewise fixed. These seven values are the only colours on a converted surface that are outside this palette on purpose; the detector is right to flag them and this note is the answer. Any future third-party mark gets the same treatment: use their sanctioned form, document it here, and change nothing else.
 
 **The Tinted Ink Rule.** No neutral gray text. Every ink is Graphite `#2E323E` or an alpha of it — a blue-leaning near-black, never a true neutral. This rule outlived the field it was written for: it used to mean "tint toward the field's blue-white," and now means "one graphite, composited." A new ink value is an alpha of `ink`, not a new hex.
 
@@ -238,9 +260,9 @@ Two rules for the next palette move. Every replacement above resolves to a **doc
 
 **Display Font:** Archivo (variable, `wdth` axis) with `ui-sans-serif, system-ui, sans-serif`
 **Body Font:** Literata with `Georgia, serif`
-**Label/Mono Font:** Azeret Mono with `ui-monospace, monospace`
+**Label Font:** Archivo (same family, wide) on the marketing surface; Azeret Mono with `ui-monospace, monospace` on app surfaces only
 
-**Character:** Condensed grotesque caps carry the authority of a ledger column head; a screen serif gives body copy document texture rather than UI gloss; a true tabular mono makes every number a measurement instead of a costume. All three were chosen specifically to sit outside the usual defaults — no Inter, no system stack, no geometric-sans-plus-one-serif reflex.
+**Character:** Wide, light, open-tracked caps — calm and automotive rather than stamped and dense — carry every heading, label, and action; a screen serif gives body copy document texture rather than UI gloss. (Until 2026-09-11 this read "condensed grotesque caps" plus a tabular mono; that pairing was retired as HUD-like.) All three were chosen specifically to sit outside the usual defaults — no Inter, no system stack, no geometric-sans-plus-one-serif reflex.
 
 ### The ramp
 
@@ -257,8 +279,8 @@ Above `1.5rem` type is fluid, never a fixed step, and only in these two clamps �
 both of which live in a shared primitive, which is the point:
 
 ```
-clamp(2.5rem,  5.4vw, 4.25rem)   Display  — PageTitle, the page-opening headline
-clamp(1.85rem, 3.2vw, 2.9rem)    Headline — SectionTitle, every section title
+clamp(1.9rem, 4.6vw, 3.5rem)     Display  — PageTitle, the page-opening headline
+clamp(1.5rem, 2.7vw, 2.4rem)     Headline — SectionTitle, every section title
 ```
 
 ### Values the build carries that are not on the ramp
@@ -277,20 +299,20 @@ it. The detector is correct to keep flagging them.
 | `1.125rem` | `industries` lead-in | 1 | `1.0625rem` |
 
 ### Hierarchy
-- **Display** (Archivo 700, `wdth` 82%, `clamp(2.5rem, 5.4vw, 4.25rem)`, line-height 0.94–0.96, tracking `-0.028em`, uppercase): Page-opening headlines only, one per page, `max-width` 15–18ch with `text-wrap: balance`.
-- **Headline** (Archivo 700, `wdth` 82%, `clamp(1.85rem, 3.2vw, 2.9rem)`, line-height 1.02, tracking `-0.022em`, uppercase): Section titles, `max-width` ~20ch. Always via `SectionTitle`; a section title is never hand-set.
-- **Title** (Archivo 600, `wdth` 86%, 1.0625 / 1.1875 / 1.25rem, tracking `-0.008em`, uppercase): Entry headings inside a ruled list. `1.5rem` is reserved for the one headline figure per column in the rate schedule.
+- **Display** (Archivo 300, `wdth` 125, `clamp(1.9rem, 4.6vw, 3.5rem)`, line-height 1.08, tracking `0.07em`, uppercase): Page-opening headlines only, one per page, `max-width` 15–18ch with `text-wrap: balance`. The clamp came down from 2.5–4.25rem with the move to wide light caps: they read larger at the same size, and a long word at 125% width has to fit 335px.
+- **Headline** (Archivo 300, `wdth` 125, `clamp(1.5rem, 2.7vw, 2.4rem)`, line-height 1.12, tracking `0.07em`, uppercase): Section titles, `max-width` ~20ch. Always via `SectionTitle`; a section title is never hand-set.
+- **Title** (Archivo 400, `wdth` 125, 1.0625 / 1.1875 / 1.25rem, tracking `0.06em`, uppercase): Entry headings inside a ruled list. `1.5rem` is reserved for the one headline figure per column in the rate schedule.
 - **Body** (Literata 400, 0.875 / 0.9375 / 1 / 1.0625rem, line-height 1.62): All prose. Measure is capped at 58ch by default, 40–60ch in practice. Prose links do not use a browser underline — they carry a 1px foil `text-decoration-color` at `0.22em` offset.
-- **Label** (Azeret Mono 400, 0.625 / 0.6875rem, tracking `0.11em`–`0.15em`, uppercase): Column heads, terms in a `RuledList` or `Band`, register cells, meta, legend text, the foot-rule tally, and the skip link.
-- **Action** (Archivo 700 stamped / 600 quiet, `wdth` 88%, 0.75 / 0.8125 / 0.875 / 0.9375 / 1rem, tracking `0.08em` stamped / `0.04em` quiet, uppercase): Every button and link that is an action.
+- **Label** (Archivo 400 at `wdth` 125 on the marketing surface — Azeret Mono on app surfaces — 0.625 / 0.6875rem, tracking `0.11em`–`0.2em`, uppercase): Column heads, terms in a `RuledList` or `Band`, register cells, meta, legend text, the foot-rule tally, and the skip link.
+- **Action** (Archivo 500, `wdth` 125, 0.6875 / 0.75 / 0.8125 / 0.875 / 0.9375 / 1rem, tracking `0.12em` on a stamp, `0.16em` in the nav stamp, `0.12em` on nav links, uppercase): Every button and link that is an action.
 
 ### Named Rules
 
-**The Tabular Figures Rule.** Any number that is a quantity, a time, a count, or a price gets `.lg-fig` — Azeret Mono with `tabular-nums` and `"tnum" 1, "zero" 1`. A number set in the body serif is a word, not a figure. Columns of numbers must align on the digit.
+**The Tabular Figures Rule.** Any number that is a quantity, a time, a count, or a price gets `.lg-fig` — tabular figures (`"tnum" 1`), which on the marketing surface are Archivo's and on app surfaces are Azeret Mono's. A number set in the body serif is a word, not a figure. Columns of numbers must align on the digit.
 
 **The Closed Ramp Rule.** The type ramp is closed: eleven fixed steps and two clamps, enumerated in `typography.scale` and in "The ramp" above. Above `1.5rem` type is fluid and comes from `PageTitle` or `SectionTitle` — a heading is never hand-set with a new clamp, because that is how six near-duplicate headline sizes got into a build that has two headline roles.
 
-**The Condensed Caps Rule.** Display, headline, title, and action are all uppercase Archivo on the `wdth` axis between 82% and 88% — tighter as the type gets bigger. Body copy is never uppercase and never condensed. There is no sentence-case display size in this system.
+**The Wide Light Caps Rule.** Display, headline, title, label, and action are all uppercase Archivo at `--lg-stretch` (125%), light to medium weight, tracked open — tracking opens further as type gets smaller. Never condensed, never heavier than 500, never negative tracking. Body copy is never uppercase and never set in the display face. There is no sentence-case display size in this system. (Replaces the Condensed Caps Rule, 2026-09-11.)
 
 **The No Kicker Rule.** Headings stand alone. No eyebrow, no kicker, no small-caps label above a heading, no `01 / 02 / 03` section numbering. If a section needs context before the heading, it belongs in the prose after it.
 
@@ -315,12 +337,11 @@ Breakpoints observed in the build: `640px`, `900px`/`901px`, `1023px`/`1024px`, 
 There are no elevation shadows in this system. Nothing floats, nothing is lifted, and there are no cards. Depth comes from two places: the tonal step between adjacent field tones, and the pressed edges of the stamp. (It used to come from three — the cloth tile's physical weave was the middle term, and the rebrand removed it.) The only `box-shadow` in the world is on the stamp, and it is describing a physical stamping — a bright top lip, a dark bottom lip, a hairline of contact shadow, and a tight drop that reads as the block sitting *in* the surface rather than above it. On `:active` the whole shadow inverts to an impressed state and the block translates down 2px.
 
 ### Shadow Vocabulary
-- **Stamp relief** (`box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(50,4,22,0.6), 0 1px 0 rgba(0,0,0,0.12), 0 14px 26px -16px rgba(183,19,90,0.55)`): The stamp at rest. Only ever on `.lg-foil-surface`. The drop is tinted with the accent itself rather than black — on a white field an untinted drop reads as dirt.
-- **Stamp impressed** (`box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -1px 0 rgba(50,4,22,0.75), inset 0 2px 6px rgba(50,4,22,0.45)`): The stamp on `:active`, paired with `translateY(2px)`. Same two-colour family as the relief — white highlight, `rgba(50,4,22)` shadow — with the highlight pulled back and the lower lip deepened so the block reads pressed into the surface rather than raised off it.
+- **None.** The stamp's relief and impressed shadows were retired with the metallic ramp (2026-09-11). The stamp is a flat fill; `:active` keeps only the 2px `translateY` of Press.
 
 ### Named Rules
 
-**The Produced Materials Rule.** A material must be manufactured, not named. The stamp is an eight-stop metallic ramp at 100° with lit and shadowed lips. An earlier pass used a flat rectangle and it was rejected as a compliance token rather than a shipped material; that judgment stands for any future material. What changed at the rebrand is that this rule now governs exactly one material instead of two. The cloth tile was the other — a real tiled SVG carrying its own alpha — and it was retired rather than recoloured, because the same alpha-composited threads that read as grain on navy read as a grey smudge on white. **Retiring a material is in-rule; faking one is not.** The honest move when a produced material stops working on a new ground is to remove it, not to ship a washed-out version that satisfies the vocabulary without doing the work.
+**The Produced Materials Rule.** A material must be manufactured, not named. (The stamp no longer claims to be a material: since 2026-09-11 it is a flat accent fill, and the rule now governs illustrations and photography only — remove a material that stops working rather than ship a washed-out version.) An earlier pass used a flat rectangle and it was rejected as a compliance token rather than a shipped material; that judgment stands for any future material. What changed at the rebrand is that this rule now governs exactly one material instead of two. The cloth tile was the other — a real tiled SVG carrying its own alpha — and it was retired rather than recoloured, because the same alpha-composited threads that read as grain on navy read as a grey smudge on white. **Retiring a material is in-rule; faking one is not.** The honest move when a produced material stops working on a new ground is to remove it, not to ship a washed-out version that satisfies the vocabulary without doing the work.
 
 **The No Float Rule.** Surfaces do not lift. There is no ambient shadow, no hover elevation, no card. Hover changes a rule, a brightness, or a fill — never a `translateY` on a container.
 
@@ -361,7 +382,9 @@ Keyframes: `lg-settle`, `lg-strike`, `lg-rule-draw`. Utility classes: `.lg-strik
 
 **The Real Cadence Rule.** Where motion represents something happening, it is driven by the real event and not by a timer that imitates one. `/try-esmi` strikes each word group as the backend's SSE stream delivers it, so the pace on screen *is* the model's pace — which is also why there is no "skip" control: there is no artificial queue to skip past. A simulated typing cadence would be a fabrication in motion, and the honesty standard does not stop at copy.
 
-### The Inscription Exemption (homepage only)
+### The Inscription Exemption (homepage only) — RETIRED
+
+> Retired 2026-09-11: the scene is no longer mounted on `/` or `/es`, and the DAY/NIGHT control it drove is gone. `app/inscription/` stays on disk, unimported. Kept below as a record of what the exemption allowed; it grants nothing today.
 
 The homepage renders a pinned WebGPU/WebGL scene — an optical glass ledger volume written by voice filaments across one night. It is scoped to `/` and `/es` via `[data-inscription]` and reaches no other route.
 
@@ -397,18 +420,18 @@ The recurring silhouette is the ruled block: a heavy top rule in `rule` graphite
 
 **The Stamp** — the primary action, and the only filled control in the system.
 - **Shape:** Square (0 radius).
-- **Primary:** Foil metallic ramp, label in Foil Ink, Archivo 700 at `wdth` 88%, `0.9375rem`, tracking `0.08em`, uppercase, padding `0.95rem 1.7rem`. The nav variant is compact (`0.75rem`, padding `0.6rem 1.05rem`).
-- **Hover:** `filter: brightness(1.07) saturate(1.04)` over 120ms — the foil catches light, it does not move.
-- **Active:** `translateY(2px)` with the impressed shadow. The stamp presses into the cover.
-- **Quiet action (secondary):** Text in ink, Archivo 600 at `wdth` 88%, tracking `0.04em`. A 1px foil rule sits 3px under the baseline and draws in from the left on hover (`scaleX(0) → 1`, 300ms, `cubic-bezier(0.16, 1, 0.3, 1)`).
+- **Primary:** Flat `--lg-foil` fill (royal blue; `--lg-night-foil` on night bands), label in Foil Ink, Archivo 500 at `wdth` 125, `0.9375rem`, tracking `0.12em`, uppercase, padding `0.95rem 1.7rem`, `max-width: 100%` with a balanced wrap. The nav variant is `.lg-nav__stamp` (`0.75rem`, tracking `0.16em`, padding `0.6rem 1.05rem`; `0.625rem` / `0.08em` under 480px).
+- **Hover:** `filter: brightness(1.1)` over 120ms. No shimmer, no glow.
+- **Active:** `translateY(2px)`, no shadow. The stamp presses in.
+- **Quiet action (secondary):** Text in ink, Archivo 500 at `wdth` 125, tracking `0.04em`. A 1px foil rule sits 3px under the baseline and draws in from the left on hover (`scaleX(0) → 1`, 300ms, `cubic-bezier(0.16, 1, 0.3, 1)`).
 - **Reduced motion:** All stamp and quiet-action transitions are suppressed under `prefers-reduced-motion: reduce`.
 
 ### Navigation
-- Sticky header on the flat field with a `1px` hair bottom border, `1320px` container, `16px` vertical padding.
-- Wordmark is the horizontal lockup used as a `mask-image` over the foil ramp (`.lg-foil-mark`), so the metal shows through the letterforms rather than knocking out flat white.
-- Links: Archivo 500 at `wdth` 88%, `0.8125rem`, tracking `0.075em`, uppercase, in Ink 2, with the `QuietAction` foil underline on hover. The language toggle is a mono label in Ink 3.
-- The stamp is visible at every width, because on mobile the register leads and the stamp is the only action above the fold.
-- Mobile: an outlined square toggle drawing an inline SVG (three rules / an X), opening a Field-2 panel of full-width links separated by Hair 2 hairlines.
+- Sticky header on the paper field with a `1px` hair bottom border (rule-strength once scrolled), `1320px` container.
+- The lockup (`Lockup.tsx`): helix mark as artwork, name as live Archivo text in the hero wordmark's setting. Mark 40px tall (32px under 480px, where the tagline drops).
+- Links: Archivo 500 at `wdth` 125, `0.6875rem`, tracking `0.12em`, uppercase, in Ink 2, `1.25rem` apart, with the `QuietAction` underline on hover. In the bar from 1280px (English) / 1440px (Spanish); in the drawer below.
+- The stamp is visible at every width. The phone number shows in the bar only below the link breakpoint (from 900px); where the links are in the bar it lives in the footer.
+- Mobile: an outlined square toggle drawing two plain rules (an X when open), opening a Field-2 drawer. It hides wherever the links are in the bar.
 
 ### Lists and Data Blocks
 - **RuledList** (`<dl>`): graphite top rule, rows of label-left (mono label, Ink 3) and value-right (Literata, ink), `0.8rem` vertical padding, hairline between rows. Reads down the page.
@@ -434,13 +457,13 @@ Not optional, and not left to the browser: selection is foil-on-field, `accent-c
 
 ### Do:
 - **Do** put the artifact in the first viewport. The register, the schedule, the record — at full scale, with its own notation, before any explanatory copy.
-- **Do** reserve `.lg-foil-surface` for the primary action and the wordmark. Everything else that needs to read as marked uses `StatusKey` or a `QuietAction`.
+- **Do** reserve `.lg-foil-surface` for the primary action. Everything else that needs to read as marked uses `StatusKey` or a `QuietAction`.
 - **Do** build data blocks from the shared primitives in `app/components/ledger/index.tsx`. Every marketing page composes from them; per-page inline restyling is exactly how the site drifted before.
 - **Do** let the section `tone` choose the inks. Use `inkFor` / `ink2For` / `hairFor` rather than hand-picking a colour for a stock section.
 - **Do** set every quantity, time, count, and price in `.lg-fig` tabular figures.
 - **Do** anchor a block with a graphite top rule (`2px` primary, `1px` nested) and separate its rows with Hair 2 hairlines.
 - **Do** change axis when two data blocks sit in sequence — a `RuledList` followed by a `Band`, never a `RuledList` followed by a `RuledList`.
-- **Do** ship materials as produced assets: a real tile, a real ramp with lit and shadowed lips.
+- **Do** set type through the `--lg-*` type tokens (`--lg-stretch`, `--lg-w-*`, `--lg-track-*`) — never a hand-typed width, display weight, or display tracking.
 - **Do** use real semantic tables and definition lists for tabular content, with a caption and scoped headers.
 - **Do** provide a reduced-motion path for every animation, and make the default state the legible one.
 
@@ -448,7 +471,8 @@ Not optional, and not left to the browser: selection is foil-on-field, `accent-c
 - **Don't** add a second foil element to a screen that already has a stamp. Foil on five elements is what destroyed the stamp's meaning once already.
 - **Don't** use the ruling as an error, alert, or destructive colour on this surface. It is structure.
 - **Don't** round a corner. Radius is 0, including the focus ring on the field.
-- **Don't** add a shadow to anything but the foil. No card elevation, no hover lift, no ambient glow.
+- **Don't** add a shadow to anything, the stamp included. No card elevation, no hover lift, no ambient glow.
+- **Don't** reintroduce game-HUD devices: plus/registration marks, tick rails, live clocks or readouts, reticle or corner-square icons, shimmer or foil gradients, glows. The owner's standing direction is that the site must not look like a video game.
 - **Don't** put an eyebrow, kicker, or `01/02/03` numbering above a heading.
 - **Don't** ship a row of same-size icon + heading + text cards, or gradient text, or a sparkline standing in for content.
 - **Don't** use a Unicode glyph as a rule, bullet, arrow, or separator. Rules are drawn; icons are inline SVG paths.
@@ -456,6 +480,6 @@ Not optional, and not left to the browser: selection is foil-on-field, `accent-c
 - **Don't** invent a duration or an easing curve. Four verbs, three durations, one stagger, two curves — the vocabulary is closed.
 - **Don't** animate anything but `transform`, `opacity`, and `clip-path`, and don't gate content behind an animation.
 - **Don't** introduce a font-size that is not in `typography.scale`, and don't hand-write a `clamp()` for a heading — use `PageTitle` or `SectionTitle`.
-- **Don't** set body copy in uppercase or in the condensed display face, and don't set a figure in the body serif.
+- **Don't** set body copy in uppercase or in the display face, don't condense or embolden the display face, and don't set a figure in the body serif.
 - **Don't** show the alternating register band below 901px, or let a register entry occupy more than one line below 640px.
 - **Don't** merge the `--lg-*` block with the navy/teal/gold `@theme` scales in `app/globals.css`. They serve different surfaces and the split is intentional.

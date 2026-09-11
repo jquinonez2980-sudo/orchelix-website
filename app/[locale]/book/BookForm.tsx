@@ -274,10 +274,10 @@ export default function BookForm({ t }: { t: BookFormCopy }) {
           className="lg-stamp lg-foil-surface inline-flex items-center"
           style={{
             fontFamily: "var(--font-display)",
-            fontStretch: "88%",
-            fontWeight: 700,
+            fontStretch: "var(--lg-stretch)",
+            fontWeight: "var(--lg-w-ui)",
             fontSize: "0.9375rem",
-            letterSpacing: "0.08em",
+            letterSpacing: "var(--lg-track-ui)",
             textTransform: "uppercase",
             color: "var(--lg-foil-ink)",
             padding: "0.95rem 1.7rem",

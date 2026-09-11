@@ -13,7 +13,7 @@ export default function NotFound() {
   return (
     <>
       <Nav />
-      <main id="main-content">
+      <main id="main-content" data-surface="site">
         <Section tone="field" scene>
           <div className="mx-auto max-w-xl text-center">
             <p

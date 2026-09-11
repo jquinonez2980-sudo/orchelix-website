@@ -6,20 +6,21 @@
    - French is a confirmed *add-on* language (not native default).
    - Named operators only from PRODUCT.md evidence list — no invented quotes
      or outcome metrics.
-   - Esmi is in production; Revenue-Ops and AcumenAI are in development. */
+   - Esmi is in production; Revenue-Ops is in development. (AcumenAI was
+     retired 2026-09-11 and must not reappear.) */
 
 const en = {
   meta: {
     localeName: "English",
     switchTo: "Español",
     switchLabel: "Cambiar a español",
-    /* Group labels for the nav conditions cluster. Both segments are
-       unlabelled visually — the ruling is the only structure — so the
-       accessible name has to come from here. */
+    /* Group label for the nav's language control. The segment is unlabelled
+       visually — the ruling is the only structure — so the accessible name
+       has to come from here.
+
+       `lighting` / `day` / `night` were removed 2026-09-11 with the DAY/NIGHT
+       control they named. */
     language: "Language",
-    lighting: "Lighting",
-    day: "Day",
-    night: "Night",
   },
 
   nav: {
@@ -31,6 +32,9 @@ const en = {
     tryEsmi: "Hear Esmi",
     book: "Book a pilot",
     menu: "Menu",
+    /* Accessible name for the bar's link row. The drawer is also a <nav>;
+       two landmarks may not share a name. */
+    primary: "Primary",
     openMenu: "Open menu",
     closeMenu: "Close menu",
     home: "Orchelix — Home",
@@ -46,6 +50,18 @@ const en = {
     startWithOneWorkflow: "Start with one workflow",
     startWithOneWorkflowBody:
       "A senior consultant maps it, your first agent goes live in fourteen days, and every action it takes is on the record.",
+    /* The closing continuum: persuade -> experience -> commit -> operate.
+       These four were written inline in FinalCTA as an `locale === "es"`
+       ternary holding both languages in the component — a hand-duplicated
+       page by another name. They also carried 01/02/03/04 numbering, which
+       the No Kicker Rule bars; the order is the list's order and the reader
+       can see it. */
+    journey: [
+      { title: "Hear", body: "A real Esmi call on this site" },
+      { title: "Book", body: "A 14-day pilot with a senior consultant" },
+      { title: "Map", body: "One workflow on your real line" },
+      { title: "Operate", body: "Every action on the operator register" },
+    ],
     phone: "+1 561 566 1066",
     countries: "Canada & United States",
   },
@@ -57,16 +73,23 @@ const en = {
       "A consultant mapping a workflow on paper, graphite pencil in hand, magenta stamp at the edge of the sheet.",
     bilingualOperations:
       "A dusk reception counter with two telephones and two stacks of cards, one marked in magenta.",
-    og: "A blank ruled ledger page with a single magenta stamp.",
+    og: "The Orchelix lockup over one line: AI agents that answer, qualify, and book around the clock, in English and Spanish.",
   },
 
   home: {
     title: "Orchelix | AI agents that run revenue operations",
     description:
       "Esmi answers, qualifies, and books 24/7 in English and Spanish. Every action logged to an audit trail you can inspect and override. Deployed by senior consultants in 14 days.",
-    heroTitle: ["Every call answered.", "Every action on the record."],
-    heroBody:
-      "Esmi answers, qualifies, and books around the clock — in English and Spanish. Every call closes with a transcript, a reason, and a disposition you can override.",
+    /* The opening band states the name at Display size, then one line of what
+       the company does, then one action. `heroTitle` (a two-line poster
+       headline) and `heroBody` (its paragraph) were what the hero used to
+       carry; both are gone rather than left unreferenced, since the catalogue
+       is the source of truth for shipped copy and a string nothing renders is
+       drift. The same claims still run in `description` and in the bands
+       below. */
+    wordmark: "Orchelix",
+    heroLede:
+      "AI agents that answer, qualify, and book around the clock — in English and Spanish, with every action on the record.",
     metaLine: "Esmi answers in English and Spanish",
     metaPlace: "West Palm Beach · Ontario",
     exploreHint: "Hover to explore",
@@ -128,7 +151,7 @@ const en = {
 
     stackTitle: "One system, one console, one audit trail",
     stackBody:
-      "One agent is answering calls in production today. Two more are being built on the same console and the same audit trail. We would rather tell you which is which.",
+      "One agent is answering calls in production today. A second is being built on the same console and the same audit trail. We would rather tell you which is which.",
     shared: [
       ["Console", "One operator view"],
       ["Audit trail", "Every action, one log"],
@@ -152,11 +175,6 @@ const en = {
         title: "Revenue-Ops Agents",
         desc: "Qualify every lead, follow up on time, and keep the pipeline moving while your team runs the conversations that matter.",
         scope: "Qualify · Follow up · Close",
-      },
-      {
-        title: "AcumenAI — Accounting & Finance OS",
-        desc: "Automated bookkeeping, reconciliations, and a month-end close you can trust, with a reviewable report every morning.",
-        scope: "Bookkeeping · Reconciliation · Close",
       },
     ],
 
@@ -216,7 +234,6 @@ const en = {
     links: {
       esmi: "Esmi — Virtual Receptionist",
       revops: "Revenue-Ops Agents",
-      acumen: "AcumenAI",
       industries: "Industries",
       howItWorks: "How it works",
       pricing: "Pricing",
@@ -261,9 +278,9 @@ const en = {
     solutions: {
       title: "Products — Orchelix AI Consulting",
       description:
-        "Three agents, one operator console, one audit trail. Esmi is answering calls in production today; Revenue-Ops and AcumenAI are in development.",
-      heading: "Three agents. One console. One audit trail.",
-      lede: "One is answering calls in production today. Two are being built on the same console and the same record. We would rather tell you which is which than let a feature list imply otherwise.",
+        "Two agents, one operator console, one audit trail. Esmi is answering calls in production today; Revenue-Ops is in development.",
+      heading: "Two agents. One console. One audit trail.",
+      lede: "One is answering calls in production today. The other is being built on the same console and the same record. We would rather tell you which is which than let a feature list imply otherwise.",
       esmiCapabilities: [
         ["Availability", "Nights, weekends, and holidays — the line is never unattended"],
         ["Languages", "English and Spanish natively; French as an add-on; switches mid-call"],
@@ -280,16 +297,8 @@ const en = {
         ["CRM", "HubSpot, Salesforce, Pipedrive, and Zoho — read and written natively"],
         ["Reporting", "A Monday scorecard: what moved, what stalled, and why"],
       ] as [string, string][],
-      acumenCapabilities: [
-        ["Categorization", "Bank, card, and AR feeds reconciled to your chart of accounts each morning"],
-        ["Matching", "PO, receipt, and invoice cross-checked; mismatches wait in a review queue"],
-        ["Receivables", "On-brand reminders that escalate by aging rather than by guesswork"],
-        ["Close", "A month-end checklist with every step logged to a name and a timestamp"],
-        ["Ledger", "QuickBooks and Xero native — written back, with no parallel set of books"],
-        ["Compliance", "PIPEDA-aligned audit trail, every action attributable, residency on request"],
-      ] as [string, string][],
       inDevNote:
-        "These two are in development. The capabilities above describe what they are being built to do, not what is running in your account today. If a pilot depends on either of them, say so and we will tell you honestly where it stands.",
+        "Revenue-Ops is in development. The capabilities above describe what it is being built to do, not what is running in your account today. If a pilot depends on it, say so and we will tell you honestly where it stands.",
       deploymentHeading: "How a deployment runs",
       deploymentLede:
         "Every agent ships the same way: one workflow mapped by a senior consultant, live in fourteen days, and audited from the first action onward.",
@@ -712,49 +721,6 @@ const en = {
        of scope for this pass: ArticleBody still renders the light world's
        long-form styling, and a documented Read variant of Prose is a
        separate piece of work. The chrome around it is the ledger. */
-    /* /acumen — the AcumenAI product page, converted 2026-08-08.
-
-       Honesty corrections in that pass:
-       - "One bookkeeper, 200 clients." was a capacity claim with no basis on
-         hand; PRODUCT.md bars outcome metrics outright.
-       - the page carried no shipping status at all, while PRODUCT.md lists
-         AcumenAI as in development and requires roadmap products to read as
-         roadmap. It now says so in the opening, matching /app.
-       - "Go to Dashboard" pointed at a raw Vercel preview host
-         (landing-pink-five-23.vercel.app) rather than /app. */
-    acumen: {
-      title: "AcumenAI — books that reconcile themselves",
-      description:
-        "AcumenAI is the accounting and finance OS: it reads bank statements, verifies every transaction against the bank's own running balance, categorises to the GL, and queues exceptions for one-click human approval — with a full audit trail.",
-      heading: "Books that reconcile themselves",
-      lede: "AcumenAI reads a bank statement, checks every transaction against the bank's own running balance, categorises it to the right GL account, and queues only the judgment calls for a person — with an audit trail behind every step.",
-      facts: [
-        ["Status", "In development"],
-        ["Verification", "Balance-chain, not inference"],
-        ["Approval", "A person approves, never keys"],
-        ["Record", "Every step logged and exportable"],
-      ] as [string, string][],
-      whyHeading: "Accuracy you can audit, not just trust",
-      why: [
-        {
-          title: "Balance-chain verification",
-          desc: "Every transaction's signed amount must equal the change in the bank's own running balance. Arithmetic, not a language model's guess — so sign-flips and dropped rows surface instead of slipping through.",
-        },
-        {
-          title: "An audit trail that survives review",
-          desc: "Every parse, categorisation, and approval is logged with a timestamp and a reason, attributable and exportable. The compliance backbone an accounting practice actually needs.",
-        },
-        {
-          title: "A person approves, never keys",
-          desc: "Clear transactions are categorised automatically; the judgment calls are queued for one-click approve or reject. Per-client rules learn over time, so the queue shrinks as the books mature.",
-        },
-      ],
-      closeHeading: "See it run on your own books",
-      closeBody:
-        "AcumenAI does the reading, the arithmetic, and the data entry. Your team reviews the exceptions and approves — the part that needs judgment. A fourteen-day pilot puts it against your real ledger.",
-      openConsole: "Open the console",
-    },
-
     /* /missed-calls — the Esmi direct-response landing page, converted
        2026-08-08. It was the last surface carrying the `esmi-dark`
        glassmorphism world: cyan #00F0FF to purple #A855F7 gradient text,
