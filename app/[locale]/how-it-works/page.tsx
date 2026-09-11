@@ -15,6 +15,7 @@ import {
   RuledList,
   Band,
   PageVisual,
+  ink3For,
 } from "@/app/components/ledger";
 import howItWorksDiagram from "@/public/how-it-works-diagram.png";
 
@@ -98,7 +99,9 @@ export default async function HowItWorksPage({ params }: PageProps<"/[locale]">)
                     fontSize: "0.6875rem",
                     letterSpacing: "0.13em",
                     textTransform: "uppercase",
-                    color: "var(--lg-rule)",
+                    /* Was `--lg-rule` — a ruling colour, 2.93:1 as text on
+                       this ground. A dated margin is text, not ruling. */
+                    color: ink3For("stock"),
                   }}
                 >
                   {s.when}
@@ -108,10 +111,10 @@ export default async function HowItWorksPage({ params }: PageProps<"/[locale]">)
                   <h3
                     style={{
                       fontFamily: "var(--font-display)",
-                      fontStretch: "86%",
-                      fontWeight: 600,
+                      fontStretch: "var(--lg-stretch)",
+                      fontWeight: "var(--lg-w-title)",
                       fontSize: "1.25rem",
-                      letterSpacing: "-0.01em",
+                      letterSpacing: "var(--lg-track-title)",
                       textTransform: "uppercase",
                       color: "var(--lg-ink-on-stock)",
                       margin: "0 0 0.5rem",
@@ -181,7 +184,7 @@ export default async function HowItWorksPage({ params }: PageProps<"/[locale]">)
         </Section>
 
         {/* ── Close ── */}
-        <Section tone="field-3" style={{ borderTop: "2px solid var(--lg-foil)" }}>
+        <Section tone="night" style={{ borderTop: "2px solid var(--lg-foil)" }}>
           <div className="grid items-end gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
             <div>
               <SectionTitle scale="display" max="16ch">

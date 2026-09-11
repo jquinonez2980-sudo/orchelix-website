@@ -20,6 +20,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { MAIL_TO_INFO, sendTransactionalEmail } from "../../../lib/email";
+import { esc, layout, link, row } from "../../../lib/emailLayout";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -62,70 +63,24 @@ function buildHtml(fields: {
     year: "numeric", month: "long", day: "numeric",
     hour: "2-digit", minute: "2-digit", timeZone: "America/New_York",
   });
+  const e = esc(email);
 
-  const row = (label: string, value: string) => `
-    <tr>
-      <td style="padding:12px 20px;border-bottom:1px solid #EEF2F6;width:110px;vertical-align:top;
-                 font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-                 font-size:10px;font-weight:700;color:#94A3B8;letter-spacing:0.12em;
-                 text-transform:uppercase;white-space:nowrap;">${label}</td>
-      <td style="padding:12px 20px;border-bottom:1px solid #EEF2F6;vertical-align:top;
-                 font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-                 font-size:14px;font-weight:500;color:#0A2540;">${value}</td>
-    </tr>`;
-
-  return `<!DOCTYPE html>
-<html lang="en">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;padding:0;background:#EEF2F6;">
-  <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background:#EEF2F6;padding:32px 16px;">
-    <tr><td align="center">
-      <table width="600" cellpadding="0" cellspacing="0" role="presentation"
-             style="max-width:600px;width:100%;border-radius:16px;overflow:hidden;
-                    box-shadow:0 4px 24px rgba(10,37,64,0.14);">
-        <tr>
-          <td style="background:#0A2540;padding:26px 36px;">
-            <span style="display:inline-block;background:rgba(0,240,255,0.14);border:1px solid rgba(0,240,255,0.32);
-                         border-radius:999px;padding:6px 14px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-                         font-size:10px;font-weight:700;color:#00F0FF;letter-spacing:0.16em;text-transform:uppercase;">
-              Meta ad lead
-            </span>
-            <h1 style="margin:16px 0 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-                       font-size:28px;font-weight:700;color:#FFFFFF;">${firstName}</h1>
-            <p style="margin:6px 0 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-                      font-size:13px;color:rgba(255,255,255,0.5);">${email}</p>
-          </td>
-        </tr>
-        <tr>
-          <td style="background:#FFFFFF;padding:28px 36px;">
-            <table width="100%" cellpadding="0" cellspacing="0" role="presentation"
-                   style="border:1px solid #E8EDF2;border-radius:10px;overflow:hidden;">
-              ${row("Source", source)}
-              ${businessTypeLabel ? row("Business type", businessTypeLabel) : ""}
-              ${utmSource ? row("UTM source", utmSource) : ""}
-              ${utmCampaign ? row("UTM campaign", utmCampaign) : ""}
-              ${row("Submitted", submittedAt)}
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td style="background:#F8FAFC;padding:20px 36px;border-top:1px solid #E8EDF2;">
-            <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
-              <tr><td style="border-radius:10px;background:#0A2540;text-align:center;">
-                <a href="mailto:${email}" style="display:block;padding:14px 24px;
-                   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-                   font-size:14px;font-weight:600;color:#FFFFFF;text-decoration:none;">
-                  Reply to ${firstName} &rarr;
-                </a>
-              </td></tr>
-            </table>
-          </td>
-        </tr>
-      </table>
-    </td></tr>
-  </table>
-</body>
-</html>`;
+  return layout({
+    title: "New Meta ad lead — Orchelix",
+    kicker: "New lead · Meta ad",
+    heading: esc(firstName),
+    subline: e,
+    rows:
+      row("Email", link(`mailto:${e}`, e)) +
+      row("Source", esc(source)) +
+      (businessTypeLabel ? row("Business", esc(businessTypeLabel)) : "") +
+      (utmSource ? row("UTM source", esc(utmSource)) : "") +
+      (utmCampaign ? row("UTM campaign", esc(utmCampaign)) : "") +
+      row("Submitted", esc(submittedAt) + " ET"),
+    replyHref: `mailto:${e}`,
+    replyLabel: `Reply to ${esc(firstName)}`,
+    footnote: "From the /missed-calls landing page.",
+  });
 }
 
 /* Optional forward to a HighLevel / Loops (or any) inbound webhook. Never

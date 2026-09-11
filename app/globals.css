@@ -156,6 +156,22 @@
      light neutral rather than a saturated highlight. */
   /* Calm B2B dwell palette (2026-09): warm paper, warm near-black ink,
      one royal-blue accent for CTAs. No neon magenta / cyber gradients. */
+  /* The type voice, 2026-09-11. One family, set light, wide and open —
+     Archivo at the top of its width axis, thin weights, positive tracking.
+     It replaced condensed heavy caps with negative tracking, and it replaced
+     the Azeret Mono label voice on the marketing surface (see
+     `body[data-surface="site"]` below), which together read as a game HUD.
+     Every display setting on the site reads these; nothing hand-sets a
+     width, a display weight or a display tracking any more. */
+  --lg-stretch:        125%;
+  --lg-w-display:      300;   /* page and section titles */
+  --lg-w-title:        400;   /* entry titles, card heads */
+  --lg-w-ui:           500;   /* nav, buttons, the stamp */
+  --lg-track-display:  0.07em;
+  --lg-track-title:    0.06em;
+  --lg-track-ui:       0.16em;
+  --lg-track-label:    0.2em;
+
   --lg-field:      #f5f1ea;
   --lg-field-2:    #efe9e0;
   --lg-field-3:    #e6dfd4;
@@ -179,9 +195,16 @@
 
   /* Near-black warm ink on paper. */
   --lg-ink:        #12141a;
-  /* Ink Floor Rule (WCAG AA 4.5:1) on warm paper. */
+  /* Ink Floor Rule (WCAG AA 4.5:1) on warm paper. `--lg-ink-3` claimed that
+     floor and did not meet it: at 0.58 it composited to 4.34 / 4.24 / 4.11 /
+     4.37 / 4.24 : 1 on field / field-2 / field-3 / stock / stock-2 — under AA
+     on all five, and it is real text (RuledList terms, Band labels, EntryList
+     meta, the clock's zone, footer prose). Raised to the lowest alpha that
+     clears the floor on the darkest tone it ever sits on, field-3, with a
+     little headroom: 0.62 → 4.65:1 there and 4.97:1 on field. Still a clear
+     step below `--lg-ink-2` at 0.72, so the three-weight hierarchy holds. */
   --lg-ink-2:      rgba(18, 20, 26, 0.72);
-  --lg-ink-3:      rgba(18, 20, 26, 0.58);
+  --lg-ink-3:      rgba(18, 20, 26, 0.62);
   --lg-hair:       rgba(18, 20, 26, 0.12);
   --lg-hair-2:     rgba(18, 20, 26, 0.07);
 
@@ -212,6 +235,188 @@
   --lg-dur-strike:  300ms;  /* Strike — a mark revealed left-to-right   */
   --lg-dur-settle:  380ms;  /* Settle — a row landing into place        */
   --lg-stagger:      45ms;  /* between siblings in a settling run       */
+}
+
+/* ─── The night tone ──────────────────────────────────────────────────────
+   2026-09-11. The marketing surface gained a sixth tone, `night`, so the
+   page can alternate dark and light full-bleed bands. It is a TONE on the
+   existing ladder, not a theme and not a second world — `Section tone="night"`
+   sits beside `field` and `stock`, and everything below it resolves through
+   the same `--lg-*` names every primitive already reads.
+
+   WHERE THESE VALUES COME FROM. They are promoted, not invented. The
+   homepage already carried a night palette scoped to the Inscription scene
+   (`[data-inscription][data-theme="dark"]` in app/inscription/inscription.css)
+   and driven by a DAY/NIGHT control in the nav. That control inverted the
+   whole page, which is exactly what a fixed dark/light rhythm cannot survive:
+   in night mode every band went dark at once and the alternation collapsed.
+   So the control is gone and its grounds and inks are lifted here verbatim,
+   where the tone ladder can reach them. Same six greys, same ink alphas.
+
+   WHY THE ACCENT MOVES AND THE HUE DOES NOT. Royal blue `#3657b1` is 2.70:1
+   on this ground — it fails as text and it fails as a surface boundary. The
+   accent is therefore restated at the value the ground needs, on the same
+   hue (223.9°) and the same saturation (0.62) as the day accent: this is one
+   accent at two values, which is what `--lg-foil` / `--lg-foil-lift` already
+   are, not a second accent. The stamp's ink inverts with it — white on the
+   night accent is 3.58:1 and fails outright, so the fill takes near-black
+   ink, the same move `.lg-app.esmi-dashboard` already makes for cyan.
+
+   Every pair below was computed, not eyeballed:
+     ink   #e8eaee on field/2/3   14.91 / 14.20 / 13.44 : 1
+     ink-2 .84     on field/2/3   10.75 / 10.31 /  9.84 : 1
+     ink-3 .74     on field/2/3    8.56 /  8.27 /  7.94 : 1
+     foil  #6484db on field/2/3    5.02 /  4.78 /  4.52 : 1
+     foil-ink on foil / foil-lift  5.14 /  7.42 : 1
+     foil fill vs field (boundary) 5.02 : 1  (needs 3)
+   The stamp's eight-stop ramp is checked stop by stop below. */
+:root {
+  --lg-night-field:      #14171c;
+  --lg-night-field-2:    #181c22;
+  --lg-night-field-3:    #1c2128;
+
+  --lg-night-ink:        #e8eaee;
+  --lg-night-ink-2:      rgba(232, 234, 238, 0.84);
+  --lg-night-ink-3:      rgba(232, 234, 238, 0.74);
+
+  --lg-night-rule:       rgba(232, 234, 238, 0.42);
+  --lg-night-rule-quiet: rgba(232, 234, 238, 0.16);
+  --lg-night-hair:       rgba(232, 234, 238, 0.16);
+  --lg-night-hair-2:     rgba(232, 234, 238, 0.09);
+  --lg-night-tick:       #8b939e;
+
+  /* The one accent, at the value this ground can carry. */
+  --lg-night-foil:       #6484db;
+  --lg-night-foil-lift:  #9aafe7;
+  --lg-night-foil-ink:   #12141a;
+}
+
+/* The tone itself. Redeclaring the `--lg-*` family on the band element is the
+   whole mechanism: `inkFor`/`ink2For`/`hairFor` in app/components/ledger keep
+   returning `var(--lg-ink)`, `var(--lg-ink-2)` and `var(--lg-hair-2)` exactly
+   as they do on every light tone, and the cascade resolves them dark inside
+   this subtree. No call site picks a colour, and no primitive learns a second
+   code path. */
+.lg-night {
+  --lg-field:            var(--lg-night-field);
+  --lg-field-2:          var(--lg-night-field-2);
+  --lg-field-3:          var(--lg-night-field-3);
+  --lg-field-vivid:      var(--lg-night-field-3);
+  --lg-stock:            var(--lg-night-field-2);
+  --lg-stock-2:          var(--lg-night-field-3);
+
+  --lg-ink:              var(--lg-night-ink);
+  --lg-ink-2:            var(--lg-night-ink-2);
+  --lg-ink-3:            var(--lg-night-ink-3);
+  --lg-ink-on-stock:     var(--lg-night-ink);
+  --lg-ink-on-stock-2:   var(--lg-night-ink-2);
+
+  --lg-rule:             var(--lg-night-rule);
+  --lg-rule-quiet:       var(--lg-night-rule-quiet);
+  --lg-rule-text:        var(--lg-night-ink);
+  --lg-hair:             var(--lg-night-hair);
+  --lg-hair-2:           var(--lg-night-hair-2);
+  --lg-tick:             var(--lg-night-tick);
+  --lg-tick-text:        var(--lg-night-ink);
+
+  --lg-foil:             var(--lg-night-foil);
+  --lg-foil-lift:        var(--lg-night-foil-lift);
+  --lg-foil-ink:         var(--lg-night-foil-ink);
+
+  /* The legacy aliases, restated — and they have to be restated, for the
+     reason `.lg-app` records above: a custom property's `var()` is
+     substituted at computed-value time on the element that DECLARES it. So
+     `--ink-3: var(--lg-ink-3)` on `:root` resolved against the light value
+     and inherits down as that literal; retargeting `--lg-ink-3` here would
+     never reach it. A component still styled with inline `var(--ink-3)` —
+     `/acumen`'s showcase is one, and it landed on a night band at 3.61:1 —
+     is only fixed by redeclaring the alias in this scope too.
+
+     Both halves are covered so the tone works with either styling method,
+     and anything unconverted that is later dropped into a night band comes
+     out right instead of needing its own patch. */
+  --paper:       var(--lg-night-field);
+  --surface:     var(--lg-night-field);
+  --surface-2:   var(--lg-night-field-2);
+  --ink:         var(--lg-night-ink);
+  --ink-2:       var(--lg-night-ink-2);
+  --ink-3:       var(--lg-night-ink-3);
+  --ink-4:       var(--lg-night-ink-3);
+  --line:        var(--lg-night-hair);
+  --line-strong: var(--lg-night-rule-quiet);
+
+  --color-paper:       var(--lg-night-field);
+  --color-surface:     var(--lg-night-field);
+  --color-surface-2:   var(--lg-night-field-2);
+  --color-ink:         var(--lg-night-ink);
+  --color-ink-2:       var(--lg-night-ink-2);
+  --color-ink-3:       var(--lg-night-ink-3);
+  --color-ink-4:       var(--lg-night-ink-3);
+  --color-line:        var(--lg-night-hair);
+  --color-line-strong: var(--lg-night-rule-quiet);
+
+  /* The accent collapse, at this ground's value. One accent, still. */
+  --teal-300:    var(--lg-night-foil-lift);
+  --teal-500:    var(--lg-night-foil);
+  --teal-600:    var(--lg-night-foil);
+  --teal-700:    var(--lg-night-foil);
+  --navy-500:    var(--lg-night-foil-lift);
+  --navy-600:    var(--lg-night-foil);
+  --navy-900:    var(--lg-night-field);
+  --gold-500:    var(--lg-night-foil);
+  --gold-600:    var(--lg-night-foil);
+  --gold-700:    var(--lg-night-foil-lift);
+  --color-teal-300:    var(--lg-night-foil-lift);
+  --color-teal-500:    var(--lg-night-foil);
+  --color-teal-600:    var(--lg-night-foil);
+  --color-teal-700:    var(--lg-night-foil);
+  --color-navy-500:    var(--lg-night-foil-lift);
+  --color-navy-600:    var(--lg-night-foil);
+  --color-navy-900:    var(--lg-night-field);
+  --color-gold-500:    var(--lg-night-foil);
+  --color-gold-600:    var(--lg-night-foil);
+  --color-gold-700:    var(--lg-night-foil-lift);
+
+  background-color: var(--lg-night-field);
+  color: var(--lg-night-ink);
+}
+
+/* The stamp on a night band. Same eight-stop structure and the same two lit
+   lips as the day ramp — a stamp is still a stamp — lifted so the DARKEST
+   stop still clears 4.5:1 against the near-black ink now sitting on it.
+   Stop by stop, ink-on-ramp: 4.65 / 5.66 / 7.25 / 6.38 / 5.14 / 8.47 / 5.66
+   / 4.65. Against the band itself the floor is 4.54:1, well past the 3:1 a
+   surface boundary needs.
+
+   The lips invert with the ground: the contact shadow and the tinted drop are
+   what read as "pressed into" on paper, and on near-black they read as
+   nothing at all, so the lower lip carries the ground's own black and the
+   drop is dropped. Nothing here lifts — the No Float Rule is untouched. */
+.lg-night .lg-foil-surface {
+  background-color: var(--lg-night-foil);
+  background-image: none;
+  box-shadow: none;
+}
+.lg-night .lg-stamp:active { box-shadow: none; }
+
+/* The recess recipe is a light-world one: a graphite tint for the cut and a
+   white lift along the faces turned toward the light. On near-black the tint
+   is invisible and the white lift reads as a seam of glare. Same picture,
+   inverted — the cut goes darker than the band, the lit faces go to a pale
+   hairline at the alpha the ruling already uses. */
+.lg-night .lg-inset {
+  background-color: rgba(0, 0, 0, 0.28);
+  border-top: 1px solid rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid var(--lg-night-hair-2);
+  border-right: 1px solid var(--lg-night-hair-2);
+}
+.lg-night .lg-inset::after {
+  background-image:
+    linear-gradient(to right,  rgba(0, 0, 0, 0.30) 0, rgba(0, 0, 0, 0) 92px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.22) 0, rgba(0, 0, 0, 0) 68px);
+}
+.lg-night .lg-hero-register-solid {
+  background-color: var(--lg-night-field-3) !important;
 }
 
 /* ─── The Ruled Record, applied to the product surface ───────────────────
@@ -620,6 +825,25 @@
   font-feature-settings: "tnum" 1, "zero" 1;
 }
 
+/* The marketing surface speaks one family. `--font-mono` is retargeted to
+   Archivo here so the label voice (column heads, meta, keys, figures) sets in
+   the same wide face as everything else instead of a terminal mono — that
+   mono, uppercase and tracked, was most of what made the pages read like a
+   game HUD. The app surfaces (dashboard, /try-esmi, onboarding) keep Azeret
+   for their registers and never carry this attribute. It sits on <body> for
+   the localized pages, and on Nav, Footer, and the <main> of the marketing
+   pages that live under the other root layout (/privacy, /terms, the 404),
+   because that layout also serves the dashboard. `font-stretch` inherits, so
+   every Archivo run that does not set its own width is wide; Literata has no
+   width axis and is unaffected. */
+[data-surface="site"] {
+  --font-mono: var(--font-display);
+  font-stretch: var(--lg-stretch);
+}
+[data-surface="site"] .lg-fig {
+  font-feature-settings: "tnum" 1;
+}
+
 * { box-sizing: border-box; }
 
 html {
@@ -948,8 +1172,27 @@ body {
   to   { transform: scaleX(1); }
 }
 
+/* `forwards`, not `both`, and the difference is the Legible Default Rule.
+
+   `both` includes `backwards` fill, which applies the `from` keyframe before
+   the animation starts — and Strike's `from` is `inset(0 100% 0 0)`, i.e.
+   fully clipped. Anything wearing this class was therefore INVISIBLE until
+   its animation actually ran, which is the one thing the rule forbids: "a
+   page whose content is gated behind an animation is broken, not animated."
+   Measured on the homepage wordmark in a throttled frame, the company name
+   sat at `inset(0px 100% 0px 0px)` indefinitely — the animation was pending,
+   so the name was simply not on the page.
+
+   With `forwards` the resting state is the unclipped default: before the
+   animation it is legible, during it the mark is written left to right, and
+   after it holds. Remove the animation entirely — reduced motion below, a
+   throttled tab, an engine that never schedules it — and the final state is
+   what was already there.
+
+   The register's ticks keep `both` (below) and must: they carry a stagger
+   delay, and `backwards` is what holds each tick back until its own turn. */
 .lg-strike {
-  animation: lg-strike var(--lg-dur-strike) var(--ease-emphasized) both;
+  animation: lg-strike var(--lg-dur-strike) var(--ease-emphasized) forwards;
 }
 
 /* ─── Motion Waits ────────────────────────────────────────────────────────
@@ -1301,17 +1544,24 @@ body {
    lip and a dark bottom lip so it still reads as pressed rather than flat —
    just in the brand's Magenta now instead of gold. */
 .lg-foil-surface {
-  /* Royal blue stamp — calm, high-contrast CTA (Jorge fabric swatch). */
-  background-image: linear-gradient(
-    100deg,
-    #274085 0%, #3657b1 14%, #4b72dc 31%, #3d63c4 44%,
-    #2d4a96 58%, #5a7ee0 74%, #3657b1 88%, #274085 100%
-  );
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.28),
-    inset 0 -1px 0 rgba(20, 35, 80, 0.55),
-    0 1px 0 rgba(0, 0, 0, 0.10),
-    0 14px 26px -16px rgba(54, 87, 177, 0.45);
+  /* Royal blue stamp — calm, high-contrast CTA (Jorge fabric swatch).
+
+     Retuned 2026-09-11 for contrast, not for looks. The label is Archivo 700
+     at 0.9375rem — bold, but under the 18.66px that would let it use the 3:1
+     large-text floor, so it needs 4.5:1 against every stop it crosses. Two of
+     the lit stops did not clear it: #4b72dc was 4.43:1 and #5a7ee0 was
+     3.82:1 under white, so the brightest quarter of the primary CTA on every
+     light band was under AA. The ramp keeps its eight-stop shape and both
+     named brand values (#274085 base, #3657b1 accent, now #284083 / #3656b0
+     at the same hue after rounding); only the three lit stops come down.
+     Worst stop is now 4.78:1 under white, and the ramp's own floor against
+     the paper is 4.25:1 — well past the 3:1 a surface boundary needs. */
+  /* Flat, 2026-09-11. The eight-stop shimmer and its glow read as a game
+     button; a solid accent is calmer and holds white at 6.42:1 everywhere
+     rather than at a worst stop. */
+  background-color: var(--lg-foil);
+  background-image: none;
+  box-shadow: none;
 }
 
 /* The wordmark, stamped. The lockup art becomes a mask so the foil ramp
@@ -1365,20 +1615,10 @@ body {
 .lg-stamp {
   transition: transform 120ms var(--ease-standard), box-shadow 120ms var(--ease-standard), filter 120ms var(--ease-standard);
 }
-.lg-stamp:hover { filter: brightness(1.07) saturate(1.04); }
+.lg-stamp:hover { filter: brightness(1.1); }
 .lg-stamp:active {
   transform: translateY(2px);
-  /* The pressed state kept the dark world's gold-brown lips (rgba(74,48,4)
-     and rgba(58,38,2)) after the rest state moved to magenta, so pressing a
-     stamp shaded it brown. Restated in the accent's own shadow family — the
-     same white highlight and rgba(50,4,22) shadow the rest state uses, with
-     the highlight pulled back and the lower lip deepened to read impressed
-     rather than raised. */
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.25),
-    inset 0 -1px 0 rgba(50, 4, 22, 0.75),
-    inset 0 2px 6px rgba(50, 4, 22, 0.45),
-    0 0 0 rgba(0, 0, 0, 0);
+  box-shadow: none;
 }
 
 /* Disclosure rows. The default triangle belongs to no design system, so the
@@ -1507,10 +1747,10 @@ details[open] > .lg-summary::before {
 }
 .lg-menu-btn__label {
   font-family: var(--font-display);
-  font-stretch: 88%;
-  font-weight: 600;
+  font-stretch: var(--lg-stretch);
+  font-weight: var(--lg-w-ui);
   font-size: 0.6875rem;
-  letter-spacing: 0.12em;
+  letter-spacing: var(--lg-track-ui);
   text-transform: uppercase;
   line-height: 1;
 }
@@ -1573,6 +1813,11 @@ details[open] > .lg-summary::before {
   gap: 1.25rem;
   padding-top: 1.6rem;
 }
+.lg-nav__stamp {
+  font-size: 0.75rem;
+  letter-spacing: var(--lg-track-ui);
+  padding: 0.6rem 1.05rem;
+}
 .lg-nav-phone {
   font-size: 0.6875rem;
   letter-spacing: 0.08em;
@@ -1597,154 +1842,164 @@ details[open] > .lg-summary::before {
     letter-spacing: 0.04em;
   }
 }
-/* Declared here rather than inline on the element: the homepage carries two
-   lockups and swaps them with `display`, and an inline style would outrank
-   the stylesheet rule that does the swapping. */
+/* The lockup — mark plus live name. The name is the hero wordmark's
+   setting (Archivo at --lg-stretch, --lg-w-display) scaled down for the
+   chrome, with the tracking opened further because thin caps at 20px need
+   more air than the same caps at display size. */
+.lg-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--lg-ink);
+}
+.lg-lockup__mark {
+  display: block;
+  height: 38px;
+  width: auto;
+}
+.lg-lockup__words {
+  display: flex;
+  flex-direction: column;
+  gap: 0.34rem;
+  line-height: 1;
+}
+.lg-lockup__name {
+  font-family: var(--font-display);
+  font-stretch: var(--lg-stretch);
+  font-weight: var(--lg-w-display);
+  /* Measured against the Spanish bar at 1440px and 375px, which is where
+     the chrome is tightest: at 1.25rem the lockup cost the Spanish nav its
+     last 14px and pushed the 375px Spanish bar 18px sideways. */
+  font-size: 1.125rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lg-ink);
+  white-space: nowrap;
+}
+.lg-lockup__tag {
+  font-family: var(--font-display);
+  font-stretch: var(--lg-stretch);
+  font-weight: var(--lg-w-ui);
+  font-size: 0.5rem;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--lg-ink-2);
+  white-space: nowrap;
+}
+@media (max-width: 479px) {
+  .lg-lockup { gap: 0.4rem; }
+  .lg-lockup__mark { height: 28px; }
+  .lg-lockup__name { font-size: 0.8125rem; letter-spacing: 0.08em; }
+  .lg-lockup__tag { display: none; }
+}
+
+/* Declared here rather than inline on the element. There used to be two
+   lockups swapped with `display` for the homepage's dark mode; with the mode
+   gone there is one, and this stays a stylesheet rule so the 479px height
+   override below has something to override. */
 .lg-nav-logo { display: block; }
 
 @media (max-width: 479px) {
   .lg-nav-logo { height: 38px !important; }
   .lg-nav__bar { gap: 0.55rem; }
   .lg-nav__bar .lg-stamp {
-    padding: 0.5rem 0.65rem;
+    padding: 0.5rem 0.6rem;
     font-size: 0.625rem;
+    letter-spacing: 0.08em;
   }
 }
 
-/* ─── Conditions cluster: language and lighting ──────────────────────────
-   The two facts about how this page is being presented — which language it
-   speaks, and which light it is read under — drawn as ruling rather than as
-   chrome. The hero's meta strip already states the other conditions (place,
-   time, languages carried); these are the same class of fact and are set the
-   same way.
+/* ─── The destination row ─────────────────────────────────────────────────
+   The six destinations, in the bar from 1024px up. Below that they are in the
+   drawer, which is where all six used to live at every width — including
+   desktop, where there was room for them and a visitor got a Menu button
+   instead of a link to the page showing the product working.
 
-   This replaces a fixed, blurred pill that floated over the bottom-right of
-   the record. That pill was the one element on the homepage the No Float
-   Rule did not survive: `position: fixed` + `backdrop-filter` + a panel fill
-   is a card, and it sat permanently on top of the thing it was lighting.
-
-   State reads as ink weight, never as a filled pill — the selected segment
-   carries `--lg-ink`, its sibling `--lg-ink-3`. Colour is the only property
-   that transitions, at `--lg-dur-state`, so the closed motion vocabulary
-   gains no fifth verb. */
-
-.lg-conditions {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
+   They are `.lg-quiet`, so each carries the same rule-drawn-from-the-left
+   hover the rest of the site's secondary actions carry. No new treatment. */
+.lg-nav__links {
+  display: none;
 }
-
-.lg-seg {
-  display: inline-flex;
-  align-items: stretch;
-  border: 1px solid var(--lg-rule-quiet);
+@media (min-width: 1280px) {
+  .lg-nav__links {
+    display: flex;
+    align-items: center;
+    /* Measured, not guessed, in both languages. The bar's content box is
+       capped at 1240px by the 1320px container, and at the wide setting the
+       six labels plus the stamp leave no room for the phone number — so the
+       phone leaves the bar when the links arrive (it is in the footer), and
+       the Spanish labels, ~180px longer, wait until 1440px (below). */
+    gap: 1.25rem;
+    margin-left: 1.5rem;
+    min-width: 0;
+  }
 }
-
-.lg-seg__item {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  /* The inline locale link this replaces measured 17x17px. 44 is the floor,
-     and it is why the cluster gets its own row rather than being squeezed. */
-  min-height: 44px;
-  min-width: 44px;
-  padding: 0 0.7rem;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
+/* With the six destinations in the bar the drawer holds nothing the bar
+   does not, so the Menu button goes where the links arrive. */
+@media (min-width: 1280px) {
+  .lg-nav .lg-menu-btn { display: none; }
+  .lg-nav__actions .lg-nav-phone { display: none; }
+}
+@media (min-width: 1280px) and (max-width: 1439px) {
+  html:lang(es) .lg-nav__links { display: none; }
+  html:lang(es) .lg-nav .lg-menu-btn { display: flex; }
+}
+.lg-nav__link {
   font-family: var(--font-display);
-  font-stretch: 88%;
-  font-weight: 600;
+  font-stretch: var(--lg-stretch);
+  font-weight: var(--lg-w-ui);
   font-size: 0.6875rem;
-  letter-spacing: 0.11em;
+  /* A step under --lg-track-ui: six labels in one row is the one place the
+     open tracking costs more than it gives. */
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--lg-ink-3);
+  color: var(--lg-ink-2);
   text-decoration: none;
-  cursor: pointer;
+  white-space: nowrap;
   transition: color var(--lg-dur-state) var(--ease-standard);
 }
-
-/* The divider is the ruling itself — no gap, no radius, no second border. */
-.lg-seg__item + .lg-seg__item {
-  border-left: 1px solid var(--lg-rule-quiet);
-}
-
-.lg-seg__item[data-on="true"],
-.lg-seg__item:hover {
-  color: var(--lg-ink);
-}
-
-.lg-seg__item:focus-visible {
-  outline: 2px solid var(--lg-foil);
-  /* Inset so the ring draws inside the segment's own ruling rather than
-     straddling the neighbouring one. */
-  outline-offset: -2px;
-}
+.lg-nav__link:hover { color: var(--lg-ink); }
 
 @media (prefers-reduced-motion: reduce) {
-  .lg-seg__item { transition: none; }
+  .lg-nav__link { transition: none; }
 }
 
-/* The mobile bar collapses to logo + stamp + menu.
-
-   An earlier pass let `.lg-nav__actions` wrap so the conditions cluster could
-   take its own row. On a real phone that failed badly: the actions box is
-   `ml-auto`, so once it wrapped, the phone number and the stamp broke onto a
-   line *above* the wordmark and the header ate roughly a quarter of the
-   viewport. Six things — logo, phone, EN|ES, DAY|NIGHT, stamp, menu — do not
-   fit across 390px, and no amount of wrapping makes them.
-
-   So below 900px the bar carries only what has to be reachable from any
-   scroll position: the wordmark, the one primary action, and the way into
-   everything else. The phone number and both conditions controls move into
-   the drawer, which is what the drawer is for.
-
-   The cost is real and worth naming: the lighting toggle is no longer visible
-   beside the scene it controls on a phone. Nothing else fit without the
-   header dominating the first viewport, which would be the worse trade on the
-   surface whose whole argument is the artifact in the first screen. */
+/* The narrow bar carries only what has to be reachable from any scroll
+   position: the wordmark, the one primary action, and the way into everything
+   else. Six things do not fit across 390px and no amount of wrapping makes
+   them — an earlier pass let this box wrap, and because it is `ml-auto` the
+   phone number and the stamp broke onto a line *above* the wordmark and the
+   header ate a quarter of the viewport. */
 @media (max-width: 899px) {
   .lg-nav__actions {
     /* No wrapping. This is the rule the previous pass got wrong. */
     flex-wrap: nowrap;
   }
-  .lg-nav__actions .lg-nav-phone,
-  .lg-nav__actions .lg-conditions {
+  .lg-nav__actions .lg-nav-phone {
     display: none;
   }
 }
 
-/* The same three controls, restated inside the drawer where they now live. */
-.lg-menu__conditions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1rem;
-  padding-top: 1.15rem;
-  margin-top: 0.35rem;
-  border-top: 1px solid var(--lg-rule);
-}
-@media (min-width: 900px) {
-  .lg-menu__conditions { display: none; }
-}
+/* The hero band. It used to be `min-height: calc(100dvh - 4.7rem)` — a full
+   screen of hero on every first impression, with nothing below the fold to
+   say the page continued. It is now sized by its own content through the
+   `Section` padding every other band uses, which at the Display clamp puts
+   the next band's top edge on screen at every width we test. A visitor can
+   scroll straight past it; there is no gate and nothing to dismiss.
 
-.lg-hero-scene {
-  min-height: calc(100dvh - 4.7rem);
-}
-.lg-hero-inner {
-  padding-top: 1.1rem;
-  padding-bottom: 2.4rem;
-}
+   `--lg-hero-foot` is the rule under the conditions strip at the foot of the
+   band. The strip sits BELOW the heading and the action on purpose: above
+   them it would be an eyebrow, and headings in this world stand alone. */
 .lg-hero-meta {
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.35rem 1.5rem;
   position: relative;
-  padding-bottom: 0.95rem;
-  margin-bottom: 1.6rem;
-  font-family: var(--font-mono);
+  padding-top: 1.15rem;
+  margin-top: 3rem;
+  font-family: var(--font-display);
   font-size: 0.6875rem;
-  letter-spacing: 0.11em;
+  letter-spacing: var(--lg-track-label);
   text-transform: uppercase;
   color: var(--lg-ink-2);
 }
@@ -1753,7 +2008,7 @@ details[open] > .lg-summary::before {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 0;
+  top: 0;
   height: 1px;
   background: var(--lg-rule);
 }
@@ -1771,7 +2026,7 @@ details[open] > .lg-summary::before {
 
 @media (min-width: 768px) {
   .lg-hero-meta {
-    grid-template-columns: minmax(0, 1.4fr) repeat(3, auto);
+    grid-template-columns: minmax(0, 1.4fr) repeat(2, auto);
     align-items: baseline;
   }
 }
@@ -1788,26 +2043,29 @@ details[open] > .lg-summary::before {
 }
 
 .lg-hero-offer { max-width: 38rem; }
+/* One line of what the company does. `1.0625rem` is the ramp's lead step and
+   the measure is capped so it stays one or two lines rather than becoming a
+   paragraph — the hero says what this is, the bands below argue it. */
 .lg-hero-body {
   font-family: var(--font-body);
   font-size: 1.0625rem;
   line-height: 1.62;
   color: var(--lg-ink-2);
-  max-width: 40ch;
-  margin: 1.5rem 0 0;
+  max-width: 46ch;
+  margin: 1.6rem 0 0;
 }
 .lg-hero-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 1.4rem 1.75rem;
-  margin-top: 1.7rem;
+  margin-top: 2rem;
 }
 .lg-hero-phone {
   display: inline-block;
   font-family: var(--font-display);
-  font-stretch: 88%;
-  font-weight: 600;
+  font-stretch: var(--lg-stretch);
+  font-weight: var(--lg-w-ui);
   font-size: 1.0625rem;
   letter-spacing: 0.01em;
   color: var(--lg-ink);
@@ -1815,39 +2073,38 @@ details[open] > .lg-summary::before {
   margin-top: 1.25rem;
 }
 
+/* Display. `PageTitle` is the only thing that sets this, and it is now the
+   ramp's own Display clamp rather than the two near-duplicates that were
+   here — `clamp(2.5rem, 11vw, 3.6rem)` with a 1024px override of
+   `clamp(2.7rem, 4.15vw, 4.2rem)`, plus a `-0.032em` tracking and a 0.88
+   leading that matched nothing in the document. DESIGN.md records the ramp
+   as closed at eleven steps and two clamps; this folds the last hand-set
+   display size back onto the canonical one, so the breakpoint override goes
+   with it — a fluid clamp does not need a second clamp at 1024px. */
 .lg-poster {
   font-family: var(--font-display);
-  font-stretch: 82%;
-  font-weight: 700;
-  font-size: clamp(2.5rem, 11vw, 3.6rem);
-  line-height: 0.88;
-  letter-spacing: -0.032em;
+  font-stretch: var(--lg-stretch);
+  font-weight: var(--lg-w-display);
+  /* Wide, light caps read larger than condensed heavy ones at the same
+     size, and a long word at 125% width has to fit 335px — so the clamp
+     comes down from 2.5–4.25rem. */
+  font-size: clamp(1.9rem, 4.6vw, 3.5rem);
+  line-height: 1.08;
+  letter-spacing: var(--lg-track-display);
   text-transform: uppercase;
   color: var(--lg-ink);
   margin: 0;
 }
+/* Strike needs a box to clip. `clip-path` on a bare inline box is not
+   reliably applied, so the struck run inside a heading is made inline-block —
+   it is a single unbroken word here, so this costs no wrapping behaviour. */
+.lg-poster .lg-strike { display: inline-block; }
+
 .lg-poster-block { display: block; }
 .lg-poster-block + .lg-poster-block { margin-top: 0.34em; }
 .lg-poster-lead,
 .lg-poster-last { display: block; }
-@media (min-width: 1024px) {
-  .lg-poster { font-size: clamp(2.7rem, 4.15vw, 4.2rem); }
-  .lg-poster-lead,
-  .lg-poster-last { white-space: nowrap; }
-}
 
-.lg-plus-frame { position: relative; }
-.lg-plus {
-  position: absolute;
-  color: var(--lg-rule);
-  width: 11px;
-  height: 11px;
-  pointer-events: none;
-}
-.lg-plus--tl { top: -0.15rem; left: -0.85rem; }
-.lg-plus--tr { top: -0.15rem; right: -0.55rem; }
-.lg-plus--bl { bottom: -0.2rem; left: -0.85rem; }
-.lg-plus--br { bottom: -0.2rem; right: -0.55rem; }
 
 .lg-explore { display: grid; gap: 1rem; }
 .lg-explore__pods {
@@ -1888,10 +2145,10 @@ details[open] > .lg-summary::before {
 }
 .lg-explore__pod-title {
   font-family: var(--font-display);
-  font-stretch: 86%;
-  font-weight: 600;
-  font-size: 0.95rem;
-  letter-spacing: -0.01em;
+  font-stretch: var(--lg-stretch);
+  font-weight: var(--lg-w-title);
+  font-size: 0.875rem;
+  letter-spacing: var(--lg-track-title);
   text-transform: uppercase;
 }
 .lg-explore__pod-body {
@@ -1926,40 +2183,6 @@ details[open] > .lg-summary::before {
 .lg-explore .lg-reg-row,
 .lg-explore .lg-reg-reason {
   transition: opacity 280ms var(--ease-standard);
-}
-
-.lg-tick-rail {
-  display: none;
-}
-@media (min-width: 1280px) {
-  .lg-tick-rail {
-    position: fixed;
-    top: 50%;
-    right: 1.1rem;
-    z-index: 30;
-    display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
-    transform: translateY(-50%);
-  }
-}
-.lg-tick-rail__item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-}
-.lg-tick-rail__mark {
-  display: block;
-  width: 9px;
-  height: 1px;
-  background: var(--lg-rule-quiet);
-}
-.lg-tick-rail__item[data-active="true"] .lg-tick-rail__mark {
-  width: 14px;
-  height: 2px;
-  background: var(--lg-foil);
 }
 
 .lg-hear-stage {
@@ -2045,8 +2268,6 @@ details[open] > .lg-summary::before {
 @media (max-width: 1023px) {
   .lg-hero-grid { display: flex; flex-direction: column; }
   .lg-hero-register { order: 0; }
-  .lg-plus--tl, .lg-plus--bl { left: 0; }
-  .lg-plus--tr, .lg-plus--br { right: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {

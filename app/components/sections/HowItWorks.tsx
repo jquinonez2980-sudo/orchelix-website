@@ -2,7 +2,7 @@
    real information — these are dated stages, not decorative numbering.
    React Bits: ScrollReveal on each stage (one motion language). */
 
-import { Section, SectionTitle, Prose } from "@/app/components/ledger";
+import { Section, SectionTitle, Prose, ink3For } from "@/app/components/ledger";
 import type { Messages } from "@/app/i18n/messages/en";
 import ScrollReveal from "@/app/components/react-bits/ScrollReveal";
 
@@ -41,7 +41,9 @@ export default function HowItWorks({ t }: { t: Messages }) {
                         fontSize: "0.625rem",
                         letterSpacing: "0.14em",
                         textTransform: "uppercase",
-                        color: "var(--lg-rule)",
+                        /* Was `--lg-rule` — a ruling colour, 2.93:1 as text
+                           on this ground. The dated margin is text. */
+                        color: ink3For("stock"),
                         minWidth: "6rem",
                       }}
                     >
@@ -50,10 +52,10 @@ export default function HowItWorks({ t }: { t: Messages }) {
                     <h3
                       style={{
                         fontFamily: "var(--font-display)",
-                        fontStretch: "86%",
-                        fontWeight: 600,
+                        fontStretch: "var(--lg-stretch)",
+                        fontWeight: "var(--lg-w-title)",
                         fontSize: "1.25rem",
-                        letterSpacing: "-0.01em",
+                        letterSpacing: "var(--lg-track-title)",
                         textTransform: "uppercase",
                         color: "var(--lg-ink-on-stock)",
                         margin: 0,

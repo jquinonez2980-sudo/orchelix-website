@@ -1,4 +1,12 @@
-/* The pricing opening chart — three ascending bars, the tallest in magenta.
+/* The pricing opening chart — three ascending bars, the tallest in the accent.
+
+   2026-09-11: `pricing-visual.png` still carried the retired magenta
+   (#DA326D face, #BC2C5F extruded side) — a second accent on a surface whose
+   palette is one, and the loudest object on the page once this band went
+   night. The bar was recoloured in the asset itself onto the accent's own two
+   values: the lit face to --lg-foil-lift (#4b72dc) and the side to --lg-foil
+   (#3657b1), mapping the original's value span so the 3D reading survives.
+   Hue and relative shading only; nothing was redrawn.
    Sits above the fold like the other two opening visuals, so it gets the
    same on-load Settle treatment rather than a scroll reveal (RevealObserver
    skips anything already on screen at mount).

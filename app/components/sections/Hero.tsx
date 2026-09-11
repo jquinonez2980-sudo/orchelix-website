@@ -1,109 +1,61 @@
-/* Poster first viewport. The DOM register chart is gone — the Inscription
-   occupies that column. The offer type stays.
-   React Bits: BlurText on headline + low-opacity DotGrid behind hero. */
+/* The opening band.
 
-import { Stamp, QuietAction } from "@/app/components/ledger";
+   Near-black, full-bleed, and sized by its own content rather than by the
+   viewport — the first frame has to show that the page continues, because the
+   site's problem is too few visitors and a splash taxes every one of them.
+   Nothing here gates the page: no "enter", no click to proceed, no overlay.
+   A visitor can scroll straight past on the first gesture.
+
+   Three things, in this order: the name, one line of what the company does,
+   one action. The conditions strip sits at the FOOT of the band rather than
+   above the wordmark, where it would be an eyebrow — headings in this world
+   stand alone (DESIGN.md, The No Kicker Rule).
+
+   One animation. The wordmark is Struck — revealed left to right, the way it
+   would be written — once, in 300ms, and then it holds. It is declared on the
+   resting state, so with JS off, with motion suppressed, or in the frame
+   before the animation starts, the name is simply on the page. */
+
+import { Section, PageTitle, Stamp } from "@/app/components/ledger";
 import { localizedHref, type Locale } from "@/app/i18n/config";
 import type { Messages } from "@/app/i18n/messages/en";
-import LiveClock from "./LiveClock";
-import BlurText from "@/app/components/react-bits/BlurText";
-import DotGrid from "@/app/components/react-bits/DotGrid";
 
 export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
   return (
-    <section id="top" className="lg-world lg-field lg-cloth-vivid lg-hero-scene relative">
-      <DotGrid className="lg-hero-dotgrid" opacity={0.28} />
+    <Section id="top" tone="night">
+      <div className="lg-hero-offer">
+        {/* Archivo light at the top of the wdth axis, uppercase, open
+            tracking — all of it from `PageTitle` and the --lg-* type tokens,
+            which are the only way a heading is set here. The ink is `--lg-ink`, which the night
+            band has already retargeted to #e8eaee: 14.91:1 on this ground. */}
+        <PageTitle tone="night" max="12ch">
+          <span className="lg-strike">{t.home.wordmark}</span>
+        </PageTitle>
 
-      <div
-        aria-hidden="true"
-        className="lg-ticks pointer-events-none absolute inset-y-0 left-0 hidden w-[7px] lg:block"
-        style={{ zIndex: 1 }}
-      />
+        <p className="lg-prose lg-hero-body">{t.home.heroLede}</p>
 
-      <div className="lg-hero-inner relative mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-10" style={{ zIndex: 1 }}>
-        <div className="lg-hero-meta">
-          <p>{t.home.metaLine}</p>
-          <p>{t.home.metaPlace}</p>
-          <p>
-            <LiveClock />
-          </p>
-          <p>
-            <span>EN</span>
-            <Sep />
-            <span>ES</span>
-            <Sep />
-            <span>FR+</span>
-          </p>
-          <span className="lg-hero-meta__line" aria-hidden="true" />
-        </div>
-
-        <div className="lg-hero-grid lg-hero-grid--inscription">
-          <div className="lg-hero-offer">
-            <PosterTitle lines={t.home.heroTitle} />
-
-            <p className="lg-prose lg-hero-body">{t.home.heroBody}</p>
-
-            <div className="lg-hero-actions">
-              <Stamp href={localizedHref("/book", locale)}>{t.common.bookPilot}</Stamp>
-              <QuietAction href="#hear-esmi">{t.common.hearRealCall}</QuietAction>
-            </div>
-
-            <a href="tel:+15615661066" className="lg-quiet lg-hero-phone">
-              {t.common.phone}
-            </a>
-          </div>
+        <div className="lg-hero-actions">
+          <Stamp href={localizedHref("/book", locale)}>{t.common.bookPilot}</Stamp>
         </div>
       </div>
-    </section>
-  );
-}
 
-function splitPoster(line: string) {
-  const clean = line.replace(/\.$/, "");
-  const words = clean.split(" ");
-  if (words.length <= 2) {
-    return { lead: words.slice(0, -1).join(" "), last: `${words.at(-1) ?? ""}.` };
-  }
-  if (words.length === 3) {
-    return { lead: words.slice(0, 2).join(" "), last: `${words[2]}.` };
-  }
-  return {
-    lead: words.slice(0, -3).join(" "),
-    last: `${words.slice(-3).join(" ")}.`,
-  };
-}
-
-function PosterTitle({ lines }: { lines: string[] }) {
-  return (
-    <h1 className="lg-poster">
-      {lines.map((line) => {
-        const { lead, last } = splitPoster(line);
-        return (
-          <span className="lg-poster-block" key={line}>
-            {lead ? (
-              <BlurText
-                text={lead}
-                animateBy="words"
-                direction="top"
-                delay={70}
-                stepDuration={0.24}
-                className="lg-poster-lead"
-                as="span"
-              />
-            ) : null}
-            <BlurText
-              text={last}
-              animateBy="words"
-              direction="top"
-              delay={70}
-              stepDuration={0.24}
-              className="lg-poster-last"
-              as="span"
-            />
-          </span>
-        );
-      })}
-    </h1>
+      {/* The conditions of record — what this page is, where it is answered
+          from, and which languages it carries. Facts, set in the label voice,
+          closing the band with a rule. The ticking clock that stood here was
+          removed 2026-09-11: a live readout under a hero is a HUD device. */}
+      <div className="lg-hero-meta">
+        <span className="lg-hero-meta__line" aria-hidden="true" />
+        <p>{t.home.metaLine}</p>
+        <p>{t.home.metaPlace}</p>
+        <p>
+          <span>EN</span>
+          <Sep />
+          <span>ES</span>
+          <Sep />
+          <span>FR</span>
+        </p>
+      </div>
+    </Section>
   );
 }
 

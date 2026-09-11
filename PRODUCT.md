@@ -24,7 +24,7 @@ bilingual, or may be losing calls because nobody in the office is.
 
 Orchelix builds and deploys multi-agent systems that run revenue operations — the
 recurring, time-sensitive work that gets dropped when a small team is busy: answering
-calls, qualifying leads, following up, and closing the books.
+calls, qualifying leads, and following up.
 
 Success is the operator seeing work completed that would otherwise have slipped, with a
 reviewable record of every action the system took.
@@ -59,10 +59,9 @@ once the first has earned it.
 |---|---|
 | **Esmi** — Virtual Receptionist & call automation | **Live in production.** 24/7 answering, qualification, booking, smart routing, EN/ES native, FR as add-on, transcript + reason on every call. |
 | **Revenue-Ops Agents** — lead qualification, follow-up, pipeline | **In development.** |
-| **AcumenAI** — Accounting & Finance OS, close and bookkeeping | **In development.** |
 
-The site must not present all three as equally shipped. Esmi carries the proof; the other
-two are roadmap and must read as such.
+The site must not present both as equally shipped. Esmi carries the proof; Revenue-Ops is
+roadmap and must read as such. AcumenAI was retired 2026-09-11 and is not to be mentioned.
 
 **Jurisdiction:** genuinely cross-border, US and Canada.
 
@@ -89,8 +88,8 @@ Contact: (561) 566-1066.
 
 ## Brand Commitments
 
-- Name: **Orchelix** (Orchelix AI Consulting). Product name **Esmi** for the receptionist;
-  **AcumenAI** for the finance OS.
+- Name: **Orchelix** (Orchelix AI Consulting). Product name **Esmi** for the receptionist.
+  (**AcumenAI**, the finance OS, was retired 2026-09-11 — see Products above.)
 - Voice: senior, competent, calm confidence. No hype, no exclamation, no AI-vendor
   breathlessness. Copy states specifics and consequences, not adjectives.
 - Bilingual EN/ES is an identity commitment, not a feature bullet. French is an add-on.

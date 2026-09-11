@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
+import Lockup from "./Lockup";
 import {
   localizedHref,
   otherLocale,
@@ -11,11 +11,29 @@ import {
   type Locale,
 } from "@/app/i18n/config";
 import type { Messages } from "@/app/i18n/messages/en";
-import ConditionsControl from "./ConditionsControl";
 
-/* Collapsed chrome: logo, language, stamp, menu. The six destinations
-   live in the drawer on every width so the first viewport can be a poster
-   rather than a link row. */
+/* Site chrome: logo, destinations, language, stamp, menu.
+
+   Two fixes, 2026-09-11.
+
+   THE DESTINATIONS WERE UNREACHABLE WITHOUT A CLICK. All six lived in the
+   drawer at every width, including desktop, so the bar offered a visitor the
+   logo, a phone number, one stamp and a Menu button — and "Hear Esmi", the
+   one link that shows the product actually working, was two interactions deep
+   on a site whose stated problem is too few visitors converting. The drawer
+   still owns narrow widths, where six links do not fit; from 1024px up they
+   are in the bar.
+
+   SEPARATION. The bar used to render translucent-and-blurred over the
+   homepage's fixed 3D stage, with a hairline that composited to roughly
+   1.3:1 — present in the DOM, invisible on screen, and invisible against a
+   dark ground in particular. It is now an opaque paper band on every route,
+   which separates from the near-black hero beneath it by a full tonal step:
+   a tone change is this world's only divider, and it is doing the work here.
+
+   The DAY/NIGHT control is gone with the scene it drove. Dark is now a fixed
+   rhythm of specific bands, and a per-visitor invert of the whole page
+   flattened exactly the alternation that rhythm is made of. */
 
 export type NavCopy = Pick<Messages, "nav" | "meta"> & {
   common: Pick<Messages["common"], "phone">;
@@ -31,6 +49,7 @@ const EN_FALLBACK: NavCopy = {
     tryEsmi: "Hear Esmi",
     book: "Book a pilot",
     menu: "Menu",
+    primary: "Primary",
     openMenu: "Open menu",
     closeMenu: "Close menu",
     home: "Orchelix — Home",
@@ -40,9 +59,6 @@ const EN_FALLBACK: NavCopy = {
     switchTo: "Español",
     switchLabel: "Cambiar a español",
     language: "Language",
-    lighting: "Lighting",
-    day: "Day",
-    night: "Night",
   },
   common: { phone: "+1 561 566 1066" },
 };
@@ -79,10 +95,6 @@ export default function Nav({
     ? localizedHref(currentPath, other)
     : localizedHref("/", other);
   const bookHref = localizedHref("/book", locale);
-  /* The lighting control drives the Inscription scene, which only the
-     homepage mounts. Everywhere else the language link keeps its existing
-     inline treatment so no other route's chrome moves. */
-  const isHome = currentPath === "/";
 
   useEffect(() => {
     if (!open) return;
@@ -116,10 +128,10 @@ export default function Nav({
 
   const linkStyle: React.CSSProperties = {
     fontFamily: "var(--font-display)",
-    fontStretch: "88%",
-    fontWeight: 500,
-    fontSize: "1.05rem",
-    letterSpacing: "0.04em",
+    fontStretch: "var(--lg-stretch)",
+    fontWeight: "var(--lg-w-ui)",
+    fontSize: "0.9375rem",
+    letterSpacing: "var(--lg-track-ui)",
     textTransform: "uppercase",
     color: "var(--lg-ink)",
     textDecoration: "none",
@@ -127,6 +139,7 @@ export default function Nav({
 
   return (
     <header
+      data-surface="site"
       className="lg-field lg-cloth lg-nav"
       data-ruled={ruled ? "true" : undefined}
       style={{
@@ -142,51 +155,29 @@ export default function Nav({
           aria-label={t.nav.home}
           style={{ display: "flex", alignItems: "center", textDecoration: "none", flexShrink: 0 }}
         >
-          {/* Two lockups, swapped by CSS rather than by state.
+          {/* One lockup. There used to be two — a night wordmark swapped in by
+              CSS whenever the homepage was in dark mode — and with the mode
+              gone the bar is paper on every route, so the graphite lockup is
+              the only one that is ever on screen.
 
-              Switching `src` on a theme change would mean the wrong lockup is
-              painted first and then replaced — a visible flicker on every
-              toggle, and a graphite wordmark on a black nav for the length of
-              one network request. Both are in the markup and `display` picks
-              one, so the swap costs nothing at runtime.
-
-              The night lockup only renders on the homepage, since that is the
-              only surface with a dark mode; every other route ships exactly
-              the one image it did before.
-
-              Both carry `alt=""`: the anchor above already has an accessible
-              name, and labelling the image too made screen readers announce
-              the link twice. */}
-          {isHome ? (
-            <Image
-              src="/orchelix-logo-night.svg"
-              alt=""
-              aria-hidden="true"
-              width={720}
-              height={280}
-              sizes="140px"
-              unoptimized
-              preload
-              className="lg-nav-logo lg-nav-logo--night"
-              style={{ height: 50, width: "auto" }}
-            />
-          ) : null}
-          <Image
-            src="/orchelix-logo.svg"
-            alt=""
-            aria-hidden="true"
-            width={720}
-            height={280}
-            sizes="140px"
-            unoptimized
-            /* On the homepage night is the opening light, so the day lockup is
-               the one that is not on screen first and must not take the
-               preload slot from it. */
-            preload={!isHome}
-            className="lg-nav-logo lg-nav-logo--day"
-            style={{ height: 50, width: "auto" }}
-          />
+              `alt=""`: the anchor above already has an accessible name, and
+              labelling the image too made screen readers announce it twice. */}
+          <Lockup />
         </a>
+
+        {/* The destinations, in the bar from 1024px up. Below that the drawer
+            carries them — the same list, rendered once from `links`, so the
+            two can never drift apart. */}
+        {/* Its own label: the drawer below is also a <nav> and sharing a name
+            would give the page two landmarks a screen reader cannot tell
+            apart. */}
+        <nav className="lg-nav__links" aria-label={t.nav.primary}>
+          {links.map(({ label, href }) => (
+            <a key={href} href={href} className="lg-quiet lg-nav__link">
+              {label}
+            </a>
+          ))}
+        </nav>
 
         <div className="lg-nav__actions ml-auto flex items-center gap-3 sm:gap-5">
           <a
@@ -196,50 +187,34 @@ export default function Nav({
           >
             {t.common.phone}
           </a>
-          {isHome ? (
-            <ConditionsControl
-              locale={locale}
-              other={other}
-              switchHref={switchHref}
-              copy={{
-                language: t.meta.language,
-                lighting: t.meta.lighting,
-                day: t.meta.day,
-                night: t.meta.night,
-                switchLabel: t.meta.switchLabel,
-              }}
-              onNavigate={close}
-            />
-          ) : (
-            <a
-              href={switchHref}
-              className="lg-fig lg-quiet hidden sm:inline-flex"
-              style={{
-                fontSize: "0.6875rem",
-                letterSpacing: "0.11em",
-                color: "var(--lg-ink-2)",
-                textDecoration: "none",
-              }}
-              lang={other}
-              hrefLang={other}
-              aria-label={t.meta.switchLabel}
-            >
-              {other.toUpperCase()}
-            </a>
-          )}
+          <a
+            href={switchHref}
+            className="lg-fig lg-quiet hidden sm:inline-flex"
+            style={{
+              fontSize: "0.6875rem",
+              letterSpacing: "0.11em",
+              color: "var(--lg-ink-2)",
+              textDecoration: "none",
+            }}
+            lang={other}
+            hrefLang={other}
+            aria-label={t.meta.switchLabel}
+          >
+            {other.toUpperCase()}
+          </a>
 
           <a
             href={bookHref}
-            className="lg-stamp lg-foil-surface inline-flex items-center whitespace-nowrap"
+            /* Size, tracking and padding live on `.lg-nav__stamp` so the
+               narrow-bar rule can step them down — inline values here beat
+               the 479px override, and the Spanish label overflowed 375px. */
+            className="lg-stamp lg-nav__stamp lg-foil-surface inline-flex items-center whitespace-nowrap"
             style={{
               fontFamily: "var(--font-display)",
-              fontStretch: "88%",
-              fontWeight: 700,
-              fontSize: "0.75rem",
-              letterSpacing: "0.08em",
+              fontStretch: "var(--lg-stretch)",
+              fontWeight: "var(--lg-w-ui)",
               textTransform: "uppercase",
               color: "var(--lg-foil-ink)",
-              padding: "0.6rem 1.05rem",
               textDecoration: "none",
             }}
           >
@@ -260,12 +235,9 @@ export default function Nav({
               {open ? (
                 <path d="M3.2 2.4l10.4 10.4-.8.8L2.4 3.2zM13.6 2.4l.8.8L4 13.6l-.8-.8z" />
               ) : (
-                <>
-                  <rect x="0" y="0" width="4.2" height="4.2" />
-                  <rect x="11.8" y="0" width="4.2" height="4.2" />
-                  <rect x="0" y="11.8" width="4.2" height="4.2" />
-                  <rect x="11.8" y="11.8" width="4.2" height="4.2" />
-                </>
+                /* Two plain rules. The four corner squares that stood here
+                   read as a game's fullscreen control. */
+                <path d="M1 5h14v1H1zM1 10h14v1H1z" />
               )}
             </svg>
           </button>
@@ -308,10 +280,10 @@ export default function Nav({
               className="lg-stamp lg-foil-surface inline-flex items-center"
               style={{
                 fontFamily: "var(--font-display)",
-                fontStretch: "88%",
-                fontWeight: 700,
+                fontStretch: "var(--lg-stretch)",
+                fontWeight: "var(--lg-w-ui)",
                 fontSize: "0.8125rem",
-                letterSpacing: "0.08em",
+                letterSpacing: "var(--lg-track-ui)",
                 textTransform: "uppercase",
                 color: "var(--lg-foil-ink)",
                 padding: "0.8rem 1.35rem",
@@ -345,39 +317,6 @@ export default function Nav({
             {t.common.phone}
           </a>
 
-          {/* Lighting lives here on a phone, because six controls do not fit
-              across 390px of bar. Language is already stated above as a word,
-              so only the lighting segment is repeated. Hidden at 900px and up,
-              where the cluster is back in the bar and this would be a second
-              copy of a control already on screen. */}
-          {isHome ? (
-            <div className="lg-menu__conditions">
-              <span
-                className="lg-fig"
-                style={{
-                  fontSize: "0.625rem",
-                  letterSpacing: "0.13em",
-                  textTransform: "uppercase",
-                  color: "var(--lg-ink-3)",
-                }}
-              >
-                {t.meta.lighting}
-              </span>
-              <ConditionsControl
-                parts="lighting"
-                locale={locale}
-                other={other}
-                switchHref={switchHref}
-                copy={{
-                  language: t.meta.language,
-                  lighting: t.meta.lighting,
-                  day: t.meta.day,
-                  night: t.meta.night,
-                  switchLabel: t.meta.switchLabel,
-                }}
-              />
-            </div>
-          ) : null}
         </div>
       </nav>
     </header>

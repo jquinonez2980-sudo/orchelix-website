@@ -10,8 +10,6 @@ import Why from "@/app/components/sections/Why";
 import Operators from "@/app/components/sections/Operators";
 import FinalCTA from "@/app/components/sections/FinalCTA";
 import Footer from "@/app/components/sections/Footer";
-import TickRail from "@/app/components/sections/TickRail";
-import InscriptionRoot from "@/app/inscription/InscriptionRoot";
 import { isLocale, localizedHref } from "@/app/i18n/config";
 import { getDictionary } from "@/app/i18n/dictionaries";
 
@@ -33,22 +31,15 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
   if (!isLocale(locale)) notFound();
   const t = await getDictionary(locale);
 
+  /* The Inscription scene — a pinned WebGL stage that used to sit behind the
+     whole page, with every band transparent over it — is no longer mounted
+     here. Opaque alternating bands are the composition now, and a full-page
+     stage behind them would be visible only where a band declined to paint.
+     `app/inscription/` is left intact on disk; nothing else imports it. */
   return (
-    <InscriptionRoot>
+    <>
       <Nav locale={locale} t={t} />
       <main id="main-content">
-        <TickRail
-          ticks={[
-            { id: "top", label: t.home.rail.top },
-            { id: "hear-esmi", label: t.home.rail.hear },
-            { id: "problem", label: t.home.rail.problem },
-            { id: "solutions", label: t.home.rail.solutions },
-            { id: "how", label: t.home.rail.how },
-            { id: "why", label: t.home.rail.why },
-            { id: "operators", label: t.home.rail.operators },
-            { id: "book", label: t.home.rail.book },
-          ]}
-        />
         <Hero locale={locale} t={t} />
         <HearCall locale={locale} t={t} />
         <Problem t={t} />
@@ -58,7 +49,7 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
         <Operators t={t} />
         <FinalCTA locale={locale} t={t} />
       </main>
-      <Footer locale={locale} t={t} home />
-    </InscriptionRoot>
+      <Footer locale={locale} t={t} />
+    </>
   );
 }

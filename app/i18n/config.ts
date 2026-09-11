@@ -30,7 +30,6 @@ export const LOCALIZED_PATHS = [
   "/kitchen-bath",
   "/ai-receptionist",
   "/blog",
-  "/acumen",
   "/missed-calls",
 ] as const;
 
@@ -55,7 +54,6 @@ export const TRANSLATED_PATHS = new Set<string>([
   "/kitchen-bath",
   "/ai-receptionist",
   "/blog",
-  "/acumen",
   "/missed-calls",
 ]);
 

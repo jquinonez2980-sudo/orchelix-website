@@ -27,8 +27,8 @@ const nextConfig: NextConfig = {
         destination: 'https://www.orchelix.com/:path*',
         statusCode: 301,
       },
-      // /agents has no dedicated page — /solutions is already the three-agent
-      // hub (Esmi, Revenue-Ops, AcumenAI). Redirect rather than duplicate it.
+      // /agents has no dedicated page — /solutions is already the agent hub
+      // (Esmi, Revenue-Ops). Redirect rather than duplicate it.
       {
         source: '/agents',
         destination: '/solutions',
@@ -41,6 +41,17 @@ const nextConfig: NextConfig = {
       {
         source: '/es/recepcionista-ia',
         destination: '/es/ai-receptionist',
+        statusCode: 301,
+      },
+      // AcumenAI was retired 2026-09-11. Its product page and its operator
+      // console at /app are gone; anything still linking to them lands on
+      // the agent hub instead of a 404.
+      { source: '/acumen', destination: '/solutions', statusCode: 301 },
+      { source: '/es/acumen', destination: '/es/solutions', statusCode: 301 },
+      { source: '/app', destination: '/solutions', statusCode: 301 },
+      {
+        source: '/app/:path*',
+        destination: '/solutions',
         statusCode: 301,
       },
     ];

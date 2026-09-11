@@ -12,6 +12,7 @@ import {
   Prose,
   RuledList,
   Band,
+  ink3For,
 } from "@/app/components/ledger";
 
 /* Fabricated proof removed 2026-08-08: two named testimonials (Marisol
@@ -96,7 +97,9 @@ export default async function BookPage({ params }: PageProps<"/[locale]">) {
                       fontSize: "0.6875rem",
                       letterSpacing: "0.13em",
                       textTransform: "uppercase",
-                      color: "var(--lg-rule)",
+                      /* Was `--lg-rule` — a ruling colour, 2.93:1 as text on
+                         this ground. A dated margin is text, not ruling. */
+                      color: ink3For("stock"),
                     }}
                   >
                     {a.when}
@@ -105,10 +108,10 @@ export default async function BookPage({ params }: PageProps<"/[locale]">) {
                     <h3
                       style={{
                         fontFamily: "var(--font-display)",
-                        fontStretch: "86%",
-                        fontWeight: 600,
+                        fontStretch: "var(--lg-stretch)",
+                        fontWeight: "var(--lg-w-title)",
                         fontSize: "1.25rem",
-                        letterSpacing: "-0.01em",
+                        letterSpacing: "var(--lg-track-title)",
                         textTransform: "uppercase",
                         color: "var(--lg-ink-on-stock)",
                         margin: "0 0 0.5rem",

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Lockup from "./Lockup";
 import { localizedHref, otherLocale, type Locale } from "@/app/i18n/config";
 import enMessages, { type Messages } from "@/app/i18n/messages/en";
 
@@ -12,13 +12,9 @@ import enMessages, { type Messages } from "@/app/i18n/messages/en";
 export default function Footer({
   locale = "en",
   t = enMessages,
-  home = false,
 }: {
   locale?: Locale;
   t?: Messages;
-  /* Homepage is night-first and swaps lockups with the lighting control.
-     Other routes keep the single day mark. */
-  home?: boolean;
 } = {}) {
   const L = (path: string) => localizedHref(path, locale);
   const other = otherLocale(locale);
@@ -32,7 +28,6 @@ export default function Footer({
            product demo had no route in from the chrome at all. */
         { label: t.nav.tryEsmi, href: locale === "es" ? "/try-esmi?lang=es" : "/try-esmi" },
         { label: t.footer.links.revops, href: `${L("/solutions")}#agent-revops` },
-        { label: t.footer.links.acumen, href: "/acumen" },
         { label: t.footer.links.industries, href: L("/industries") },
       ],
     },
@@ -82,6 +77,7 @@ export default function Footer({
 
   return (
     <footer
+      data-surface="site"
       className="lg-field lg-cloth"
       style={{ borderTop: "1px solid var(--lg-hair)" }}
     >
@@ -104,32 +100,12 @@ export default function Footer({
         <div className="grid gap-x-12 gap-y-12 lg:grid-cols-[minmax(0,1.25fr)_repeat(3,minmax(0,1fr))]">
           <div>
             <a href={L("/")} aria-label={t.nav.home} style={{ display: "inline-flex" }}>
-              {/* Same pair as Nav. Inline `display` would beat the theme
-                  swap in inscription.css, so visibility lives on the class. */}
-              {home ? (
-                <Image
-                  src="/orchelix-logo-night.svg"
-                  alt=""
-                  aria-hidden="true"
-                  width={720}
-                  height={280}
-                  sizes="140px"
-                  unoptimized
-                  className="lg-nav-logo lg-nav-logo--night"
-                  style={{ height: 50, width: "auto" }}
-                />
-              ) : null}
-              <Image
-                src="/orchelix-logo.svg"
-                alt=""
-                aria-hidden="true"
-                width={720}
-                height={280}
-                sizes="140px"
-                unoptimized
-                className="lg-nav-logo lg-nav-logo--day"
-                style={{ height: 50, width: "auto" }}
-              />
+              {/* One lockup, as in Nav. The footer is paper on every route —
+                  including the homepage, which used to swap in a night
+                  wordmark whenever the retired DAY/NIGHT control was set to
+                  night. The closing CTA above is the page's last dark band;
+                  the footer is its colophon and stays light. */}
+              <Lockup />
             </a>
 
             <p

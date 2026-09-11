@@ -119,7 +119,7 @@ export default async function ArticlePage({ params }: PageProps<"/[locale]/blog/
       <Nav locale={locale} t={t} />
       <main id="main-content">
         {/* ── Masthead ── */}
-        <Section tone="field" scene>
+        <Section tone="night" scene>
           <div style={{ maxWidth: "46rem" }}>
             <div className="mb-7">
               <QuietAction href={indexHref}>{p.allArticles}</QuietAction>
@@ -166,10 +166,10 @@ export default async function ArticlePage({ params }: PageProps<"/[locale]/blog/
                 <h2
                   style={{
                     fontFamily: "var(--font-display)",
-                    fontStretch: "86%",
-                    fontWeight: 600,
+                    fontStretch: "var(--lg-stretch)",
+                    fontWeight: "var(--lg-w-title)",
                     fontSize: "1.0625rem",
-                    letterSpacing: "-0.008em",
+                    letterSpacing: "var(--lg-track-title)",
                     textTransform: "uppercase",
                     color: "var(--lg-ink-on-stock)",
                     margin: "1.4rem 0 0.4rem",
@@ -190,8 +190,8 @@ export default async function ArticlePage({ params }: PageProps<"/[locale]/blog/
                           display: "block",
                           padding: "0.95rem 0",
                           fontFamily: "var(--font-display)",
-                          fontStretch: "88%",
-                          fontWeight: 600,
+                          fontStretch: "var(--lg-stretch)",
+                          fontWeight: "var(--lg-w-ui)",
                           fontSize: "0.9375rem",
                           letterSpacing: "0.04em",
                           color: "var(--lg-ink-on-stock)",
@@ -209,7 +209,7 @@ export default async function ArticlePage({ params }: PageProps<"/[locale]/blog/
         </Section>
 
         {/* ── Close ── */}
-        <Section tone="field-3" style={{ borderTop: "2px solid var(--lg-foil)" }} tight>
+        <Section tone="night" style={{ borderTop: "2px solid var(--lg-foil)" }} tight>
           <div className="grid items-end gap-x-14 gap-y-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
             <Prose size="1.0625rem" max="46ch">
               {p.closeBody}

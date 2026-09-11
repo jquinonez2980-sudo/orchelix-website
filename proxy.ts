@@ -21,11 +21,10 @@ import { DEFAULT_LOCALE, LOCALIZED_PATHS } from "./app/i18n/config";
    The apex-domain redirect (orchelix.com → www) stays in next.config.ts
    redirects(), which run before this. */
 
-const isProtected = createRouteMatcher(["/app(.*)", "/dashboard(.*)"]);
+const isProtected = createRouteMatcher(["/dashboard(.*)"]);
 
 /** Routes that need Clerk's request handling at all. */
 const NEEDS_CLERK = [
-  "/app",
   "/dashboard",
   "/get-started",
   "/sign-in",
@@ -82,10 +81,8 @@ export const config = {
     "/ai-receptionist/:path*",
     "/blog",
     "/blog/:path*",
-    "/acumen",
     "/missed-calls",
     /* Clerk surfaces. */
-    "/app(.*)",
     "/dashboard(.*)",
     "/get-started(.*)",
     "/sign-in(.*)",

@@ -139,8 +139,8 @@ export default async function IndustriesPage({ params }: PageProps<"/[locale]">)
                     <dt
                       style={{
                         fontFamily: "var(--font-display)",
-                        fontStretch: "88%",
-                        fontWeight: 600,
+                        fontStretch: "var(--lg-stretch)",
+                        fontWeight: "var(--lg-w-ui)",
                         fontSize: "0.875rem",
                         letterSpacing: "0.01em",
                         color: "var(--lg-ink)",
@@ -169,7 +169,7 @@ export default async function IndustriesPage({ params }: PageProps<"/[locale]">)
         ))}
 
         {/* ── Close ── */}
-        <Section tone="field-3" style={{ borderTop: "2px solid var(--lg-foil)" }}>
+        <Section tone="night" style={{ borderTop: "2px solid var(--lg-foil)" }}>
           <div className="grid items-end gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
             <div>
               <SectionTitle scale="display" max="18ch">

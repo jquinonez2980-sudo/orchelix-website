@@ -12,7 +12,7 @@ import RevealObserver from "./components/ledger/RevealObserver";
    segment's params (`unstable_rootParams` was removed in Next 16). Rather than
    maintain the fonts, contract, and analytics twice, both roots render this. */
 
-/* Display: condensed heavy caps carry the ledger's column-head authority. */
+/* Display: one family, set wide and light through the --lg-* type tokens. */
 const archivo = Archivo({
   subsets: ["latin"],
   axes: ["wdth"],
@@ -47,12 +47,13 @@ const DIRECTION_CONTRACT = `<!--
 THESIS: The audit trail is the interface. Refuses the category's centered hero +
 three identical product cards, and its opposite, the cream editorial broadsheet.
 OWN-WORLD: Ruled record — white field, graphite ruling, one magenta stamp,
-tick marks, tabular registers. Archivo condensed caps / Literata / Azeret mono.
+tabular registers. Archivo wide light caps / Literata; Azeret mono on app surfaces only.
 STORY: An operator sees Esmi answering calls in two languages, every row
 timestamped with a reason and a disposition, and books a pilot.
 FIRST VIEWPORT: White ruled field. Collapsed chrome (logo, stamp, menu).
 Stacked poster type on the left with the magenta stamp; the call register
-on the right is the hover-to-explore object. Native scroll, graphite plus marks.
+on the right is the hover-to-explore object. Native scroll. No plus marks, tick
+rails, live clocks or foil shimmer (removed 2026-09-11: read as a game HUD).
 FORM: The Ruled Record — light rebrand 2026-08-10, seed key 8a1b2873.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the
 finish review, the verdict, and DESIGN.md
@@ -125,10 +126,14 @@ export const fontClassNames = `${archivo.variable} ${literata.variable} ${azeret
 export default function Shell({
   lang,
   skipLabel,
+  surface,
   children,
 }: {
   lang: string;
   skipLabel: string;
+  /* "site" marks the localized marketing surface, which sets its label voice
+     in Archivo rather than Azeret mono — see `body[data-surface="site"]`. */
+  surface?: "site";
   children: React.ReactNode;
 }) {
   return (
@@ -137,7 +142,7 @@ export default function Shell({
         <meta name="theme-color" content="#FFFFFF" />
         <JsonLd data={orgJsonLd} />
       </head>
-      <body>
+      <body data-surface={surface}>
         <div hidden dangerouslySetInnerHTML={{ __html: DIRECTION_CONTRACT }} />
         <a href="#main-content" className="skip-link">
           {skipLabel}

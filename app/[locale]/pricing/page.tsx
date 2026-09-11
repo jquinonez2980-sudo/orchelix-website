@@ -85,7 +85,7 @@ export default async function PricingPage({ params }: PageProps<"/[locale]">) {
       <Nav locale={locale} t={t} />
       <main id="main-content">
         {/* ── Opening ── */}
-        <Section tone="field" scene>
+        <Section tone="night" scene>
           <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:items-start">
             <div>
               <PageTitle max="16ch">{p.heading}</PageTitle>
@@ -224,7 +224,7 @@ export default async function PricingPage({ params }: PageProps<"/[locale]">) {
         </Section>
 
         {/* ── Close ── */}
-        <Section tone="field-3" style={{ borderTop: "2px solid var(--lg-foil)" }}>
+        <Section tone="night" style={{ borderTop: "2px solid var(--lg-foil)" }}>
           <div className="grid items-end gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
             <div>
               <SectionTitle scale="display" max="16ch">
@@ -339,10 +339,10 @@ function RateSchedule({ t, locale }: { t: Messages; locale: Locale }) {
                   style={{
                     textAlign: "right",
                     fontFamily: row.strong ? "var(--font-display)" : undefined,
-                    fontStretch: row.strong ? "86%" : undefined,
+                    fontStretch: row.strong ? "var(--lg-stretch)" : undefined,
                     fontSize: row.strong ? "1.5rem" : "0.8125rem",
-                    fontWeight: row.strong ? 700 : 400,
-                    letterSpacing: row.strong ? "-0.01em" : "0.02em",
+                    fontWeight: row.strong ? "var(--lg-w-title)" : 400,
+                    letterSpacing: row.strong ? "0.02em" : "0.02em",
                     color: row.strong ? "var(--lg-foil)" : "var(--lg-ink)",
                     padding: "0.85rem 0.9rem",
                     borderBottom: "1px solid var(--lg-hair-2)",
@@ -371,10 +371,10 @@ function RateSchedule({ t, locale }: { t: Messages; locale: Locale }) {
                   className="lg-quiet"
                   style={{
                     fontFamily: "var(--font-display)",
-                    fontStretch: "88%",
-                    fontWeight: 600,
+                    fontStretch: "var(--lg-stretch)",
+                    fontWeight: "var(--lg-w-ui)",
                     fontSize: "0.8125rem",
-                    letterSpacing: "0.06em",
+                    letterSpacing: "var(--lg-track-ui)",
                     textTransform: "uppercase",
                     color: "var(--lg-ink)",
                     textDecoration: "none",
