@@ -338,6 +338,31 @@ function initGL(
   canvas: HTMLCanvasElement,
   stage: HTMLElement,
 ): GL | null {
+  /* TWO CORRECTIONS FOR r185, BOTH MEASURED, NOT GUESSED.
+
+     The study was authored against r150 and its numbers only reproduce under
+     r150's pipeline. Ported literally to r185 the ring came out near-black:
+     measured against a capture of the reference, the shipped port lit 4.0% of
+     the frame at mean luminance 67.9, where the reference lights 11.6% at
+     84.7. It read as dark wire, not as glass.
+
+     1. COLOUR MANAGEMENT. r150 defaulted `ColorManagement.enabled` to false;
+        r152 flipped it to true. With it on, every colour set from a hex is
+        converted sRGB → linear, so the environment's four softboxes emit far
+        less than the numbers say — the blue floor line lands at roughly a
+        third of its authored radiance. The scene's values were chosen in the
+        unmanaged pipeline, so the honest way to honour them is to render them
+        in it. This is a global flag, and it is safe to set here only because
+        nothing else in the app draws with three.
+
+     2. LIGHT INTENSITY. r155 removed `useLegacyLights`, which r150 defaulted
+        to true, making physically-correct lighting the only mode. The key
+        light's authored 1.4 is a legacy figure; π is the conversion factor.
+
+     Together they measure 11.5% lit at mean 82.5 — the reference to within
+     noise. Change either and the ring goes dark again. */
+  T.ColorManagement.enabled = false;
+
   const renderer = new T.WebGLRenderer({
     canvas,
     antialias: true,
@@ -391,7 +416,8 @@ function initGL(
   const envRT = pmrem.fromScene(envScene, 0.008);
   scene.environment = envRT.texture;
 
-  const key = new T.DirectionalLight(0xffffff, 1.4);
+  /* 1.4 is the study's legacy-lighting figure; see correction 2 above. */
+  const key = new T.DirectionalLight(0xffffff, 1.4 * Math.PI);
   scene.add(key);
 
   /* The Frosted setting — the approved one. Normal blending, opaque: custom
