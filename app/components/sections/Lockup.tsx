@@ -1,4 +1,9 @@
-/* The Orchelix lockup: the helix mark plus the name, set live.
+/* The Orchelix lockup: the ring mark plus the name, set live.
+
+   The mark changed 2026-09-11 from the helix to the ring — a circle with one
+   ribbon crossing it, vectorized from Jorge's own drawing. Only the file
+   behind /orchelix-mark.svg and the intrinsic size below changed; the name
+   and its setting did not.
 
    The name used to be part of `orchelix-logo.svg` as SVG <text> in Inter —
    which an <img> cannot load, so it rendered in whatever sans the visitor's
@@ -20,8 +25,8 @@ export default function Lockup({ tagline = true }: { tagline?: boolean }) {
         src="/orchelix-mark.svg"
         alt=""
         aria-hidden="true"
-        width={517}
-        height={1045}
+        width={554}
+        height={608}
         unoptimized
         className="lg-lockup__mark"
       />

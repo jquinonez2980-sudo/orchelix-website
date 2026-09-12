@@ -167,7 +167,7 @@ export default function PrivacyPage() {
                 ],
                 ["Company", "Orchelix AI Consulting Inc. — incorporated in Ontario, Canada"],
                 ["US operations", "West Palm Beach, Florida"],
-                ["Privacy Officer", "Jorge Quinonez — privacy@orchelix.com"],
+                ["Privacy Officer", "Jorge Quiñonez — privacy@orchelix.com"],
               ]}
             />
           </div>
@@ -446,7 +446,7 @@ export default function PrivacyPage() {
             <RuledList
               labelWidth="9rem"
               items={[
-                ["Privacy Officer", "Jorge Quinonez"],
+                ["Privacy Officer", "Jorge Quiñonez"],
                 [
                   "Email",
                   <a
