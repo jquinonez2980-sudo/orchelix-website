@@ -1849,12 +1849,15 @@ details[open] > .lg-summary::before {
 .lg-lockup {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.55rem;
   color: var(--lg-ink);
 }
 .lg-lockup__mark {
   display: block;
-  height: 38px;
+  /* The ring is nearly round (0.91:1) where the helix was tall and narrow,
+     so the same height costs ~15px more width. 32px keeps the Spanish bar
+     inside its measured budget at 1440px. */
+  height: 32px;
   width: auto;
 }
 .lg-lockup__words {
@@ -1887,9 +1890,9 @@ details[open] > .lg-summary::before {
   white-space: nowrap;
 }
 @media (max-width: 479px) {
-  .lg-lockup { gap: 0.4rem; }
-  .lg-lockup__mark { height: 28px; }
-  .lg-lockup__name { font-size: 0.8125rem; letter-spacing: 0.08em; }
+  .lg-lockup { gap: 0.35rem; }
+  .lg-lockup__mark { height: 22px; }
+  .lg-lockup__name { font-size: 0.8125rem; letter-spacing: 0.06em; }
   .lg-lockup__tag { display: none; }
 }
 

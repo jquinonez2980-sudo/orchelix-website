@@ -77,7 +77,7 @@ Contact: (561) 566-1066.
 
 **Confirmed (2026-08-12 founder):**
 
-- **Privacy Officer:** Jorge Quinonez — privacy@orchelix.com  
+- **Privacy Officer:** Jorge Quiñonez — privacy@orchelix.com  
 - **French:** available as an add-on language  
 - **Legal presence:** Canada and United States (see Jurisdiction above). Street-level registered addresses: add to privacy/terms when formal registry strings are pasted in; city/jurisdiction level is approved for public pages until then.
 
@@ -88,8 +88,8 @@ Contact: (561) 566-1066.
 
 ## Brand Commitments
 
-- Name: **Orchelix** (Orchelix AI Consulting). Product name **Esmi** for the receptionist.
-  (**AcumenAI**, the finance OS, was retired 2026-09-11 — see Products above.)
+- Name: **Orchelix** (Orchelix AI Consulting). Product name **Esmi** for the receptionist;
+  **AcumenAI** for the finance OS.
 - Voice: senior, competent, calm confidence. No hype, no exclamation, no AI-vendor
   breathlessness. Copy states specifics and consequences, not adjectives.
 - Bilingual EN/ES is an identity commitment, not a feature bullet. French is an add-on.

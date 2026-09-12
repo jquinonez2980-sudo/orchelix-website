@@ -147,6 +147,31 @@ const nextConfig: NextConfig = {
           { key: "Cache-Control", value: "no-cache, no-store, must-revalidate" },
         ],
       },
+      {
+        /* Jorge's vCard, linked from the digital card at /jorge.
+
+           INLINE, NOT ATTACHMENT, and that is the whole point. Handed an
+           inline text/vcard response, iOS opens its own "Add contact" sheet
+           and the record goes straight into Contacts; `attachment` makes it a
+           download the visitor then has to find and open by hand. Android
+           saves the file and offers Contacts as the handler either way.
+
+           `charset=utf-8` is not optional here: the card carries "Quiñonez"
+           and an em dash in its NOTE, and a parser that falls back to Latin-1
+           mangles the founder's own surname.
+
+           Served from /public, so this is a static file — headers are checked
+           before the filesystem, which is what lets a config entry set the
+           type on a file Next would otherwise serve as application/octet-stream. */
+        source: "/jorge.vcf",
+        headers: [
+          { key: "Content-Type", value: "text/vcard; charset=utf-8" },
+          {
+            key: "Content-Disposition",
+            value: 'inline; filename="Jorge-Quinonez-Orchelix.vcf"',
+          },
+        ],
+      },
     ];
   },
 };
