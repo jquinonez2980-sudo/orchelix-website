@@ -1,0 +1,16 @@
+# vCards are CRLF by specification, not by preference.
+#
+# RFC 2426 (and 6350 after it) define a vCard as lines delimited by CRLF, and
+# long values are folded by inserting CRLF followed by a single space. Git's
+# default `text=auto` saw jorge.vcf as text and normalised it to LF on commit:
+# the file was 17,150 bytes with 231 CRLF on disk and landed in the repo as
+# 16,919 bytes with 231 bare LF, which is what production then served.
+#
+# That matters most where it is least visible. The card carries a base64 PHOTO
+# folded across ~200 continuation lines, and a parser that is strict about the
+# folding rule can reject the photo, or the whole card, rather than degrade.
+#
+# `binary` is `-text -diff`: never normalise on the way in or out. The diff
+# half is wanted too — a one-character change re-emits the entire base64 blob,
+# so the textual diff is noise either way.
+*.vcf binary
