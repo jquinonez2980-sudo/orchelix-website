@@ -235,6 +235,18 @@
   --lg-dur-strike:  300ms;  /* Strike — a mark revealed left-to-right   */
   --lg-dur-settle:  380ms;  /* Settle — a row landing into place        */
   --lg-stagger:      45ms;  /* between siblings in a settling run       */
+
+  /* The hero ring's scenery values. Outside the four-verb ramp on purpose and
+     recorded in DESIGN.md under The Hero Ring Exemption, which is what makes
+     them a decision rather than drift. They are named here so nothing
+     hand-sets a duration: the ramp is still closed for every DOM verb.
+
+     The wipe is longer than Strike (300ms) and its stagger tighter than the
+     register's (45ms) because sixteen strokes at the documented pair read as
+     a stuttering list instead of one mark being drawn. */
+  --lg-ring-draw:    700ms;  /* the flat strokes wipe in, once per visit */
+  --lg-ring-stagger:  18ms;  /* between strokes in that wipe            */
+  --lg-ring-fade:    600ms;  /* the canvas fades up over the flat mark  */
 }
 
 /* ─── The night tone ──────────────────────────────────────────────────────
@@ -2028,7 +2040,10 @@ details[open] > .lg-summary::before {
   height: 100%;
   display: block;
   opacity: 0;
-  transition: opacity 600ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  /* `--ease-standard`, not the study's bespoke cubic-bezier(.2,.7,.2,1).
+     The Closed Vocabulary Rule allows two curves and a third is a defect; an
+     opacity fade has no argument for one of its own. */
+  transition: opacity var(--lg-ring-fade) var(--ease-standard);
 }
 .lg-ring.is-glass .lg-ring__gl { opacity: 1; }
 
@@ -2052,8 +2067,8 @@ details[open] > .lg-summary::before {
 .lg-ring.is-drawing .lg-ring__line path {
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
-  animation: lg-ring-draw 700ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  animation-delay: calc(var(--i) * 18ms);
+  animation: lg-ring-draw var(--lg-ring-draw) var(--ease-emphasized) forwards;
+  animation-delay: calc(var(--i) * var(--lg-ring-stagger));
 }
 @keyframes lg-ring-draw { to { stroke-dashoffset: 0; } }
 
