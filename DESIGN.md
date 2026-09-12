@@ -190,6 +190,7 @@ This document was written across three rebrands and much of it still describes t
 - **One family on the marketing surface.** `body[data-surface="site"]` (set by `app/[locale]/layout.tsx` through `Shell`) retargets `--font-mono` to Archivo, so the label voice, keys, and figures set in the same wide face — tabular via `"tnum"`. Azeret Mono remains only on the app surfaces (`/dashboard`, `/try-esmi`, onboarding), which never carry that attribute.
 - **The lockup.** `app/components/sections/Lockup.tsx`: the helix mark as artwork, the name as **live text in the hero wordmark's setting** (Archivo, `--lg-stretch`, `--lg-w-display`, tracking 0.14em; the tagline at `--lg-w-ui`, 0.34em). Nav and Footer both render it. The old `orchelix-logo.svg` set its name in SVG `<text>` Inter, which an `<img>` cannot load, so it rendered in whatever system sans the visitor had.
 - **Retired devices — do not reintroduce.** Registration plus marks around titles (`PlusFrame`), the right-edge tick rail, the live clock under the hero, the four-square Menu icon, the DAY/NIGHT control, the foil shimmer and glow, the Inscription WebGL scene on the homepage (unmounted; `app/inscription/` is on disk and unimported). Together they read as a game HUD, which is the one thing the owner has said this site must not look like.
+- **One WebGL object survives that list, and the distinction is the whole point.** The homepage hero carries the ring mark in frosted glass (`HeroRing.tsx`) — approved from a study on 2026-09-12, after the Inscription was retired. It is not a reprieve for the retired scene and does not reopen the category. What the Inscription was: a pinned full-viewport stage behind every band, choreographed across eight sections, with bloom, a die, a second palette and a control in the nav. What this is: one object, the company's own mark, in one band, drawn from the same path data as the flat logo, that sways and never spins. The HUD reading came from a screenful of live instrumentation — a ticking clock, a tick rail, a pinned scene, a lighting toggle — not from there being a canvas anywhere. See **The Hero Ring Exemption** under Motion for what it may and may not do.
 - **Nav.** The six destinations sit in the bar from 1280px (Spanish from 1440px — its labels run ~180px longer); the Menu button hides where they arrive, and the phone number leaves the bar there (it is in the footer). Below that, the drawer.
 - **Stamps wrap.** `Stamp` is `max-w-full` with a balanced wrap, because at the wide setting long Spanish labels run past 400px and a nowrap button pushed pages sideways at 375px.
 
@@ -426,6 +427,78 @@ This is an elevation of the Ruled Record into space, not a relaxation of it. The
 - **No new motion verb for DOM elements.** Rule, Settle, Strike, and Press remain closed. The scene's motion is not a fifth verb — it is scenery.
 - **No content may be gated behind the scene.** The Legible Default Rule governs: the page must read complete with the canvas absent, failed, or refused.
 - **Reduced motion and low-tier devices receive a still frame,** not a degraded animation.
+
+### The Hero Ring Exemption (homepage hero only)
+
+The homepage hero renders the Orchelix ring in frosted glass on a `<canvas>`:
+`app/components/sections/HeroRing.tsx`, ported from the approved study in
+`design-sources/ring-3d/hero-ring-reference.html`. It reaches the hero band of
+`/` and `/es` and nothing else.
+
+This is the mark, given depth. It is not scenery and not an illustration: the
+tubes are extruded from `RING_PATHS` in `app/lib/ringPaths.ts` — the same
+sixteen strokes the flat logo and the card at `/jorge` draw — so seen straight
+on it projects onto the outline of `public/orchelix-mark.svg`. That shared
+source is the rule, not a convenience: two copies of the path data would let
+the glass and the logo drift apart, and then the hero would be showing a
+different mark than the nav.
+
+**The ring may:**
+
+- **Refract and catch light.** Glass is manufactured here — a real physical
+  material lit by a black-room PMREM environment with four softboxes — so it
+  satisfies the Produced Materials Rule rather than escaping it.
+- **Sway continuously.** ±6° over 12 seconds, with `rotation.x` a quarter of
+  that. It asserts no system state, so the Nothing Loops Rule's decorative
+  exemption covers it. It may not spin: a rotating logo is a loading spinner
+  with better manners.
+- **Take the pointer on the light, never on the mesh.** The key light swings
+  ±18°. Dragging the object itself would make it a toy.
+- **Hand off to the nav mark on scroll.** Triggered by scroll position, never
+  by a timer imitating one — the Real Cadence Rule applies unchanged.
+
+**Still forbidden, unchanged:**
+
+- **No flare, starfield, bloom, morph or spin.** The retired Inscription was
+  allowed bloom on two things; this is allowed it on none.
+- **No second accent.** The body is near-black and takes its colour from the
+  ground; what you see is the light it catches. The flat mark under it is
+  `--lg-foil`, the one accent, already retargeted by `.lg-night`.
+- **No float.** The canvas sits in the band. It lifts nothing and casts
+  nothing onto the DOM.
+- **Nothing gated behind it.** The Legible Default Rule governs: `HeroRing`
+  server-renders the flat SVG as its resting state, and the canvas is only
+  ever painted *over* it. With JavaScript off, with reduced motion, with WebGL
+  refused, with the context lost, or on a device reporting under 4 GB, the
+  hero shows the flat mark and says nothing about what is missing.
+- **No new motion verb for DOM elements.** Rule, Settle, Strike and Press
+  remain closed. The ring's motion is not a fifth verb.
+
+**Its motion values are an exception to the Closed Vocabulary Rule, and they
+are written down here so they are a decision and not drift.** Four values sit
+outside the ramp, all of them scenery rather than DOM verbs, all tokenised as
+`--lg-ring-*` in `app/globals.css` so nothing hand-sets a duration:
+
+| Value | Token | What it does |
+| --- | --- | --- |
+| 700ms | `--lg-ring-draw` | the flat strokes wipe in, once per visit |
+| 18ms | `--lg-ring-stagger` | between strokes in that wipe |
+| 600ms | `--lg-ring-fade` | the canvas fades up over the flat mark |
+| 12s | `SWAY_PERIOD` in `HeroRing.tsx` | one full sway cycle |
+
+The wipe is longer than Strike's 300ms and its stagger tighter than the
+register's 45ms because sixteen strokes at the documented pair read as a
+stuttering list rather than as one mark being drawn. The ramp is still closed
+for everything that is not this canvas.
+
+**The r150 pipeline is part of the material.** The study was authored against
+three r150 and its numbers only reproduce there, so `HeroRing` sets
+`ColorManagement.enabled = false` and scales the key light by π — r152 turned
+colour management on by default and r155 removed `useLegacyLights`. Ported
+literally to r185 the ring lit 4.0% of its frame at mean luminance 67.9
+against the study's 11.6% at 84.7: it read as dark wire, not as glass. These
+two lines are load-bearing; changing either darkens the mark. The global flag
+is safe only while nothing else in the app draws with three.
 
 ## Shapes
 
