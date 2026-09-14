@@ -1,0 +1,363 @@
+/* Orchelix shop styles.
+ *
+ * Every token is prefixed --shop-* and declared on .shop-scope, NOT :root.
+ * The marketing site already defines --ink, --line, --paper and --surface on
+ * :root; putting the shop's pale-field palette there would overwrite them
+ * site-wide. Scoping here means the shop palette applies only inside the
+ * shop's own wrapper and cannot leak.
+ *
+ * Imported by app/(site)/shop/layout.tsx.
+ */
+
+.shop-scope {
+  --shop-bg: #f4f1ea;
+  --shop-ink: #161616;
+  --shop-mute: #6b6b6b;
+  --shop-card: #fffdf8;
+  --shop-line: rgba(22, 22, 22, 0.12);
+
+  /* --shop-font is Geist, set by next/font in layout.tsx on this wrapper. */
+  font-family: var(--shop-font, Geist), "Inter Tight", sans-serif;
+  background: var(--shop-bg);
+  color: var(--shop-ink);
+  letter-spacing: 0.02em;
+  min-height: 100vh;
+}
+
+.shop-scope *,
+.shop-scope *::before,
+.shop-scope *::after {
+  box-sizing: border-box;
+}
+
+.shop-scope a {
+  color: inherit;
+}
+
+.shop-scope :focus-visible {
+  outline: 2px solid var(--shop-ink);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shop-scope * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---- shell: header + footer ---- */
+
+.shop-scope .shop-header {
+  padding: 28px 7vw 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.shop-scope .shop-header img {
+  height: 36px;
+  width: auto;
+}
+
+.shop-scope .shop-header a.site-link {
+  color: var(--shop-ink);
+  text-decoration: none;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+}
+
+.shop-scope .shop-footer {
+  padding: 40px 7vw 60px;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--shop-mute);
+}
+
+/* ---- hero ---- */
+
+.shop-scope .hero {
+  padding: 72px 7vw 40px;
+  max-width: 1100px;
+}
+
+.shop-scope .hero .kicker {
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--shop-mute);
+}
+
+.shop-scope .hero h1 {
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  margin: 12px 0 0;
+}
+
+.shop-scope .hero .sub {
+  margin: 16px 0 0;
+  color: var(--shop-mute);
+  max-width: 420px;
+  line-height: 1.5;
+}
+
+/* ---- product grid ---- */
+
+.shop-scope .grid {
+  padding: 12px 7vw 80px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 28px;
+}
+
+.shop-scope .grid-section {
+  padding: 0 7vw 8px;
+}
+
+.shop-scope .grid-section h3 {
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--shop-mute);
+  margin: 0;
+  padding-top: 32px;
+}
+
+.shop-scope .card {
+  background: var(--shop-card);
+  border: 1px solid var(--shop-line);
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.shop-scope .card-media {
+  display: block;
+  width: 100%;
+  /* 16:9 matches the 1792×1008 product files, so they show uncropped. */
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: #ece8e0;
+}
+
+.shop-scope .card .meta {
+  padding: 18px 18px 22px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.shop-scope .card h2 {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.shop-scope .card .fit {
+  font-size: 12px;
+  color: var(--shop-mute);
+  margin: 4px 0 0;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.shop-scope .card .row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 16px;
+}
+
+.shop-scope .card .price {
+  font-size: 15px;
+}
+
+.shop-scope .btn {
+  border: 1px solid var(--shop-ink);
+  background: transparent;
+  color: var(--shop-ink);
+  padding: 8px 14px;
+  font-size: 11px;
+  font-family: inherit;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.shop-scope .btn:hover {
+  background: var(--shop-ink);
+  color: var(--shop-bg);
+}
+
+.shop-scope .btn:disabled,
+.shop-scope .btn[aria-disabled="true"] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.shop-scope .btn:disabled:hover,
+.shop-scope .btn[aria-disabled="true"]:hover {
+  background: transparent;
+  color: var(--shop-ink);
+}
+
+.shop-scope .btn-primary {
+  background: var(--shop-ink);
+  color: var(--shop-bg);
+  border-color: var(--shop-ink);
+  padding: 14px 22px;
+  font-size: 12px;
+  width: 100%;
+}
+
+.shop-scope .btn-primary:hover {
+  background: transparent;
+  color: var(--shop-ink);
+}
+
+.shop-scope .tag-soon {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--shop-mute);
+  border: 1px solid var(--shop-line);
+  padding: 8px 14px;
+  display: inline-block;
+}
+
+/* ---- product detail ---- */
+
+.shop-scope .detail {
+  padding: 24px 7vw 100px;
+  max-width: 1100px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 56px;
+}
+
+@media (max-width: 780px) {
+  .shop-scope .detail {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+/* Natural aspect ratio, never cropped: the tee images are front and back side
+   by side, so a fixed ratio with cover cuts one of them in half. */
+.shop-scope .detail-gallery img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #ece8e0;
+  border: 1px solid var(--shop-line);
+  border-radius: 4px;
+}
+
+.shop-scope .detail-info .back-link {
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--shop-mute);
+  text-decoration: none;
+}
+
+.shop-scope .detail-info h1 {
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 18px 0 0;
+}
+
+.shop-scope .detail-info .fit-color {
+  margin: 8px 0 0;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--shop-mute);
+}
+
+.shop-scope .detail-info .price {
+  margin: 20px 0 0;
+  font-size: 20px;
+}
+
+.shop-scope .detail-info .desc {
+  margin: 20px 0 0;
+  color: var(--shop-mute);
+  line-height: 1.6;
+  max-width: 46ch;
+}
+
+.shop-scope .detail-info .prints {
+  margin: 24px 0 0;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--shop-mute);
+  line-height: 1.8;
+}
+
+.shop-scope .detail-info .prints span {
+  color: var(--shop-ink);
+}
+
+.shop-scope .size-select {
+  margin-top: 28px;
+}
+
+.shop-scope .size-select .label {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--shop-mute);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.shop-scope .size-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.shop-scope .size-option {
+  border: 1px solid var(--shop-line);
+  background: transparent;
+  color: var(--shop-ink);
+  font-family: inherit;
+  min-width: 44px;
+  padding: 9px 12px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+.shop-scope .size-option[aria-pressed="true"] {
+  border-color: var(--shop-ink);
+  background: var(--shop-ink);
+  color: var(--shop-bg);
+}
+
+.shop-scope .buy-row {
+  margin-top: 32px;
+  max-width: 320px;
+}
+
+.shop-scope .checkout-note {
+  margin: 12px 0 0;
+  font-size: 12px;
+  color: var(--shop-mute);
+}
+
+.shop-scope .checkout-note[data-state="error"] {
+  color: #9a3b2e;
+}

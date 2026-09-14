@@ -42,6 +42,8 @@ next-env.d.ts
 
 .vercel
 .env*
+# The template of variable names, placeholder values only, is committed.
+!.env.example
 
 # Design source material — the raw exports, AI-generated originals, and
 # camera-roll-named intermediates that the committed assets in public/ were
