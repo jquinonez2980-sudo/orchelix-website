@@ -236,11 +236,13 @@
 
 /* ---- product detail ---- */
 
+/* The gallery gets the larger share: the main product shot is two garments side
+   by side, and at an even split each one rendered too small to read. */
 .shop-scope .detail {
   padding: 24px 7vw 100px;
-  max-width: 1100px;
+  max-width: 1320px;
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
   gap: 56px;
 }
 
@@ -252,11 +254,15 @@
 }
 
 /* Natural aspect ratio, never cropped: the tee images are front and back side
-   by side, so a fixed ratio with cover cuts one of them in half. */
+   by side, so a fixed ratio with cover cuts one of them in half. The height cap
+   keeps tall portrait images (studio-kit.jpg is 960×2080) inside the viewport;
+   contain scales them down whole rather than cropping, and never distorts. */
 .shop-scope .detail-gallery img {
   display: block;
   width: 100%;
   height: auto;
+  max-height: 80vh;
+  object-fit: contain;
   background: #ece8e0;
   border: 1px solid var(--shop-line);
   border-radius: 4px;

@@ -28,6 +28,13 @@ colors:
   night-ink-3: "rgba(232, 234, 238, 0.74)"
   night-foil: "#6484DB"
   night-foil-ink: "#12141A"
+  # Shop only — scoped to .shop-scope in app/(site)/shop/shop.css. See "Shop".
+  shop-field: "#F4F1EA"
+  shop-card: "#FFFDF8"
+  shop-ink: "#161616"
+  shop-mute: "#6B6B6B"
+  shop-line: "rgba(22, 22, 22, 0.12)"
+  shop-error: "#9A3B2E"
 typography:
   scale:
     micro: "0.625rem"
@@ -88,9 +95,22 @@ typography:
     letterSpacing: "0.12em"
     fontVariation: "wdth 125"
     textTransform: "uppercase"
+  # Shop only — scoped to .shop-scope. See "Shop".
+  shop-display:
+    fontFamily: "Geist, \"Inter Tight\", sans-serif"
+    fontSize: "clamp(40px, 6vw, 72px)"
+    fontWeight: 500
+    letterSpacing: "0.08em"
+  shop-title:
+    fontFamily: "Geist, \"Inter Tight\", sans-serif"
+    fontSize: "clamp(28px, 4vw, 40px)"
+    fontWeight: 500
+    letterSpacing: "0.06em"
+    textTransform: "uppercase"
 rounded:
   none: "0px"
   panel: "18px"
+  shop: "4px"
 spacing:
   hair: "0.5rem"
   cell: "0.85rem"
@@ -151,6 +171,7 @@ components:
 
 > **Scope.** This document records the marketing surface: `/`, `/pricing`, `/solutions`, `/how-it-works`, `/industries`, `/about`, `/book`, `/try-esmi`, `/privacy`, `/terms`, plus shared `Nav` and `Footer`.  
 > **Operate:** `/dashboard/*` uses the same graphite/magenta tokens via `.lg-app` remaps and is an Operate surface (denser, review/coach verbs) — not a second brand.  
+> **Shop:** `/shop` and `/shop/[sku]` (`app/(site)/shop`) carry their own scoped design language, recorded under **Shop** at the end of this file. It is not part of the Ruled Record and none of its tokens are available to marketing pages.  
 > **AcumenAI is retired (2026-09-11).** `/acumen`, `/es/acumen`, and the `/app` operator console were removed and 301 to `/solutions`. The navy/gold finance language that was allowed "for that product only" has no remaining home — do not reintroduce it anywhere.
 >
 > **The token file is deliberately split.** `app/globals.css` holds three unrelated systems in one file: the Tailwind `@theme` navy/teal/gold scales and their `:root` aliases (product surfaces — dashboard, forms, legacy marketing routes), the `--lg-*` block (this system), and the `.esmi-dark` block (`/try-esmi` only). Do not "unify" them. The `--lg-*` block is additive and is the only source of truth for anything documented here.
@@ -483,3 +504,30 @@ Not optional, and not left to the browser: selection is foil-on-field, `accent-c
 - **Don't** set body copy in uppercase or in the display face, don't condense or embolden the display face, and don't set a figure in the body serif.
 - **Don't** show the alternating register band below 901px, or let a register entry occupy more than one line below 640px.
 - **Don't** merge the `--lg-*` block with the navy/teal/gold `@theme` scales in `app/globals.css`. They serve different surfaces and the split is intentional.
+
+## Shop
+
+`/shop` and `/shop/[sku]` (`app/(site)/shop`, added 2026-09-14) are a merch storefront with their own design language, deliberately separate from the Ruled Record. Everything in this section applies **only inside `.shop-scope`**, the wrapper rendered by `app/(site)/shop/layout.tsx`. None of it is available site-wide, and none of the Ruled Record's rules above are relaxed by it. The `shop-*` entries in the frontmatter are recorded so the detector can tell these values from drift; being in the frontmatter is not permission to use them on a marketing page.
+
+**How it is scoped.** `app/(site)/shop/shop.css` declares the palette as `--shop-*` custom properties on `.shop-scope`, never on `:root`, so it cannot overwrite the site's `--ink`, `--line`, `--paper`, or `--surface`. Geist is loaded with `next/font/google` in the shop layout and exposed as `--shop-font` on the same wrapper; `app/shell.tsx` and the site's Archivo / Literata type are untouched. The stylesheet ships as its own chunk that only `/shop` routes load.
+
+### Colors
+- **Shop Field** (`shop-field`): the pale ground of every shop page.
+- **Shop Card** (`shop-card`): product card surface, one step lighter than the field.
+- **Shop Ink** (`shop-ink`): all primary text, the outline and filled buttons, and the selected size.
+- **Shop Mute** (`shop-mute`): secondary text — kicker, fit and colour line, description, footer.
+- **Shop Line** (`shop-line`): card borders, image borders, unselected size options, the "Soon" tag.
+- **Shop Error** (`shop-error`): checkout error text only. It is not an accent and appears nowhere else.
+
+### Typography
+Geist, with `"Inter Tight"` and `sans-serif` as the fallback stack. Two display sizes, both fluid:
+- **Shop Display** (`shop-display`, 500, tracking `0.08em`): the ORCHELIX wordmark in the `/shop` hero.
+- **Shop Title** (`shop-title`, 500, tracking `0.06em`, uppercase): the product name on `/shop/[sku]`.
+
+Labels, meta, prices and buttons use fixed sizes from 11px to 20px, uppercase and tracked open.
+
+### Shapes
+Cards and the product image take a small `4px` radius (`rounded.shop`). This is the one place the site shows a rounded corner outside `/try-esmi`'s `panel`, and it stays inside `.shop-scope`: **Radius 0 still governs every marketing page.**
+
+### Named Rules
+**The Shop Scope Rule.** A shop token never leaves `.shop-scope`. If a marketing page wants something that looks like the shop, it is built in the Ruled Record's own tokens, not by importing `shop.css` or reading `--shop-*`.

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-10T18:21:18.781780Z",
+  "generatedAt": "2026-09-14T18:27:33.327Z",
   "title": "Design System: Orchelix Marketing — The Ruled Record",
   "extensions": {
     "scope": {
@@ -13,20 +13,16 @@
         "/about",
         "/book",
         "/try-esmi",
-        "/dashboard/*",
+        "/privacy",
+        "/terms",
+        "/dashboard/* (Operate, via .lg-app)",
         "Nav",
         "Footer"
       ],
       "unconverted": [
-        "/acumen",
-        "/blog",
-        "/ai-receptionist",
-        "/missed-calls",
-        "/home-services",
-        "/kitchen-bath",
-        "/es/blog",
-        "/es/recepcionista-ia",
-        "ContactForm"
+        "/get-started",
+        "/blog article bodies",
+        "/privacy and /terms (residual mixed styling)"
       ],
       "scopeClasses": [
         {
@@ -43,386 +39,570 @@
           "name": ".lg-app",
           "where": "/dashboard subtree only (DashboardShell + dashboard layout)",
           "purpose": "Retargets the Tailwind @theme custom properties to ledger values, converting sixteen routes without touching markup. Deliberately NOT global — the same tokens still dress /acumen, /ai-receptionist, /blog, /es/* and ContactForm, and hoisting the values would render those dark-on-light."
+        },
+        {
+          "name": ".lg-night",
+          "where": "the sixth Section tone (night bands)",
+          "purpose": "Redeclares the whole --lg-* family on the band so every call site resolves the night values without picking a colour."
+        },
+        {
+          "name": ".shop-scope",
+          "where": "app/(site)/shop/layout.tsx — /shop and /shop/[sku] only",
+          "purpose": "A separate, scoped design language: --shop-* palette, Geist type (--shop-font), 4px radius. Not part of the Ruled Record; nothing in it is available site-wide."
         }
       ],
-      "note": "app/globals.css holds three systems: the Tailwind @theme navy/teal/gold scales (still serving the unconverted light routes), the --lg-* block (this system, retargeted onto the dashboard via .lg-app), and .esmi-dark. The split is intentional; do not unify or hoist."
+      "note": "app/globals.css holds three systems: the Tailwind @theme navy/teal/gold scales (still serving the unconverted light routes), the --lg-* block (this system, retargeted onto the dashboard via .lg-app), and .esmi-dark. The split is intentional; do not unify or hoist. The shop is a fourth, separate system: app/(site)/shop/shop.css, scoped to .shop-scope and loaded only on /shop routes."
     },
     "colorMeta": {
       "field": {
         "role": "neutral",
         "displayName": "Field",
-        "canonical": "#FFFFFF",
+        "canonical": "#F5F1EA",
+        "purpose": "The dominant warm-paper ground. Flat: no tile, no gradient, no texture.",
         "tonalRamp": [
-          "#1F1F1F",
-          "#333333",
-          "#4C4C4C",
-          "#666666",
-          "#858585",
-          "#FFFFFF",
-          "#FCFCFC",
-          "#FCFCFC",
-          "#FCFCFC"
+          "#342A19",
+          "#5A492B",
+          "#80673D",
+          "#A6864F",
+          "#BDA375",
+          "#D1BF9E",
+          "#E5DAC8",
+          "#F7F3EE"
         ]
       },
       "field-2": {
         "role": "neutral",
         "displayName": "Field 2",
-        "canonical": "#F1F3F5",
+        "canonical": "#EFE9E0",
+        "purpose": "Adjacent section tone, one narrow step up from Field.",
         "tonalRamp": [
-          "#191F24",
-          "#2A333C",
-          "#404C59",
-          "#556677",
-          "#708599",
-          "#F1F3F5",
-          "#FCFCFD",
-          "#FCFCFD",
-          "#FCFCFD"
+          "#32291A",
+          "#57472D",
+          "#7C6440",
+          "#A18253",
+          "#BAA078",
+          "#CEBCA1",
+          "#E3D9C9",
+          "#F6F3EE"
         ]
       },
       "field-3": {
         "role": "neutral",
         "displayName": "Field 3",
-        "canonical": "#E4E7EB",
+        "canonical": "#E6DFD4",
+        "purpose": "The closing tone.",
         "tonalRamp": [
-          "#1A1E23",
-          "#2B323B",
-          "#414B58",
-          "#576475",
-          "#728297",
-          "#E4E7EB",
-          "#FCFCFD",
-          "#FCFCFD",
-          "#FCFCFD"
+          "#30281C",
+          "#544631",
+          "#776445",
+          "#9B825A",
+          "#B49F7E",
+          "#CBBCA5",
+          "#E1D9CB",
+          "#F6F3EF"
         ]
       },
       "stock": {
         "role": "neutral",
         "displayName": "Ledger Stock",
-        "canonical": "#F1F3F5",
+        "canonical": "#F8F4ED",
+        "purpose": "Sections meant to be read at length.",
         "tonalRamp": [
-          "#191F24",
-          "#2A333C",
-          "#404C59",
-          "#556677",
-          "#708599",
-          "#F1F3F5",
-          "#FCFCFD",
-          "#FCFCFD",
-          "#FCFCFD"
+          "#372B15",
+          "#5F4A25",
+          "#886A35",
+          "#B08945",
+          "#C6A56C",
+          "#D7C098",
+          "#E8DBC4",
+          "#F8F4ED"
         ]
       },
       "stock-2": {
         "role": "neutral",
         "displayName": "Ledger Stock 2",
-        "canonical": "#E4E7EB",
+        "canonical": "#EFE9E0",
+        "purpose": "Second stock step.",
         "tonalRamp": [
-          "#1A1E23",
-          "#2B323B",
-          "#414B58",
-          "#576475",
-          "#728297",
-          "#E4E7EB",
-          "#FCFCFD",
-          "#FCFCFD",
-          "#FCFCFD"
+          "#32291A",
+          "#57472D",
+          "#7C6440",
+          "#A18253",
+          "#BAA078",
+          "#CEBCA1",
+          "#E3D9C9",
+          "#F6F3EE"
         ]
       },
       "foil": {
         "role": "primary",
-        "displayName": "Stamp Magenta",
-        "canonical": "#B7135A",
+        "displayName": "Stamp Blue",
+        "canonical": "#3657B1",
+        "purpose": "The one accent: the flat stamp on the primary action, and browser surfaces (selection, caret, focus ring).",
         "tonalRamp": [
-          "#37061B",
-          "#5C0A2D",
-          "#8B0E44",
-          "#B9135B",
-          "#E82177",
-          "#B7135A",
-          "#E9297C",
-          "#F17CAF",
-          "#FACFE2"
+          "#121D3B",
+          "#1F3266",
+          "#2C4791",
+          "#395CBC",
+          "#6380CF",
+          "#92A6DE",
+          "#C0CCEC",
+          "#EBEFF9"
         ]
       },
       "foil-lift": {
         "role": "primary",
         "displayName": "Stamp Lift",
-        "canonical": "#D42670",
+        "canonical": "#4B72DC",
+        "purpose": "The lit step of the accent. Never a flat fill.",
         "tonalRamp": [
-          "#34091B",
-          "#56102E",
-          "#821745",
-          "#AD1F5B",
-          "#DA2F78",
-          "#D42670",
-          "#E25F97",
-          "#F0ADCA",
-          "#FEFBFC"
+          "#0C1A40",
+          "#162E6F",
+          "#1F419E",
+          "#2854CD",
+          "#5479DE",
+          "#87A1E8",
+          "#BBC9F2",
+          "#EAEEFB"
         ]
       },
       "foil-ink": {
         "role": "primary",
         "displayName": "Stamp Ink",
         "canonical": "#FFFFFF",
+        "purpose": "The white that sits on the stamp.",
         "tonalRamp": [
-          "#1F1F1F",
-          "#333333",
-          "#4C4C4C",
-          "#666666",
-          "#858585",
-          "#FFFFFF",
-          "#FCFCFC",
-          "#FCFCFC",
-          "#FCFCFC"
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#999999",
+          "#B8B8B8",
+          "#D6D6D6",
+          "#F2F2F2"
         ]
       },
       "rule": {
         "role": "neutral",
         "displayName": "Rule",
-        "canonical": "rgba(46, 50, 62, 0.55)",
+        "canonical": "rgba(18, 20, 26, 0.45)",
+        "purpose": "Section top rules and the register margin rule. A mark, never text.",
         "tonalRamp": [
-          "#1A1C23",
-          "#2B2F3B",
-          "#414758",
-          "#575E75",
-          "#727C97",
-          "#2E323E",
-          "#4C5367",
-          "#767F99",
-          "#ABB0C0"
+          "#1F232D",
+          "#363C4E",
+          "#4D5670",
+          "#646F91",
+          "#8690AC",
+          "#ABB1C5",
+          "#CFD2DE",
+          "#F0F1F5"
         ]
       },
       "rule-quiet": {
         "role": "neutral",
         "displayName": "Rule Quiet",
-        "canonical": "rgba(46, 50, 62, 0.18)",
+        "canonical": "rgba(18, 20, 26, 0.16)",
+        "purpose": "Verticals between columns. A mark, never text.",
         "tonalRamp": [
-          "#1A1C23",
-          "#2B2F3B",
-          "#414758",
-          "#575E75",
-          "#727C97",
-          "#2E323E",
-          "#4C5367",
-          "#767F99",
-          "#ABB0C0"
+          "#1F232D",
+          "#363C4E",
+          "#4D5670",
+          "#646F91",
+          "#8690AC",
+          "#ABB1C5",
+          "#CFD2DE",
+          "#F0F1F5"
         ]
       },
       "rule-text": {
         "role": "neutral",
-        "displayName": "Rule Text (retired alias)",
-        "canonical": "#2E323E",
-        "contrastOnField": "5.28:1",
-        "purpose": "The readable step of rule red. Any status word, disposition label, or inline message — never a rule or border. Base #B4342A measures 2.90:1 as text on the field and is a mark only.",
+        "displayName": "Rule Text (alias)",
+        "canonical": "#12141A",
+        "purpose": "Resolves to Ink; kept so the disposition map keeps its shape.",
         "tonalRamp": [
-          "#1A1C23",
-          "#2B2F3B",
-          "#414758",
-          "#575E75",
-          "#727C97",
-          "#2E323E",
-          "#4C5367",
-          "#767F99",
-          "#ABB0C0"
+          "#1F232D",
+          "#363C4E",
+          "#4D5670",
+          "#646F91",
+          "#8690AC",
+          "#ABB1C5",
+          "#CFD2DE",
+          "#F0F1F5"
+        ]
+      },
+      "tick-text": {
+        "role": "neutral",
+        "displayName": "Tick Text (alias)",
+        "canonical": "#12141A",
+        "purpose": "Resolves to Ink; kept so the disposition map keeps its shape.",
+        "tonalRamp": [
+          "#1F232D",
+          "#363C4E",
+          "#4D5670",
+          "#646F91",
+          "#8690AC",
+          "#ABB1C5",
+          "#CFD2DE",
+          "#F0F1F5"
         ]
       },
       "tick": {
         "role": "neutral",
         "displayName": "Tick",
         "canonical": "#ADB5BD",
+        "purpose": "The inert disposition swatch. A mark, never text.",
         "tonalRamp": [
-          "#1B1F22",
-          "#2D3339",
-          "#444C55",
-          "#5B6671",
-          "#778592",
-          "#ADB5BD",
-          "#D5D9DD",
-          "#FCFCFD",
-          "#FCFCFD"
-        ]
-      },
-      "tick-text": {
-        "role": "neutral",
-        "displayName": "Tick Text (retired alias)",
-        "canonical": "#2E323E",
-        "contrastOnField": "5.91:1",
-        "purpose": "The readable step of tick green. The ANSWERED disposition label and any success word. Base #2F8F6B measures 4.40:1 as text and is a mark only.",
-        "tonalRamp": [
-          "#1A1C23",
-          "#2B2F3B",
-          "#414758",
-          "#575E75",
-          "#727C97",
-          "#2E323E",
-          "#4C5367",
-          "#767F99",
-          "#ABB0C0"
+          "#22262A",
+          "#3B4249",
+          "#545E69",
+          "#6D7A88",
+          "#8E99A4",
+          "#B0B8BF",
+          "#D2D6DB",
+          "#F1F2F4"
         ]
       },
       "ink": {
         "role": "neutral",
         "displayName": "Graphite Ink",
-        "canonical": "#2E323E",
+        "canonical": "#12141A",
+        "purpose": "Primary text and the source of every rule.",
         "tonalRamp": [
-          "#1A1C23",
-          "#2B2F3B",
-          "#414758",
-          "#575E75",
-          "#727C97",
-          "#2E323E",
-          "#4C5367",
-          "#767F99",
-          "#ABB0C0"
+          "#1F232D",
+          "#363C4E",
+          "#4D5670",
+          "#646F91",
+          "#8690AC",
+          "#ABB1C5",
+          "#CFD2DE",
+          "#F0F1F5"
         ]
       },
       "ink-2": {
         "role": "neutral",
         "displayName": "Ink 2",
-        "canonical": "rgba(46, 50, 62, 0.68)",
+        "canonical": "rgba(18, 20, 26, 0.72)",
+        "purpose": "Body and secondary text.",
         "tonalRamp": [
-          "#1A1C23",
-          "#2B2F3B",
-          "#414758",
-          "#575E75",
-          "#727C97",
-          "#2E323E",
-          "#4C5367",
-          "#767F99",
-          "#ABB0C0"
+          "#1F232D",
+          "#363C4E",
+          "#4D5670",
+          "#646F91",
+          "#8690AC",
+          "#ABB1C5",
+          "#CFD2DE",
+          "#F0F1F5"
         ]
       },
       "ink-3": {
         "role": "neutral",
         "displayName": "Ink 3",
-        "canonical": "rgba(46, 50, 62, 0.48)",
+        "canonical": "rgba(18, 20, 26, 0.62)",
+        "purpose": "Labels and meta.",
         "tonalRamp": [
-          "#1A1C23",
-          "#2B2F3B",
-          "#414758",
-          "#575E75",
-          "#727C97",
-          "#2E323E",
-          "#4C5367",
-          "#767F99",
-          "#ABB0C0"
+          "#1F232D",
+          "#363C4E",
+          "#4D5670",
+          "#646F91",
+          "#8690AC",
+          "#ABB1C5",
+          "#CFD2DE",
+          "#F0F1F5"
         ]
       },
       "hair": {
         "role": "neutral",
         "displayName": "Hair",
-        "canonical": "rgba(46, 50, 62, 0.14)",
+        "canonical": "rgba(18, 20, 26, 0.12)",
+        "purpose": "Chrome edges: nav bottom, column-head rule.",
         "tonalRamp": [
-          "#1A1C23",
-          "#2B2F3B",
-          "#414758",
-          "#575E75",
-          "#727C97",
-          "#2E323E",
-          "#4C5367",
-          "#767F99",
-          "#ABB0C0"
+          "#1F232D",
+          "#363C4E",
+          "#4D5670",
+          "#646F91",
+          "#8690AC",
+          "#ABB1C5",
+          "#CFD2DE",
+          "#F0F1F5"
         ]
       },
       "hair-2": {
         "role": "neutral",
         "displayName": "Hair 2",
-        "canonical": "rgba(46, 50, 62, 0.08)",
+        "canonical": "rgba(18, 20, 26, 0.07)",
+        "purpose": "Entry row separators.",
         "tonalRamp": [
-          "#1A1C23",
-          "#2B2F3B",
-          "#414758",
-          "#575E75",
-          "#727C97",
-          "#2E323E",
-          "#4C5367",
-          "#767F99",
-          "#ABB0C0"
+          "#1F232D",
+          "#363C4E",
+          "#4D5670",
+          "#646F91",
+          "#8690AC",
+          "#ABB1C5",
+          "#CFD2DE",
+          "#F0F1F5"
         ]
       },
       "ink-on-stock": {
         "role": "neutral",
         "displayName": "Ink on Stock",
-        "canonical": "#2E323E",
+        "canonical": "#12141A",
+        "purpose": "Ink pair for stock-tone sections; selected by tone, never hand-picked.",
         "tonalRamp": [
-          "#1A1C23",
-          "#2B2F3B",
-          "#414758",
-          "#575E75",
-          "#727C97",
-          "#2E323E",
-          "#4C5367",
-          "#767F99",
-          "#ABB0C0"
+          "#1F232D",
+          "#363C4E",
+          "#4D5670",
+          "#646F91",
+          "#8690AC",
+          "#ABB1C5",
+          "#CFD2DE",
+          "#F0F1F5"
         ]
       },
       "ink-on-stock-2": {
         "role": "neutral",
         "displayName": "Ink on Stock 2",
-        "canonical": "rgba(46, 50, 62, 0.68)",
+        "canonical": "rgba(18, 20, 26, 0.72)",
+        "purpose": "Secondary ink on stock tones.",
         "tonalRamp": [
-          "#1A1C23",
-          "#2B2F3B",
-          "#414758",
-          "#575E75",
-          "#727C97",
-          "#2E323E",
-          "#4C5367",
-          "#767F99",
-          "#ABB0C0"
+          "#1F232D",
+          "#363C4E",
+          "#4D5670",
+          "#646F91",
+          "#8690AC",
+          "#ABB1C5",
+          "#CFD2DE",
+          "#F0F1F5"
+        ]
+      },
+      "night-field": {
+        "role": "neutral",
+        "displayName": "Night Field",
+        "canonical": "#14171C",
+        "purpose": "Ground of the near-black night bands.",
+        "tonalRamp": [
+          "#20252D",
+          "#37404D",
+          "#4F5A6E",
+          "#66758F",
+          "#8895AA",
+          "#ACB5C3",
+          "#CFD4DD",
+          "#F0F2F4"
+        ]
+      },
+      "night-ink": {
+        "role": "neutral",
+        "displayName": "Night Ink",
+        "canonical": "#E8EAEE",
+        "purpose": "Primary text on night bands.",
+        "tonalRamp": [
+          "#21242C",
+          "#383F4C",
+          "#505A6D",
+          "#68748D",
+          "#8A94A8",
+          "#ADB4C2",
+          "#D0D4DC",
+          "#F0F2F4"
+        ]
+      },
+      "night-ink-2": {
+        "role": "neutral",
+        "displayName": "Night Ink 2",
+        "canonical": "rgba(232, 234, 238, 0.84)",
+        "purpose": "Body text on night bands.",
+        "tonalRamp": [
+          "#21242C",
+          "#383F4C",
+          "#505A6D",
+          "#68748D",
+          "#8A94A8",
+          "#ADB4C2",
+          "#D0D4DC",
+          "#F0F2F4"
+        ]
+      },
+      "night-ink-3": {
+        "role": "neutral",
+        "displayName": "Night Ink 3",
+        "canonical": "rgba(232, 234, 238, 0.74)",
+        "purpose": "Labels and meta on night bands.",
+        "tonalRamp": [
+          "#21242C",
+          "#383F4C",
+          "#505A6D",
+          "#68748D",
+          "#8A94A8",
+          "#ADB4C2",
+          "#D0D4DC",
+          "#F0F2F4"
+        ]
+      },
+      "night-foil": {
+        "role": "primary",
+        "displayName": "Night Stamp Blue",
+        "canonical": "#6484DB",
+        "purpose": "The accent on night bands.",
+        "tonalRamp": [
+          "#0E1B3E",
+          "#192F6C",
+          "#244399",
+          "#2E57C7",
+          "#597CD9",
+          "#8BA3E4",
+          "#BDCAF0",
+          "#EAEFFA"
+        ]
+      },
+      "night-foil-ink": {
+        "role": "primary",
+        "displayName": "Night Stamp Ink",
+        "canonical": "#12141A",
+        "purpose": "Label colour on the night stamp.",
+        "tonalRamp": [
+          "#1F232D",
+          "#363C4E",
+          "#4D5670",
+          "#646F91",
+          "#8690AC",
+          "#ABB1C5",
+          "#CFD2DE",
+          "#F0F1F5"
+        ]
+      },
+      "shop-field": {
+        "role": "shop",
+        "displayName": "Shop Field",
+        "canonical": "#F4F1EA",
+        "purpose": "Shop only (.shop-scope): pale ground of every shop page.",
+        "tonalRamp": [
+          "#322B1A",
+          "#574B2E",
+          "#7C6A41",
+          "#A18A54",
+          "#B9A679",
+          "#CEC1A1",
+          "#E3DBC9",
+          "#F6F4EE"
+        ]
+      },
+      "shop-card": {
+        "role": "shop",
+        "displayName": "Shop Card",
+        "canonical": "#FFFDF8",
+        "purpose": "Shop only (.shop-scope): product card surface.",
+        "tonalRamp": [
+          "#4D3700",
+          "#855F00",
+          "#BD8700",
+          "#F5AF00",
+          "#FFC533",
+          "#FFD670",
+          "#FFE8AD",
+          "#FFF8E5"
+        ]
+      },
+      "shop-ink": {
+        "role": "shop",
+        "displayName": "Shop Ink",
+        "canonical": "#161616",
+        "purpose": "Shop only (.shop-scope): primary text, buttons, selected size.",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#999999",
+          "#B8B8B8",
+          "#D6D6D6",
+          "#F2F2F2"
+        ]
+      },
+      "shop-mute": {
+        "role": "shop",
+        "displayName": "Shop Mute",
+        "canonical": "#6B6B6B",
+        "purpose": "Shop only (.shop-scope): secondary text.",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#999999",
+          "#B8B8B8",
+          "#D6D6D6",
+          "#F2F2F2"
+        ]
+      },
+      "shop-line": {
+        "role": "shop",
+        "displayName": "Shop Line",
+        "canonical": "rgba(22, 22, 22, 0.12)",
+        "purpose": "Shop only (.shop-scope): card and image borders, unselected sizes.",
+        "tonalRamp": [
+          "#262626",
+          "#424242",
+          "#5E5E5E",
+          "#7A7A7A",
+          "#999999",
+          "#B8B8B8",
+          "#D6D6D6",
+          "#F2F2F2"
+        ]
+      },
+      "shop-error": {
+        "role": "shop",
+        "displayName": "Shop Error",
+        "canonical": "#9A3B2E",
+        "purpose": "Shop only (.shop-scope): checkout error text. Not an accent.",
+        "tonalRamp": [
+          "#3B1712",
+          "#66271E",
+          "#91382B",
+          "#BC4838",
+          "#D06F62",
+          "#DE9A91",
+          "#ECC5C0",
+          "#F9EDEB"
         ]
       }
     },
     "typographyMeta": {
       "display": {
         "displayName": "Display",
-        "purpose": "Page-opening headline, one per page. Archivo wdth 82%, uppercase, balanced, 16-18ch."
+        "purpose": "Page-opening headline, one per page, via PageTitle. Archivo 300 at wdth 125, uppercase, tracked 0.07em, balanced, 15-18ch."
       },
       "headline": {
         "displayName": "Headline",
-        "purpose": "Section titles. Archivo wdth 82%, uppercase, ~20ch."
+        "purpose": "Section titles, always via SectionTitle. Archivo 300 at wdth 125, uppercase, ~20ch."
       },
       "title": {
         "displayName": "Entry Title",
-        "purpose": "Entry headings inside ruled lists. Archivo wdth 86%, uppercase."
+        "purpose": "Entry headings inside ruled lists. Archivo 400 at wdth 125, uppercase, tracked 0.06em."
       },
       "body": {
         "displayName": "Body",
-        "purpose": "All prose. Literata, measure capped at 58ch. Never uppercase, never condensed."
+        "purpose": "All prose. Literata, measure capped at 58ch. Never uppercase, never in the display face."
       },
       "label": {
         "displayName": "Label / Figure",
-        "purpose": "Column heads, terms, register cells, meta, tallies. Azeret Mono tabular, uppercase, wide tracking."
+        "purpose": "Column heads, terms, register cells, meta, tallies. Archivo at wdth 125 with tabular figures on the marketing surface; Azeret Mono on app surfaces only."
       },
       "action": {
         "displayName": "Action",
-        "purpose": "Every button and action link. Archivo wdth 88%, uppercase, tracked."
+        "purpose": "Every button and action link. Archivo 500 at wdth 125, uppercase, tracked 0.12em."
+      },
+      "shop-display": {
+        "displayName": "Shop Display",
+        "purpose": "Shop only (.shop-scope): the ORCHELIX wordmark in the /shop hero. Geist 500."
+      },
+      "shop-title": {
+        "displayName": "Shop Title",
+        "purpose": "Shop only (.shop-scope): the product name on /shop/[sku]. Geist 500, uppercase."
       }
     },
-    "materials": [
-      {
-        "name": "foil-ramp",
-        "value": "linear-gradient(100deg, #7C0C3C 0%, #A81050 14%, #E14A88 31%, #C81E63 44%, #93104C 58%, #D6266F 74%, #A81050 88%, #7C0C3C 100%)",
-        "purpose": "The magenta stamp. Eight-stop metallic reflection ramp; only ever on the primary action. The buckram cloth that used to sit beside it was retired at the 2026-08-10 rebrand rather than recoloured — it was tuned against dark ground and read as a grey smudge on white."
-      },
-      {
-        "name": "measure-ticks",
-        "value": "repeating-linear-gradient(to bottom, rgba(46,50,62,0.55) 0 1px, transparent 1px 70px), repeating-linear-gradient(to bottom, rgba(46,50,62,0.18) 0 1px, transparent 1px 14px)",
-        "purpose": "Graduated measure ticks down the field edge beside the register — minor every 14px, major every fifth. Drawn in the ruling's two documented steps."
-      }
-    ],
-    "shadows": [
-      {
-        "name": "stamp-relief",
-        "value": "inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(50,4,22,0.6), 0 1px 0 rgba(0,0,0,0.12), 0 14px 26px -16px rgba(183,19,90,0.55)",
-        "purpose": "The stamp at rest — bright top lip, dark bottom lip, contact shadow, accent-tinted drop. The only shadow in the system."
-      },
-      {
-        "name": "stamp-impressed",
-        "value": "inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -1px 0 rgba(50,4,22,0.75), inset 0 2px 6px rgba(50,4,22,0.45)",
-        "purpose": "The stamp on :active, paired with translateY(2px). Same family as the relief, highlight pulled back and lower lip deepened so it reads pressed in."
-      }
-    ],
+    "materials": [],
+    "shadows": [],
     "motion": [
       {
         "name": "ease-standard",
@@ -437,7 +617,7 @@
       {
         "name": "dur-press",
         "value": "120ms",
-        "purpose": "Press — the stamp impressing into the cover."
+        "purpose": "Press — the stamp moving 2px into the surface on :active. No shadow since 2026-09-11."
       },
       {
         "name": "dur-state",
@@ -514,6 +694,18 @@
       {
         "name": "container",
         "value": "1320px"
+      },
+      {
+        "name": "nav-links-en",
+        "value": "1280px"
+      },
+      {
+        "name": "nav-links-es",
+        "value": "1440px"
+      },
+      {
+        "name": "shop-detail-stack",
+        "value": "780px"
       }
     ],
     "typeRamp": {
@@ -534,12 +726,12 @@
       "fluid": [
         {
           "role": "display",
-          "value": "clamp(2.5rem, 5.4vw, 4.25rem)",
+          "value": "clamp(1.9rem, 4.6vw, 3.5rem)",
           "source": "PageTitle primitive + Hero h1"
         },
         {
           "role": "headline",
-          "value": "clamp(1.85rem, 3.2vw, 2.9rem)",
+          "value": "clamp(1.5rem, 2.7vw, 2.4rem)",
           "source": "SectionTitle primitive"
         }
       ],
@@ -581,7 +773,19 @@
           "foldsInto": "1.0625rem"
         }
       ],
-      "note": "Recorded as defects the build carries, not as ramp steps. The detector is correct to keep flagging them."
+      "note": "Recorded as defects the build carries, not as ramp steps. The detector is correct to keep flagging them.",
+      "scopedFluid": [
+        {
+          "role": "shop-display",
+          "value": "clamp(40px, 6vw, 72px)",
+          "source": ".shop-scope .hero h1 — shop only"
+        },
+        {
+          "role": "shop-title",
+          "value": "clamp(28px, 4vw, 40px)",
+          "source": ".shop-scope .detail-info h1 — shop only"
+        }
+      ]
     },
     "roundedMeta": {
       "none": {
@@ -595,6 +799,12 @@
         "displayName": "Glass Panel",
         "canonical": "18px",
         "note": "The /try-esmi glass chat panel only — a translucent blurred pane with its own material treatment, on a surface the DESIGN.md Scope note places outside this document. Recorded here because the value lives in the shared app/globals.css and a reader of that file has to be able to tell a chosen shape from drift. Nothing on the marketing surface may use it."
+      },
+      "shop": {
+        "role": "shop",
+        "displayName": "Shop Corner",
+        "canonical": "4px",
+        "note": "Shop only: product cards and the product image inside .shop-scope. Radius 0 still governs every marketing page; this value is recorded so the detector can tell it from drift, not as permission to use it outside the shop."
       }
     }
   },
@@ -603,100 +813,118 @@
       "name": "The Stamp (primary action)",
       "kind": "button",
       "refersTo": "stamp",
-      "description": "The only filled control in the system. Reserved for the primary action; a screen gets one.",
+      "description": "The only filled control in the system: a flat royal-blue fill, reserved for the primary action. A screen gets one.",
       "html": "<a href=\"#\" class=\"ds-stamp\">Book a pilot</a>",
-      "css": ".ds-stamp { display: inline-flex; align-items: center; font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 88%; font-weight: 700; font-size: 0.9375rem; letter-spacing: 0.08em; text-transform: uppercase; color: #FFFFFF; padding: 0.95rem 1.7rem; text-decoration: none; border: 0; border-radius: 0; cursor: pointer; background-image: linear-gradient(100deg, #8A6410 0%, #C08F18 14%, #F6DC8C 31%, #DFAE33 44%, #B5820F 58%, #F0CE6A 74%, #CE9A1E 88%, #8F6A12 100%); box-shadow: inset 0 1px 0 rgba(255,244,205,0.85), inset 0 -1px 0 rgba(74,48,4,0.9), 0 1px 0 rgba(0,0,0,0.5), 0 14px 26px -16px rgba(0,0,0,0.75); transition: transform 120ms cubic-bezier(0.2,0.6,0.2,1), box-shadow 120ms cubic-bezier(0.2,0.6,0.2,1), filter 120ms cubic-bezier(0.2,0.6,0.2,1); } .ds-stamp:hover { filter: brightness(1.07) saturate(1.04); } .ds-stamp:focus-visible { outline: 2px solid #B7135A; outline-offset: 3px; border-radius: 0; } .ds-stamp:active { transform: translateY(2px); box-shadow: inset 0 1px 0 rgba(255,244,205,0.5), inset 0 -1px 0 rgba(74,48,4,0.95), inset 0 2px 6px rgba(58,38,2,0.5); }"
+      "css": ".ds-stamp { display: inline-flex; align-items: center; max-width: 100%; text-wrap: balance; font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: var(--lg-stretch, 125%); font-weight: var(--lg-w-ui, 500); font-size: 0.9375rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--lg-foil-ink, #FFFFFF); background: var(--lg-foil, #3657B1); padding: 0.95rem 1.7rem; border: 0; border-radius: 0; text-decoration: none; cursor: pointer; transition: filter 120ms cubic-bezier(0.2, 0.6, 0.2, 1), transform 120ms cubic-bezier(0.2, 0.6, 0.2, 1); } .ds-stamp:hover { filter: brightness(1.1); } .ds-stamp:focus-visible { outline: 2px solid var(--lg-foil, #3657B1); outline-offset: 3px; border-radius: 0; } .ds-stamp:active { transform: translateY(2px); } @media (prefers-reduced-motion: reduce) { .ds-stamp { transition: none; } }"
     },
     {
       "name": "Quiet Action (secondary)",
       "kind": "button",
       "refersTo": "quiet-action",
-      "description": "The secondary action. A foil rule draws in from the left on hover; no fill, ever.",
+      "description": "The secondary action. A 1px foil rule draws in from the left on hover; no fill, ever.",
       "html": "<a href=\"#\" class=\"ds-quiet\">Hear a real call</a>",
-      "css": ".ds-quiet { position: relative; font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 88%; font-weight: 600; font-size: 0.9375rem; letter-spacing: 0.04em; color: #2E323E; text-decoration: none; } .ds-quiet::after { content: \"\"; position: absolute; left: 0; right: 0; bottom: -3px; height: 1px; background: #B7135A; transform: scaleX(0); transform-origin: left; transition: transform 300ms cubic-bezier(0.16,1,0.3,1); } .ds-quiet:hover::after { transform: scaleX(1); } .ds-quiet:focus-visible { outline: 2px solid #B7135A; outline-offset: 3px; border-radius: 0; }"
+      "css": ".ds-quiet { position: relative; font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: var(--lg-stretch, 125%); font-weight: var(--lg-w-ui, 500); font-size: 0.9375rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--lg-ink, #12141A); text-decoration: none; } .ds-quiet::after { content: \"\"; position: absolute; left: 0; right: 0; bottom: -3px; height: 1px; background: var(--lg-foil, #3657B1); transform: scaleX(0); transform-origin: left; transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-quiet:hover::after { transform: scaleX(1); } .ds-quiet:focus-visible { outline: 2px solid var(--lg-foil, #3657B1); outline-offset: 3px; border-radius: 0; } @media (prefers-reduced-motion: reduce) { .ds-quiet::after { transition: none; } }"
     },
     {
       "name": "Status Key",
       "kind": "chip",
       "refersTo": "register-row",
-      "description": "The system's only status marker — a drawn 14x2px swatch plus a mono label. Replaces every chip, pill, and badge.",
-      "html": "<span class=\"ds-key\"><span class=\"ds-key-swatch\" aria-hidden=\"true\"></span><span class=\"ds-key-label\">Booked</span></span>",
-      "css": ".ds-key { display: inline-flex; align-items: baseline; gap: 8px; font-family: \"Azeret Mono\", ui-monospace, monospace; font-variant-numeric: tabular-nums; } .ds-key-swatch { width: 14px; height: 2px; background: #B7135A; transform: translateY(-0.25em); } .ds-key-label { font-size: 0.625rem; letter-spacing: 0.14em; text-transform: uppercase; color: #B7135A; }"
+      "description": "The system's only status marker — a drawn 14×2px swatch plus a small wide uppercase label. Replaces every chip, pill, and badge.",
+      "html": "<span class=\"ds-key\"><span class=\"ds-key-swatch\" aria-hidden=\"true\"></span><span class=\"ds-key-label\">Booked</span></span> <span class=\"ds-key ds-key-quiet\"><span class=\"ds-key-swatch\" aria-hidden=\"true\"></span><span class=\"ds-key-label\">Routed</span></span>",
+      "css": ".ds-key { display: inline-flex; align-items: baseline; gap: 8px; margin-right: 16px; font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: var(--lg-stretch, 125%); font-feature-settings: \"tnum\" 1; color: var(--lg-foil, #3657B1); } .ds-key-swatch { width: 14px; height: 2px; background: currentColor; transform: translateY(-0.25em); } .ds-key-label { font-size: 0.625rem; letter-spacing: 0.14em; text-transform: uppercase; } .ds-key-quiet { color: var(--lg-ink-2, rgba(18, 20, 26, 0.72)); }"
     },
     {
       "name": "Call Register",
       "kind": "custom",
       "refersTo": "register-row",
-      "description": "The signature artifact: a ruled record with red column verticals, tabular figures, and a derived foot tally.",
-      "html": "<figure class=\"ds-reg\"><figcaption class=\"ds-reg-cap\"><span>Call register — one night, one line</span><span class=\"ds-reg-cap-2\">18:00 – 06:00</span></figcaption><div class=\"ds-reg-row ds-reg-head\"><span>Time</span><span>Lang</span><span>Reason</span><span>Disp.</span></div><div class=\"ds-reg-row\"><span class=\"ds-reg-t\">18:42</span><span class=\"ds-reg-l\">ES</span><span class=\"ds-reg-r\">Plantilla de encimera</span><span class=\"ds-reg-d\">BOOKED</span></div><div class=\"ds-reg-row\"><span class=\"ds-reg-t\">19:07</span><span class=\"ds-reg-l ds-quiet-ink\">EN</span><span class=\"ds-reg-r\">After-hours, no heat</span><span class=\"ds-reg-d ds-reg-d-routed\">ROUTED</span></div><div class=\"ds-reg-row\"><span class=\"ds-reg-t\">19:51</span><span class=\"ds-reg-l\">ES</span><span class=\"ds-reg-r\">Seguimiento de cotización</span><span class=\"ds-reg-d ds-reg-d-answered\">ANSWERED</span></div><div class=\"ds-reg-foot\"><span>3 calls</span></div></figure>",
-      "css": ".ds-reg { margin: 0; background-color: #FFFFFF; padding: 20px; font-family: \"Azeret Mono\", ui-monospace, monospace; font-variant-numeric: tabular-nums; } .ds-reg-cap { display: flex; justify-content: space-between; gap: 16px; font-size: 0.6875rem; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(46,50,62,0.68); padding-bottom: 0.8rem; border-bottom: 2px solid rgba(46,50,62,0.55); } .ds-reg-cap-2 { color: rgba(46,50,62,0.48); } .ds-reg-row { display: grid; grid-template-columns: 4.4rem 3rem minmax(0,1fr) 6.4rem; align-items: center; padding: 0.72rem 0; border-bottom: 1px solid rgba(46,50,62,0.08); } .ds-reg-row > * { padding-inline: 0.85rem; } .ds-reg-row > *:first-child { padding-inline-start: 0.6rem; } .ds-reg-row > * + * { border-left: 1px solid rgba(46,50,62,0.18); } .ds-reg-head { font-size: 0.625rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(46,50,62,0.48); border-bottom: 1px solid rgba(46,50,62,0.14); } .ds-reg-row:nth-child(odd) { background: rgba(46,50,62,0.028); } .ds-reg-t { font-size: 0.8125rem; color: rgba(46,50,62,0.68); } .ds-reg-l { font-size: 0.625rem; letter-spacing: 0.08em; color: #B7135A; } .ds-quiet-ink { color: rgba(46,50,62,0.48); } .ds-reg-r { font-family: Literata, Georgia, serif; font-size: 0.9375rem; color: #2E323E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .ds-reg-d { font-size: 0.625rem; letter-spacing: 0.09em; text-align: right; color: #B7135A; } .ds-reg-d-routed { color: rgba(46,50,62,0.55); } .ds-reg-d-answered { color: #ADB5BD; } .ds-reg-foot { border-top: 2px solid rgba(46,50,62,0.55); padding-top: 0.85rem; font-size: 0.625rem; letter-spacing: 0.11em; text-transform: uppercase; color: rgba(46,50,62,0.48); }"
+      "description": "The signature artifact: a ruled record with graphite column verticals, tabular figures, and a foot tally derived from the rows above it.",
+      "html": "<figure class=\"ds-reg\"><figcaption class=\"ds-reg-cap\"><span>Call register — one night, one line</span><span class=\"ds-reg-cap-2\">18:00 – 06:00</span></figcaption><div class=\"ds-reg-row ds-reg-head\"><span>Time</span><span>Lang</span><span>Reason</span><span>Disp.</span></div><div class=\"ds-reg-row\"><span class=\"ds-reg-t\">18:42</span><span class=\"ds-reg-l\">ES</span><span class=\"ds-reg-r\">Plantilla de encimera</span><span class=\"ds-reg-d\">BOOKED</span></div><div class=\"ds-reg-row\"><span class=\"ds-reg-t\">19:07</span><span class=\"ds-reg-l ds-reg-l-en\">EN</span><span class=\"ds-reg-r\">After-hours, no heat</span><span class=\"ds-reg-d ds-reg-d-quiet\">ROUTED</span></div><div class=\"ds-reg-row\"><span class=\"ds-reg-t\">19:51</span><span class=\"ds-reg-l\">ES</span><span class=\"ds-reg-r\">Seguimiento de cotización</span><span class=\"ds-reg-d ds-reg-d-quiet\">ANSWERED</span></div><div class=\"ds-reg-foot\"><span>3 calls</span></div></figure>",
+      "css": ".ds-reg { margin: 0; background: var(--lg-field, #F5F1EA); padding: 20px; font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: var(--lg-stretch, 125%); font-feature-settings: \"tnum\" 1; } .ds-reg-cap { display: flex; justify-content: space-between; gap: 16px; font-size: 0.6875rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--lg-ink-2, rgba(18, 20, 26, 0.72)); padding-bottom: 0.8rem; border-bottom: 2px solid var(--lg-rule, rgba(18, 20, 26, 0.45)); } .ds-reg-cap-2 { color: var(--lg-ink-3, rgba(18, 20, 26, 0.62)); } .ds-reg-row { display: grid; grid-template-columns: 4.4rem 3rem minmax(0, 1fr) 6.4rem; align-items: center; padding: 0.72rem 0; border-bottom: 1px solid var(--lg-hair-2, rgba(18, 20, 26, 0.07)); } .ds-reg-row > * { padding-inline: 0.85rem; } .ds-reg-row > *:first-child { padding-inline-start: 0.6rem; } .ds-reg-row > * + * { border-left: 1px solid var(--lg-rule-quiet, rgba(18, 20, 26, 0.16)); } .ds-reg-head { font-size: 0.625rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--lg-ink-3, rgba(18, 20, 26, 0.62)); border-bottom: 1px solid var(--lg-hair, rgba(18, 20, 26, 0.12)); } .ds-reg-t { font-size: 0.8125rem; color: var(--lg-ink-2, rgba(18, 20, 26, 0.72)); } .ds-reg-l { font-size: 0.625rem; letter-spacing: 0.08em; color: var(--lg-foil, #3657B1); } .ds-reg-l-en { color: var(--lg-ink-3, rgba(18, 20, 26, 0.62)); } .ds-reg-r { font-family: Literata, Georgia, serif; font-stretch: normal; font-size: 0.9375rem; color: var(--lg-ink, #12141A); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .ds-reg-d { font-size: 0.625rem; letter-spacing: 0.09em; text-align: right; color: var(--lg-foil, #3657B1); } .ds-reg-d-quiet { color: var(--lg-ink-2, rgba(18, 20, 26, 0.72)); } .ds-reg-foot { border-top: 2px solid var(--lg-rule, rgba(18, 20, 26, 0.45)); padding-top: 0.85rem; font-size: 0.625rem; letter-spacing: 0.11em; text-transform: uppercase; color: var(--lg-ink-3, rgba(18, 20, 26, 0.62)); }"
     },
     {
       "name": "Ruled List",
       "kind": "custom",
       "refersTo": "register-row",
-      "description": "Reads DOWN the page: mono label left, serif value right, hairline per row under a red top rule.",
+      "description": "Reads DOWN the page: wide label left, serif value right, a hairline per row under a graphite top rule.",
       "html": "<dl class=\"ds-rlist\"><div class=\"ds-rlist-row\"><dt>Languages</dt><dd>English and Spanish, same number</dd></div><div class=\"ds-rlist-row\"><dt>Deployment</dt><dd>14 days, senior consultant led</dd></div><div class=\"ds-rlist-row\"><dt>Coverage</dt><dd>24/7, including after hours</dd></div></dl>",
-      "css": ".ds-rlist { margin: 0; background-color: #FFFFFF; padding: 20px; border-top: 1px solid rgba(46,50,62,0.55); font-family: \"Azeret Mono\", ui-monospace, monospace; font-variant-numeric: tabular-nums; } .ds-rlist-row { display: grid; grid-template-columns: 9rem minmax(0,1fr); align-items: center; padding: 0.8rem 0; border-bottom: 1px solid rgba(46,50,62,0.08); } .ds-rlist-row:last-child { border-bottom: 0; } .ds-rlist dt { font-size: 0.625rem; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(46,50,62,0.48); } .ds-rlist dd { margin: 0; font-family: Literata, Georgia, serif; font-size: 0.9375rem; color: #2E323E; }"
+      "css": ".ds-rlist { margin: 0; background: var(--lg-field, #F5F1EA); padding: 20px; border-top: 1px solid var(--lg-rule, rgba(18, 20, 26, 0.45)); font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: var(--lg-stretch, 125%); } .ds-rlist-row { display: grid; grid-template-columns: 9rem minmax(0, 1fr); align-items: center; padding: 0.8rem 0; border-bottom: 1px solid var(--lg-hair-2, rgba(18, 20, 26, 0.07)); } .ds-rlist-row:last-child { border-bottom: 0; } .ds-rlist dt { font-size: 0.625rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--lg-ink-3, rgba(18, 20, 26, 0.62)); } .ds-rlist dd { margin: 0; font-family: Literata, Georgia, serif; font-stretch: normal; font-size: 0.9375rem; color: var(--lg-ink, #12141A); }"
     },
     {
       "name": "Band",
       "kind": "card",
       "refersTo": "register-row",
-      "description": "Reads ACROSS the page: label stacked above value, quiet-red verticals between columns only. The formal opposite of Ruled List.",
+      "description": "Reads ACROSS the page: label stacked above value, quiet graphite verticals between columns only. The formal opposite of Ruled List.",
       "html": "<dl class=\"ds-band\"><div><dt>Answered</dt><dd>Every call, in under two rings</dd></div><div><dt>Logged</dt><dd>Transcript, reason, disposition</dd></div><div><dt>Overridable</dt><dd>Any row, by any operator</dd></div></dl>",
-      "css": ".ds-band { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); margin: 0; background-color: #FFFFFF; padding: 20px 20px 0; border-top: 1px solid rgba(46,50,62,0.55); font-family: \"Azeret Mono\", ui-monospace, monospace; } .ds-band > * { padding: 1.1rem 1.1rem 1.2rem; border-left: 1px solid rgba(46,50,62,0.18); } .ds-band > *:first-child { border-left: 0; padding-left: 0; } .ds-band dt { font-size: 0.5875rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(46,50,62,0.48); margin-bottom: 0.5rem; } .ds-band dd { margin: 0; font-family: Literata, Georgia, serif; font-size: 0.875rem; line-height: 1.45; color: rgba(46,50,62,0.68); }"
+      "css": ".ds-band { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; background: var(--lg-field, #F5F1EA); padding: 20px 20px 0; border-top: 1px solid var(--lg-rule, rgba(18, 20, 26, 0.45)); font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: var(--lg-stretch, 125%); } .ds-band > * { padding: 1.1rem 1.1rem 1.2rem; border-left: 1px solid var(--lg-rule-quiet, rgba(18, 20, 26, 0.16)); } .ds-band > *:first-child { border-left: 0; padding-left: 0; } .ds-band dt { font-size: 0.625rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--lg-ink-3, rgba(18, 20, 26, 0.62)); margin-bottom: 0.5rem; } .ds-band dd { margin: 0; font-family: Literata, Georgia, serif; font-stretch: normal; font-size: 0.875rem; line-height: 1.45; color: var(--lg-ink-2, rgba(18, 20, 26, 0.72)); }"
     },
     {
       "name": "Navigation",
       "kind": "nav",
       "refersTo": "nav-link",
-      "description": "Sticky cloth header: foil-masked wordmark, tracked caps links with a foil underline on hover, and the stamp visible at every width.",
-      "html": "<header class=\"ds-nav\"><span class=\"ds-nav-mark\">ORCHELIX</span><nav class=\"ds-nav-links\"><a href=\"#\" class=\"ds-nav-a\">Products</a><a href=\"#\" class=\"ds-nav-a\">How it works</a><a href=\"#\" class=\"ds-nav-a\">Pricing</a></nav><a href=\"#\" class=\"ds-nav-stamp\">Book a pilot</a></header>",
-      "css": ".ds-nav { display: flex; align-items: center; gap: 32px; background-color: #FFFFFF; padding: 16px 20px; border-bottom: 1px solid rgba(46,50,62,0.14); } .ds-nav-mark { font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 82%; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.02em; background-image: linear-gradient(100deg, #9A7314 0%, #D3A021 16%, #F8E29B 34%, #E2B33A 47%, #BC8912 61%, #F3D276 77%, #C8941B 100%); -webkit-background-clip: text; background-clip: text; color: transparent; } .ds-nav-links { margin-left: auto; display: flex; gap: 32px; } .ds-nav-a { position: relative; font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 88%; font-weight: 500; font-size: 0.8125rem; letter-spacing: 0.075em; text-transform: uppercase; color: rgba(46,50,62,0.68); text-decoration: none; } .ds-nav-a::after { content: \"\"; position: absolute; left: 0; right: 0; bottom: -3px; height: 1px; background: #B7135A; transform: scaleX(0); transform-origin: left; transition: transform 300ms cubic-bezier(0.16,1,0.3,1); } .ds-nav-a:hover::after { transform: scaleX(1); } .ds-nav-a:focus-visible { outline: 2px solid #B7135A; outline-offset: 3px; border-radius: 0; } .ds-nav-stamp { font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 88%; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: #FFFFFF; padding: 0.6rem 1.05rem; text-decoration: none; border-radius: 0; background-image: linear-gradient(100deg, #8A6410 0%, #C08F18 14%, #F6DC8C 31%, #DFAE33 44%, #B5820F 58%, #F0CE6A 74%, #CE9A1E 88%, #8F6A12 100%); box-shadow: inset 0 1px 0 rgba(255,244,205,0.85), inset 0 -1px 0 rgba(74,48,4,0.9), 0 1px 0 rgba(0,0,0,0.5); transition: filter 120ms cubic-bezier(0.2,0.6,0.2,1); } .ds-nav-stamp:hover { filter: brightness(1.07) saturate(1.04); }"
+      "description": "Sticky paper header with a hair bottom rule: the lockup (ring mark plus the name as live wide light text), tracked caps links with a foil underline on hover, and the compact stamp at every width. The ring mark is artwork (/orchelix-mark.svg) and is not redrawn here.",
+      "html": "<header class=\"ds-nav\"><span class=\"ds-nav-name\">Orchelix</span><nav class=\"ds-nav-links\"><a href=\"#\" class=\"ds-nav-a\">Solutions</a><a href=\"#\" class=\"ds-nav-a\">How it works</a><a href=\"#\" class=\"ds-nav-a\">Pricing</a></nav><a href=\"#\" class=\"ds-nav-stamp\">Book a pilot</a></header>",
+      "css": ".ds-nav { display: flex; align-items: center; gap: 1.25rem; background: var(--lg-field, #F5F1EA); padding: 16px 20px; border-bottom: 1px solid var(--lg-hair, rgba(18, 20, 26, 0.12)); } .ds-nav-name { font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: var(--lg-stretch, 125%); font-weight: var(--lg-w-display, 300); font-size: 1rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--lg-ink, #12141A); } .ds-nav-links { margin-left: auto; display: flex; gap: 1.25rem; } .ds-nav-a { position: relative; font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: var(--lg-stretch, 125%); font-weight: var(--lg-w-ui, 500); font-size: 0.6875rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--lg-ink-2, rgba(18, 20, 26, 0.72)); text-decoration: none; } .ds-nav-a::after { content: \"\"; position: absolute; left: 0; right: 0; bottom: -3px; height: 1px; background: var(--lg-foil, #3657B1); transform: scaleX(0); transform-origin: left; transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-nav-a:hover::after { transform: scaleX(1); } .ds-nav-a:focus-visible { outline: 2px solid var(--lg-foil, #3657B1); outline-offset: 3px; border-radius: 0; } .ds-nav-stamp { font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: var(--lg-stretch, 125%); font-weight: var(--lg-w-ui, 500); font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--lg-foil-ink, #FFFFFF); background: var(--lg-foil, #3657B1); padding: 0.6rem 1.05rem; border-radius: 0; text-decoration: none; transition: filter 120ms cubic-bezier(0.2, 0.6, 0.2, 1); } .ds-nav-stamp:hover { filter: brightness(1.1); } .ds-nav-stamp:focus-visible { outline: 2px solid var(--lg-foil, #3657B1); outline-offset: 3px; border-radius: 0; }"
     },
     {
       "name": "Disclosure Row",
       "kind": "custom",
       "refersTo": "register-row",
-      "description": "A question that opens. The native marker is removed and drawn instead: a foil rule that extends from 12px to 26px when the row opens. Shared primitive as of 2026-08-08 — /pricing, /ai-receptionist, and every sector page render through it.",
+      "description": "A question that opens. The native marker is removed and drawn instead: a foil rule that extends from 12px to 26px when the row opens.",
       "html": "<details class=\"ds-disc\" open><summary class=\"ds-disc-s\">What happens in the first fourteen days?</summary><p class=\"ds-disc-p\">A senior consultant configures the line, the knowledge base, and the escalation rules, then runs Esmi on your real number.</p></details>",
-      "css": ".ds-disc { background-color: #FFFFFF; border-top: 2px solid rgba(46,50,62,0.55); border-bottom: 1px solid rgba(46,50,62,0.08); padding: 1.1rem 20px; } .ds-disc-s { list-style: none; display: flex; align-items: baseline; gap: 0.9rem; cursor: pointer; font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 86%; font-weight: 600; font-size: 1.0625rem; letter-spacing: -0.008em; text-transform: uppercase; color: #2E323E; } .ds-disc-s::-webkit-details-marker { display: none; } .ds-disc-s::before { content: \"\"; flex: 0 0 auto; width: 12px; height: 1px; background: #B7135A; transform: translateY(-0.3em); transition: width 220ms cubic-bezier(0.16,1,0.3,1); } .ds-disc[open] > .ds-disc-s::before { width: 26px; } .ds-disc-s:focus-visible { outline: 2px solid #B7135A; outline-offset: 3px; } .ds-disc-p { font-family: Literata, Georgia, serif; font-size: 0.9375rem; line-height: 1.62; color: rgba(46,50,62,0.68); max-width: 58ch; margin: 0.9rem 0 0; }"
+      "css": ".ds-disc { background: var(--lg-field, #F5F1EA); border-top: 2px solid var(--lg-rule, rgba(18, 20, 26, 0.45)); border-bottom: 1px solid var(--lg-hair-2, rgba(18, 20, 26, 0.07)); padding: 1.1rem 20px; } .ds-disc-s { list-style: none; display: flex; align-items: baseline; gap: 0.9rem; cursor: pointer; font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: var(--lg-stretch, 125%); font-weight: var(--lg-w-title, 400); font-size: 1.0625rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--lg-ink, #12141A); } .ds-disc-s::-webkit-details-marker { display: none; } .ds-disc-s::before { content: \"\"; flex: 0 0 auto; width: 12px; height: 1px; background: var(--lg-foil, #3657B1); transform: translateY(-0.3em); transition: width 220ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-disc[open] > .ds-disc-s::before { width: 26px; } .ds-disc-s:focus-visible { outline: 2px solid var(--lg-foil, #3657B1); outline-offset: 3px; border-radius: 0; } .ds-disc-p { font-family: Literata, Georgia, serif; font-size: 0.9375rem; line-height: 1.62; color: var(--lg-ink-2, rgba(18, 20, 26, 0.72)); max-width: 58ch; margin: 0.9rem 0 0; } @media (prefers-reduced-motion: reduce) { .ds-disc-s::before { transition: none; } }"
     },
     {
       "name": "Rate Schedule Table",
       "kind": "custom",
       "refersTo": "register-row",
-      "description": "A real semantic table: red head rule, quiet-red column verticals, right-aligned tabular figures, one foil headline figure per column.",
-      "html": "<table class=\"ds-rate\"><caption class=\"ds-rate-cap\">Plan rate schedule</caption><thead><tr><th scope=\"col\"></th><th scope=\"col\">Starter</th><th scope=\"col\">Growth</th><th scope=\"col\">Scale</th></tr></thead><tbody><tr><th scope=\"row\">Monthly</th><td class=\"ds-rate-strong\">$490</td><td class=\"ds-rate-strong\">$1,180</td><td class=\"ds-rate-strong\">Custom</td></tr><tr><th scope=\"row\">Calls included</th><td>400</td><td>1,200</td><td>Unmetered</td></tr><tr><th scope=\"row\">Languages</th><td>EN · ES</td><td>EN · ES</td><td>EN · ES</td></tr></tbody></table>",
-      "css": ".ds-rate { width: 100%; border-collapse: collapse; background-color: #FFFFFF; padding: 20px; font-family: \"Azeret Mono\", ui-monospace, monospace; font-variant-numeric: tabular-nums; } .ds-rate-cap { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); } .ds-rate thead th { text-align: right; font-size: 0.625rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: #2E323E; padding: 0 0.9rem 0.8rem; border-bottom: 2px solid rgba(46,50,62,0.55); border-left: 1px solid rgba(46,50,62,0.18); } .ds-rate thead th:first-child { text-align: left; border-left: 0; padding-left: 0; color: rgba(46,50,62,0.48); width: 22%; } .ds-rate tbody th { text-align: left; font-size: 0.625rem; font-weight: 500; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(46,50,62,0.48); padding: 0.85rem 0.9rem 0.85rem 0; border-bottom: 1px solid rgba(46,50,62,0.08); vertical-align: top; } .ds-rate td { text-align: right; font-size: 0.8125rem; letter-spacing: 0.02em; color: #2E323E; padding: 0.85rem 0.9rem; border-bottom: 1px solid rgba(46,50,62,0.08); border-left: 1px solid rgba(46,50,62,0.18); vertical-align: top; } .ds-rate .ds-rate-strong { font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 86%; font-size: 1.5rem; font-weight: 700; letter-spacing: -0.01em; color: #B7135A; }"
+      "description": "A real semantic table: graphite head rule, quiet graphite column verticals, right-aligned tabular figures, one foil headline figure per column.",
+      "html": "<table class=\"ds-rate\"><caption class=\"ds-rate-cap\">Plan rate schedule</caption><thead><tr><th scope=\"col\"></th><th scope=\"col\">Starter</th><th scope=\"col\">Growth</th><th scope=\"col\">Scale</th></tr></thead><tbody><tr><th scope=\"row\">Monthly</th><td class=\"ds-rate-strong\">$299</td><td class=\"ds-rate-strong\">$599</td><td class=\"ds-rate-strong\">$999</td></tr><tr><th scope=\"row\">Languages</th><td>EN · ES</td><td>EN · ES</td><td>EN · ES</td></tr></tbody></table>",
+      "css": ".ds-rate { width: 100%; border-collapse: collapse; background: var(--lg-field, #F5F1EA); font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: var(--lg-stretch, 125%); font-feature-settings: \"tnum\" 1; } .ds-rate-cap { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); } .ds-rate thead th { text-align: right; font-size: 0.625rem; font-weight: var(--lg-w-ui, 500); letter-spacing: 0.15em; text-transform: uppercase; color: var(--lg-ink, #12141A); padding: 0 0.9rem 0.8rem; border-bottom: 2px solid var(--lg-rule, rgba(18, 20, 26, 0.45)); border-left: 1px solid var(--lg-rule-quiet, rgba(18, 20, 26, 0.16)); } .ds-rate thead th:first-child { text-align: left; border-left: 0; padding-left: 0; color: var(--lg-ink-3, rgba(18, 20, 26, 0.62)); width: 22%; } .ds-rate tbody th { text-align: left; font-size: 0.625rem; font-weight: var(--lg-w-ui, 500); letter-spacing: 0.13em; text-transform: uppercase; color: var(--lg-ink-3, rgba(18, 20, 26, 0.62)); padding: 0.85rem 0.9rem 0.85rem 0; border-bottom: 1px solid var(--lg-hair-2, rgba(18, 20, 26, 0.07)); vertical-align: top; } .ds-rate td { text-align: right; font-size: 0.8125rem; letter-spacing: 0.02em; color: var(--lg-ink, #12141A); padding: 0.85rem 0.9rem; border-bottom: 1px solid var(--lg-hair-2, rgba(18, 20, 26, 0.07)); border-left: 1px solid var(--lg-rule-quiet, rgba(18, 20, 26, 0.16)); vertical-align: top; } .ds-rate .ds-rate-strong { font-size: 1.5rem; font-weight: var(--lg-w-ui, 500); letter-spacing: 0.02em; color: var(--lg-foil, #3657B1); }"
     },
     {
       "name": "Section (tone bands)",
       "kind": "card",
       "refersTo": "section-field",
-      "description": "The page unit. Full-bleed band in one of five tones; tone change is the only section divider.",
-      "html": "<section class=\"ds-sec\"><div class=\"ds-sec-in\"><h2 class=\"ds-sec-h\">The rate schedule</h2><p class=\"ds-sec-p\">Pick a starting point by call volume. Every tier includes the full dashboard — the difference is capacity, not capability.</p></div></section><section class=\"ds-sec ds-sec-stock\"><div class=\"ds-sec-in\"><h2 class=\"ds-sec-h ds-sec-h-stock\">Try Esmi on your real line</h2><p class=\"ds-sec-p ds-sec-p-stock\">Fourteen days, your own number, every call on the record.</p></div></section>",
-      "css": ".ds-sec { display: block; background-color: #F1F3F5; background-image: url(/textures/buckram.svg); background-repeat: repeat; background-size: 180px 180px; } .ds-sec-stock { background-color: #F1F3F5; background-image: none; } .ds-sec-in { max-width: 1320px; margin: 0 auto; padding: 5rem 1.25rem; } .ds-sec-h { font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: 82%; font-weight: 700; font-size: clamp(1.85rem, 3.2vw, 2.9rem); line-height: 1.02; letter-spacing: -0.022em; text-transform: uppercase; color: #2E323E; max-width: 20ch; margin: 0; } .ds-sec-h-stock { color: #2E323E; } .ds-sec-p { font-family: Literata, Georgia, serif; font-size: 1.0625rem; line-height: 1.62; color: rgba(46,50,62,0.68); max-width: 52ch; margin: 1.3rem 0 0; } .ds-sec-p-stock { color: rgba(46,50,62,0.68); }"
+      "description": "The page unit. A full-bleed band in one of six tones (field, field-2, field-3, stock, stock-2, night); a tone change is the only section divider. Night redeclares the --lg-* family, so the same variable names resolve to night values.",
+      "html": "<section class=\"ds-sec\"><div class=\"ds-sec-in\"><h2 class=\"ds-sec-h\">The rate schedule</h2><p class=\"ds-sec-p\">Pick a starting point by call volume. Every tier includes the full dashboard — the difference is capacity, not capability.</p></div></section><section class=\"ds-sec ds-sec-night\"><div class=\"ds-sec-in\"><h2 class=\"ds-sec-h\">Try Esmi on your real line</h2><p class=\"ds-sec-p\">Fourteen days, your own number, every call on the record.</p></div></section>",
+      "css": ".ds-sec { display: block; background: var(--lg-field, #F5F1EA); color: var(--lg-ink, #12141A); } .ds-sec-night { --lg-ink: #E8EAEE; --lg-ink-2: rgba(232, 234, 238, 0.84); background: var(--lg-night-field, #14171C); } .ds-sec-in { max-width: 1320px; margin: 0 auto; padding: 5rem 1.25rem; } .ds-sec-h { font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: var(--lg-stretch, 125%); font-weight: var(--lg-w-display, 300); font-size: clamp(1.5rem, 2.7vw, 2.4rem); line-height: 1.12; letter-spacing: 0.07em; text-transform: uppercase; color: var(--lg-ink, #12141A); max-width: 20ch; margin: 0; } .ds-sec-p { font-family: Literata, Georgia, serif; font-size: 1.0625rem; line-height: 1.62; color: var(--lg-ink-2, rgba(18, 20, 26, 0.72)); max-width: 52ch; margin: 1.3rem 0 0; }"
     },
     {
       "name": "Anchor Rule",
       "kind": "custom",
       "refersTo": "register-row",
-      "description": "The red top rule every data block hangs from, drawn as a pseudo-element so it can be scaled. On first viewport entry it draws in from the left in 260ms; at rest it is simply present at full width.",
+      "description": "The graphite top rule every data block hangs from, drawn as a pseudo-element so it can be scaled. On first viewport entry it draws in from the left in 260ms; at rest it is simply present at full width.",
       "html": "<dl class=\"ds-anchor\"><div class=\"ds-anchor-row\"><dt>Languages</dt><dd>English and Spanish, natively</dd></div><div class=\"ds-anchor-row\"><dt>Hours</dt><dd>24/7, nights and weekends included</dd></div></dl>",
-      "css": ".ds-anchor { position: relative; margin: 0; font-family: 'Azeret Mono', ui-monospace, monospace; } .ds-anchor::before { content: \"\"; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--lg-rule, rgba(46,50,62,0.55)); transform-origin: left center; animation: ds-rule-draw 260ms cubic-bezier(0.16,1,0.3,1) both; } .ds-anchor-row { display: grid; grid-template-columns: 9rem minmax(0,1fr); padding: 0.8rem 0; border-bottom: 1px solid var(--lg-hair-2, rgba(46,50,62,0.08)); } .ds-anchor-row dt { font-size: 0.625rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--lg-ink-3, rgba(46,50,62,0.48)); } .ds-anchor-row dd { margin: 0; font-family: Literata, Georgia, serif; font-size: 0.9375rem; color: var(--lg-ink, #2E323E); } @keyframes ds-rule-draw { from { transform: scaleX(0) } to { transform: scaleX(1) } } @media (prefers-reduced-motion: reduce) { .ds-anchor::before { animation: none } }"
+      "css": ".ds-anchor { position: relative; margin: 0; font-family: Archivo, ui-sans-serif, system-ui, sans-serif; font-stretch: var(--lg-stretch, 125%); } .ds-anchor::before { content: \"\"; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: var(--lg-rule, rgba(18, 20, 26, 0.45)); transform-origin: left center; animation: ds-rule-draw 260ms cubic-bezier(0.16, 1, 0.3, 1) both; } .ds-anchor-row { display: grid; grid-template-columns: 9rem minmax(0, 1fr); padding: 0.8rem 0; border-bottom: 1px solid var(--lg-hair-2, rgba(18, 20, 26, 0.07)); } .ds-anchor-row dt { font-size: 0.625rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--lg-ink-3, rgba(18, 20, 26, 0.62)); } .ds-anchor-row dd { margin: 0; font-family: Literata, Georgia, serif; font-stretch: normal; font-size: 0.9375rem; color: var(--lg-ink, #12141A); } @keyframes ds-rule-draw { from { transform: scaleX(0) } to { transform: scaleX(1) } } @media (prefers-reduced-motion: reduce) { .ds-anchor::before { animation: none } }"
+    },
+    {
+      "name": "Shop Product Card (shop only)",
+      "kind": "card",
+      "refersTo": "shop",
+      "description": "The /shop grid card, inside .shop-scope only: 16:9 product image, uppercase name, fit and colour, price, and a View outline button or a Soon tag. Not a marketing-surface component — the Ruled Record has no cards.",
+      "html": "<div class=\"ds-shop\"><article class=\"ds-shop-card\"><div class=\"ds-shop-media\" aria-hidden=\"true\"></div><div class=\"ds-shop-meta\"><h2>Quiet Tee</h2><p class=\"ds-shop-fit\">Unisex · Bone</p><div class=\"ds-shop-row\"><span>$48</span><a href=\"#\" class=\"ds-shop-btn\">View</a></div></div></article><article class=\"ds-shop-card\"><div class=\"ds-shop-media\" aria-hidden=\"true\"></div><div class=\"ds-shop-meta\"><h2>Mark Pin</h2><p class=\"ds-shop-fit\">— · Black enamel</p><div class=\"ds-shop-row\"><span>$18</span><span class=\"ds-shop-soon\">Soon</span></div></div></article></div>",
+      "css": ".ds-shop { --shop-field: #F4F1EA; --shop-card: #FFFDF8; --shop-ink: #161616; --shop-mute: #6B6B6B; --shop-line: rgba(22, 22, 22, 0.12); display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 28px; padding: 24px; background: var(--shop-field); font-family: Geist, \"Inter Tight\", sans-serif; letter-spacing: 0.02em; color: var(--shop-ink); } .ds-shop-card { display: flex; flex-direction: column; background: var(--shop-card); border: 1px solid var(--shop-line); border-radius: 4px; overflow: hidden; } .ds-shop-media { aspect-ratio: 16 / 9; background: #ECE8E0; } .ds-shop-meta { padding: 18px 18px 22px; } .ds-shop-meta h2 { margin: 0; font-size: 16px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; } .ds-shop-fit { margin: 4px 0 0; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--shop-mute); } .ds-shop-row { display: flex; justify-content: space-between; align-items: baseline; margin-top: 16px; font-size: 15px; } .ds-shop-btn { border: 1px solid var(--shop-ink); color: var(--shop-ink); padding: 8px 14px; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; transition: background 0.15s ease, color 0.15s ease; } .ds-shop-btn:hover { background: var(--shop-ink); color: var(--shop-field); } .ds-shop-btn:focus-visible { outline: 2px solid var(--shop-ink); outline-offset: 2px; } .ds-shop-soon { border: 1px solid var(--shop-line); color: var(--shop-mute); padding: 8px 14px; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; }"
     }
   ],
   "narrative": {
     "northStar": "The Ruled Record",
-    "overview": "The interface *is* the audit trail. The world is a ruled record: a white field, ruled off in graphite, stamped once in magenta, and filled with rows of tabular figures. Nothing decorative is added on top of the record — the record itself is the composition. The first viewport does not introduce the product with a centered headline and three identical cards; it puts the call register on the page at full scale, with its own column heads, its own notation legend, and a foot rule tallied from the rows above it.\n\nDensity is high and deliberate. Rows are close-set, labels are small caps in mono, and the space between sections is generous so that each ruled block reads as a page in a book rather than a card in a feed. The palette is one white field with two barely-separated tonal steps and a single accent. Structure is drawn entirely in graphite at varying alpha — the ruling that used to be red is now the ink's own colour, held back — so colour appears in exactly one place: the magenta stamp, scarce enough that its appearance means \"this is the action.\"\n\n**The 2026-08-10 rebrand inverted this world and the inversion is load-bearing.** It ran dark for its first life: a navy buckram field carrying a shipped SVG cloth weave, red column ruling, and a gold foil stamp. All three are gone. The weave was tuned against dark grounds and read as a grey smudge on white, so `.lg-cloth` and its `-2` / `-3` variants are now flat fills that keep their names only because components reference them. Red retired because the brand has one accent and does not spend it on dividers. What survived is the *structure* — the ruling, the density, the registers, the closed ramps — which is the evidence that this world was never really about being dark.\n\nThe build refuses two specific things, and the refusal is durable: the category's centered hero with three identical product cards, and its opposite, the cream editorial broadsheet. Neither one puts the artifact on the page. Note that going light did **not** license the second one; a white field ruled in graphite is not a broadsheet.",
+    "currentDirection": [
+      "**Ground.** Warm paper (`#F5F1EA` and its two steps), not white. Near-black **night** bands (`#14171C`) alternate with it: `night` is the sixth tone on the `Section` ladder, and it works by redeclaring the whole `--lg-*` family on the band, so `inkFor` / `ink2For` / `ink3For` / `hairFor` return the same variable names on every tone and the cascade resolves them. No call site picks a colour. Night lands on the homepage hero, the proof band, and the closing CTA; `/book` and the `/missed-calls` lead form stay light.",
+      "**Accent.** One royal blue (`#3657B1` on paper, `#6484DB` on night). The stamp is a **flat** fill — the eight-stop metallic ramp, its lips, and its tinted drop shadow are retired, because a shimmering glowing button read as a game control. White on the paper stamp is 6.42:1; ink on the night stamp clears 4.5:1.",
+      "**Type.** One display voice: **Archivo at the top of its width axis (`wdth` 125), light, uppercase, tracked open.** It replaced condensed heavy caps with negative tracking. All of it comes from tokens in `:root` — `--lg-stretch` (125%), `--lg-w-display` (300), `--lg-w-title` (400), `--lg-w-ui` (500), `--lg-track-display` (0.07em), `--lg-track-title` (0.06em), `--lg-track-ui` (0.16em), `--lg-track-label` (0.2em). Nothing hand-sets a width, a display weight, or a display tracking.",
+      "**One family on the marketing surface.** `body[data-surface=\"site\"]` (set by `app/[locale]/layout.tsx` through `Shell`) retargets `--font-mono` to Archivo, so the label voice, keys, and figures set in the same wide face — tabular via `\"tnum\"`. Azeret Mono remains only on the app surfaces (`/dashboard`, `/try-esmi`, onboarding), which never carry that attribute.",
+      "**The lockup.** `app/components/sections/Lockup.tsx`: the helix mark as artwork, the name as **live text in the hero wordmark's setting** (Archivo, `--lg-stretch`, `--lg-w-display`, tracking 0.14em; the tagline at `--lg-w-ui`, 0.34em). Nav and Footer both render it. The old `orchelix-logo.svg` set its name in SVG `<text>` Inter, which an `<img>` cannot load, so it rendered in whatever system sans the visitor had.",
+      "**Retired devices — do not reintroduce.** Registration plus marks around titles (`PlusFrame`), the right-edge tick rail, the live clock under the hero, the four-square Menu icon, the DAY/NIGHT control, the foil shimmer and glow, the Inscription WebGL scene on the homepage (unmounted; `app/inscription/` is on disk and unimported). Together they read as a game HUD, which is the one thing the owner has said this site must not look like.",
+      "**Nav.** The six destinations sit in the bar from 1280px (Spanish from 1440px — its labels run ~180px longer); the Menu button hides where they arrive, and the phone number leaves the bar there (it is in the footer). Below that, the drawer.",
+      "**Stamps wrap.** `Stamp` is `max-w-full` with a balanced wrap, because at the wide setting long Spanish labels run past 400px and a nowrap button pushed pages sideways at 375px."
+    ],
+    "overview": "The interface *is* the audit trail. The world is a ruled record: a white field, ruled off in graphite, stamped once in magenta, and filled with rows of tabular figures. Nothing decorative is added on top of the record — the record itself is the composition. The first viewport does not introduce the product with a centered headline and three identical cards; it puts the call register on the page at full scale, with its own column heads, its own notation legend, and a foot rule tallied from the rows above it.\n\nDensity is high and deliberate. Rows are close-set, labels are small caps in mono, and the space between sections is generous so that each ruled block reads as a page in a book rather than a card in a feed. The palette is one white field with two barely-separated tonal steps and a single accent. Structure is drawn entirely in graphite at varying alpha — the ruling that used to be red is now the ink's own colour, held back — so colour appears in exactly one place: the magenta stamp, scarce enough that its appearance means \"this is the action.\"\n\n**The 2026-08-10 rebrand inverted this world and the inversion is load-bearing.** It ran dark for its first life: a navy buckram field carrying a shipped SVG cloth weave, red column ruling, and a gold foil stamp. All three are gone. The weave was tuned against dark grounds and read as a grey smudge on white, so `.lg-cloth` and its `-2` / `-3` variants are now flat fills that keep their names only because components reference them. Red retired because the brand has one accent and does not spend it on dividers. What survived is the *structure* — the ruling, the density, the registers, the closed ramps — which is the evidence that this world was never really about being dark.\n\nThe inversion is load-bearing **for the marketing surface**. The homepage Inscription scene carries a scoped night palette (see The Inscription Exemption under Motion); that is a second light on the same world, not a return to the dark brand. It reaches `/` and `/es` only, through `[data-inscription]`, and no other route can see it.\n\nThe build refuses two specific things, and the refusal is durable: the category's centered hero with three identical product cards, and its opposite, the cream editorial broadsheet. Neither one puts the artifact on the page. Note that going light did **not** license the second one; a white field ruled in graphite is not a broadsheet.",
     "keyCharacteristics": [
-      "Flat white field in three near-adjacent tonal steps — no texture, no gradient, no material tile.",
+      "Flat warm-paper field in three near-adjacent tonal steps, alternating with near-black night bands — no texture, no gradient, no material tile.",
       "Graphite ruling at low alpha as the primary structural device; it is a rule, not a warning.",
-      "Magenta reserved for the primary action, and for nothing else.",
+      "One flat royal-blue stamp reserved for the primary action, and for nothing else.",
       "Zero corner radius everywhere; every edge is a ruled edge.",
-      "Archivo condensed caps / Literata / Azeret Mono tabular figures.",
+      "Archivo wide light caps (display, labels, figures) / Literata body. Azeret Mono on app surfaces only.",
       "Registers, bands, and rate schedules built as real ruled tables and definition lists."
     ],
     "rules": [
@@ -712,12 +940,12 @@
       },
       {
         "name": "The Ink Floor Rule",
-        "body": "Every ink that carries a word must clear 4.5:1 on the tone it sits on. Two shipped values do not, and both are inherited from an alpha ladder that was calibrated against a dark ground where the same alphas landed much brighter:",
+        "body": "Every ink that carries a word must clear 4.5:1 on the tone it sits on. Fixed 2026-08-12: alphas raised from the dark-world ladder (`0.68` / `0.48`) to values that clear AA on the light field.",
         "section": "colors"
       },
       {
         "name": "The Status Scale (product surface)",
-        "body": "`/dashboard` carries real state that has to be readable at a glance in a table. With the palette down to one hue, colour alone can no longer separate four states: `foil` marks attention or pending, and everything else is held apart by ink tier, border weight, and the label itself. `Badge.tsx` is the single place these semantics are defined. Do not reintroduce a green or a red to the product surface to recover the old four-hue scale — that is a design-system change, and it would contradict the single-accent decision the rebrand was for.",
+        "body": "`/dashboard` carries real state that has to be readable at a glance in a table. With the palette down to one hue, colour alone can no longer separate four states: `foil` marks attention, pending, or the booked \"AI moment,\" and everything else is held apart by ink tier, border weight, and the label itself. `Badge.tsx` is the single place these semantics are defined — green/red fills were removed 2026-08-12. Call outcomes bridge to the marketing register dispositions (`BOOKED` / `ROUTED` / `ANSWERED` / `CLOSED`) via labels in `CallLog.tsx` `OUTCOME_STYLE`.",
         "section": "colors"
       },
       {
@@ -727,7 +955,7 @@
       },
       {
         "name": "The Foreign Mark Rule",
-        "body": "A third party's brand is not ours to restyle, and the conversion stops at its edge. `/app`'s \"Sign in with Google\" buttons carry Google's own dark button spec — ground `#131314`, border `#8E918F`, label `#E3E3E3` — because Google's branding guidelines permit only light (`#FFFFFF`), neutral (`#F2F2F2`), or dark (`#131314`) grounds beneath the multicolour mark. The four logo colours (`#4285F4`, `#34A853`, `#FBBC05`, `#EA4335`) are likewise fixed. These seven values are the only colours on a converted surface that are outside this palette on purpose; the detector is right to flag them and this note is the answer. Any future third-party mark gets the same treatment: use their sanctioned form, document it here, and change nothing else.",
+        "body": "A third party's brand is not ours to restyle, and the conversion stops at its edge. The sign-in surfaces' \"Sign in with Google\" buttons carry Google's own dark button spec — ground `#131314`, border `#8E918F`, label `#E3E3E3` — because Google's branding guidelines permit only light (`#FFFFFF`), neutral (`#F2F2F2`), or dark (`#131314`) grounds beneath the multicolour mark. The four logo colours (`#4285F4`, `#34A853`, `#FBBC05`, `#EA4335`) are likewise fixed. These seven values are the only colours on a converted surface that are outside this palette on purpose; the detector is right to flag them and this note is the answer. Any future third-party mark gets the same treatment: use their sanctioned form, document it here, and change nothing else.",
         "section": "colors"
       },
       {
@@ -737,7 +965,7 @@
       },
       {
         "name": "The Tabular Figures Rule",
-        "body": "Any number that is a quantity, a time, a count, or a price gets `.lg-fig` — Azeret Mono with `tabular-nums` and `\"tnum\" 1, \"zero\" 1`. A number set in the body serif is a word, not a figure. Columns of numbers must align on the digit.",
+        "body": "Any number that is a quantity, a time, a count, or a price gets `.lg-fig` — tabular figures (`\"tnum\" 1`), which on the marketing surface are Archivo's and on app surfaces are Azeret Mono's. A number set in the body serif is a word, not a figure. Columns of numbers must align on the digit.",
         "section": "typography"
       },
       {
@@ -746,8 +974,8 @@
         "section": "typography"
       },
       {
-        "name": "The Condensed Caps Rule",
-        "body": "Display, headline, title, and action are all uppercase Archivo on the `wdth` axis between 82% and 88% — tighter as the type gets bigger. Body copy is never uppercase and never condensed. There is no sentence-case display size in this system.",
+        "name": "The Wide Light Caps Rule",
+        "body": "Display, headline, title, label, and action are all uppercase Archivo at `--lg-stretch` (125%), light to medium weight, tracked open — tracking opens further as type gets smaller. Never condensed, never heavier than 500, never negative tracking. Body copy is never uppercase and never set in the display face. There is no sentence-case display size in this system. (Replaces the Condensed Caps Rule, 2026-09-11.)",
         "section": "typography"
       },
       {
@@ -772,7 +1000,7 @@
       },
       {
         "name": "The Produced Materials Rule",
-        "body": "A material must be manufactured, not named. The stamp is an eight-stop metallic ramp at 100° with lit and shadowed lips. An earlier pass used a flat rectangle and it was rejected as a compliance token rather than a shipped material; that judgment stands for any future material. What changed at the rebrand is that this rule now governs exactly one material instead of two. The cloth tile was the other — a real tiled SVG carrying its own alpha — and it was retired rather than recoloured, because the same alpha-composited threads that read as grain on navy read as a grey smudge on white. **Retiring a material is in-rule; faking one is not.** The honest move when a produced material stops working on a new ground is to remove it, not to ship a washed-out version that satisfies the vocabulary without doing the work.",
+        "body": "A material must be manufactured, not named. (The stamp no longer claims to be a material: since 2026-09-11 it is a flat accent fill, and the rule now governs illustrations and photography only — remove a material that stops working rather than ship a washed-out version.) An earlier pass used a flat rectangle and it was rejected as a compliance token rather than a shipped material; that judgment stands for any future material. What changed at the rebrand is that this rule now governs exactly one material instead of two. The cloth tile was the other — a real tiled SVG carrying its own alpha — and it was retired rather than recoloured, because the same alpha-composited threads that read as grain on navy read as a grey smudge on white. **Retiring a material is in-rule; faking one is not.** The honest move when a produced material stops working on a new ground is to remove it, not to ship a washed-out version that satisfies the vocabulary without doing the work.",
         "section": "elevation"
       },
       {
@@ -791,6 +1019,11 @@
         "section": "motion"
       },
       {
+        "name": "The rule does not reach decoration",
+        "body": "It was never a claim that a marketing illustration has to hold still — every example above is a UI element mimicking a state it may not be in. Fourteen `infinite` loops shipped on 2026-08-11 across four illustrations: the solutions-page particle field drifting, the how-it-works and industries diagrams pulsing signal along their real lines, and five cut pieces of the about-page artwork breathing in and out. None of them assert anything about the product's state — a particle field that stopped moving wouldn't mean the network went offline, and a cube that stopped breathing wouldn't mean a pilot failed. They're closer to grain in a photograph than to a progress indicator, and the exemption is exactly that narrow: decorative motion on a marketing illustration that carries no claim about system state may loop. Anything wired to a real state — loading, listening, sending, thinking — still resolves once and holds, per the rule above.",
+        "section": "motion"
+      },
+      {
         "name": "The Legible Default Rule",
         "body": "Every verb animates *to* the resting state, never *from* invisibility. Remove the animation — by reduced motion, by JS being off, by an observer that never fires — and the final state is what's already on the page. A page whose content is gated behind an animation is broken, not animated.",
         "section": "motion"
@@ -804,17 +1037,22 @@
         "name": "The Real Cadence Rule",
         "body": "Where motion represents something happening, it is driven by the real event and not by a timer that imitates one. `/try-esmi` strikes each word group as the backend's SSE stream delivers it, so the pace on screen *is* the model's pace — which is also why there is no \"skip\" control: there is no artificial queue to skip past. A simulated typing cadence would be a fabrication in motion, and the honesty standard does not stop at copy.",
         "section": "motion"
+      },
+      {
+        "name": "The Shop Scope Rule",
+        "body": "A shop token never leaves `.shop-scope`. If a marketing page wants something that looks like the shop, it is built in the Ruled Record's own tokens, not by importing `shop.css` or reading `--shop-*`.",
+        "section": "shop"
       }
     ],
     "dos": [
       "**Do** put the artifact in the first viewport. The register, the schedule, the record — at full scale, with its own notation, before any explanatory copy.",
-      "**Do** reserve `.lg-foil-surface` for the primary action and the wordmark. Everything else that needs to read as marked uses `StatusKey` or a `QuietAction`.",
+      "**Do** reserve `.lg-foil-surface` for the primary action. Everything else that needs to read as marked uses `StatusKey` or a `QuietAction`.",
       "**Do** build data blocks from the shared primitives in `app/components/ledger/index.tsx`. Every marketing page composes from them; per-page inline restyling is exactly how the site drifted before.",
       "**Do** let the section `tone` choose the inks. Use `inkFor` / `ink2For` / `hairFor` rather than hand-picking a colour for a stock section.",
       "**Do** set every quantity, time, count, and price in `.lg-fig` tabular figures.",
       "**Do** anchor a block with a graphite top rule (`2px` primary, `1px` nested) and separate its rows with Hair 2 hairlines.",
       "**Do** change axis when two data blocks sit in sequence — a `RuledList` followed by a `Band`, never a `RuledList` followed by a `RuledList`.",
-      "**Do** ship materials as produced assets: a real tile, a real ramp with lit and shadowed lips.",
+      "**Do** set type through the `--lg-*` type tokens (`--lg-stretch`, `--lg-w-*`, `--lg-track-*`) — never a hand-typed width, display weight, or display tracking.",
       "**Do** use real semantic tables and definition lists for tabular content, with a caption and scoped headers.",
       "**Do** provide a reduced-motion path for every animation, and make the default state the legible one."
     ],
@@ -822,7 +1060,8 @@
       "**Don't** add a second foil element to a screen that already has a stamp. Foil on five elements is what destroyed the stamp's meaning once already.",
       "**Don't** use the ruling as an error, alert, or destructive colour on this surface. It is structure.",
       "**Don't** round a corner. Radius is 0, including the focus ring on the field.",
-      "**Don't** add a shadow to anything but the foil. No card elevation, no hover lift, no ambient glow.",
+      "**Don't** add a shadow to anything, the stamp included. No card elevation, no hover lift, no ambient glow.",
+      "**Don't** reintroduce game-HUD devices: plus/registration marks, tick rails, live clocks or readouts, reticle or corner-square icons, shimmer or foil gradients, glows. The owner's standing direction is that the site must not look like a video game.",
       "**Don't** put an eyebrow, kicker, or `01/02/03` numbering above a heading.",
       "**Don't** ship a row of same-size icon + heading + text cards, or gradient text, or a sparkline standing in for content.",
       "**Don't** use a Unicode glyph as a rule, bullet, arrow, or separator. Rules are drawn; icons are inline SVG paths.",
@@ -830,7 +1069,7 @@
       "**Don't** invent a duration or an easing curve. Four verbs, three durations, one stagger, two curves — the vocabulary is closed.",
       "**Don't** animate anything but `transform`, `opacity`, and `clip-path`, and don't gate content behind an animation.",
       "**Don't** introduce a font-size that is not in `typography.scale`, and don't hand-write a `clamp()` for a heading — use `PageTitle` or `SectionTitle`.",
-      "**Don't** set body copy in uppercase or in the condensed display face, and don't set a figure in the body serif.",
+      "**Don't** set body copy in uppercase or in the display face, don't condense or embolden the display face, and don't set a figure in the body serif.",
       "**Don't** show the alternating register band below 901px, or let a register entry occupy more than one line below 640px.",
       "**Don't** merge the `--lg-*` block with the navy/teal/gold `@theme` scales in `app/globals.css`. They serve different surfaces and the split is intentional."
     ]
