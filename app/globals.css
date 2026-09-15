@@ -2007,7 +2007,7 @@ details[open] > .lg-summary::before {
    band. The strip sits BELOW the heading and the action on purpose: above
    them it would be an eyebrow, and headings in this world stand alone. */
 /* ─── The hero ring ───────────────────────────────────────────────────────
-   The stage for the frosted-glass mark in the homepage hero. Scoped entirely
+   The stage for the 3D ring mark in the homepage hero. Scoped entirely
    to `.lg-ring*`; nothing here reaches another surface.
 
    The flat SVG is the resting state and it is always in the markup. The
@@ -2061,6 +2061,13 @@ details[open] > .lg-summary::before {
   transition: opacity 500ms ease;
   pointer-events: none;
 }
+/* A first visit that can render in 3D hides the flat mark while the renderer
+   boots, so the build can start from nothing instead of fading a finished
+   logo out and constructing it again. Only JS adds the class, and it comes
+   off after at most 1.4s whichever way the boot goes. */
+.lg-ring.is-waiting .lg-ring__line { opacity: 0; transition: none; }
+.lg-ring.is-building .lg-ring__gl { transition: none; }
+
 /* Once the glass is up the flat mark steps out of its way. It stays in the
    accessibility tree — it carries the only label this stage has. */
 .lg-ring.is-glass .lg-ring__line { opacity: 0; }
