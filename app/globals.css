@@ -1865,6 +1865,34 @@ details[open] > .lg-summary::before {
   gap: 0.55rem;
   color: var(--lg-ink);
 }
+/* The landing glow. The homepage ring lands in this mark on scroll; the first
+   time it does, the mark lights up in the accent and settles to solid — a
+   one-shot (1.4s, emphasized ease-out) triggered by the real scroll position,
+   never a loop. It is the one glow on the marketing surface, and it exists
+   because the owner asked for the landing to register (2026-09-15). */
+@keyframes lg-mark-land {
+  0% {
+    filter: drop-shadow(0 0 0.2rem rgba(75, 114, 220, 1))
+      drop-shadow(0 0 0.75rem rgba(75, 114, 220, 0.9));
+    transform: scale(1.14);
+  }
+  25% {
+    filter: drop-shadow(0 0 0.2rem rgba(75, 114, 220, 1))
+      drop-shadow(0 0 0.9rem rgba(75, 114, 220, 0.85));
+    transform: scale(1);
+  }
+  100% {
+    filter: drop-shadow(0 0 0 rgba(75, 114, 220, 0))
+      drop-shadow(0 0 0 rgba(75, 114, 220, 0));
+    transform: scale(1);
+  }
+}
+.lg-lockup__mark.is-landing {
+  animation: lg-mark-land 1400ms var(--ease-emphasized) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lg-lockup__mark.is-landing { animation: none; }
+}
 .lg-lockup__mark {
   display: block;
   /* The ring is nearly round (0.91:1) where the helix was tall and narrow,

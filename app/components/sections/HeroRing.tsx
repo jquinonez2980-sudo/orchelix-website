@@ -57,6 +57,8 @@ const BOOT_WAIT_MS = 1400;
    client navigation back to the homepage, and replaying it every time would
    turn a one-off into a tic. */
 let introPlayed = false;
+/* The nav mark glows the first time the ring lands in it, once per visit. */
+let landingGlowPlayed = false;
 
 type GL = {
   render: () => void;
@@ -104,7 +106,11 @@ export default function HeroRing() {
     let introP = 1;
     const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
 
-    /* ---- the hand-off to the nav mark ----------------------------------- */
+    /* ---- the hand-off to the nav mark -----------------------------------
+       As the hero scrolls away the ring flies up into the nav mark and the
+       two crossfade: the nav mark is empty at the top of the homepage and
+       fills as the ring arrives. The first time it lands, the mark glows in
+       the accent and settles to solid (`is-landing`, once per visit). */
 
     const handoff = () => {
       if (!hero) return;
@@ -125,6 +131,15 @@ export default function HeroRing() {
         const fade = p < 0.72 ? 1 : Math.max(0, 1 - (p - 0.72) / 0.22);
         ring.style.opacity = fade === 1 ? "" : String(fade);
         navMark.style.opacity = String(Math.max(0, Math.min(1, (p - 0.7) / 0.25)));
+        if (p >= 0.95 && !landingGlowPlayed && !reduced) {
+          landingGlowPlayed = true;
+          navMark.classList.add("is-landing");
+          navMark.addEventListener(
+            "animationend",
+            () => navMark.classList.remove("is-landing"),
+            { once: true },
+          );
+        }
       }
       ring.style.pointerEvents = p > 0.05 ? "none" : "";
     };
@@ -339,8 +354,12 @@ export default function HeroRing() {
       io?.disconnect();
       gl?.dispose();
       gl = null;
-      /* The nav mark belongs to every route; leave it visible on the way out. */
-      if (navMark) navMark.style.opacity = "";
+      /* The nav mark belongs to every route; leave it visible on the way out
+         or it stays invisible on whatever page comes next. */
+      if (navMark) {
+        navMark.style.opacity = "";
+        navMark.classList.remove("is-landing");
+      }
     };
   }, []);
 
