@@ -267,7 +267,7 @@ export function SectionTitle({
            with the move to wide, light caps. */
         fontSize: display
           ? "clamp(1.9rem, 4.6vw, 3.5rem)"
-          : "clamp(1.5rem, 2.7vw, 2.4rem)",
+          : "var(--lg-size-headline)",
         lineHeight: display ? 1.08 : 1.12,
         letterSpacing: "var(--lg-track-display)",
         textTransform: "uppercase",

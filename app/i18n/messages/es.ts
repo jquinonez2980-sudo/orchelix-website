@@ -75,11 +75,13 @@ const es: Messages = {
     title: "Orchelix | Agentes de IA que operan tu área comercial",
     description:
       "Esmi contesta, califica y agenda 24/7 en inglés y español. Cada acción queda en un registro auditable que puedes revisar y revertir. Implementado por consultores senior en 14 días.",
-    /* El nombre no se traduce; la línea que lo sigue sí. */
-    wordmark: "Orchelix",
+    heroTitle: "Cada llamada, contestada.",
     heroLede:
       "Agentes de IA que contestan, califican y agendan a toda hora — en inglés y español, con cada acción en el registro.",
-    metaLine: "Esmi contesta en inglés y español",
+    lineHead: "Llama a Esmi",
+    lineNote: "Una línea en vivo, no una grabación. Llama ahora y escucha cómo contesta.",
+    lineCall: "Llama a Esmi al +1 561 566 1066",
+    hearFirst: "Escucha una llamada primero",
     metaPlace: "West Palm Beach · Ontario",
     exploreHint: "Pasa el cursor para explorar",
     exploreHintTouch: "Toca para explorar",

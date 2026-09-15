@@ -168,6 +168,7 @@
   --lg-w-title:        400;   /* entry titles, card heads */
   --lg-w-ui:           500;   /* nav, buttons, the stamp */
   --lg-track-display:  0.07em;
+  --lg-size-headline:  clamp(1.5rem, 2.7vw, 2.4rem);  /* SectionTitle, the live-line number */
   --lg-track-title:    0.06em;
   --lg-track-ui:       0.16em;
   --lg-track-label:    0.2em;
@@ -1854,8 +1855,8 @@ details[open] > .lg-summary::before {
     letter-spacing: 0.04em;
   }
 }
-/* The lockup — mark plus live name. The name is the hero wordmark's
-   setting (Archivo at --lg-stretch, --lg-w-display) scaled down for the
+/* The lockup — mark plus live name. The name is set in the display
+   voice (Archivo at --lg-stretch, --lg-w-display) scaled down for the
    chrome, with the tracking opened further because thin caps at 20px need
    more air than the same caps at display size. */
 .lg-lockup {
@@ -2085,7 +2086,11 @@ details[open] > .lg-summary::before {
 
 /* The hero grid gains a second column for the stage from 900px up. Below
    that the mark sits above the copy, where it reads as a header rather than
-   as an illustration squeezed beside one. */
+   as an illustration squeezed beside one — and small (2026-09-15): at 16rem
+   it pushed the headline to mid-screen and the live line off a 390×844
+   phone, and the live line is the one thing a phone visitor can act on. It
+   stays above the copy because the scroll hand-off flies it up into the nav
+   mark; below the copy it would sweep across the headline on the way. */
 .lg-hero-grid--ring {
   display: grid;
   gap: clamp(1.5rem, 4vw, 3rem);
@@ -2099,7 +2104,7 @@ details[open] > .lg-summary::before {
 @media (max-width: 899px) {
   .lg-ring-stage {
     order: -1;
-    max-width: 16rem;
+    max-width: 8.5rem;
     margin-inline: auto;
   }
 }
@@ -2111,7 +2116,7 @@ details[open] > .lg-summary::before {
   gap: 0.35rem 1.5rem;
   position: relative;
   padding-top: 1.15rem;
-  margin-top: 3rem;
+  margin-top: 2rem;
   font-family: var(--font-display);
   font-size: 0.6875rem;
   letter-spacing: var(--lg-track-label);
@@ -2141,7 +2146,7 @@ details[open] > .lg-summary::before {
 
 @media (min-width: 768px) {
   .lg-hero-meta {
-    grid-template-columns: minmax(0, 1.4fr) repeat(2, auto);
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: baseline;
   }
 }
@@ -2186,6 +2191,90 @@ details[open] > .lg-summary::before {
   color: var(--lg-ink);
   text-decoration: none;
   margin-top: 1.25rem;
+}
+
+/* ─── The live line ──────────────────────────────────────────────────────
+   `HeroLine`: the number Esmi answers, as a ruled block in the hero column.
+   A 2px rule, a label row, the entry, a note — the record's own silhouette,
+   so the proof reads as part of the page rather than as a widget dropped on
+   it. No fill and no border box: the stamp below stays the one foil surface.
+
+   The number is set at `--lg-size-headline` — the value `SectionTitle`
+   carries, not a new size — light, wide, tabular, display tracking. It is the
+   band's second focal point after the headline and the only one a visitor can
+   act on with a thumb, so it wears a resting graphite rule (a link has to
+   look like one on a phone, where there is no hover), and hover or focus
+   draws the foil Rule over it from the left (260ms). Vertical padding takes
+   the hit area past 44px at the 1.5rem floor of the clamp; the negative margin keeps the baseline where it
+   was. */
+.lg-line {
+  position: relative;
+  margin-top: 2rem;
+  padding-top: 0.85rem;
+  border-top: 2px solid var(--lg-rule);
+  max-width: 32rem;
+}
+.lg-line__head .lg-hero-sep { margin: 0 0.5em; }
+.lg-line__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin: 0;
+  font-family: var(--font-display);
+  font-stretch: var(--lg-stretch);
+  font-weight: var(--lg-w-title);
+  font-size: 0.6875rem;
+  letter-spacing: var(--lg-track-label);
+  text-transform: uppercase;
+  color: var(--lg-ink-2);
+}
+.lg-line__number {
+  position: relative;
+  display: inline-block;
+  padding-block: 0.6rem;
+  margin: 0.1rem 0 -0.6rem;
+  font-family: var(--font-display);
+  font-stretch: var(--lg-stretch);
+  font-weight: var(--lg-w-display);
+  font-size: var(--lg-size-headline);
+  line-height: 1.12;
+  letter-spacing: var(--lg-track-display);
+  white-space: nowrap;
+  color: var(--lg-ink);
+  text-decoration: none;
+}
+.lg-line__country {
+  color: var(--lg-ink-3);
+  margin-right: 0.38em;
+}
+.lg-line__number::before,
+.lg-line__number::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0.3rem;
+  height: 1px;
+}
+.lg-line__number::before { background: var(--lg-rule); }
+.lg-line__number::after {
+  background: var(--lg-foil);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--lg-dur-rule) var(--ease-emphasized);
+}
+.lg-line__number:hover::after,
+.lg-line__number:focus-visible::after { transform: scaleX(1); }
+.lg-line__note {
+  margin: 1.15rem 0 0;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  line-height: 1.62;
+  color: var(--lg-ink-2);
+  max-width: 50ch;
+  text-wrap: pretty;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lg-line__number::after { transition: none; }
 }
 
 /* Display. `PageTitle` is the only thing that sets this, and it is now the

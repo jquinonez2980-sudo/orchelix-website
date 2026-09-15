@@ -1,25 +1,35 @@
 /* The opening band.
 
    Near-black, full-bleed, and sized by its own content rather than by the
-   viewport — the first frame has to show that the page continues, because the
-   site's problem is too few visitors and a splash taxes every one of them.
-   Nothing here gates the page: no "enter", no click to proceed, no overlay.
-   A visitor can scroll straight past on the first gesture.
+   viewport — the first frame has to show that the page continues. Nothing
+   here gates the page: no "enter", no overlay. A visitor can scroll straight
+   past on the first gesture.
 
-   Three things, in this order: the name, one line of what the company does,
-   one action. The conditions strip sits at the FOOT of the band rather than
-   above the wordmark, where it would be an eyebrow — headings in this world
-   stand alone (DESIGN.md, The No Kicker Rule).
+   The band makes one promise and proves it in the same viewport:
 
-   One animation. The wordmark is Struck — revealed left to right, the way it
-   would be written — once, in 300ms, and then it holds. It is declared on the
-   resting state, so with JS off, with motion suppressed, or in the frame
-   before the animation starts, the name is simply on the page. */
+   1. The outcome, at Display size — "Every call answered." The name is in
+      the nav lockup and in the glass mark beside this column; the headline
+      does not spend itself repeating the logo.
+   2. One line of what the company does.
+   3. The live line (`HeroLine`) — the number Esmi answers, 24/7, set large.
+      A visitor can test the claim before they read another word, which is
+      the one thing a competitor's hero cannot copy.
+   4. The action: the stamp (book a pilot) and a quiet action that hands the
+      visitor down to the recorded call in the next band, so a visitor not
+      ready to dial still has somewhere to go that is not away.
 
-import { Section, PageTitle, Stamp } from "@/app/components/ledger";
+   The conditions strip sits at the FOOT of the band rather than above the
+   headline, where it would be an eyebrow (DESIGN.md, The No Kicker Rule).
+
+   One animation in the column. The headline is Struck — revealed left to
+   right — once, in 300ms, and then it holds. It is declared on the resting
+   state, so with JS off or motion suppressed the words are simply there. */
+
+import { Section, PageTitle, Stamp, QuietAction } from "@/app/components/ledger";
 import { localizedHref, type Locale } from "@/app/i18n/config";
 import type { Messages } from "@/app/i18n/messages/en";
 import HeroRing from "./HeroRing";
+import HeroLine from "./HeroLine";
 
 /* HeroRing is a Client Component, imported plainly rather than through
    `next/dynamic` with `ssr: false`.
@@ -47,21 +57,24 @@ import HeroRing from "./HeroRing";
 
 export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
   return (
-    <Section id="top" tone="night">
+    <Section id="top" tone="night" tight>
       <div className="lg-hero-grid--ring">
       <div className="lg-hero-offer">
         {/* Archivo light at the top of the wdth axis, uppercase, open
             tracking — all of it from `PageTitle` and the --lg-* type tokens,
             which are the only way a heading is set here. The ink is `--lg-ink`, which the night
             band has already retargeted to #e8eaee: 14.91:1 on this ground. */}
-        <PageTitle tone="night" max="12ch">
-          <span className="lg-strike">{t.home.wordmark}</span>
+        <PageTitle tone="night" max="14ch">
+          <span className="lg-strike">{t.home.heroTitle}</span>
         </PageTitle>
 
         <p className="lg-prose lg-hero-body">{t.home.heroLede}</p>
 
+        <HeroLine head={t.home.lineHead} note={t.home.lineNote} label={t.home.lineCall} />
+
         <div className="lg-hero-actions">
           <Stamp href={localizedHref("/book", locale)}>{t.common.bookPilot}</Stamp>
+          <QuietAction tone="night" href="#hear-esmi">{t.home.hearFirst}</QuietAction>
         </div>
       </div>
 
@@ -71,26 +84,16 @@ export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
       <HeroRing />
       </div>
 
-      {/* The conditions of record — what this page is, where it is answered
-          from, and which languages it carries. Facts, set in the label voice,
+      {/* The conditions of record — where it is answered from. The languages
+          are stated once, on the live line; a second EN/ES/FR run here
+          disagreed with it (French is an add-on, not a language the line
+          answers in natively). Facts, set in the label voice,
           closing the band with a rule. The ticking clock that stood here was
           removed 2026-09-11: a live readout under a hero is a HUD device. */}
       <div className="lg-hero-meta">
         <span className="lg-hero-meta__line" aria-hidden="true" />
-        <p>{t.home.metaLine}</p>
         <p>{t.home.metaPlace}</p>
-        <p>
-          <span>EN</span>
-          <Sep />
-          <span>ES</span>
-          <Sep />
-          <span>FR</span>
-        </p>
       </div>
     </Section>
   );
-}
-
-function Sep() {
-  return <span aria-hidden="true" className="lg-hero-sep" />;
 }

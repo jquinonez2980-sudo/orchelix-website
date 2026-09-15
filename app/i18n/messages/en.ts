@@ -80,17 +80,20 @@ const en = {
     title: "Orchelix | AI agents that run revenue operations",
     description:
       "Esmi answers, qualifies, and books 24/7 in English and Spanish. Every action logged to an audit trail you can inspect and override. Deployed by senior consultants in 14 days.",
-    /* The opening band states the name at Display size, then one line of what
-       the company does, then one action. `heroTitle` (a two-line poster
-       headline) and `heroBody` (its paragraph) were what the hero used to
-       carry; both are gone rather than left unreferenced, since the catalogue
-       is the source of truth for shipped copy and a string nothing renders is
-       drift. The same claims still run in `description` and in the bands
-       below. */
-    wordmark: "Orchelix",
+    /* The opening band states the outcome at Display size, one line of what
+       the company does, then the live line: the number Esmi answers, set
+       large enough to dial from across a desk and one tap on a phone. The
+       name moved out of the headline (2026-09-15, owner-approved) — the nav
+       lockup already says it, and a headline that repeats the logo spends
+       the first viewport on nothing. The number is confirmed answered by
+       Esmi 24/7; if that ever stops being true, this block has to change. */
+    heroTitle: "Every call answered.",
     heroLede:
       "AI agents that answer, qualify, and book around the clock — in English and Spanish, with every action on the record.",
-    metaLine: "Esmi answers in English and Spanish",
+    lineHead: "Call Esmi",
+    lineNote: "A live line, not a recording. Call now and hear it pick up.",
+    lineCall: "Call Esmi at +1 561 566 1066",
+    hearFirst: "Hear a call first",
     metaPlace: "West Palm Beach · Ontario",
     exploreHint: "Hover to explore",
     exploreHintTouch: "Tap to explore",
