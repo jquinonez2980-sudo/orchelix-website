@@ -76,10 +76,14 @@ export const ALL_PRODUCTS: Product[] = catalog.products.map((p) => {
 // images/caps-tote-pin.jpg, a collage of two caps, the tote and the pin, which
 // doesn't show a buyer the one item they'd be paying for. Add them back here
 // once each has its own photograph.
+//
+// ORX-S-U (Spec Tee) is held as "Soon" too: it has no print artwork (the
+// MARK 00 diagram it prints doesn't exist in brand/) and it isn't in the
+// printer quote. The launch set is the three tees in that quote package.
+// Add it back once the artwork exists and the printer has quoted it.
 export const LAUNCH_SKUS = [
   "ORX-Q-U",
   "ORX-D-U",
-  "ORX-S-U",
   "ORX-Q-W",
 ] as const;
 

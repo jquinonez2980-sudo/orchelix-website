@@ -40,13 +40,17 @@ the build fails if a product points at an image with no entry.
 
 ## The first drop (checkout-enabled)
 
-Only these 4 SKUs are buyable. The list lives in `app/lib/products.ts` as
-`LAUNCH_SKUS`:
+Only these 3 SKUs are buyable — the three tees in the printer quote package.
+The list lives in `app/lib/products.ts` as `LAUNCH_SKUS`:
 
 - `ORX-Q-U` Quiet Tee, unisex
 - `ORX-D-U` Drop Tee, unisex
-- `ORX-S-U` Spec Tee, unisex
 - `ORX-Q-W` Quiet Tee, women
+
+`ORX-S-U` (Spec Tee, unisex) is **held as "Soon"**: it has no print artwork —
+the MARK 00 diagram it prints doesn't exist in `brand/` — and it isn't in the
+printer quote. Add it back to `LAUNCH_SKUS` once the artwork exists and the
+printer has quoted it.
 
 `HOW-TO-SELL.md`'s suggested first catalog also had `ORX-CAP-Q` (Quiet Cap) and
 `ORX-PIN` (Mark Pin). Both are **held as "Soon" pending their own product
@@ -54,8 +58,9 @@ images** — today they share `caps-tote-pin.jpg`, a collage of two caps, the
 tote and the pin, which doesn't show a buyer the one item they're paying for.
 Add them back to `LAUNCH_SKUS` once each has its own photograph.
 
-Every other SKU in `products.json` (Drop/Spec women, Kids Line, Quiet Crewneck,
-Quiet Cap, Drop Cap, Quiet Tote, Mark Pin, Field Notebook) still renders on
+Every other SKU in `products.json` (Spec unisex, Drop/Spec women, Kids Line,
+Quiet Crewneck, Quiet Cap, Drop Cap, Quiet Tote, Mark Pin, Field Notebook) still
+renders on
 `/shop` and has a detail page, but shows a "Soon" badge instead of a Buy
 button, and the checkout API rejects it outright. To launch a SKU, add it to
 `LAUNCH_SKUS`.
