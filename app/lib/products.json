@@ -1,0 +1,165 @@
+{
+  "brand": "Orchelix",
+  "url": "https://orchelix.com",
+  "type": "Geist Regular / Satoshi Regular",
+  "rules": [
+    "One message per surface",
+    "Front = mark only (Spec front may include MARK 00 labels)",
+    "Back = ORCHELIX.COM in all caps",
+    "Never print ORCHELIX and ORCHELIX.COM on the same group",
+    "Print the official mark file. Do not redraw."
+  ],
+  "products": [
+    {
+      "sku": "ORX-Q-U",
+      "name": "Quiet Tee",
+      "fit": "Unisex",
+      "price": 48,
+      "currency": "CAD",
+      "color": "Bone",
+      "image": "images/quiet-unisex.jpg",
+      "front": "Small left-chest wire mark",
+      "back": "ORCHELIX.COM",
+      "sizes": ["S", "M", "L", "XL"]
+    },
+    {
+      "sku": "ORX-D-U",
+      "name": "Drop Tee",
+      "fit": "Unisex",
+      "price": 52,
+      "currency": "CAD",
+      "color": "Black",
+      "image": "images/drop-unisex.jpg",
+      "front": "Large graphite wire mark",
+      "back": "ORCHELIX.COM",
+      "sizes": ["S", "M", "L", "XL"]
+    },
+    {
+      "sku": "ORX-S-U",
+      "name": "Spec Tee",
+      "fit": "Unisex",
+      "price": 48,
+      "currency": "CAD",
+      "color": "Fog gray",
+      "image": "images/spec-unisex.jpg",
+      "front": "Mark as diagram + MARK 00",
+      "back": "ORCHELIX.COM",
+      "sizes": ["S", "M", "L", "XL"]
+    },
+    {
+      "sku": "ORX-Q-W",
+      "name": "Quiet Tee",
+      "fit": "Women",
+      "price": 48,
+      "currency": "CAD",
+      "color": "Bone",
+      "image": "images/quiet-women.jpg",
+      "front": "Small left-chest wire mark",
+      "back": "ORCHELIX.COM",
+      "sizes": ["XS", "S", "M", "L"]
+    },
+    {
+      "sku": "ORX-D-W",
+      "name": "Drop Tee",
+      "fit": "Women",
+      "price": 52,
+      "currency": "CAD",
+      "color": "Black",
+      "image": "images/drop-women.jpg",
+      "front": "Large graphite wire mark",
+      "back": "ORCHELIX.COM",
+      "sizes": ["XS", "S", "M", "L"]
+    },
+    {
+      "sku": "ORX-S-W",
+      "name": "Spec Tee",
+      "fit": "Women",
+      "price": 48,
+      "currency": "CAD",
+      "color": "Fog gray",
+      "image": "images/spec-women.jpg",
+      "front": "Mark as diagram + MARK 00",
+      "back": "ORCHELIX.COM",
+      "sizes": ["XS", "S", "M", "L"]
+    },
+    {
+      "sku": "ORX-K-LINE",
+      "name": "Kids Line",
+      "fit": "Youth 8–12",
+      "price": 36,
+      "currency": "CAD",
+      "color": "Bone / Black / Gray",
+      "image": "images/kids-line.jpg",
+      "front": "Scaled mark",
+      "back": "ORCHELIX.COM",
+      "sizes": ["Y8", "Y10", "Y12"]
+    },
+    {
+      "sku": "ORX-CREW-Q",
+      "name": "Quiet Crewneck",
+      "fit": "Unisex",
+      "price": 88,
+      "currency": "CAD",
+      "color": "Bone",
+      "image": "images/crewneck-quiet.jpg",
+      "front": "Small left-chest wire mark",
+      "back": "ORCHELIX.COM",
+      "sizes": ["S", "M", "L", "XL"]
+    },
+    {
+      "sku": "ORX-CAP-Q",
+      "name": "Quiet Cap",
+      "fit": "One size",
+      "price": 38,
+      "currency": "CAD",
+      "color": "Bone",
+      "image": "images/caps-tote-pin.jpg",
+      "front": "Tiny wire mark",
+      "back": "None"
+    },
+    {
+      "sku": "ORX-CAP-D",
+      "name": "Drop Cap",
+      "fit": "One size",
+      "price": 38,
+      "currency": "CAD",
+      "color": "Black",
+      "image": "images/caps-tote-pin.jpg",
+      "front": "Tiny wire mark",
+      "back": "None"
+    },
+    {
+      "sku": "ORX-TOTE",
+      "name": "Quiet Tote",
+      "fit": "One size",
+      "price": 42,
+      "currency": "CAD",
+      "color": "Bone canvas",
+      "image": "images/caps-tote-pin.jpg",
+      "front": "Wire mark only",
+      "back": "ORCHELIX.COM"
+    },
+    {
+      "sku": "ORX-PIN",
+      "name": "Mark Pin",
+      "fit": "—",
+      "price": 18,
+      "currency": "CAD",
+      "color": "Black enamel",
+      "image": "images/caps-tote-pin.jpg",
+      "front": "Wire mark",
+      "back": "None"
+    },
+    {
+      "sku": "ORX-NOTE",
+      "name": "Field Notebook",
+      "fit": "—",
+      "price": 28,
+      "currency": "CAD",
+      "color": "Fog gray",
+      "image": "images/studio-kit.jpg",
+      "front": "Foil wire mark",
+      "back": "ORCHELIX.COM"
+    }
+  ]
+}
