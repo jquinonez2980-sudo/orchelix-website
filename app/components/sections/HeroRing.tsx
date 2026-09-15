@@ -104,7 +104,11 @@ export default function HeroRing() {
     let introP = 1;
     const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
 
-    /* ---- the hand-off to the nav mark ----------------------------------- */
+    /* ---- the hand-off to the nav mark -----------------------------------
+       The ring flies toward the nav mark and fades out as the hero scrolls
+       away. The nav mark itself is never hidden: it used to start at opacity
+       0 and fade in only as the ring arrived, and on landing that read as
+       the logo missing from the nav (owner report, 2026-09-15). */
 
     const handoff = () => {
       if (!hero) return;
@@ -124,7 +128,6 @@ export default function HeroRing() {
         }
         const fade = p < 0.72 ? 1 : Math.max(0, 1 - (p - 0.72) / 0.22);
         ring.style.opacity = fade === 1 ? "" : String(fade);
-        navMark.style.opacity = String(Math.max(0, Math.min(1, (p - 0.7) / 0.25)));
       }
       ring.style.pointerEvents = p > 0.05 ? "none" : "";
     };
@@ -339,8 +342,6 @@ export default function HeroRing() {
       io?.disconnect();
       gl?.dispose();
       gl = null;
-      /* The nav mark belongs to every route; leave it visible on the way out. */
-      if (navMark) navMark.style.opacity = "";
     };
   }, []);
 

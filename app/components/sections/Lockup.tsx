@@ -29,10 +29,9 @@ export default function Lockup({ tagline = true }: { tagline?: boolean }) {
         height={608}
         unoptimized
         className="lg-lockup__mark"
-        /* The homepage hero's 3D ring shrinks into this mark as the hero
-           scrolls away and crossfades with it. Nothing else reads this, and
-           nothing here depends on it: if HeroRing never mounts, the mark is
-           simply at full opacity, which is its resting state anyway. */
+        /* The homepage hero's 3D ring flies toward this mark as the hero
+           scrolls away. HeroRing reads its position only; the mark is never
+           hidden or faded. */
         data-ring-target=""
       />
       <span className="lg-lockup__words" aria-hidden="true">

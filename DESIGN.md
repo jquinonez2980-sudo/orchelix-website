@@ -465,7 +465,7 @@ and the logo drift apart.
   system state, so the Nothing Loops Rule's decorative exemption covers it.
 - **Answer the pointer.** A few degrees of tilt toward the cursor, and the key
   light follows it.
-- **Hand off to the nav mark on scroll** — triggered by scroll position.
+- **Hand off to the nav mark on scroll** — triggered by scroll position. The ring flies toward the nav mark and fades out; the nav mark stays fully visible the whole time (hiding it until the ring arrived read as a missing logo).
 
 **Still forbidden:**
 
