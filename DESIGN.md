@@ -188,8 +188,10 @@ This document was written across three rebrands and much of it still describes t
 - **Accent.** One royal blue (`#3657B1` on paper, `#6484DB` on night). The stamp is a **flat** fill — the eight-stop metallic ramp, its lips, and its tinted drop shadow are retired, because a shimmering glowing button read as a game control. White on the paper stamp is 6.42:1; ink on the night stamp clears 4.5:1.
 - **Type.** One display voice: **Archivo at the top of its width axis (`wdth` 125), light, uppercase, tracked open.** It replaced condensed heavy caps with negative tracking. All of it comes from tokens in `:root` — `--lg-stretch` (125%), `--lg-w-display` (300), `--lg-w-title` (400), `--lg-w-ui` (500), `--lg-track-display` (0.07em), `--lg-track-title` (0.06em), `--lg-track-ui` (0.16em), `--lg-track-label` (0.2em). Nothing hand-sets a width, a display weight, or a display tracking.
 - **One family on the marketing surface.** `body[data-surface="site"]` (set by `app/[locale]/layout.tsx` through `Shell`) retargets `--font-mono` to Archivo, so the label voice, keys, and figures set in the same wide face — tabular via `"tnum"`. Azeret Mono remains only on the app surfaces (`/dashboard`, `/try-esmi`, onboarding), which never carry that attribute.
-- **The lockup.** `app/components/sections/Lockup.tsx`: the helix mark as artwork, the name as **live text in the hero wordmark's setting** (Archivo, `--lg-stretch`, `--lg-w-display`, tracking 0.14em; the tagline at `--lg-w-ui`, 0.34em). Nav and Footer both render it. The old `orchelix-logo.svg` set its name in SVG `<text>` Inter, which an `<img>` cannot load, so it rendered in whatever system sans the visitor had.
+- **The lockup.** `app/components/sections/Lockup.tsx`: the helix mark as artwork, the name as **live text** (Archivo, `--lg-stretch`, `--lg-w-display`, tracking 0.14em; the tagline at `--lg-w-ui`, 0.34em). Nav and Footer both render it. The old `orchelix-logo.svg` set its name in SVG `<text>` Inter, which an `<img>` cannot load, so it rendered in whatever system sans the visitor had.
 - **Retired devices — do not reintroduce.** Registration plus marks around titles (`PlusFrame`), the right-edge tick rail, the live clock under the hero, the four-square Menu icon, the DAY/NIGHT control, the foil shimmer and glow, the Inscription WebGL scene on the homepage (unmounted; `app/inscription/` is on disk and unimported). Together they read as a game HUD, which is the one thing the owner has said this site must not look like.
+- **One WebGL object survives that list, and the distinction is the whole point.** The homepage hero carries the ring mark as a 3D motion mark in polished metal (`HeroRing.tsx`) — first approved as frosted glass on 2026-09-12, rebuilt 2026-09-15. It is not a reprieve for the retired scene and does not reopen the category. What the Inscription was: a pinned full-viewport stage behind every band, choreographed across eight sections, with bloom, a die, a second palette and a control in the nav. What this is: one object, the company's own mark, in one band, drawn from the same path data as the flat logo, built once and then swaying, never spinning. The HUD reading came from a screenful of live instrumentation — a ticking clock, a tick rail, a pinned scene, a lighting toggle — not from there being a canvas anywhere. See **The Hero Ring Exemption** under Motion for what it may and may not do.
+- **The hero (2026-09-15).** `Hero.tsx`, a `tight` night band. Left column, in order: the outcome headline at Display (`heroTitle` — "Every call answered." / "Cada llamada, contestada."; the wordmark headline is retired, the nav lockup carries the name), the one-line lede, **the live line** (`HeroLine`, see Components), then the stamp and a `QuietAction` down to `#hear-esmi`. Right column: the glass ring. The conditions strip (place only — the languages are stated once, on the live line) closes the band. Below 900px the ring sits above the copy at 8.5rem so the headline, the live line and the stamp all land on a 390×844 screen. The band is `tight` so the next band's paper edge shows at 1440×900 — the first frame has to say the page continues.
 - **Nav.** The six destinations sit in the bar from 1280px (Spanish from 1440px — its labels run ~180px longer); the Menu button hides where they arrive, and the phone number leaves the bar there (it is in the footer). Below that, the drawer.
 - **Stamps wrap.** `Stamp` is `max-w-full` with a balanced wrap, because at the wide setting long Spanish labels run past 400px and a nowrap button pushed pages sideways at 375px.
 
@@ -427,6 +429,63 @@ This is an elevation of the Ruled Record into space, not a relaxation of it. The
 - **No content may be gated behind the scene.** The Legible Default Rule governs: the page must read complete with the canvas absent, failed, or refused.
 - **Reduced motion and low-tier devices receive a still frame,** not a degraded animation.
 
+### The Hero Ring Exemption (homepage hero only)
+
+The homepage hero renders the Orchelix ring as a 3D motion mark on a
+`<canvas>`: `app/components/sections/HeroRing.tsx`. It reaches the hero band of
+`/` and `/es` and nothing else.
+
+**Rebuilt 2026-09-15 at the owner's request.** The approved 2026-09-12 study
+(`design-sources/ring-3d/hero-ring-reference.html`) rendered near-black frosted
+glass on the near-black band with a ±6° sway; on screen it read as grey wire,
+and the owner called it cheap. The study stays on disk as history. The
+geometry and the hand-off survive from it; the material, studio and motion do
+not.
+
+This is the mark, given depth. The tubes are extruded from `RING_PATHS` in
+`app/lib/ringPaths.ts` — the same sixteen strokes the flat logo and the card
+at `/jorge` draw — so seen straight on it projects onto the outline of
+`public/orchelix-mark.svg`. Two copies of the path data would let the 3D mark
+and the logo drift apart.
+
+**The ring may:**
+
+- **Be built, once per visit.** Each stroke grows along its own path in order
+  around the ring (a cap riding the tip) while the mark turns in from a
+  three-quarter view, the camera settles, and the studio light sweeps across
+  it. 2.6s, then it rests straight on. A first visit hides the flat mark for at
+  most 1.4s while the renderer boots; if it is not up in time, the flat mark
+  draws in instead and the build is skipped.
+- **Be polished metal.** Graphite-silver `MeshPhysicalMaterial` (metalness 1,
+  roughness 0.22, clearcoat) in a produced studio: a black room, large white
+  softboxes, one royal-blue floor bounce and back glow. The blue it catches is
+  the brand accent as light, not a second fill.
+- **Sway and glide continuously.** ±8° over 14s, a slow vertical drift, and
+  the environment turning so highlights travel along the curves. It asserts no
+  system state, so the Nothing Loops Rule's decorative exemption covers it.
+- **Answer the pointer.** A few degrees of tilt toward the cursor, and the key
+  light follows it.
+- **Hand off to the nav mark on scroll** — triggered by scroll position.
+
+**Still forbidden:**
+
+- **No spin, morph, flare, starfield or bloom.** A rotating logo is a loading
+  spinner with better manners.
+- **No float on the DOM.** The canvas sits in the band and casts nothing onto
+  the page.
+- **Nothing gated behind it.** `HeroRing` server-renders the flat SVG as its
+  resting state. With JavaScript off, reduced motion, WebGL refused, a lost
+  context, or a device reporting under 4 GB, the hero shows the flat mark and
+  says nothing about what is missing.
+- **No new motion verb for DOM elements.** The ring's motion is scenery.
+
+**Its motion values are an exception to the Closed Vocabulary Rule,** recorded
+so they are a decision and not drift. The flat-mark fallback keeps its
+tokenised values (`--lg-ring-draw` 700ms, `--lg-ring-stagger` 18ms,
+`--lg-ring-fade` 600ms); the canvas's own timings live as named constants in
+`HeroRing.tsx` (`INTRO_MS` 2600, `BOOT_WAIT_MS` 1400, `SWAY_PERIOD` 14s). The
+ramp is still closed for everything that is not this canvas.
+
 ## Shapes
 
 Zero radius, everywhere. Corners are square on the stamp, on the mobile menu button, on section edges, on table cells, and on the focus ring — the global `:focus-visible` and `.lg-field :focus-visible` both set `border-radius: 0` so the ring squares off against the register's ruling instead of rounding over it. There is no rounded corner anywhere on the field — the last two, an 8px scrollbar thumb and a 4px global focus ring, were both removed. Radius 0 is literal, not approximate.
@@ -449,7 +508,7 @@ The recurring silhouette is the ruled block: a heavy top rule in `rule` graphite
 
 ### Navigation
 - Sticky header on the paper field with a `1px` hair bottom border (rule-strength once scrolled), `1320px` container.
-- The lockup (`Lockup.tsx`): helix mark as artwork, name as live Archivo text in the hero wordmark's setting. Mark 40px tall (32px under 480px, where the tagline drops).
+- The lockup (`Lockup.tsx`): helix mark as artwork, name as live Archivo text (`--lg-w-display`, tracking 0.14em). Mark 40px tall (32px under 480px, where the tagline drops).
 - Links: Archivo 500 at `wdth` 125, `0.6875rem`, tracking `0.12em`, uppercase, in Ink 2, `1.25rem` apart, with the `QuietAction` underline on hover. In the bar from 1280px (English) / 1440px (Spanish); in the drawer below.
 - The stamp is visible at every width. The phone number shows in the bar only below the link breakpoint (from 900px); where the links are in the bar it lives in the footer.
 - Mobile: an outlined square toggle drawing two plain rules (an X when open), opening a Field-2 drawer. It hides wherever the links are in the bar.
@@ -470,6 +529,11 @@ A real `<table>` with `border-collapse: collapse`, a screen-reader caption, `sco
 The system's defining artifact and the hero of the home page. A `<figure>` with a mono caption on a `2px` graphite rule, a mono column-head row, ten ruled entries, and a foot rule whose tally is *derived from the rendered rows, never typed*. Each entry carries a tabular time, a language marker (foil when `ES`), a serif reason, a mono outcome, and a mono disposition coloured by its key. A `lg-margin-rule` graphite vertical runs down its left edge and `lg-ticks` graduated measure ticks (minor every 14px, major every 70px) run down the field edge beside it.
 
 Motion: Settle, then Strike. Rows land in sequence (`--lg-dur-settle`, `--lg-stagger` per row), and each disposition is struck in via `clip-path` 180ms behind its own row, so the mark lands as the row does. Retimed 2026-08-08 from 620ms/90ms, where ten rows took 1.43s and read as slow rather than precise; the same picture now lands in 785ms. Both animate from an already-legible default, so the register reads with JS off, and both are disabled under `prefers-reduced-motion`.
+
+### The Live Line (homepage hero)
+`app/components/sections/HeroLine.tsx`. Esmi's real number, printed so a visitor can test the hero's promise before reading on. It is a ruled block, not a button: a `2px` `rule` top, a label row (`lineHead` left; `24/7 | EN | ES` as notation right, French omitted because it is an add-on), the number, a Literata note. The number is a `tel:` link at `--lg-size-headline` (the token `SectionTitle` also reads), `--lg-w-display`, `--lg-track-display`, tabular, with `+1` in Ink 3. It wears a resting 1px `rule` underline, because a phone has no hover to reveal a link; hover and focus draw the foil Rule over it (260ms). Vertical padding (`0.6rem`) takes the hit area past 44px even at the clamp's 1.5rem floor, with a matching negative margin. No fill, no box: the stamp beneath stays the band's one foil surface. A tap fires the `hero_call` analytics event.
+
+**The line is a claim.** The owner confirmed on 2026-09-15 that +1 561 566 1066 is answered by Esmi 24/7 in English and Spanish. If that stops being true, this block changes the same day.
 
 ### Browser Surfaces
 Not optional, and not left to the browser: selection is foil-on-field, `accent-color` is foil, the caret on the field is foil, the field scrollbar is a thin translucent-foil thumb, and the focus ring on the field is a squared `2px` foil outline at `3px` offset.

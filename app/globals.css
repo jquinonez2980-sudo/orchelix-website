@@ -168,6 +168,7 @@
   --lg-w-title:        400;   /* entry titles, card heads */
   --lg-w-ui:           500;   /* nav, buttons, the stamp */
   --lg-track-display:  0.07em;
+  --lg-size-headline:  clamp(1.5rem, 2.7vw, 2.4rem);  /* SectionTitle, the live-line number */
   --lg-track-title:    0.06em;
   --lg-track-ui:       0.16em;
   --lg-track-label:    0.2em;
@@ -235,6 +236,18 @@
   --lg-dur-strike:  300ms;  /* Strike — a mark revealed left-to-right   */
   --lg-dur-settle:  380ms;  /* Settle — a row landing into place        */
   --lg-stagger:      45ms;  /* between siblings in a settling run       */
+
+  /* The hero ring's scenery values. Outside the four-verb ramp on purpose and
+     recorded in DESIGN.md under The Hero Ring Exemption, which is what makes
+     them a decision rather than drift. They are named here so nothing
+     hand-sets a duration: the ramp is still closed for every DOM verb.
+
+     The wipe is longer than Strike (300ms) and its stagger tighter than the
+     register's (45ms) because sixteen strokes at the documented pair read as
+     a stuttering list instead of one mark being drawn. */
+  --lg-ring-draw:    700ms;  /* the flat strokes wipe in, once per visit */
+  --lg-ring-stagger:  18ms;  /* between strokes in that wipe            */
+  --lg-ring-fade:    600ms;  /* the canvas fades up over the flat mark  */
 }
 
 /* ─── The night tone ──────────────────────────────────────────────────────
@@ -1842,8 +1855,8 @@ details[open] > .lg-summary::before {
     letter-spacing: 0.04em;
   }
 }
-/* The lockup — mark plus live name. The name is the hero wordmark's
-   setting (Archivo at --lg-stretch, --lg-w-display) scaled down for the
+/* The lockup — mark plus live name. The name is set in the display
+   voice (Archivo at --lg-stretch, --lg-w-display) scaled down for the
    chrome, with the tracking opened further because thin caps at 20px need
    more air than the same caps at display size. */
 .lg-lockup {
@@ -1993,13 +2006,124 @@ details[open] > .lg-summary::before {
    `--lg-hero-foot` is the rule under the conditions strip at the foot of the
    band. The strip sits BELOW the heading and the action on purpose: above
    them it would be an eyebrow, and headings in this world stand alone. */
+/* ─── The hero ring ───────────────────────────────────────────────────────
+   The stage for the 3D ring mark in the homepage hero. Scoped entirely
+   to `.lg-ring*`; nothing here reaches another surface.
+
+   The flat SVG is the resting state and it is always in the markup. The
+   canvas is painted on top of it only once `is-glass` lands, so a visitor who
+   gets the fallback — reduced motion, no WebGL, a lost context, a small
+   device — sees the hero mark with nothing missing and nothing announced.
+
+   `is-drawing` is the intro: each stroke is normalised to pathLength 1 and
+   wipes in over 700ms with an 18ms stagger, then the canvas fades up over
+   600ms. Once per visit, not once per mount. */
+.lg-ring-stage {
+  position: relative;
+  width: 100%;
+  max-width: 34rem;
+  aspect-ratio: 1 / 1;
+  justify-self: center;
+  /* The stage listens for a drag to move the light; vertical scrolling has to
+     survive that on a phone. */
+  touch-action: pan-y;
+}
+.lg-ring {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+}
+.lg-ring__gl {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 0;
+  /* `--ease-standard`, not the study's bespoke cubic-bezier(.2,.7,.2,1).
+     The Closed Vocabulary Rule allows two curves and a third is a defect; an
+     opacity fade has no argument for one of its own. */
+  transition: opacity var(--lg-ring-fade) var(--ease-standard);
+}
+.lg-ring.is-glass .lg-ring__gl { opacity: 1; }
+
+.lg-ring__line {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: 78%;
+  width: auto;
+  overflow: visible;
+  /* The night band's accent, already retargeted by `.lg-night`. */
+  color: var(--lg-foil);
+  transition: opacity 500ms ease;
+  pointer-events: none;
+}
+/* A first visit that can render in 3D hides the flat mark while the renderer
+   boots, so the build can start from nothing instead of fading a finished
+   logo out and constructing it again. Only JS adds the class, and it comes
+   off after at most 1.4s whichever way the boot goes. */
+.lg-ring.is-waiting .lg-ring__line { opacity: 0; transition: none; }
+.lg-ring.is-building .lg-ring__gl { transition: none; }
+
+/* Once the glass is up the flat mark steps out of its way. It stays in the
+   accessibility tree — it carries the only label this stage has. */
+.lg-ring.is-glass .lg-ring__line { opacity: 0; }
+
+.lg-ring.is-drawing .lg-ring__line path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: lg-ring-draw var(--lg-ring-draw) var(--ease-emphasized) forwards;
+  animation-delay: calc(var(--i) * var(--lg-ring-stagger));
+}
+@keyframes lg-ring-draw { to { stroke-dashoffset: 0; } }
+
+/* Reduced motion never reaches the drawing class from the component, but the
+   stylesheet states the resting truth too: no wipe, no fade, mark present. */
+@media (prefers-reduced-motion: reduce) {
+  .lg-ring.is-drawing .lg-ring__line path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .lg-ring__gl,
+  .lg-ring__line { transition: none; }
+}
+
+/* The hero grid gains a second column for the stage from 900px up. Below
+   that the mark sits above the copy, where it reads as a header rather than
+   as an illustration squeezed beside one — and small (2026-09-15): at 16rem
+   it pushed the headline to mid-screen and the live line off a 390×844
+   phone, and the live line is the one thing a phone visitor can act on. It
+   stays above the copy because the scroll hand-off flies it up into the nav
+   mark; below the copy it would sweep across the headline on the way. */
+.lg-hero-grid--ring {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+}
+@media (min-width: 900px) {
+  .lg-hero-grid--ring {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  }
+}
+@media (max-width: 899px) {
+  .lg-ring-stage {
+    order: -1;
+    max-width: 8.5rem;
+    margin-inline: auto;
+  }
+}
+
+
 .lg-hero-meta {
   display: grid;
   grid-template-columns: 1fr;
   gap: 0.35rem 1.5rem;
   position: relative;
   padding-top: 1.15rem;
-  margin-top: 3rem;
+  margin-top: 2rem;
   font-family: var(--font-display);
   font-size: 0.6875rem;
   letter-spacing: var(--lg-track-label);
@@ -2029,7 +2153,7 @@ details[open] > .lg-summary::before {
 
 @media (min-width: 768px) {
   .lg-hero-meta {
-    grid-template-columns: minmax(0, 1.4fr) repeat(2, auto);
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: baseline;
   }
 }
@@ -2074,6 +2198,90 @@ details[open] > .lg-summary::before {
   color: var(--lg-ink);
   text-decoration: none;
   margin-top: 1.25rem;
+}
+
+/* ─── The live line ──────────────────────────────────────────────────────
+   `HeroLine`: the number Esmi answers, as a ruled block in the hero column.
+   A 2px rule, a label row, the entry, a note — the record's own silhouette,
+   so the proof reads as part of the page rather than as a widget dropped on
+   it. No fill and no border box: the stamp below stays the one foil surface.
+
+   The number is set at `--lg-size-headline` — the value `SectionTitle`
+   carries, not a new size — light, wide, tabular, display tracking. It is the
+   band's second focal point after the headline and the only one a visitor can
+   act on with a thumb, so it wears a resting graphite rule (a link has to
+   look like one on a phone, where there is no hover), and hover or focus
+   draws the foil Rule over it from the left (260ms). Vertical padding takes
+   the hit area past 44px at the 1.5rem floor of the clamp; the negative margin keeps the baseline where it
+   was. */
+.lg-line {
+  position: relative;
+  margin-top: 2rem;
+  padding-top: 0.85rem;
+  border-top: 2px solid var(--lg-rule);
+  max-width: 32rem;
+}
+.lg-line__head .lg-hero-sep { margin: 0 0.5em; }
+.lg-line__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin: 0;
+  font-family: var(--font-display);
+  font-stretch: var(--lg-stretch);
+  font-weight: var(--lg-w-title);
+  font-size: 0.6875rem;
+  letter-spacing: var(--lg-track-label);
+  text-transform: uppercase;
+  color: var(--lg-ink-2);
+}
+.lg-line__number {
+  position: relative;
+  display: inline-block;
+  padding-block: 0.6rem;
+  margin: 0.1rem 0 -0.6rem;
+  font-family: var(--font-display);
+  font-stretch: var(--lg-stretch);
+  font-weight: var(--lg-w-display);
+  font-size: var(--lg-size-headline);
+  line-height: 1.12;
+  letter-spacing: var(--lg-track-display);
+  white-space: nowrap;
+  color: var(--lg-ink);
+  text-decoration: none;
+}
+.lg-line__country {
+  color: var(--lg-ink-3);
+  margin-right: 0.38em;
+}
+.lg-line__number::before,
+.lg-line__number::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0.3rem;
+  height: 1px;
+}
+.lg-line__number::before { background: var(--lg-rule); }
+.lg-line__number::after {
+  background: var(--lg-foil);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--lg-dur-rule) var(--ease-emphasized);
+}
+.lg-line__number:hover::after,
+.lg-line__number:focus-visible::after { transform: scaleX(1); }
+.lg-line__note {
+  margin: 1.15rem 0 0;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  line-height: 1.62;
+  color: var(--lg-ink-2);
+  max-width: 50ch;
+  text-wrap: pretty;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lg-line__number::after { transition: none; }
 }
 
 /* Display. `PageTitle` is the only thing that sets this, and it is now the

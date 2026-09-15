@@ -3,6 +3,7 @@
 
 type EventName =
   | "hear_play"
+  | "hero_call"
   | "book_submit"
   | "get_started_submit"
   | "coach_save"
