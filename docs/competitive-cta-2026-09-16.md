@@ -1,0 +1,49 @@
+# Competitive CTA — 2026-09-16
+
+Copy and CTA pass so the public site matches shipping truth vs rivals.
+
+## Commercial facts kept / clarified
+
+| Fact | Site representation |
+|---|---|
+| Demo line | `+1 561 566 1066` (unchanged) |
+| Pilot | **$149 / 14 days** — primary homepage + FinalCTA stamps now hit the live Stripe pilot Payment Link |
+| Esmi Local / Starter | **$299/mo + $499 setup** — named on pricing lede, fine print, schedule caption, and table header |
+| EN / ES | **Included** on every plan — removed the `$99 / mo` bilingual EN/ES add-on |
+| French | Remains a **custom add-on** (language pack) |
+
+## Overflow packaging
+
+Local / Starter is framed as the **after-hours and overflow** package: one line, voice · after-hours & overflow, Google Calendar + SMS. Included list now states overflow answering explicitly.
+
+## Calendar truth
+
+- Live booking is **Google Calendar + SMS confirmation** only.
+- Removed public claims that Microsoft 365, Calendly, or Acuity are live booking surfaces.
+- Pricing FAQ states those are **not** live today.
+
+## CRM / field-service honesty
+
+- No Jobber or Housecall Pro native claims (none were present; left that way).
+- Revenue-Ops CRM line no longer claims HubSpot/Salesforce/Pipedrive/Zoho “natively”; it is roadmap hand-off wiring scoped per engagement.
+- Day-14 pilot stage no longer implies CRM/ledger go-live on day 14 — phone line + Google Calendar only.
+
+## Esmi is not human
+
+- Removed “sounds human” / “suena humana” phrasing.
+- Included copy states **natural AI voice — not a human receptionist**.
+
+## Files touched
+
+- `app/i18n/messages/en.ts`
+- `app/i18n/messages/es.ts`
+- `app/[locale]/pricing/page.tsx` (table header Local / Starter)
+- `app/components/sections/Hero.tsx` (primary stamp → Stripe pilot)
+- `app/components/sections/FinalCTA.tsx` (primary stamp → Stripe pilot; /book kept as quiet action)
+- `docs/competitive-cta-2026-09-16.md` (this note)
+
+## Intentionally unchanged
+
+- Nav stamp still routes to `/book` (consult booking) so the bar does not force a card charge.
+- Growth / Scale dollars and minute bands unchanged.
+- Named operators and PRODUCT.md jurisdiction claims unchanged.
