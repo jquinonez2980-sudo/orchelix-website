@@ -27,6 +27,24 @@ const patch = {
       "24/7 call handling that books appointments, routes urgent calls, and works in English and Spanish — an AI receptionist, not a person.",
     esmiBody:
       "24/7 call handling that books appointments, routes urgent calls, and works in English and Spanish — an AI receptionist, not a person. Every call ends with a full transcript and a reason.",
+    arrears: [
+      {
+        entry: "Calls that go unanswered",
+        desc: "After-hours calls turn into voicemails — and voicemails turn into customers who booked with whoever picked up first.",
+      },
+      {
+        entry: "Follow-up that arrives late",
+        desc: "A lead waits a day for a callback. By the time someone replies, the decision is made and the quote is signed.",
+      },
+      {
+        entry: "A month-end that drags",
+        desc: "Reconciliations stretch out for weeks, so you steer the business on last month's numbers instead of this morning's.",
+      },
+      {
+        entry: "Your best people on busywork",
+        desc: "The people you hired for judgment spend their days re-keying the same numbers between tools.",
+      },
+    ],
     stages: [
       {
         day: "Day 1",
