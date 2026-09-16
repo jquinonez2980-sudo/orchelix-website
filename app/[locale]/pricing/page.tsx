@@ -266,7 +266,7 @@ function RateSchedule({ t, locale }: { t: Messages; locale: Locale }) {
     { term: p.terms.support, cells: [v.starterSupport, v.growthSupport, v.scaleSupport] },
   ];
 
-  const head = ["", "Starter", "Growth", "Scale"];
+  const head = ["", "Local / Starter", "Growth", "Scale"];
   const actions = [
     { href: PILOT_HREF, label: p.startPilotShort },
     { href: PILOT_HREF, label: p.startPilotShort },

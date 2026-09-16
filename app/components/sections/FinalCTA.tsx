@@ -17,6 +17,7 @@ import {
   ink3For,
 } from "@/app/components/ledger";
 import { localizedHref, type Locale } from "@/app/i18n/config";
+import { ESMI_PILOT_PAYMENT_LINK } from "@/app/lib/pilotPayment";
 import enMessages, { type Messages } from "@/app/i18n/messages/en";
 
 /* Defaults to English: /ai-receptionist and its industry pages live under
@@ -43,11 +44,14 @@ export default function FinalCTA({
         </div>
 
         <div className="flex flex-wrap items-center gap-x-8 gap-y-4 lg:justify-end">
-          <Stamp href={localizedHref("/book", locale)} size="1rem">
-            {t.common.bookPilot}
+          <Stamp href={ESMI_PILOT_PAYMENT_LINK} size="1rem">
+            {locale === "es" ? "Empieza un piloto de $149" : "Start a $149 pilot"}
           </Stamp>
           <QuietAction tone={TONE} href={locale === "es" ? "/try-esmi?lang=es" : "/try-esmi"}>
             {t.common.hearRealCall}
+          </QuietAction>
+          <QuietAction tone={TONE} href={localizedHref("/book", locale)}>
+            {t.common.bookPilot}
           </QuietAction>
           <QuietAction tone={TONE} href={localizedHref("/pricing", locale)}>
             {t.common.seePricing}
