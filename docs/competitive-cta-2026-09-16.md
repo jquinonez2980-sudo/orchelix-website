@@ -16,8 +16,6 @@ Copy and CTA pass so the public site matches shipping truth vs rivals.
 
 Local / Starter is framed as the **after-hours** package: one line, voice · after-hours, Google Calendar + SMS. Included list states after-hours answering explicitly.
 
-Do **not** use the word “overflow” (or Spanish “desborde”) in public copy on this branch.
-
 Polish pass (still on `ship/rival-cta-2026-09-16`, not merged):
 
 - Hero lede names after-hours before the $149 stamp.
