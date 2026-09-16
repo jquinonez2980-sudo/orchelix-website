@@ -7,14 +7,21 @@ Copy and CTA pass so the public site matches shipping truth vs rivals.
 | Fact | Site representation |
 |---|---|
 | Demo line | `+1 561 566 1066` (unchanged) |
-| Pilot | **$149 / 14 days** — primary homepage + FinalCTA stamps now hit the live Stripe pilot Payment Link |
+| Pilot | **$149 / 14 days overflow** — primary homepage + FinalCTA stamps hit the live Stripe pilot Payment Link |
 | Esmi Local / Starter | **$299/mo + $499 setup** — named on pricing lede, fine print, schedule caption, and table header |
 | EN / ES | **Included** on every plan — removed the `$99 / mo` bilingual EN/ES add-on |
 | French | Remains a **custom add-on** (language pack) |
 
 ## Overflow packaging
 
-Local / Starter is framed as the **after-hours and overflow** package: one line, voice · after-hours & overflow, Google Calendar + SMS. Included list now states overflow answering explicitly.
+Local / Starter is framed as the **after-hours and overflow** package: one line, voice · after-hours & overflow, Google Calendar + SMS. Included list states overflow answering explicitly.
+
+Polish pass (still on `ship/rival-cta-2026-09-16`, not merged):
+
+- Hero lede names after-hours and overflow before the $149 stamp.
+- Stamp copy is **Start a $149 overflow pilot** / **Piloto de desborde, $149** (hardcoded — do not use a missing `t.common.startPilot` key).
+- Pricing stamps, pilot heading/body, close body, and journey step 2 match that overflow pilot.
+- FAQ: “Is Local / Starter only for after-hours?” — overflow behind the desk *or* the whole line; $149 / 14 days.
 
 ## Calendar truth
 
@@ -39,8 +46,8 @@ Local / Starter is framed as the **after-hours and overflow** package: one line,
 - `app/i18n/messages/patches/competitive-2026-09-16-en.ts`
 - `app/i18n/messages/patches/competitive-2026-09-16-es.ts`
 - `app/[locale]/pricing/page.tsx` (table header Local / Starter)
-- `app/components/sections/Hero.tsx` (primary stamp → Stripe pilot)
-- `app/components/sections/FinalCTA.tsx` (primary stamp → Stripe pilot; /book kept as quiet action)
+- `app/components/sections/Hero.tsx` (primary stamp → Stripe overflow pilot)
+- `app/components/sections/FinalCTA.tsx` (primary stamp → Stripe; /book kept as quiet action)
 - `docs/competitive-cta-2026-09-16.md` (this note)
 
 Base `en.ts` / `es.ts` left unchanged; overlays carry the competitive-truth copy so the MCP push stays size-safe.
@@ -50,3 +57,4 @@ Base `en.ts` / `es.ts` left unchanged; overlays carry the competitive-truth copy
 - Nav stamp still routes to `/book` (consult booking) so the bar does not force a card charge.
 - Growth / Scale dollars and minute bands unchanged.
 - Named operators and PRODUCT.md jurisdiction claims unchanged.
+- **Not merged to `main`.** Production DNS untouched.

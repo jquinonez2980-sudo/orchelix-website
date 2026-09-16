@@ -14,7 +14,7 @@
    3. The live line (`HeroLine`) — the number Esmi answers, 24/7, set large.
       A visitor can test the claim before they read another word, which is
       the one thing a competitor's hero cannot copy.
-   4. The action: the stamp (book a pilot) and a quiet action that hands the
+   4. The action: the stamp (overflow pilot) and a quiet action that hands the
       visitor down to the recorded call in the next band, so a visitor not
       ready to dial still has somewhere to go that is not away.
 
@@ -26,7 +26,7 @@
    state, so with JS off or motion suppressed the words are simply there. */
 
 import { Section, PageTitle, Stamp, QuietAction } from "@/app/components/ledger";
-import { localizedHref, type Locale } from "@/app/i18n/config";
+import { type Locale } from "@/app/i18n/config";
 import { ESMI_PILOT_PAYMENT_LINK } from "@/app/lib/pilotPayment";
 import type { Messages } from "@/app/i18n/messages/en";
 import HeroRing from "./HeroRing";
@@ -74,7 +74,7 @@ export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
         <HeroLine head={t.home.lineHead} note={t.home.lineNote} label={t.home.lineCall} />
 
         <div className="lg-hero-actions">
-          <Stamp href={ESMI_PILOT_PAYMENT_LINK}>{locale === "es" ? "Empieza un piloto de $149" : "Start a $149 pilot"}</Stamp>
+          <Stamp href={ESMI_PILOT_PAYMENT_LINK}>{locale === "es" ? "Piloto de desborde, $149" : "Start a $149 overflow pilot"}</Stamp>
           <QuietAction tone="night" href="#hear-esmi">{t.home.hearFirst}</QuietAction>
         </div>
       </div>
