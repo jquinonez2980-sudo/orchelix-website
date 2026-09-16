@@ -27,6 +27,7 @@
 
 import { Section, PageTitle, Stamp, QuietAction } from "@/app/components/ledger";
 import { localizedHref, type Locale } from "@/app/i18n/config";
+import { ESMI_PILOT_PAYMENT_LINK } from "@/app/lib/pilotPayment";
 import type { Messages } from "@/app/i18n/messages/en";
 import HeroRing from "./HeroRing";
 import HeroLine from "./HeroLine";
@@ -73,7 +74,7 @@ export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
         <HeroLine head={t.home.lineHead} note={t.home.lineNote} label={t.home.lineCall} />
 
         <div className="lg-hero-actions">
-          <Stamp href={localizedHref("/book", locale)}>{t.common.bookPilot}</Stamp>
+          <Stamp href={ESMI_PILOT_PAYMENT_LINK}>{t.common.startPilot}</Stamp>
           <QuietAction tone="night" href="#hear-esmi">{t.home.hearFirst}</QuietAction>
         </div>
       </div>
