@@ -45,7 +45,7 @@ export default function FinalCTA({
 
         <div className="flex flex-wrap items-center gap-x-8 gap-y-4 lg:justify-end">
           <Stamp href={ESMI_PILOT_PAYMENT_LINK} size="1rem">
-            {locale === "es" ? "Piloto de desborde, $149" : "Start a $149 overflow pilot"}
+            {locale === "es" ? "Empieza un piloto de $149" : "Start a $149 pilot"}
           </Stamp>
           <QuietAction tone={TONE} href={locale === "es" ? "/try-esmi?lang=es" : "/try-esmi"}>
             {t.common.hearRealCall}

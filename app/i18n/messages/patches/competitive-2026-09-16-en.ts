@@ -12,17 +12,17 @@ type DeepPartial<T> = {
 const patch = {
   common: {
     startWithOneWorkflowBody:
-      "A $149 overflow pilot on your real line for fourteen days. After-hours answering, Google Calendar + SMS, English and Spanish included.",
+      "A $149 pilot on your real line for fourteen days. After-hours answering, Google Calendar + SMS, English and Spanish included.",
     journey: [
       { title: "Hear", body: "A real Esmi call on this site" },
-      { title: "Book", body: "A $149 overflow pilot on your real line" },
-      { title: "Map", body: "After-hours and overflow on one workflow" },
+      { title: "Book", body: "A $149 pilot on your real line" },
+      { title: "Map", body: "After-hours answering on one workflow" },
       { title: "Operate", body: "Every action on the operator register" },
     ],
   },
   home: {
     heroLede:
-      "After-hours and overflow on your line — Esmi answers, books Google Calendar, and confirms by SMS. English and Spanish included.",
+      "After-hours on your line — Esmi answers, books Google Calendar, and confirms by SMS. English and Spanish included.",
     exploreEsmiBody:
       "24/7 call handling that books appointments, routes urgent calls, and works in English and Spanish — an AI receptionist, not a person.",
     esmiBody:
@@ -71,25 +71,25 @@ const patch = {
     },
     pricing: {
       description:
-        "Esmi Local / Starter is $299/mo + $499 setup. A 14-day overflow pilot is $149. Esmi answers after-hours and overflow, books Google Calendar with SMS confirmation, and puts every call, appointment, and lead in one dashboard.",
-      lede: "Esmi Local / Starter covers after-hours and overflow on one line — $299/mo + $499 setup. Esmi answers the phone and web chat, books Google Calendar with SMS confirmation, and puts every call, appointment, and lead in one dashboard. Setup is done for you.",
-      startPilot: "Start a $149 overflow pilot",
-      startThePilot: "Start a $149 overflow pilot",
-      startPilotShort: "$149 overflow",
+        "Esmi Local / Starter is $299/mo + $499 setup. A 14-day pilot is $149. Esmi answers after-hours, books Google Calendar with SMS confirmation, and puts every call, appointment, and lead in one dashboard.",
+      lede: "Esmi Local / Starter covers after-hours on one line — $299/mo + $499 setup. Esmi answers the phone and web chat, books Google Calendar with SMS confirmation, and puts every call, appointment, and lead in one dashboard. Setup is done for you.",
+      startPilot: "Start a $149 pilot",
+      startThePilot: "Start a $149 pilot",
+      startPilotShort: "$149 pilot",
       scheduleLede:
-        "Local / Starter is the overflow package: one line, after-hours and overflow answering, English and Spanish included. Growth and Scale add capacity — every tier includes the full dashboard.",
+        "Local / Starter is the after-hours package: one line, nights and weekends answered, English and Spanish included. Growth and Scale add capacity — every tier includes the full dashboard.",
       values: {
-        starterChannels: "Voice · after-hours & overflow",
+        starterChannels: "Voice · after-hours",
         starterBooking: "1 Google Calendar + SMS",
       },
       finePrint:
-        "Esmi Local / Starter is $299/mo + $499 setup. Month-to-month available. Annual billing: two months free and setup waived. Setup covers number, Google Calendar, knowledge base, and go-live onboarding. Overflow pilot is $149 for 14 days including setup, credited to your first invoice if you continue. English and Spanish are included on every plan — not an add-on. Minutes are voice minutes and do not roll over. Taxes extra where applicable.",
-      pilotHeading: "After-hours and overflow, on your line, for fourteen days",
+        "Esmi Local / Starter is $299/mo + $499 setup. Month-to-month available. Annual billing: two months free and setup waived. Setup covers number, Google Calendar, knowledge base, and go-live onboarding. Pilot is $149 for 14 days including setup, credited to your first invoice if you continue. English and Spanish are included on every plan — not an add-on. Minutes are voice minutes and do not roll over. Taxes extra where applicable.",
+      pilotHeading: "After-hours on your line, for fourteen days",
       pilotBody:
-        "$149 for 14 days, including white-glove setup, credited to your first month if you continue. One number, up to 75 minutes, after-hours and overflow answering, one Google Calendar + SMS confirmations, English and Spanish included, the full dashboard, and an end-of-pilot review with your consultant.",
+        "$149 for 14 days, including white-glove setup, credited to your first month if you continue. One number, up to 75 minutes, after-hours answering, one Google Calendar + SMS confirmations, English and Spanish included, the full dashboard, and an end-of-pilot review with your consultant.",
       included: [
         "Natural AI voice, 24/7 — not a human receptionist",
-        "After-hours and overflow answering",
+        "After-hours answering",
         "English and Spanish included",
         "Google Calendar book and reschedule + SMS confirmation",
         "Escalation to your team with context",
@@ -104,9 +104,9 @@ const patch = {
         ["CRM / HighLevel wiring", "Custom"],
       ] as [string, string][],
       afterStart: [
-        ["Step one", "We learn your hours, overflow rules, services, and Google Calendar."],
+        ["Step one", "We learn your hours, routing rules, services, and Google Calendar."],
         ["Step two", "We go live — number, after-hours agent, booking, dashboard login."],
-        ["Step three", "You see every overflow call, booking, lead, and recording."],
+        ["Step three", "You see every after-hours call, booking, lead, and recording."],
       ] as [string, string][],
       faq: [
         {
@@ -119,7 +119,7 @@ const patch = {
         },
         {
           q: "Is Local / Starter only for after-hours?",
-          a: "It is built for after-hours and overflow on one line — nights, weekends, holidays, and the calls your front desk cannot take. During open hours it can sit behind your receptionist or answer the line outright. Same number, same Google Calendar, same dashboard. A 14-day overflow pilot is $149.",
+          a: "It is built for after-hours on one line — nights, weekends, holidays, and the calls your front desk cannot take. During open hours it can sit behind your receptionist or answer the line outright. Same number, same Google Calendar, same dashboard. A 14-day pilot is $149.",
         },
         {
           q: "What happens when Esmi can't handle something?",

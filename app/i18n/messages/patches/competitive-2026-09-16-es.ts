@@ -12,17 +12,17 @@ type DeepPartial<T> = {
 const patch = {
   common: {
     startWithOneWorkflowBody:
-      "Un piloto de desborde de $149 en tu línea real por catorce días. Fuera de horario, Google Calendar + SMS, inglés y español incluidos.",
+      "Un piloto de $149 en tu línea real por catorce días. Fuera de horario, Google Calendar + SMS, inglés y español incluidos.",
     journey: [
       { title: "Escucha", body: "Una grabación real de Esmi en este sitio" },
-      { title: "Agenda", body: "Un piloto de desborde de $149 en tu línea real" },
-      { title: "Mapa", body: "Fuera de horario y desborde en un solo proceso" },
+      { title: "Agenda", body: "Un piloto de $149 en tu línea real" },
+      { title: "Mapa", body: "Atención fuera de horario en un solo proceso" },
       { title: "Opera", body: "Cada acción en el registro del operador" },
     ],
   },
   home: {
     heroLede:
-      "Fuera de horario y desborde en tu línea — Esmi contesta, agenda en Google Calendar y confirma por SMS. Inglés y español incluidos.",
+      "Fuera de horario en tu línea — Esmi contesta, agenda en Google Calendar y confirma por SMS. Inglés y español incluidos.",
     exploreEsmiBody:
       "Atención de llamadas 24/7 que agenda citas, deriva las urgentes y trabaja en inglés y español — una recepcionista con IA, no una persona.",
     esmiBody:
@@ -71,25 +71,25 @@ const patch = {
     },
     pricing: {
       description:
-        "Esmi Local / Starter cuesta $299/mes + $499 de implementación. Un piloto de desborde de 14 días cuesta $149. Esmi contesta fuera de horario y desborde, agenda en Google Calendar con SMS y deja cada llamada, cita y prospecto en un solo tablero.",
-      lede: "Esmi Local / Starter cubre fuera de horario y desborde en una línea — $299/mes + $499 de implementación. Esmi contesta el teléfono y el chat web, agenda en Google Calendar con confirmación por SMS y deja cada llamada, cita y prospecto en un solo tablero. La configuración la hacemos nosotros.",
-      startPilot: "Empieza un piloto de desborde de $149",
-      startThePilot: "Empieza un piloto de desborde de $149",
-      startPilotShort: "Desborde $149",
+        "Esmi Local / Starter cuesta $299/mes + $499 de implementación. Un piloto de 14 días cuesta $149. Esmi contesta fuera de horario, agenda en Google Calendar con SMS y deja cada llamada, cita y prospecto en un solo tablero.",
+      lede: "Esmi Local / Starter cubre fuera de horario en una línea — $299/mes + $499 de implementación. Esmi contesta el teléfono y el chat web, agenda en Google Calendar con confirmación por SMS y deja cada llamada, cita y prospecto en un solo tablero. La configuración la hacemos nosotros.",
+      startPilot: "Empieza un piloto de $149",
+      startThePilot: "Empieza un piloto de $149",
+      startPilotShort: "Piloto $149",
       scheduleLede:
-        "Local / Starter es el paquete de desborde: una línea, fuera de horario y desborde, inglés y español incluidos. Growth y Scale suman capacidad — todos los planes incluyen el tablero completo.",
+        "Local / Starter es el paquete fuera de horario: una línea, noches y fines de semana contestados, inglés y español incluidos. Growth y Scale suman capacidad — todos los planes incluyen el tablero completo.",
       values: {
-        starterChannels: "Voz · fuera de horario y desborde",
+        starterChannels: "Voz · fuera de horario",
         starterBooking: "1 Google Calendar + SMS",
       },
       finePrint:
-        "Esmi Local / Starter cuesta $299/mes + $499 de implementación. Disponible mes a mes. Con facturación anual: dos meses sin costo y sin cargo de implementación. La implementación cubre número, Google Calendar, base de conocimiento y puesta en marcha. El piloto de desborde son $149 por 14 días con implementación incluida, acreditados a tu primera factura si continúas. Inglés y español están incluidos en todos los planes — no son un adicional. Los minutos son de voz y no se acumulan. Impuestos aparte donde apliquen.",
-      pilotHeading: "Fuera de horario y desborde, en tu línea, por catorce días",
+        "Esmi Local / Starter cuesta $299/mes + $499 de implementación. Disponible mes a mes. Con facturación anual: dos meses sin costo y sin cargo de implementación. La implementación cubre número, Google Calendar, base de conocimiento y puesta en marcha. El piloto son $149 por 14 días con implementación incluida, acreditados a tu primera factura si continúas. Inglés y español están incluidos en todos los planes — no son un adicional. Los minutos son de voz y no se acumulan. Impuestos aparte donde apliquen.",
+      pilotHeading: "Fuera de horario en tu línea, por catorce días",
       pilotBody:
-        "$149 por 14 días, con implementación completa incluida, acreditados a tu primer mes si continúas. Un número, hasta 75 minutos, atención fuera de horario y de desborde, un Google Calendar + SMS, inglés y español incluidos, el tablero completo y una revisión de cierre con tu consultor.",
+        "$149 por 14 días, con implementación completa incluida, acreditados a tu primer mes si continúas. Un número, hasta 75 minutos, atención fuera de horario, un Google Calendar + SMS, inglés y español incluidos, el tablero completo y una revisión de cierre con tu consultor.",
       included: [
         "Voz de IA natural, 24/7 — no es una recepcionista humana",
-        "Atención fuera de horario y de desborde",
+        "Atención fuera de horario",
         "Inglés y español incluidos",
         "Google Calendar (agendar/reprogramar) + confirmación por SMS",
         "Escalamiento a tu equipo con contexto",
@@ -104,9 +104,9 @@ const patch = {
         ["Integración CRM / HighLevel", "A medida"],
       ] as [string, string][],
       afterStart: [
-        ["Paso uno", "Aprendemos tus horarios, reglas de desborde, servicios y Google Calendar."],
+        ["Paso uno", "Aprendemos tus horarios, reglas de derivación, servicios y Google Calendar."],
         ["Paso dos", "Entra en operación — número, agente fuera de horario, agenda, acceso al tablero."],
-        ["Paso tres", "Ves cada llamada de desborde, cita, prospecto y grabación."],
+        ["Paso tres", "Ves cada llamada fuera de horario, cita, prospecto y grabación."],
       ] as [string, string][],
       faq: [
         {
@@ -119,7 +119,7 @@ const patch = {
         },
         {
           q: "¿Local / Starter es solo para fuera de horario?",
-          a: "Está pensado para fuera de horario y desborde en una línea: noches, fines de semana, feriados y las llamadas que tu recepción no puede tomar. En horario de atención puede quedar detrás de tu recepcionista o contestar la línea de frente. Mismo número, mismo Google Calendar, mismo tablero. Un piloto de desborde de 14 días cuesta $149.",
+          a: "Está pensado para fuera de horario en una línea: noches, fines de semana, feriados y las llamadas que tu recepción no puede tomar. En horario de atención puede quedar detrás de tu recepcionista o contestar la línea de frente. Mismo número, mismo Google Calendar, mismo tablero. Un piloto de 14 días cuesta $149.",
         },
         {
           q: "¿Qué pasa cuando Esmi no puede resolver algo?",
