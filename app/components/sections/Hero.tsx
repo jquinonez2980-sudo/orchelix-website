@@ -74,7 +74,7 @@ export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
         <HeroLine head={t.home.lineHead} note={t.home.lineNote} label={t.home.lineCall} />
 
         <div className="lg-hero-actions">
-          <Stamp href={ESMI_PILOT_PAYMENT_LINK}>{t.common.startPilot}</Stamp>
+          <Stamp href={ESMI_PILOT_PAYMENT_LINK}>{locale === "es" ? "Empieza un piloto de $149" : "Start a $149 pilot"}</Stamp>
           <QuietAction tone="night" href="#hear-esmi">{t.home.hearFirst}</QuietAction>
         </div>
       </div>

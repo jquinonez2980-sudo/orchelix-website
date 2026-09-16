@@ -35,12 +35,15 @@ Local / Starter is framed as the **after-hours and overflow** package: one line,
 
 ## Files touched
 
-- `app/i18n/messages/en.ts`
-- `app/i18n/messages/es.ts`
+- `app/i18n/dictionaries.ts` — deep-merge competitive overlays onto EN/ES catalogues
+- `app/i18n/messages/patches/competitive-2026-09-16-en.ts`
+- `app/i18n/messages/patches/competitive-2026-09-16-es.ts`
 - `app/[locale]/pricing/page.tsx` (table header Local / Starter)
 - `app/components/sections/Hero.tsx` (primary stamp → Stripe pilot)
 - `app/components/sections/FinalCTA.tsx` (primary stamp → Stripe pilot; /book kept as quiet action)
 - `docs/competitive-cta-2026-09-16.md` (this note)
+
+Base `en.ts` / `es.ts` left unchanged; overlays carry the competitive-truth copy so the MCP push stays size-safe.
 
 ## Intentionally unchanged
 
