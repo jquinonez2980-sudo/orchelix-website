@@ -22,7 +22,7 @@ const patch = {
   },
   home: {
     heroLede:
-      "Hecho para negocios en Jobber que pierden trabajos cuando suena el teléfono y nadie contesta. Fuera de horario en tu línea — Esmi contesta, agenda en Google Calendar y confirma por SMS. Inglés y español incluidos.",
+      "Fuera de horario en tu línea — Esmi contesta, agenda en Google Calendar y confirma por SMS. Inglés y español incluidos.",
     exploreEsmiBody:
       "Atención de llamadas 24/7 que agenda citas, deriva las urgentes y trabaja en inglés y español — una recepcionista con IA, no una persona.",
     esmiBody:
@@ -68,6 +68,13 @@ const patch = {
         ["CRM", "Entrega al CRM que ya usas — cableado por proyecto (hoja de ruta, no un catálogo de conectores nativos)"],
         ["Reportes", "Un tablero de los lunes: qué avanzó, qué se detuvo y por qué"],
       ] as [string, string][],
+    },
+    verticals: {
+      homeServices: {
+        description:
+          "Hecho para negocios en Jobber que pierden trabajos cuando suena el teléfono y nadie contesta. Esmi contesta llamadas de climatización, plomería, techado y electricidad fuera de horario — inglés y español — y agenda en Google Calendar.",
+        lede: "Hecho para negocios en Jobber que pierden trabajos cuando suena el teléfono y nadie contesta. Una recepcionista bilingüe para negocios de servicios del hogar. Esmi contesta fuera de horario, los fines de semana y mientras tu cuadrilla está en un trabajo — califica el servicio y lo agenda en Google Calendar con confirmación por SMS.",
+      },
     },
     pricing: {
       description:

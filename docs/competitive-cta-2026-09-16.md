@@ -31,7 +31,7 @@ Polish pass (still on `ship/rival-cta-2026-09-16`, not merged):
 
 ## CRM / field-service honesty
 
-- Jobber may be named as **ICP / workflow fit** on the homepage hero lede (approved 2026-09-16). Still **no** Jobber or Housecall Pro native integration, sync, or booking-into-Jobber claims until that path is live and demoable on 561-566-1066.
+- Jobber may be named as **ICP / workflow fit** on `/home-services` (not the homepage hero — Jorge 2026-09-16). Still **no** Jobber or Housecall Pro native integration, sync, or booking-into-Jobber claims until that path is live and demoable on 561-566-1066.
 - Revenue-Ops CRM line no longer claims HubSpot/Salesforce/Pipedrive/Zoho “natively”; it is roadmap hand-off wiring scoped per engagement.
 - Day-14 pilot stage no longer implies CRM/ledger go-live on day 14 — phone line + Google Calendar only.
 - Pricing stays Pilot $149 / 14 days and Esmi Local $299/mo + $499 setup — no Jobber plan, discount, or “includes Jobber.”
@@ -58,4 +58,4 @@ Base `en.ts` / `es.ts` left unchanged; overlays carry the competitive-truth copy
 - Nav stamp still routes to `/book` (consult booking) so the bar does not force a card charge.
 - Growth / Scale dollars and minute bands unchanged.
 - Named operators and PRODUCT.md jurisdiction claims unchanged.
-- Merged competitive CTA to `main` (2026-09-16). Jobber ICP hero lede added on `ship/jobber-icp-2026-09-16`.
+- Merged competitive CTA to `main` (2026-09-16). Jobber ICP lives on `/home-services` (moved off hero 2026-09-16).
