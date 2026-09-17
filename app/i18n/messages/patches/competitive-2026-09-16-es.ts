@@ -22,7 +22,7 @@ const patch = {
   },
   home: {
     heroLede:
-      "Fuera de horario en tu línea — Esmi contesta, agenda en Google Calendar y confirma por SMS. Inglés y español incluidos.",
+      "Hecho para negocios en Jobber que pierden trabajos cuando suena el teléfono y nadie contesta. Fuera de horario en tu línea — Esmi contesta, agenda en Google Calendar y confirma por SMS. Inglés y español incluidos.",
     exploreEsmiBody:
       "Atención de llamadas 24/7 que agenda citas, deriva las urgentes y trabaja en inglés y español — una recepcionista con IA, no una persona.",
     esmiBody:

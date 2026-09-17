@@ -22,7 +22,7 @@ const patch = {
   },
   home: {
     heroLede:
-      "After-hours on your line — Esmi answers, books Google Calendar, and confirms by SMS. English and Spanish included.",
+      "Built for Jobber shops that lose jobs when the phone rings and nobody’s there to answer. After-hours on your line — Esmi answers, books Google Calendar, and confirms by SMS. English and Spanish included.",
     exploreEsmiBody:
       "24/7 call handling that books appointments, routes urgent calls, and works in English and Spanish — an AI receptionist, not a person.",
     esmiBody:
