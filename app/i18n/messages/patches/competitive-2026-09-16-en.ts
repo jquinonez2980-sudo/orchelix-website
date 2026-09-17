@@ -22,7 +22,7 @@ const patch = {
   },
   home: {
     heroLede:
-      "Built for Jobber shops that lose jobs when the phone rings and nobody’s there to answer. After-hours on your line — Esmi answers, books Google Calendar, and confirms by SMS. English and Spanish included.",
+      "After-hours on your line — Esmi answers, books Google Calendar, and confirms by SMS. English and Spanish included.",
     exploreEsmiBody:
       "24/7 call handling that books appointments, routes urgent calls, and works in English and Spanish — an AI receptionist, not a person.",
     esmiBody:
@@ -86,6 +86,13 @@ const patch = {
         ["CRM", "Hand-off into the CRM you already use — wiring scoped per engagement (roadmap, not a native connector catalog)"],
         ["Reporting", "A Monday scorecard: what moved, what stalled, and why"],
       ] as [string, string][],
+    },
+    verticals: {
+      homeServices: {
+        description:
+          "Built for Jobber shops that lose jobs when the phone rings and nobody’s there to answer. Esmi answers HVAC, plumbing, roofing, and electrical calls after hours — English and Spanish — and books onto Google Calendar.",
+        lede: "Built for Jobber shops that lose jobs when the phone rings and nobody’s there to answer. A bilingual receptionist for home-services businesses. Esmi picks up after hours, on weekends, and while your crew is on a job — qualifies the work, and books it onto Google Calendar with SMS confirmation.",
+      },
     },
     pricing: {
       description:
