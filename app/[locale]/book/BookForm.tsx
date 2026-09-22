@@ -61,9 +61,16 @@ function Field({
   );
 }
 
-export default function BookForm({ t }: { t: BookFormCopy }) {
+/* `niaConsent` is passed only on the English page. When present, the form
+   offers "Have Nia call me": a separate, unticked-by-default consent box. A
+   ticked box also sends the lead to /api/nia-callback, which queues it for
+   Nia, Orchelix's outbound AI caller. The booking request above is sent
+   either way; Nia is an addition, never a condition. */
+export default function BookForm({ t, niaConsent }: { t: BookFormCopy; niaConsent?: string }) {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string>("");
+  const [callMe, setCallMe] = useState(false);
+  const [niaQueued, setNiaQueued] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -108,6 +115,27 @@ export default function BookForm({ t }: { t: BookFormCopy }) {
         const body = await res.json().catch(() => ({}));
         throw new Error(body.error || "");
       }
+      if (callMe && niaConsent) {
+        try {
+          const nia = await fetch("/api/nia-callback", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name: String(data.get("name") || "").trim(),
+              company: String(data.get("company") || "").trim(),
+              phone: String(data.get("phone") || "").trim(),
+              industry,
+              consent: true,
+              website: String(data.get("website") || ""),
+            }),
+          });
+          const niaBody = await nia.json().catch(() => ({}));
+          setNiaQueued(nia.ok && niaBody.queued === true);
+        } catch {
+          /* The booking request already went through; a missed call queue
+             just means a person replies by email instead. */
+        }
+      }
       track("book_submit");
       setStatus("sent");
     } catch (err) {
@@ -143,6 +171,20 @@ export default function BookForm({ t }: { t: BookFormCopy }) {
         >
           {t.receivedBody}
         </p>
+        {niaQueued && (
+          <p
+            style={{
+              fontFamily: "var(--font-body)",
+              fontSize: "1.0625rem",
+              lineHeight: 1.62,
+              color: "var(--lg-ink)",
+              maxWidth: "44ch",
+              margin: "1rem 0 0",
+            }}
+          >
+            Nia, our AI assistant, will call you at the number you gave to find a time.
+          </p>
+        )}
         <p
           className="lg-fig"
           style={{
@@ -187,7 +229,14 @@ export default function BookForm({ t }: { t: BookFormCopy }) {
           }
           htmlFor="f-phone"
         >
-          <input id="f-phone" name="phone" type="tel" autoComplete="tel" style={fieldStyle} />
+          <input
+            id="f-phone"
+            name="phone"
+            type="tel"
+            autoComplete="tel"
+            required={callMe}
+            style={fieldStyle}
+          />
         </Field>
 
         <Field label={t.industry} htmlFor="f-industry" span>
@@ -230,6 +279,58 @@ export default function BookForm({ t }: { t: BookFormCopy }) {
             ))}
           </div>
         </fieldset>
+
+        {niaConsent && (
+          <label
+            htmlFor="f-nia"
+            className="sm:col-span-2 flex cursor-pointer items-start gap-3"
+            style={{ borderTop: "1px solid var(--lg-hair)", paddingTop: "1.1rem" }}
+          >
+            <input
+              id="f-nia"
+              name="nia_consent"
+              type="checkbox"
+              checked={callMe}
+              onChange={(e) => setCallMe(e.target.checked)}
+              style={{ accentColor: "var(--lg-foil)", marginTop: "0.3rem", flex: "none" }}
+            />
+            <span>
+              <span
+                className="lg-fig"
+                style={{
+                  display: "block",
+                  fontSize: "0.6875rem",
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase",
+                  color: "var(--lg-ink)",
+                  marginBottom: "0.35rem",
+                }}
+              >
+                Have Nia call me — optional
+              </span>
+              <span
+                style={{
+                  fontFamily: "var(--font-body)",
+                  fontSize: "0.875rem",
+                  lineHeight: 1.55,
+                  color: "var(--lg-ink-2)",
+                }}
+              >
+                {niaConsent}
+              </span>
+            </span>
+          </label>
+        )}
+
+        {/* Honeypot: hidden from people and screen readers; bots fill it. */}
+        <input
+          type="text"
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          style={{ position: "absolute", left: "-10000px", width: 1, height: 1, opacity: 0 }}
+        />
       </div>
 
       {/* Drawn as a margin annotation, not in red. DESIGN.md's Red Is

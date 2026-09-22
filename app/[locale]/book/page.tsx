@@ -5,6 +5,7 @@ import { getDictionary } from "@/app/i18n/dictionaries";
 import Nav from "@/app/components/sections/Nav";
 import Footer from "@/app/components/sections/Footer";
 import BookForm from "./BookForm";
+import { NIA_CONSENT_TEXT } from "@/app/lib/niaCallback";
 import {
   Section,
   PageTitle,
@@ -69,7 +70,7 @@ export default async function BookPage({ params }: PageProps<"/[locale]">) {
               {/* The form is a client component, so its copy crosses the
                   boundary as a prop — only the `form` slice, not the whole
                   catalogue. */}
-              <BookForm t={p.form} />
+              <BookForm t={p.form} niaConsent={locale === "en" ? NIA_CONSENT_TEXT : undefined} />
             </div>
           </div>
         </Section>
