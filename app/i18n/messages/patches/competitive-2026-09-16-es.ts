@@ -105,6 +105,7 @@ const patch = {
         "Actividad fuera de horario en el resumen",
       ],
       addOns: [
+        ["Nia, llamadas de seguimiento · 300 min", "$299 / mes"],
         ["Número adicional", "$49 / mes"],
         ["500 minutos adicionales", "$99"],
         ["Paquete de francés", "A medida"],

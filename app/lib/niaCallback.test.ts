@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
   NIA_CONSENT_TEXT,
+  NIA_CONSENT_TEXT_ES,
   buildNiaLead,
   industryFor,
   marketFor,
@@ -12,7 +13,12 @@ import {
    would block every lead from the /book form. */
 function gateAccepts(text: string): boolean {
   const t = text.toLowerCase().replace(/\s+/g, " ").trim();
-  return t.includes("orchelix may call") && t.includes("consent is not required") && /\bai\b/.test(t);
+  const en = t.includes("orchelix may call") && t.includes("consent is not required") && /\bai\b/.test(t);
+  const es =
+    t.includes("orchelix puede llamar") &&
+    t.includes("el consentimiento no es requisito") &&
+    (/\bia\b/.test(t) || t.includes("inteligencia artificial"));
+  return en || es;
 }
 
 const NOW = new Date("2026-09-22T15:00:00Z");
@@ -77,4 +83,25 @@ test("a ticked box builds a form_ai_call lead carrying the exact consent text", 
   assert.equal(r.lead.consent_text, NIA_CONSENT_TEXT);
   assert.equal(r.lead.consent_at, NOW.toISOString());
   assert.ok(gateAccepts(r.lead.consent_text));
+});
+
+test("the Spanish consent text passes the gate's Spanish rules", () => {
+  assert.ok(gateAccepts(NIA_CONSENT_TEXT_ES));
+});
+
+test("language es stores the Spanish text and a Spanish lead; anything else is English", () => {
+  const es = buildNiaLead({ name: "Ana", phone: "4165550123", consent: true, language: "es" }, NOW);
+  assert.ok(es.ok);
+  if (es.ok) {
+    assert.equal(es.lead.language, "es");
+    assert.equal(es.lead.consent_text, NIA_CONSENT_TEXT_ES);
+  }
+  for (const language of [undefined, "en", "ES", "fr", 1]) {
+    const r = buildNiaLead({ name: "Ana", phone: "4165550123", consent: true, language }, NOW);
+    assert.ok(r.ok);
+    if (r.ok) {
+      assert.equal(r.lead.language, "en");
+      assert.equal(r.lead.consent_text, NIA_CONSENT_TEXT);
+    }
+  }
 });

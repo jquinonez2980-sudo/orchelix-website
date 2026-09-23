@@ -123,6 +123,7 @@ const patch = {
         "After-hours activity on the overview",
       ],
       addOns: [
+        ["Nia follow-up caller · 300 min", "$299 / mo"],
         ["Extra number", "$49 / mo"],
         ["Extra 500 minutes", "$99"],
         ["French language pack", "Custom"],

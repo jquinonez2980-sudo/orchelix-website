@@ -27,6 +27,7 @@ export default function Footer({
         /* /try-esmi was absent from the nav and from here both — the live
            product demo had no route in from the chrome at all. */
         { label: t.nav.tryEsmi, href: locale === "es" ? "/try-esmi?lang=es" : "/try-esmi" },
+        { label: t.footer.links.nia, href: L("/nia") },
         { label: t.footer.links.revops, href: `${L("/solutions")}#agent-revops` },
         { label: t.footer.links.industries, href: L("/industries") },
       ],

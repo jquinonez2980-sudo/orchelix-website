@@ -237,6 +237,7 @@ const en = {
     links: {
       esmi: "Esmi — Virtual Receptionist",
       revops: "Revenue-Ops Agents",
+      nia: "Nia — AI Follow-up Caller",
       industries: "Industries",
       howItWorks: "How it works",
       pricing: "Pricing",
@@ -302,6 +303,11 @@ const en = {
       ] as [string, string][],
       inDevNote:
         "Revenue-Ops is in development. The capabilities above describe what it is being built to do, not what is running in your account today. If a pilot depends on it, say so and we will tell you honestly where it stands.",
+      niaStatus: "In production — Esmi add-on",
+      niaName: "Nia — follow-up calls",
+      niaBody:
+        "Esmi answers the calls that come in. Nia makes the ones that should go out: she calls new leads back within minutes, in English or Spanish, books them on your calendar, and only calls people who asked to hear from you.",
+      niaMore: "How Nia works",
       deploymentHeading: "How a deployment runs",
       deploymentLede:
         "Every agent ships the same way: one workflow mapped by a senior consultant, live in fourteen days, and audited from the first action onward.",
@@ -311,6 +317,59 @@ const en = {
         ["Ongoing", "Every action logged, reversible, and attributable."],
         ["When ready", "Add the next agent — same console, same consultant."],
       ] as [string, string][],
+    },
+
+    nia: {
+      title: "Nia — AI follow-up caller",
+      description:
+        "Nia calls your new leads back within minutes, in English or Spanish, and books them on your calendar. She only calls people who asked to hear from you. $299/mo add-on to any Esmi plan.",
+      status: "Live — onboarded by pilot",
+      heading: "Every lead called back in minutes. In English or Spanish.",
+      lede: "Nia is the outbound half of Esmi. When someone fills in your form, misses you on the phone, or asks Esmi for a callback, Nia calls them back, answers the first questions, and books the appointment on your calendar.",
+      hearNia: "Have Nia call you",
+      flowHeading: "From lead to booked, without you in the loop",
+      flow: [
+        ["Minute 0", "A lead arrives — your web form, a missed call, or an Esmi callback request."],
+        ["Minutes later", "Nia calls, says she is an AI assistant, and asks if it is a good time."],
+        ["On the call", "Four questions at most, then two open slots from your real calendar."],
+        ["Booked", "Text and email confirmation, then reminders 24 hours and 1 hour before."],
+      ] as [string, string][],
+      capabilitiesHeading: "What Nia does",
+      capabilities: [
+        ["Speed", "Calls a new lead within minutes, while they still remember asking"],
+        ["Languages", "English and Spanish from the first sentence; stays in the caller's language"],
+        ["Booking", "Offers two real slots from your Google Calendar and books the one they pick"],
+        ["Reminders", "SMS and email confirmation, plus reminders at 24 hours and 1 hour"],
+        ["Follow-up", "A second attempt on a different day, a voicemail, and a text — then she stops"],
+        ["Hand-off", "Transfers the call to you when a lead insists on a person and you are available"],
+        ["Record", "Every attempt logged with outcome, summary, and recording where consent allows"],
+      ] as [string, string][],
+      rulesHeading: "What Nia will not do",
+      rulesLede:
+        "These are checks that run before every dial, not a policy document. If any one of them cannot be confirmed, the call is not placed.",
+      rules: [
+        ["Cold lists", "She never calls a purchased or scraped list — only people who asked to hear from you"],
+        ["Consent", "No stored record of how the lead asked to be contacted, no call"],
+        ["Do-not-call", "Opt-outs are honoured on the spot; Canadian leads older than six months are scrubbed against the National DNCL"],
+        ["Hours", "Only inside local calling hours for the lead's market"],
+        ["Persistence", "No more than two attempts per lead in seven days"],
+        ["Honesty", "She says she is an AI in her first sentence and never claims to be a person"],
+        ["Payments", "She never takes card details or promises results"],
+      ] as [string, string][],
+      rulesNote:
+        "These controls reduce risk; they are not legal advice. You remain responsible for how your leads were collected — we will show you the consent wording your forms need before Nia goes live.",
+      proofHeading: "We use her first",
+      proofBody:
+        "Orchelix uses Nia to call back its own leads and book walkthroughs with Jorge. If you ask for a callback on our booking page, she is who calls.",
+      priceHeading: "Pricing",
+      price: [
+        ["Monthly", "$299 / mo"],
+        ["Included", "300 call minutes"],
+        ["Setup", "Included"],
+        ["Requires", "Any Esmi plan"],
+      ] as [string, string][],
+      priceNote:
+        "Nia is an add-on to Esmi: she books into the same calendar and reports into the same dashboard. Onboarding runs as a pilot — we write your script, set your calling rules, and review the first calls with you.",
     },
 
     pricing: {
@@ -372,6 +431,7 @@ const en = {
       ],
       addOnsHeading: "Add-ons",
       addOns: [
+        ["Nia follow-up caller · 300 min", "$299 / mo"],
         ["Extra number", "$49 / mo"],
         ["Extra 500 minutes", "$99"],
         ["Bilingual EN / ES", "$99 / mo"],
@@ -683,6 +743,8 @@ const en = {
         receivedBody:
           "Your request is with a senior consultant. Expect a reply within one business day — from a person, with a time proposed.",
         soonerIsFine: "Sooner is fine too —",
+        niaLabel: "Have Nia call me — optional",
+        niaQueued: "Nia, our AI assistant, will call you at the number you gave to find a time.",
         notSent: "Not sent",
         errorTail:
           "Nothing was sent — please try again, or call the number above and we will book it directly.",

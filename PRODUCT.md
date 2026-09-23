@@ -58,6 +58,7 @@ once the first has earned it.
 | Product | Status |
 |---|---|
 | **Esmi** — Virtual Receptionist & call automation | **Live in production.** 24/7 answering, qualification, booking, smart routing, EN/ES native, FR as add-on, transcript + reason on every call. |
+| **Nia** — outbound follow-up caller (Esmi add-on, $299/mo, 300 min, setup included) | **Live for Orchelix's own leads; clients onboarded by pilot (added 2026-09-23).** Calls back consented leads only, EN/ES, books on the client's calendar. Page: /nia. Never describe as TCPA/CRTC compliant. |
 | **Revenue-Ops Agents** — lead qualification, follow-up, pipeline | **In development.** |
 
 The site must not present both as equally shipped. Esmi carries the proof; Revenue-Ops is

@@ -226,6 +226,7 @@ const es: Messages = {
     links: {
       esmi: "Esmi — Recepcionista Virtual",
       revops: "Agentes de Revenue-Ops",
+      nia: "Nia — Llamadas de seguimiento",
       industries: "Industrias",
       howItWorks: "Cómo funciona",
       pricing: "Precios",
@@ -292,6 +293,11 @@ const es: Messages = {
       ] as [string, string][],
       inDevNote:
         "Revenue-Ops está en desarrollo. Las capacidades de arriba describen para qué se está construyendo, no lo que corre hoy en tu cuenta. Si un piloto depende de él, dilo y te decimos con honestidad en qué punto está.",
+      niaStatus: "En producción — complemento de Esmi",
+      niaName: "Nia — llamadas de seguimiento",
+      niaBody:
+        "Esmi contesta las llamadas que entran. Nia hace las que deben salir: devuelve la llamada a tus nuevos prospectos en minutos, en inglés o en español, los agenda en tu calendario y solo llama a quienes pidieron saber de ti.",
+      niaMore: "Cómo funciona Nia",
       deploymentHeading: "Cómo se implementa",
       deploymentLede:
         "Cada agente entra igual: un proceso documentado por un consultor senior, en operación en catorce días, y auditado desde la primera acción.",
@@ -301,6 +307,59 @@ const es: Messages = {
         ["Continuo", "Cada acción registrada, reversible y atribuible."],
         ["Cuando decidas", "Suma el siguiente agente — misma consola, mismo consultor."],
       ] as [string, string][],
+    },
+
+    nia: {
+      title: "Nia — llamadas de seguimiento con IA",
+      description:
+        "Nia devuelve la llamada a tus nuevos prospectos en minutos, en inglés o en español, y los agenda en tu calendario. Solo llama a quienes pidieron saber de ti. Complemento de $299/mes para cualquier plan de Esmi.",
+      status: "En operación — se activa con piloto",
+      heading: "Cada prospecto recibe tu llamada en minutos. En inglés o en español.",
+      lede: "Nia es la mitad saliente de Esmi. Cuando alguien llena tu formulario, no te encuentra por teléfono o le pide a Esmi que lo llamen, Nia le devuelve la llamada, responde las primeras preguntas y agenda la cita en tu calendario.",
+      hearNia: "Pide que Nia te llame",
+      flowHeading: "Del prospecto a la cita, sin que tengas que intervenir",
+      flow: [
+        ["Minuto 0", "Llega un prospecto: tu formulario web, una llamada perdida o una solicitud a Esmi."],
+        ["Minutos después", "Nia llama, dice que es una asistente de IA y pregunta si es buen momento."],
+        ["En la llamada", "Cuatro preguntas como máximo y dos horarios reales de tu calendario."],
+        ["Agendado", "Confirmación por texto y correo, y recordatorios 24 horas y 1 hora antes."],
+      ] as [string, string][],
+      capabilitiesHeading: "Lo que hace Nia",
+      capabilities: [
+        ["Rapidez", "Llama al prospecto en minutos, cuando todavía recuerda que pidió información"],
+        ["Idiomas", "Inglés y español desde la primera frase; se queda en el idioma de quien contesta"],
+        ["Agenda", "Ofrece dos horarios reales de tu Google Calendar y agenda el que elijan"],
+        ["Recordatorios", "Confirmación por SMS y correo, y recordatorios a las 24 horas y a 1 hora"],
+        ["Seguimiento", "Un segundo intento otro día, un mensaje de voz y un texto — y ahí se detiene"],
+        ["Traspaso", "Te pasa la llamada cuando el prospecto insiste en hablar con una persona y estás disponible"],
+        ["Registro", "Cada intento queda registrado con resultado, resumen y grabación cuando hay consentimiento"],
+      ] as [string, string][],
+      rulesHeading: "Lo que Nia no hace",
+      rulesLede:
+        "Son verificaciones que corren antes de cada llamada, no un documento de políticas. Si alguna no se puede confirmar, la llamada no se hace.",
+      rules: [
+        ["Listas en frío", "Nunca llama a listas compradas o extraídas — solo a quienes pidieron saber de ti"],
+        ["Consentimiento", "Sin registro de cómo pidió el prospecto que lo contacten, no hay llamada"],
+        ["No llamar", "Las bajas se respetan al instante; los prospectos de Canadá con más de seis meses se revisan contra la lista nacional (DNCL)"],
+        ["Horario", "Solo dentro del horario permitido en el mercado del prospecto"],
+        ["Insistencia", "No más de dos intentos por prospecto en siete días"],
+        ["Honestidad", "Dice que es una IA en su primera frase y nunca afirma ser una persona"],
+        ["Pagos", "Nunca pide datos de tarjeta ni promete resultados"],
+      ] as [string, string][],
+      rulesNote:
+        "Estos controles reducen el riesgo; no son asesoría legal. Sigues siendo responsable de cómo se obtuvieron tus prospectos — antes de activar a Nia te mostramos el texto de consentimiento que necesitan tus formularios.",
+      proofHeading: "Nosotros la usamos primero",
+      proofBody:
+        "Orchelix usa a Nia para devolver la llamada a sus propios prospectos y agendar demostraciones con Jorge. Si pides que te llamen en nuestra página de reservas, es ella quien llama.",
+      priceHeading: "Precio",
+      price: [
+        ["Mensual", "$299 / mes"],
+        ["Incluye", "300 minutos de llamada"],
+        ["Configuración", "Incluida"],
+        ["Requiere", "Cualquier plan de Esmi"],
+      ] as [string, string][],
+      priceNote:
+        "Nia es un complemento de Esmi: agenda en el mismo calendario y reporta en el mismo tablero. La activación es un piloto — escribimos tu guion, definimos tus reglas de llamada y revisamos contigo las primeras llamadas.",
     },
 
     pricing: {
@@ -362,6 +421,7 @@ const es: Messages = {
       ],
       addOnsHeading: "Adicionales",
       addOns: [
+        ["Nia, llamadas de seguimiento · 300 min", "$299 / mes"],
         ["Número adicional", "$49 / mes"],
         ["500 minutos adicionales", "$99"],
         ["Bilingüe EN / ES", "$99 / mes"],
@@ -673,6 +733,8 @@ const es: Messages = {
         receivedBody:
           "Tu solicitud está con un consultor senior. Espera respuesta dentro de un día hábil — de una persona, con un horario propuesto.",
         soonerIsFine: "Si prefieres antes —",
+        niaLabel: "Quiero que Nia me llame — opcional",
+        niaQueued: "Nia, nuestra asistente de IA, te llamará al número que nos diste para encontrar un horario.",
         notSent: "No se envió",
         errorTail:
           "No se envió nada — inténtalo de nuevo, o llama al número de arriba y lo agendamos directamente.",
