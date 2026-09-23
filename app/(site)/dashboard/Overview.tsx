@@ -6,6 +6,7 @@ import Action from "./Action";
 import Link from "next/link";
 import {
   type OverviewBucket,
+  type OverviewDay,
   fetchOverview,
   fetchUsage,
   type OverviewResponse,
@@ -13,72 +14,80 @@ import {
 } from "@/app/lib/esmiPlatform";
 import NightRegister from "./NightRegister";
 import TonightWork from "./TonightWork";
-import { LimitBanner, MinutesProgress, Tile } from "./PlanUsageWidgets";
+import { LimitBanner, MinutesProgress } from "./PlanUsageWidgets";
 import { useActiveOrgSlug } from "./useActiveOrgSlug";
 import { useDashI18n } from "./i18n";
+import { computeWeekDelta } from "./weekDelta";
 
 /* KPI tiles per the stat-tile contract: sentence-case label, semibold value in
-   proportional figures (no tabular-nums at display size), signed delta vs a
+   proportional figures (no tabular-nums at display size), signed change vs a
    named period with an arrow glyph so direction is never color-alone.
-   Exactly ONE hero figure per view: the after-hours number. */
+   Exactly ONE hero figure per view: the after-hours number.
 
-type Delta =
-  | { kind: "pct"; value: number }
-  | { kind: "new" }
-  | { kind: "flat" };
+   Small counts state their change as a count, in a neutral tone; only a
+   real drop on real volume goes red — see weekDelta.ts. */
+function DeltaLine({ cur, prev }: { cur: number; prev: number }) {
+  const { t } = useDashI18n();
+  const d = t.overview.delta;
+  const { delta, tone } = computeWeekDelta(cur, prev);
+  const cls = tone === "drop" ? "text-rose-600" : "text-ink-2";
 
-function computeDelta(cur: number, prev: number): Delta {
-  if (prev === 0 && cur === 0) return { kind: "flat" };
-  if (prev === 0) return { kind: "new" };
-  const pct = Math.round(((cur - prev) / prev) * 100);
-  if (pct === 0) return { kind: "flat" };
-  return { kind: "pct", value: pct };
-}
-
-function DeltaLine({ delta, invert = false }: { delta: Delta; invert?: boolean }) {
-  const period = "vs prior 7 days";
-  if (delta.kind === "flat") {
-    return <p className={`text-xs ${invert ? "text-navy-200" : "text-ink-4"}`}>— {period}</p>;
-  }
-  if (delta.kind === "new") {
+  if (delta.kind === "count") {
     return (
-      <p className={`text-xs font-medium ${invert ? "text-teal-300" : "text-[var(--lg-ink-2)] hover:text-[var(--lg-ink)]"}`}>
-        New {period}
+      <p className={`text-xs font-medium ${cls}`}>
+        {delta.diff === 0
+          ? d.same
+          : delta.diff > 0
+            ? d.more(delta.diff)
+            : d.fewer(-delta.diff)}
       </p>
     );
   }
   const up = delta.value > 0;
-  const cls = invert
-    ? up
-      ? "text-teal-300"
-      : "text-navy-200"
-    : up
-      ? "text-[var(--lg-ink-2)] hover:text-[var(--lg-ink)]"
-      : "text-rose-600";
   return (
     <p className={`text-xs font-medium ${cls}`}>
-      {up ? "↑" : "↓"} {Math.abs(delta.value)}% {period}
+      {up ? "↑" : "↓"} {Math.abs(delta.value)}% {d.pct}
     </p>
   );
 }
 
-function DeltaTile({
-  label,
-  value,
-  delta,
-  note,
-}: {
-  label: string;
-  value: string;
-  delta: Delta;
-  note?: string;
-}) {
+/* Seven daily counts as a bare line — no axes, no dots, no fill. Drawn in
+   brass, not cyan: this is history, and cyan is reserved for what the line
+   is doing right now (see the console notes in globals.css). The stroke is
+   non-scaling so the SVG can stretch to the tile at any width. */
+function Sparkline({ counts, label }: { counts: number[]; label: string }) {
+  const { t } = useDashI18n();
+  if (counts.length < 2) return null;
+  const W = 100;
+  const H = 24;
+  const PAD = 2;
+  const max = Math.max(...counts, 1);
+  const step = W / (counts.length - 1);
+  const points = counts
+    .map((c, i) => {
+      const x = i * step;
+      const y = H - PAD - (c / max) * (H - PAD * 2);
+      return `${x.toFixed(2)},${y.toFixed(2)}`;
+    })
+    .join(" ");
   return (
-    <Tile label={label} value={value} note={note}>
-      <div className="mt-1.5">
-        <DeltaLine delta={delta} />
-      </div>
-    </Tile>
+    <svg
+      className="esmi-spark"
+      viewBox={`0 0 ${W} ${H}`}
+      preserveAspectRatio="none"
+      role="img"
+      aria-label={t.overview.week.trend(label, counts.join(", "))}
+    >
+      <polyline
+        points={points}
+        fill="none"
+        stroke="var(--esmi-brass)"
+        strokeWidth={1.5}
+        strokeLinejoin="round"
+        strokeLinecap="round"
+        vectorEffect="non-scaling-stroke"
+      />
+    </svg>
   );
 }
 
@@ -121,13 +130,13 @@ function SetupChecklistSection({ checklist }: { checklist: OverviewResponse["set
       </ul>
       <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm font-medium">
         <Link href="/dashboard/knowledge" className="text-navy-600 hover:underline">
-          Knowledge →
+          {t.overview.text.linkKnowledge}
         </Link>
         <Link href="/dashboard/onboarding/voice" className="text-navy-600 hover:underline">
-          Voice preview →
+          {t.overview.text.linkVoice}
         </Link>
         <Link href="/dashboard/settings" className="text-navy-600 hover:underline">
-          Hours &amp; routing →
+          {t.overview.text.linkHours}
         </Link>
       </div>
     </section>
@@ -136,16 +145,15 @@ function SetupChecklistSection({ checklist }: { checklist: OverviewResponse["set
 
 /* ── language mix (current 7-day window) ───────────────────────────────────── */
 
-const LANGUAGE_MIX_LABEL: Record<"en" | "es" | "unknown", string> = {
-  en: "English",
-  es: "Spanish",
-  unknown: "Unknown",
-};
-
 function LanguageMixSection({ mix }: { mix: OverviewResponse["current"]["language_mix"] }) {
   const { t } = useDashI18n();
   const total = mix.en + mix.es + mix.unknown;
   const rows = (["en", "es", "unknown"] as const).filter((k) => mix[k] > 0);
+  const languageLabel = {
+    en: t.overview.text.langEn,
+    es: t.overview.text.langEs,
+    unknown: t.overview.text.langUnknown,
+  };
 
   return (
     <section>
@@ -163,7 +171,7 @@ function LanguageMixSection({ mix }: { mix: OverviewResponse["current"]["languag
               return (
                 <li key={key}>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-ink-2">{LANGUAGE_MIX_LABEL[key]}</span>
+                    <span className="text-ink-2">{languageLabel[key]}</span>
                     <span className="text-ink-3">
                       {count} <span className="text-ink-4">({pct}%)</span>
                     </span>
@@ -187,11 +195,12 @@ function LanguageMixSection({ mix }: { mix: OverviewResponse["current"]["languag
 /* ── usage meter ────────────────────────────────────────────────────────────── */
 
 function UsageMeterSection({ usage }: { usage: UsageResponse }) {
+  const { t } = useDashI18n();
   return (
     <section className="space-y-3">
       <LimitBanner plan={usage.plan} />
       <div className="rounded-lg border border-line bg-surface p-5 shadow-sm">
-        <p className="text-sm text-ink-3">Voice minutes used ({usage.plan.label} plan, this month)</p>
+        <p className="text-sm text-ink-3">{t.overview.text.voiceMinutes(usage.plan.label)}</p>
         <MinutesProgress minutes={usage.minutes} plan={usage.plan} />
       </div>
     </section>
@@ -246,13 +255,13 @@ function LineBlock({
           {t.overview.afterHours}
         </p>
         <p className="esmi-hero-figure">{value}</p>
-        <DeltaLine delta={computeDelta(value, prev)} />
+        <DeltaLine cur={value} prev={prev} />
         <p className="mt-1 max-w-[42ch] text-xs leading-5 text-ink-2">
           {quiet
-            ? "Esmi is on duty around the clock. The moment someone calls while you're closed, it's answered — and counted here."
+            ? t.overview.text.afterHoursQuiet
             : value > 0
-              ? "Calls Esmi picked up while your doors were closed — customers who would otherwise have reached voicemail or a competitor."
-              : "No after-hours calls this week — and if one comes in at 2am, Esmi has it covered."}
+              ? t.overview.text.afterHoursSome
+              : t.overview.text.afterHoursNone}
         </p>
       </div>
     </section>
@@ -262,61 +271,54 @@ function LineBlock({
 /* The week's four figures as a Band — label above value, `rule-quiet`
    verticals between columns only, reading across the page.
 
-   NO SPARKLINES, and the absence is the honest answer rather than an
-   oversight: `/overview` returns `current` and `previous`, two points. A
-   ten-point trend line drawn from two numbers is a fabricated picture of
-   someone's business. The figure carries the delta and a plain sentence
-   instead; a daily series on the overview endpoint is what would light a
-   real one up.
+   Each figure carries a 7-day sparkline drawn from `daily`, the current
+   window cut into seven 24-hour slices that sum to the figure above it — a
+   real series, not a line interpolated between `current` and `previous`.
+   Older API deploys don't send `daily`; the band just goes without.
 
    `esmi-lift` marks the one tile that carries money. One lifted thing on a
    screen is a hierarchy; two is a card deck. */
-function WeekBand({ cur, prev }: { cur: OverviewBucket; prev: OverviewBucket }) {
-  const rows = [
-    {
-      label: "Calls answered",
-      value: cur.calls_answered,
-      delta: computeDelta(cur.calls_answered, prev.calls_answered),
-      note: "Picked up by Esmi on your line",
-    },
-    {
-      label: "Appointments booked",
-      value: cur.appointments_booked,
-      delta: computeDelta(cur.appointments_booked, prev.appointments_booked),
-      note: "Written straight to your calendar",
-    },
-    {
-      label: "Leads routed to you",
-      value: cur.leads_escalated,
-      delta: computeDelta(cur.leads_escalated, prev.leads_escalated),
-      note: "Callers Esmi flagged for a person",
-    },
-    {
-      label: "Web chats",
-      value: cur.web_chats,
-      delta: computeDelta(cur.web_chats, prev.web_chats),
-      note: "Conversations from your website",
-    },
+type DailyKey = "calls_answered" | "appointments_booked" | "leads_escalated" | "web_chats";
+
+function WeekBand({
+  cur,
+  prev,
+  daily,
+}: {
+  cur: OverviewBucket;
+  prev: OverviewBucket;
+  daily: OverviewDay[] | undefined;
+}) {
+  const { t } = useDashI18n();
+  const w = t.overview.week;
+  const rows: { key: DailyKey; label: string; note: string }[] = [
+    { key: "calls_answered", label: w.callsAnswered, note: w.callsAnsweredNote },
+    { key: "appointments_booked", label: w.appointments, note: w.appointmentsNote },
+    { key: "leads_escalated", label: w.leadsRouted, note: w.leadsRoutedNote },
+    { key: "web_chats", label: w.webChats, note: w.webChatsNote },
   ];
-  const quiet = rows.every((r) => r.value === 0);
+  const quiet = rows.every((r) => cur[r.key] === 0);
 
   return (
     <section>
       <div className="mb-2 flex items-baseline justify-between gap-3">
-        <SectionTitle>This week</SectionTitle>
+        <SectionTitle>{w.title}</SectionTitle>
         <p className="lg-fig text-[0.625rem] uppercase tracking-[0.13em] text-ink-3">
-          vs prior 7 days
+          {w.vsPrior}
         </p>
       </div>
 
       <div className="esmi-band">
         {rows.map((row, i) => (
-          <div key={row.label} className={i === 1 ? "esmi-lift" : undefined}>
+          <div key={row.key} className={i === 1 ? "esmi-lift" : undefined}>
             <span className="lg-fig text-[0.625rem] uppercase tracking-[0.13em] text-ink-3">
               {row.label}
             </span>
-            <span className="esmi-band-value">{row.value}</span>
-            <DeltaLine delta={row.delta} />
+            <span className="esmi-band-value">{cur[row.key]}</span>
+            {daily && daily.length > 1 && (
+              <Sparkline counts={daily.map((d) => d[row.key])} label={row.label} />
+            )}
+            <DeltaLine cur={cur[row.key]} prev={prev[row.key]} />
             <span className="text-xs leading-5 text-ink-3">{row.note}</span>
           </div>
         ))}
@@ -324,8 +326,7 @@ function WeekBand({ cur, prev }: { cur: OverviewBucket; prev: OverviewBucket }) 
 
       {quiet && (
         <p className="mt-2 text-xs leading-5 text-ink-2">
-          A quiet week on the line. Esmi is answering — these fill in as calls
-          and chats come through.
+          {t.overview.text.quietWeek}
         </p>
       )}
     </section>
@@ -359,6 +360,8 @@ function isUnknownOrgError(message: string): boolean {
 }
 
 export default function Overview() {
+  const { t } = useDashI18n();
+  const tx = t.overview.text;
   const [data, setData] = useState<OverviewResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   // Usage is a supplementary widget here (the Usage page is its real home) —
@@ -391,19 +394,17 @@ export default function Overview() {
     return (
       <div className="flex flex-col items-center gap-3 rounded-lg border border-line bg-surface px-6 py-16 text-center shadow-sm">
         <p className="font-display text-base font-semibold text-ink">
-          {orgIssue ? "No client selected" : "Couldn't load your overview"}
+          {orgIssue ? tx.noClientTitle : tx.loadFailed}
         </p>
         <p className="max-w-sm text-sm text-ink-3">
-          {orgIssue
-            ? "This organization isn't set up as an Esmi client yet. Switch to a client organization using the switcher above."
-            : error}
+          {orgIssue ? tx.noClientBody : error}
         </p>
         {!orgIssue && (
           <Action
             weight="secondary"
             onClick={() => setReloadKey((k) => k + 1)}
           >
-            Try again
+            {tx.tryAgain}
           </Action>
         )}
       </div>
@@ -428,12 +429,9 @@ export default function Overview() {
         quiet={quiet}
       />
 
-      <WeekBand cur={cur} prev={prev} />
+      <WeekBand cur={cur} prev={prev} daily={data.daily} />
 
-      <TonightWork
-        afterHours={cur.after_hours_calls}
-        leadsEscalated={cur.leads_escalated}
-      />
+      <TonightWork />
 
       {/* Primary surface: dense live register from calls + chats APIs */}
       <NightRegister />
@@ -445,18 +443,18 @@ export default function Overview() {
         ) : (
           <section className="space-y-3">
             <div className="border border-line bg-surface p-5">
-              <p className="text-sm text-ink-3">Minutes used this month</p>
+              <p className="text-sm text-ink-3">{tx.minutesMonth}</p>
               <p className="mt-1 font-display text-2xl font-semibold text-ink">
                 {cur.minutes_used.toLocaleString(undefined, {
                   maximumFractionDigits: 1,
                 })}{" "}
-                <span className="text-base font-medium text-ink-3">min</span>
+                <span className="text-base font-medium text-ink-3">{tx.minutesUnit}</span>
               </p>
               <Link
                 href="/dashboard/usage"
                 className="mt-2 inline-block text-xs font-medium text-navy-600 hover:underline"
               >
-                Full usage →
+                {tx.fullUsage}
               </Link>
             </div>
           </section>
@@ -464,8 +462,7 @@ export default function Overview() {
       </div>
 
       <p className="text-xs text-ink-4">
-        Last 7 days vs the 7 days before, in your business timezone ({data.business_tz}).
-        Phone calls and web chats — other channels aren&apos;t counted yet.
+        {tx.footnote(data.business_tz)}
       </p>
     </div>
   );

@@ -44,9 +44,12 @@ type RegisterRow = {
   href: string;
   outcome: CallOutcome | ChatOutcome | null;
   language: "en" | "es" | null;
-  primary: string;
+  // null → the localized "No caller ID" / "Web chat" fallback at render time,
+  // so a language switch relabels rows without refetching them.
+  primary: string | null;
   secondary: string | null;
   duration: string | null;
+  messages: number | null;
 };
 
 function fmtTime(iso: string | null): string {
@@ -56,10 +59,10 @@ function fmtTime(iso: string | null): string {
   return timeFmt.format(d);
 }
 
-function fmtDay(iso: string | null): string {
-  if (!iso) return "Undated";
+function fmtDay(iso: string | null): string | null {
+  if (!iso) return null;
   const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "Undated";
+  if (Number.isNaN(d.getTime())) return null;
   return dayFmt.format(d);
 }
 
@@ -70,8 +73,8 @@ function fmtDuration(sec: number | null): string | null {
   return `${m}:${String(s).padStart(2, "0")}`;
 }
 
-function fmtCaller(e164: string | null): string {
-  if (!e164) return "No caller ID";
+function fmtCaller(e164: string | null): string | null {
+  if (!e164) return null;
   const m = e164.match(/^\+1(\d{3})(\d{3})(\d{4})$/);
   return m ? `(${m[1]}) ${m[2]}-${m[3]}` : e164;
 }
@@ -87,6 +90,7 @@ function fromCall(c: PlatformCall): RegisterRow {
     primary: fmtCaller(c.caller),
     secondary: c.summary,
     duration: fmtDuration(c.duration_sec),
+    messages: null,
   };
 }
 
@@ -98,9 +102,10 @@ function fromChat(c: PlatformChat): RegisterRow {
     href: "/dashboard/chats",
     outcome: c.outcome,
     language: null,
-    primary: "Web chat",
+    primary: null,
     secondary: c.summary,
-    duration: c.message_count ? `${c.message_count} msgs` : null,
+    duration: null,
+    messages: c.message_count || null,
   };
 }
 
@@ -118,15 +123,17 @@ function bookedCount(rows: RegisterRow[]): number {
 }
 
 function DispositionKey() {
+  const { t } = useDashI18n();
+  const r = t.overview.register;
   const keys: {
     code: string;
     meaning: string;
     tone: "warning" | "info" | "positive" | "negative";
   }[] = [
-    { code: "BOOKED", meaning: "Appointment set", tone: "warning" },
-    { code: "ROUTED", meaning: "Handed to a person", tone: "info" },
-    { code: "ANSWERED", meaning: "Resolved on the line", tone: "positive" },
-    { code: "CLOSED", meaning: "Ended / missed / voicemail", tone: "negative" },
+    { code: "BOOKED", meaning: r.keyBooked, tone: "warning" },
+    { code: "ROUTED", meaning: r.keyRouted, tone: "info" },
+    { code: "ANSWERED", meaning: r.keyAnswered, tone: "positive" },
+    { code: "CLOSED", meaning: r.keyClosed, tone: "negative" },
   ];
   return (
     <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-2 border-t border-line pt-3">
@@ -145,7 +152,10 @@ function DispositionKey() {
    same retiming DESIGN.md records for the marketing register. It animates
    to the resting state, so the row is legible with motion suppressed. */
 function Row({ row, index }: { row: RegisterRow; index: number }) {
+  const { t } = useDashI18n();
+  const r = t.overview.register;
   const style = styleFor(row);
+  const duration = row.duration ?? (row.messages ? r.msgs(row.messages) : null);
   return (
     <li className="esmi-regrow border-b border-line last:border-b-0"
         style={{ animationDelay: `${Math.min(index, 9) * 45}ms` }}>
@@ -167,8 +177,8 @@ function Row({ row, index }: { row: RegisterRow; index: number }) {
                 {row.language.toUpperCase()}
               </span>
             )}
-            {row.duration && (
-              <span className="lg-fig text-[0.625rem] text-ink-3">{row.duration}</span>
+            {duration && (
+              <span className="lg-fig text-[0.625rem] text-ink-3">{duration}</span>
             )}
             <span className="lg-fig text-[0.625rem] uppercase tracking-wide text-ink-3">
               {row.kind === "call" ? "CALL" : "CHAT"}
@@ -177,7 +187,7 @@ function Row({ row, index }: { row: RegisterRow; index: number }) {
         </div>
         <div className="min-w-0">
           <p className="lg-fig truncate text-sm font-medium text-ink">
-            {row.primary}
+            {row.primary ?? (row.kind === "chat" ? r.webChat : r.noCallerId)}
             <span className="ml-2 text-xs font-normal text-ink-3">
               {style.disposition}
             </span>
@@ -233,7 +243,8 @@ export default function NightRegister() {
 
   /* Grouped in render order, so the run stays newest-first and a day head
      only appears where the day actually changes. */
-  const groups: { day: string; rows: RegisterRow[] }[] = [];
+  const reg = t.overview.register;
+  const groups: { day: string | null; rows: RegisterRow[] }[] = [];
   for (const row of rows ?? []) {
     const day = fmtDay(row.at);
     const last = groups[groups.length - 1];
@@ -278,15 +289,14 @@ export default function NightRegister() {
             {groups.map((group, gi) => {
               const booked = bookedCount(group.rows);
               return (
-                <div key={group.day}>
+                <div key={group.day ?? "undated"}>
                   <div className="esmi-dayhead" style={gi === 0 ? { borderTop: "none" } : undefined}>
                     <span className="lg-fig text-[0.625rem] uppercase tracking-[0.13em] text-ink-2">
-                      {group.day}
+                      {group.day ?? reg.undated}
                     </span>
                     <span className="esmi-dayhead-count lg-fig text-[0.625rem] uppercase tracking-[0.13em] text-ink-3">
-                      {group.rows.length}
-                      {group.rows.length === 1 ? " entry" : " entries"}
-                      {booked > 0 && ` · ${booked} booked`}
+                      {reg.entries(group.rows.length)}
+                      {booked > 0 && ` · ${reg.booked(booked)}`}
                     </span>
                   </div>
                   <ul>
@@ -301,26 +311,26 @@ export default function NightRegister() {
             {/* Foot rule — tallied from the rows above, never typed. */}
             <div className="esmi-footrule">
               <span className="lg-fig text-[0.625rem] uppercase tracking-[0.13em] text-ink-3">
-                Tally
+                {reg.tally}
               </span>
               <span className="lg-fig text-xs text-ink-2">
-                {rows.length} entries
+                {reg.entries(rows.length)}
               </span>
               <span className="lg-fig text-xs text-ink-2">
-                {rows.filter((r) => r.kind === "call").length} calls
+                {reg.calls(rows.filter((r) => r.kind === "call").length)}
               </span>
               <span className="lg-fig text-xs text-ink-2">
-                {rows.filter((r) => r.kind === "chat").length} chats
+                {reg.chats(rows.filter((r) => r.kind === "chat").length)}
               </span>
               <span className="lg-fig text-xs" style={{ color: "var(--lg-foil)" }}>
-                {bookedCount(rows)} booked
+                {reg.booked(bookedCount(rows))}
               </span>
               {rows.some((r) => r.language === "es") && (
                 <span
                   className="lg-fig text-xs"
                   style={{ color: "var(--esmi-brass)" }}
                 >
-                  {rows.filter((r) => r.language === "es").length} in Spanish
+                  {reg.inSpanish(rows.filter((r) => r.language === "es").length)}
                 </span>
               )}
             </div>

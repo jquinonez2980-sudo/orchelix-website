@@ -181,12 +181,25 @@ export type SetupChecklist = {
   items: SetupChecklistItem[];
 };
 
+/* One 24-hour slice of the current window, oldest first. The slices sum to
+   `current`. Optional: older API deploys don't send it, and the Overview
+   simply omits its sparklines then. */
+export type OverviewDay = {
+  from: string;
+  calls_answered: number;
+  appointments_booked: number;
+  leads_escalated: number;
+  after_hours_calls: number;
+  web_chats: number;
+};
+
 export type OverviewResponse = {
   tenant_id: string;
   business_tz: string;
   window_days: number;
   current: OverviewBucket;
   previous: OverviewBucket;
+  daily?: OverviewDay[];
   recent_activity: RecentActivityItem[];
   setup_checklist: SetupChecklist | null;
 };
