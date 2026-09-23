@@ -37,6 +37,74 @@ type DashMessages = {
     setupLede: string;
     languageMix: string;
     noCallsWeek: string;
+    /* Week-over-week wording. Counts are passed in so each language can
+       order and pluralise its own sentence. */
+    delta: {
+      same: string;
+      more: (n: number) => string;
+      fewer: (n: number) => string;
+      pct: string;
+    };
+    week: {
+      title: string;
+      vsPrior: string;
+      callsAnswered: string;
+      callsAnsweredNote: string;
+      appointments: string;
+      appointmentsNote: string;
+      leadsRouted: string;
+      leadsRoutedNote: string;
+      webChats: string;
+      webChatsNote: string;
+      trend: (label: string, counts: string) => string;
+    };
+    tonight: {
+      title: string;
+      lede: string;
+      review: string;
+      reviewHint: string;
+      uncontacted: string;
+      uncontactedHint: string;
+      missed: string;
+      missedHint: string;
+    };
+    text: {
+      linkKnowledge: string;
+      linkVoice: string;
+      linkHours: string;
+      langEn: string;
+      langEs: string;
+      langUnknown: string;
+      afterHoursQuiet: string;
+      afterHoursSome: string;
+      afterHoursNone: string;
+      quietWeek: string;
+      voiceMinutes: (plan: string) => string;
+      minutesMonth: string;
+      minutesUnit: string;
+      fullUsage: string;
+      footnote: (tz: string) => string;
+      noClientTitle: string;
+      noClientBody: string;
+      loadFailed: string;
+      tryAgain: string;
+    };
+    register: {
+      undated: string;
+      noCallerId: string;
+      webChat: string;
+      msgs: (n: number) => string;
+      entries: (n: number) => string;
+      tally: string;
+      calls: (n: number) => string;
+      chats: (n: number) => string;
+      booked: (n: number) => string;
+      inSpanish: (n: number) => string;
+      keyBooked: string;
+      keyRouted: string;
+      keyAnswered: string;
+      keyClosed: string;
+    };
   };
   calls: {
     kicker: string;
@@ -263,6 +331,78 @@ const en: DashMessages = {
       "Same 14-day pilot path you saw on the marketing site — map, configure, then go live with a consultant.",
     languageMix: "Language mix (last 7 days)",
     noCallsWeek: "No calls in the last 7 days.",
+    delta: {
+      same: "Same as last week",
+      more: (n) => `${n} more than last week`,
+      fewer: (n) => `${n} fewer than last week`,
+      pct: "vs prior 7 days",
+    },
+    week: {
+      title: "This week",
+      vsPrior: "vs prior 7 days",
+      callsAnswered: "Calls answered",
+      callsAnsweredNote: "Picked up by Esmi on your line",
+      appointments: "Appointments booked",
+      appointmentsNote: "Written straight to your calendar",
+      leadsRouted: "Leads routed this week",
+      leadsRoutedNote: "Callers Esmi flagged for a person in the last 7 days",
+      webChats: "Web chats",
+      webChatsNote: "Conversations from your website",
+      trend: (label, counts) => `${label}, daily over the last 7 days: ${counts}`,
+    },
+    tonight: {
+      title: "Tonight's work",
+      lede: "What needs a person this morning — not a KPI farm.",
+      review: "Need review",
+      reviewHint: "Open or follow-up calls",
+      uncontacted: "Uncontacted leads (all time)",
+      uncontactedHint: "Every lead in the inbox still marked New",
+      missed: "Hung up / voicemail",
+      missedHint: "Callers who hung up or left a voicemail · last 7 days",
+    },
+    text: {
+      linkKnowledge: "Knowledge →",
+      linkVoice: "Voice preview →",
+      linkHours: "Hours & routing →",
+      langEn: "English",
+      langEs: "Spanish",
+      langUnknown: "Unknown",
+      afterHoursQuiet:
+        "Esmi is on duty around the clock. The moment someone calls while you're closed, it's answered — and counted here.",
+      afterHoursSome:
+        "Calls Esmi picked up while your doors were closed — customers who would otherwise have reached voicemail or a competitor.",
+      afterHoursNone:
+        "No after-hours calls this week — and if one comes in at 2am, Esmi has it covered.",
+      quietWeek:
+        "A quiet week on the line. Esmi is answering — these fill in as calls and chats come through.",
+      voiceMinutes: (plan) => `Voice minutes used (${plan} plan, this month)`,
+      minutesMonth: "Minutes used this month",
+      minutesUnit: "min",
+      fullUsage: "Full usage →",
+      footnote: (tz) =>
+        `Last 7 days vs the 7 days before, in your business timezone (${tz}). Phone calls and web chats — other channels aren't counted yet.`,
+      noClientTitle: "No client selected",
+      noClientBody:
+        "This organization isn't set up as an Esmi client yet. Switch to a client organization using the switcher above.",
+      loadFailed: "Couldn't load your overview",
+      tryAgain: "Try again",
+    },
+    register: {
+      undated: "Undated",
+      noCallerId: "No caller ID",
+      webChat: "Web chat",
+      msgs: (n) => `${n} msgs`,
+      entries: (n) => `${n} ${n === 1 ? "entry" : "entries"}`,
+      tally: "Tally",
+      calls: (n) => `${n} calls`,
+      chats: (n) => `${n} chats`,
+      booked: (n) => `${n} booked`,
+      inSpanish: (n) => `${n} in Spanish`,
+      keyBooked: "Appointment set",
+      keyRouted: "Handed to a person",
+      keyAnswered: "Resolved on the line",
+      keyClosed: "Ended / hung up / voicemail",
+    },
   },
   calls: {
     kicker: "Work · Call register",
@@ -503,6 +643,78 @@ const es: DashMessages = {
       "El mismo camino de piloto de 14 días — mapear, configurar, y salir al aire con un consultor.",
     languageMix: "Mezcla de idiomas (últimos 7 días)",
     noCallsWeek: "No hubo llamadas en los últimos 7 días.",
+    delta: {
+      same: "Igual que la semana pasada",
+      more: (n) => `${n} más que la semana pasada`,
+      fewer: (n) => `${n} menos que la semana pasada`,
+      pct: "vs. los 7 días anteriores",
+    },
+    week: {
+      title: "Esta semana",
+      vsPrior: "vs. los 7 días anteriores",
+      callsAnswered: "Llamadas contestadas",
+      callsAnsweredNote: "Atendidas por Esmi en tu línea",
+      appointments: "Citas agendadas",
+      appointmentsNote: "Directo a tu calendario",
+      leadsRouted: "Prospectos enviados esta semana",
+      leadsRoutedNote: "Llamadas que Esmi pasó a una persona en los últimos 7 días",
+      webChats: "Chats web",
+      webChatsNote: "Conversaciones desde tu sitio web",
+      trend: (label, counts) => `${label}, por día en los últimos 7 días: ${counts}`,
+    },
+    tonight: {
+      title: "Trabajo de esta noche",
+      lede: "Lo que necesita una persona esta mañana — no un tablero de KPIs.",
+      review: "Necesitan revisión",
+      reviewHint: "Llamadas abiertas o con seguimiento",
+      uncontacted: "Prospectos sin contactar (total)",
+      uncontactedHint: "Todos los prospectos de la bandeja aún marcados como nuevos",
+      missed: "Colgaron / buzón de voz",
+      missedHint: "Quienes colgaron o dejaron un mensaje de voz · últimos 7 días",
+    },
+    text: {
+      linkKnowledge: "Conocimiento →",
+      linkVoice: "Vista previa de voz →",
+      linkHours: "Horario y enrutamiento →",
+      langEn: "Inglés",
+      langEs: "Español",
+      langUnknown: "Desconocido",
+      afterHoursQuiet:
+        "Esmi está de guardia las 24 horas. En cuanto alguien llama con el negocio cerrado, se contesta — y se cuenta aquí.",
+      afterHoursSome:
+        "Llamadas que Esmi contestó con el negocio cerrado — clientes que de otro modo habrían llegado al buzón o a la competencia.",
+      afterHoursNone:
+        "Sin llamadas fuera de horario esta semana — y si entra una a las 2 a. m., Esmi la atiende.",
+      quietWeek:
+        "Una semana tranquila en la línea. Esmi está contestando — estas cifras se llenan a medida que entran llamadas y chats.",
+      voiceMinutes: (plan) => `Minutos de voz usados (plan ${plan}, este mes)`,
+      minutesMonth: "Minutos usados este mes",
+      minutesUnit: "min",
+      fullUsage: "Uso completo →",
+      footnote: (tz) =>
+        `Últimos 7 días vs. los 7 días anteriores, en la zona horaria de tu negocio (${tz}). Llamadas y chats web — otros canales aún no se cuentan.`,
+      noClientTitle: "Ningún cliente seleccionado",
+      noClientBody:
+        "Esta organización aún no está configurada como cliente de Esmi. Cambia a una organización cliente con el selector de arriba.",
+      loadFailed: "No se pudo cargar tu resumen",
+      tryAgain: "Reintentar",
+    },
+    register: {
+      undated: "Sin fecha",
+      noCallerId: "Sin identificador",
+      webChat: "Chat web",
+      msgs: (n) => `${n} mensajes`,
+      entries: (n) => `${n} ${n === 1 ? "entrada" : "entradas"}`,
+      tally: "Total",
+      calls: (n) => `${n} llamadas`,
+      chats: (n) => `${n} chats`,
+      booked: (n) => `${n} agendadas`,
+      inSpanish: (n) => `${n} en español`,
+      keyBooked: "Cita agendada",
+      keyRouted: "Pasada a una persona",
+      keyAnswered: "Resuelta en la línea",
+      keyClosed: "Terminada / colgaron / buzón",
+    },
   },
   calls: {
     kicker: "Trabajo · Registro de llamadas",

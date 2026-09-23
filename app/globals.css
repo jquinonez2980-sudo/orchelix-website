@@ -3324,7 +3324,16 @@ details[open] > .lg-summary::before {
 
   --lg-ink:         #E9EFF5;
   --lg-ink-2:       #93A4B4;
-  --lg-ink-3:       #5C6D7C;
+  /* Ink Floor Rule on the console grounds. #5C6D7C measured 3.0–3.7:1 and
+     it carries every tile label, caption and subtitle here, so it failed AA
+     for body-size text. #7F90A0 is 6.0 / 5.7 / 5.4 / 5.0 : 1 on field /
+     field-2 / field-3 / field-vivid — AA everywhere — and still sits a clear
+     step under ink-2, so the three-weight hierarchy holds. */
+  --lg-ink-3:       #7F90A0;
+  /* The old ink-3, kept for the two heavy rules that borrowed it as a line
+     colour (band head, register foot). Those are not text and must not
+     brighten with it. */
+  --esmi-rule-strong: #5C6D7C;
   --lg-hair:        #1B2632;
   --lg-hair-2:      #26364A;
   --lg-rule-quiet:  rgba(233, 239, 245, 0.14);
@@ -3581,7 +3590,7 @@ details[open] > .lg-summary::before {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   border: 1px solid var(--lg-hair);
-  border-top: 2px solid var(--lg-ink-3);
+  border-top: 2px solid var(--esmi-rule-strong);
   border-radius: 3px;
   background: var(--lg-field-2);
   overflow: hidden;
@@ -3596,6 +3605,17 @@ details[open] > .lg-summary::before {
 .esmi-console .esmi-band > div + div {
   border-left: 1px solid var(--lg-rule-quiet);
 }
+/* Four figures wrap as a clean 2×2 on narrow screens, never 3+1 (which
+   `auto-fit` produced between ~640–700px). The second row gets a rule on
+   top, and its first cell drops the vertical that would double the band's
+   own edge. */
+@media (max-width: 699px) {
+  .esmi-console .esmi-band { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .esmi-console .esmi-band > div:nth-child(n + 3) {
+    border-top: 1px solid var(--lg-rule-quiet);
+  }
+  .esmi-console .esmi-band > div:nth-child(2n + 1) { border-left: none; }
+}
 .esmi-console .esmi-band-value {
   font-family: "Azeret Mono", ui-monospace, monospace;
   font-variant-numeric: tabular-nums;
@@ -3604,6 +3624,15 @@ details[open] > .lg-summary::before {
   font-weight: 500;
   line-height: 1.05;
   color: var(--lg-ink);
+}
+/* 7-day sparkline under a band figure. Fills the tile's width; the stroke
+   is non-scaling, so stretching the SVG never thickens the line. */
+.esmi-console .esmi-spark {
+  display: block;
+  width: 100%;
+  max-width: 160px;
+  height: 22px;
+  overflow: visible;
 }
 /* The tile that carries money gets the console's one lifted surface —
    `.esmi-lift` from the shell commit, reused rather than redefined. */
@@ -3633,7 +3662,7 @@ details[open] > .lg-summary::before {
   gap: 18px;
   flex-wrap: wrap;
   padding: 9px 0 0;
-  border-top: 2px solid var(--lg-ink-3);
+  border-top: 2px solid var(--esmi-rule-strong);
 }
 
 /* Rows sit closer than the stock dashboard: this is an operating surface. */

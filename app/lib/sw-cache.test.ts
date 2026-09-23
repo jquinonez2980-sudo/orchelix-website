@@ -8,7 +8,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..")
 const SW = fs.readFileSync(path.join(ROOT, "public", "sw.js"), "utf8");
 
 test("service worker versions the cache and drops old versions on activate", () => {
-  assert.match(SW, /CACHE_VERSION\s*=\s*["']esmi-dashboard-v1["']/);
+  assert.match(SW, /CACHE_VERSION\s*=\s*["']esmi-dashboard-v2["']/);
   assert.match(SW, /self\.addEventListener\(\s*["']activate["']/);
   assert.match(SW, /caches\.delete/);
   assert.match(SW, /skipWaiting/);

@@ -1,11 +1,21 @@
 "use client";
 
-/* Tonight's work — open reviews + escalated leads + after-hours at a glance. */
+/* Tonight's work — what needs a person: calls to review, the uncontacted
+   leads inbox, and callers who hung up or left a voicemail. Esmi answers
+   every call, so that tile is labelled by what the caller did, never as
+   "missed". The after-hours count lives in the line block above and is not
+   repeated here.
+
+   "Uncontacted leads" is the whole inbox (status=new, any age), not this
+   week's routed count in the band above — the two come from different
+   sources (`/leads` vs `/overview`) and answer different questions, so the
+   labels say so rather than one silently standing in for the other. */
 
 import { useEffect, useState } from "react";
 import { SectionTitle } from "./PageTitle";
 import Link from "next/link";
 import {
+  fetchCalls,
   fetchReviews,
   fetchLeads,
   type CallReviewsResponse,
@@ -13,17 +23,24 @@ import {
 import { useActiveOrgSlug } from "./useActiveOrgSlug";
 import { useDashI18n } from "./i18n";
 
-export default function TonightWork({
-  afterHours,
-  leadsEscalated,
-}: {
-  afterHours: number;
-  leadsEscalated: number;
-}) {
-  const { t, locale } = useDashI18n();
+// null while loading, "err" when the fetch failed — shown as "—", never as
+// a borrowed number from somewhere else.
+type Count = number | null | "err";
+
+function isoDaysAgo(days: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() - days);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+export default function TonightWork() {
+  const { t } = useDashI18n();
+  const tw = t.overview.tonight;
   const orgSlug = useActiveOrgSlug();
   const [reviews, setReviews] = useState<CallReviewsResponse | null>(null);
-  const [newLeads, setNewLeads] = useState<number | null>(null);
+  const [newLeads, setNewLeads] = useState<Count>(null);
+  const [missed, setMissed] = useState<Count>(null);
 
   useEffect(() => {
     let active = true;
@@ -32,7 +49,15 @@ export default function TonightWork({
       .catch(() => active && setReviews({ tenant_id: "", reviews: {} }));
     fetchLeads({ status: "new", limit: 1, offset: 0 })
       .then((d) => active && setNewLeads(d.total))
-      .catch(() => active && setNewLeads(null));
+      .catch(() => active && setNewLeads("err"));
+    // Hung up (`abandoned`) + left a voicemail, last 7 days.
+    const from_date = isoDaysAgo(6);
+    Promise.all([
+      fetchCalls({ outcome: "abandoned", from_date, limit: 1 }),
+      fetchCalls({ outcome: "voicemail", from_date, limit: 1 }),
+    ])
+      .then(([a, v]) => active && setMissed(a.total + v.total))
+      .catch(() => active && setMissed("err"));
     return () => {
       active = false;
     };
@@ -44,36 +69,27 @@ export default function TonightWork({
       ).length
     : null;
 
-  const items = [
+  const items: { key: string; label: string; value: Count; href: string; hint: string }[] = [
     {
       key: "reviews",
-      label: locale === "es" ? "Necesitan revisión" : "Need review",
+      label: tw.review,
       value: openReviews,
       href: "/dashboard/calls?review=open",
-      hint:
-        locale === "es"
-          ? "Llamadas abiertas o con seguimiento"
-          : "Open or follow-up calls",
+      hint: tw.reviewHint,
     },
     {
       key: "leads",
-      label: locale === "es" ? "Prospectos nuevos" : "New leads",
-      value: newLeads ?? leadsEscalated,
+      label: tw.uncontacted,
+      value: newLeads,
       href: "/dashboard/leads?status=new",
-      hint:
-        locale === "es"
-          ? "Bandeja de prospectos sin contactar"
-          : "Uncontacted leads in the inbox",
+      hint: tw.uncontactedHint,
     },
     {
-      key: "after",
-      label: t.overview.afterHours,
-      value: afterHours,
+      key: "missed",
+      label: tw.missed,
+      value: missed,
       href: "/dashboard/calls",
-      hint:
-        locale === "es"
-          ? "Últimos 7 días"
-          : "Last 7 days",
+      hint: tw.missedHint,
     },
   ];
 
@@ -82,14 +98,8 @@ export default function TonightWork({
       className="border border-line bg-surface p-5"
       style={{ borderTop: "2px solid var(--lg-rule)" }}
     >
-      <SectionTitle>
-        {locale === "es" ? "Trabajo de esta noche" : "Tonight's work"}
-      </SectionTitle>
-      <p className="mt-0.5 text-xs text-ink-3">
-        {locale === "es"
-          ? "Lo que necesita una persona esta mañana — no un tablero de KPIs."
-          : "What needs a person this morning — not a KPI farm."}
-      </p>
+      <SectionTitle>{tw.title}</SectionTitle>
+      <p className="mt-0.5 text-xs text-ink-3">{tw.lede}</p>
       <ul className="mt-4 grid gap-3 sm:grid-cols-3">
         {items.map((item) => (
           <li key={item.key}>
@@ -104,7 +114,7 @@ export default function TonightWork({
                 {item.label}
               </p>
               <p className="mt-1 font-display text-2xl font-semibold text-ink">
-                {item.value == null ? "…" : item.value}
+                {item.value == null ? "…" : item.value === "err" ? "—" : item.value}
               </p>
               <p className="mt-1 text-xs text-ink-3">{item.hint}</p>
             </Link>
