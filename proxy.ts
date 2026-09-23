@@ -82,6 +82,7 @@ export const config = {
     "/blog",
     "/blog/:path*",
     "/missed-calls",
+    "/nia",
     /* Clerk surfaces. */
     "/dashboard(.*)",
     "/get-started(.*)",
