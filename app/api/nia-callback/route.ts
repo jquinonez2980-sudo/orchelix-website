@@ -58,6 +58,7 @@ export async function POST(req: NextRequest) {
     phone: body.phone,
     industry: body.industry,
     consent: body.consent,
+    language: body.language,
   });
   if (!built.ok) {
     if (built.reason === "outside_markets") {

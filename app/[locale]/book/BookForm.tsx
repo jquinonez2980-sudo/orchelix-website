@@ -61,12 +61,20 @@ function Field({
   );
 }
 
-/* `niaConsent` is passed only on the English page. When present, the form
+/* `niaConsent` is the consent text in the page's language (EN or ES). When present, the form
    offers "Have Nia call me": a separate, unticked-by-default consent box. A
    ticked box also sends the lead to /api/nia-callback, which queues it for
    Nia, Orchelix's outbound AI caller. The booking request above is sent
    either way; Nia is an addition, never a condition. */
-export default function BookForm({ t, niaConsent }: { t: BookFormCopy; niaConsent?: string }) {
+export default function BookForm({
+  t,
+  niaConsent,
+  niaLanguage = "en",
+}: {
+  t: BookFormCopy;
+  niaConsent?: string;
+  niaLanguage?: "en" | "es";
+}) {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string>("");
   const [callMe, setCallMe] = useState(false);
@@ -126,6 +134,7 @@ export default function BookForm({ t, niaConsent }: { t: BookFormCopy; niaConsen
               phone: String(data.get("phone") || "").trim(),
               industry,
               consent: true,
+              language: niaLanguage,
               website: String(data.get("website") || ""),
             }),
           });
@@ -182,7 +191,7 @@ export default function BookForm({ t, niaConsent }: { t: BookFormCopy; niaConsen
               margin: "1rem 0 0",
             }}
           >
-            Nia, our AI assistant, will call you at the number you gave to find a time.
+            {t.niaQueued}
           </p>
         )}
         <p
@@ -306,7 +315,7 @@ export default function BookForm({ t, niaConsent }: { t: BookFormCopy; niaConsen
                   marginBottom: "0.35rem",
                 }}
               >
-                Have Nia call me — optional
+                {t.niaLabel}
               </span>
               <span
                 style={{

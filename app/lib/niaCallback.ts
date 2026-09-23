@@ -8,12 +8,35 @@
    form_consent_ok) only accepts a form_ai_call lead whose stored text contains
    "orchelix may call", the whole word "ai", and "consent is not required".
    Change the wording and the gate blocks every lead from this form — the test
-   next to this file checks the same three rules. */
+   next to this file checks the same three rules.
+
+   Spanish (/es/book) has its own text, stored as shown. The gate's Spanish
+   rules: "orchelix puede llamar", the whole word "ia" (or "inteligencia
+   artificial"), and "el consentimiento no es requisito". It must match
+   FORM_AI_CALL_CONSENT_TEXT_ES in closer/compliance.py. */
 
 export const NIA_CONSENT_TEXT =
   "I agree that Orchelix may call and text me at this number about Esmi, " +
   "including with an AI-generated voice. Consent is not required to buy. " +
   "I can opt out any time.";
+
+export const NIA_CONSENT_TEXT_ES =
+  "Acepto que Orchelix puede llamarme y enviarme mensajes de texto a este " +
+  "número sobre Esmi, incluso con una voz generada por inteligencia artificial " +
+  "(IA). El consentimiento no es requisito para comprar. Puedo darme de baja " +
+  "en cualquier momento.";
+
+export type NiaLanguage = "en" | "es";
+
+/* Anything but an explicit "es" is English. The server picks the consent text
+   from the language; the browser never supplies it. */
+export function niaLanguage(raw: unknown): NiaLanguage {
+  return raw === "es" ? "es" : "en";
+}
+
+export function consentTextFor(language: NiaLanguage): string {
+  return language === "es" ? NIA_CONSENT_TEXT_ES : NIA_CONSENT_TEXT;
+}
 
 /* The two markets Nia calls in v1. Anything else is not queued. */
 const ONTARIO = new Set([
@@ -58,6 +81,7 @@ export type NiaLeadInput = {
   phone?: unknown;
   industry?: unknown;
   consent?: unknown;
+  language?: unknown;
 };
 
 export type NiaLead = {
@@ -66,7 +90,7 @@ export type NiaLead = {
   business_name: string | null;
   industry: NiaIndustry;
   market: Market;
-  language: "en";
+  language: NiaLanguage;
   source: "form";
   consent_basis: "form_ai_call";
   consent_at: string;
@@ -89,6 +113,7 @@ export function buildNiaLead(input: NiaLeadInput, now: Date = new Date()): Build
   if (!market) return { ok: false, reason: "outside_markets" };
   const company = String(input.company ?? "").trim().slice(0, 160);
   const industryLabel = String(input.industry ?? "").trim().slice(0, 80);
+  const language = niaLanguage(input.language);
   return {
     ok: true,
     lead: {
@@ -97,12 +122,15 @@ export function buildNiaLead(input: NiaLeadInput, now: Date = new Date()): Build
       business_name: company || null,
       industry: industryFor(industryLabel),
       market,
-      language: "en",
+      language,
       source: "form",
       consent_basis: "form_ai_call",
       consent_at: now.toISOString(),
-      consent_text: NIA_CONSENT_TEXT,
-      notes: ["orchelix.com /book — Have Nia call me", industryLabel && `Industry: ${industryLabel}`]
+      consent_text: consentTextFor(language),
+      notes: [
+        language === "es" ? "orchelix.com /es/book — Have Nia call me (ES)" : "orchelix.com /book — Have Nia call me",
+        industryLabel && `Industry: ${industryLabel}`,
+      ]
         .filter(Boolean)
         .join(" · "),
     },

@@ -126,6 +126,25 @@ export default async function SolutionsPage({ params }: PageProps<"/[locale]">) 
           </div>
         </Section>
 
+        {/* ── Nia — shipped, Esmi add-on ── */}
+        <Section tone="field" id="agent-nia">
+          <div className="grid gap-x-14 gap-y-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
+            <div>
+              <div className="mb-5">
+                <StatusKey>{p.niaStatus}</StatusKey>
+              </div>
+              <EntryTitle size="1.25rem">{p.niaName}</EntryTitle>
+              <Prose size="0.9375rem" max="46ch" style={{ marginTop: "1rem" }}>
+                {p.niaBody}
+              </Prose>
+              <div className="mt-6">
+                <QuietAction href={localizedHref("/nia", locale)}>{p.niaMore}</QuietAction>
+              </div>
+            </div>
+            <RuledList items={t.pages.nia.capabilities.slice(0, 4)} labelWidth="7.5rem" />
+          </div>
+        </Section>
+
         {/* ── In development ── */}
         <Section tone="field">
           <p
