@@ -205,6 +205,13 @@ but no longer win the cascade.
 - **Gradient type** (`.lg-glow-text`): blue → cyan on night, deep blue → teal
   on paper. One phrase per page (the hero's last word).
 - **Closing orb** (`.lg-orb` on a night Section): a stronger pool of light.
+- **Frosted glass** (`.lg-glass`): one translucent panel per group, 24px
+  radius, a 1px cyan→blue gradient border and a blue shadow. Smoked on night,
+  milk glass on paper. `EntryList glass` sets its entries on one; the Esmi
+  card on the homepage uses it too. Group panels, not one card per item.
+- **Gradient icon badges** (`.lg-badge`): 44px rounded square, deep blue →
+  blue → cyan, white lucide line icon, `aria-hidden` (the title carries the
+  meaning). Passed to `EntryList` via `icons`. Used on Problem and Why.
 - Still out: scan lines, reticles, neon outlines, fast or looping UI motion.
   Where the older sections below say "no glow / no gradient / flat stamp",
   this section supersedes them.

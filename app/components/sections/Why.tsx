@@ -10,6 +10,7 @@
 
 import { Section, SectionTitle, EntryList, TonePlate } from "@/app/components/ledger";
 import type { Messages } from "@/app/i18n/messages/en";
+import { UserRound, Languages, ScrollText, Hand } from "lucide-react";
 import editorialLedger from "@/public/editorial-ledger.jpg";
 import editorialLedgerNight from "@/public/editorial-ledger-night.jpg";
 
@@ -32,7 +33,13 @@ export default function Why({ t }: { t: Messages }) {
       </div>
 
       <div className="mt-14">
-        <EntryList tone={TONE} columns={2} entries={t.home.commitments} />
+        <EntryList
+          tone={TONE}
+          columns={2}
+          entries={t.home.commitments}
+          glass
+          icons={[<UserRound key="a" />, <Languages key="b" />, <ScrollText key="c" />, <Hand key="d" />]}
+        />
       </div>
     </Section>
   );
