@@ -180,6 +180,30 @@ components:
 >
 > **The site is mostly converted; residual mixed systems remain.** Core marketing routes (`/`, `/pricing`, `/solutions`, `/how-it-works`, `/industries`, `/about`, `/book`) and shared chrome use this system. Residual mixed systems: `/get-started` (navy/teal wizard), product dashboard under `.lg-app` remaps (Operate surface, not a marketing twin), blog article bodies, and privacy/terms. Anything new on public routes should be built in this system.
 
+## The Vivid Layer (2026-09-24) — overrides the flat-colour rules below
+
+Owner direction: the site should feel alive, with saturated, glowing colour in
+the manner of thryvein.ai, not flat warm paper and one flat blue. Implemented
+as one appended block at the end of `app/globals.css` ("The vivid layer"), so
+the older retirements stay on record but no longer win the cascade.
+
+- **Accent spectrum.** Indigo `#4F46E5` → violet `#7C3AED` → fuchsia `#A21CAF`.
+  `--lg-foil` is now indigo (5.85:1 on paper). White holds ≥ 5.7:1 on every
+  stamp stop. On night, the solid accent is lilac `#A78BFA` (7.4:1).
+- **Night bands** are violet-black (`#08070F`) and carry a nebula (large,
+  blurred indigo/violet/magenta radial light, `::before`) and a faint star
+  field (`::after`). The nebula drifts over 28s; off under reduced motion.
+- **Light bands** are cool lavender-white (`#F7F6FB` ladder) instead of warm
+  beige. Scene bands get one soft violet→pink wash in the top-right corner.
+- **The stamp** is a pill with the spectrum gradient, a lit top edge and a
+  soft coloured glow. Hover brightens the glow; active presses 1px.
+- **Gradient type** (`.lg-glow-text`): lilac → pink → peach on night, the
+  darker spectrum on paper. One phrase per page (the hero's last word).
+- **Closing orb** (`.lg-orb` on a night Section): a stronger pool of light.
+- Still out: scan lines, reticles, neon outlines, fast or looping UI motion.
+  Where the older sections below say "no glow / no gradient / flat stamp",
+  this section supersedes them.
+
 ## Current direction (2026-09-11) — read this first
 
 This document was written across three rebrands and much of it still describes the earlier ones. **Where anything below conflicts with this section, this section wins,** and the conflicting passage is history rather than instruction.

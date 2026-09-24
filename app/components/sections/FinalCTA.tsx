@@ -32,7 +32,7 @@ export default function FinalCTA({
   t?: Messages;
 } = {}) {
   return (
-    <Section id="book" tone={TONE} scene style={{ borderTop: "2px solid var(--lg-foil)" }}>
+    <Section id="book" tone={TONE} scene className="lg-orb">
       <div className="grid items-end gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
         <div>
           <SectionTitle tone={TONE} scale="display" max="16ch">
