@@ -3,6 +3,7 @@
 
 import { Section, SectionTitle, EntryList } from "@/app/components/ledger";
 import type { Messages } from "@/app/i18n/messages/en";
+import { PhoneMissed, Hourglass, CalendarClock, Repeat } from "lucide-react";
 
 export default function Problem({ t }: { t: Messages }) {
   return (
@@ -16,6 +17,8 @@ export default function Problem({ t }: { t: Messages }) {
           tone="stock-2"
           columns={2}
           entries={t.home.arrears.map((a) => ({ title: a.entry, desc: a.desc }))}
+          glass
+          icons={[<PhoneMissed key="a" />, <Hourglass key="b" />, <CalendarClock key="c" />, <Repeat key="d" />]}
         />
       </div>
     </Section>

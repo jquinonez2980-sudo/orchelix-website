@@ -57,6 +57,9 @@ import HeroLine from "./HeroLine";
    surface is built on. */
 
 export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
+  const words = t.home.heroTitle.split(" ");
+  const tail = words.pop() ?? "";
+  const head = words.join(" ");
   return (
     <Section id="top" tone="night" tight>
       <div className="lg-hero-grid--ring">
@@ -66,7 +69,10 @@ export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
             which are the only way a heading is set here. The ink is `--lg-ink`, which the night
             band has already retargeted to #e8eaee: 14.91:1 on this ground. */}
         <PageTitle tone="night" max="14ch">
-          <span className="lg-strike">{t.home.heroTitle}</span>
+          {/* The last word carries the vivid gradient — one phrase, once. */}
+          <span className="lg-strike">
+            {head}{head && " "}<span className="lg-glow-text">{tail}</span>
+          </span>
         </PageTitle>
 
         <p className="lg-prose lg-hero-body">{t.home.heroLede}</p>

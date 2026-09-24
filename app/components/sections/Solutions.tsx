@@ -32,9 +32,8 @@ export default function Solutions({ locale, t }: { locale: Locale; t: Messages }
       </div>
 
       <SpotlightCard
-        className="rounded-[14px] border border-[color:var(--lg-hair)] bg-[color:var(--lg-field)]"
-        spotlightColor="rgba(13, 92, 99, 0.14)"
-        style={{ borderTop: "2px solid var(--lg-foil)" }}
+        className="lg-glass"
+        spotlightColor="rgba(34, 211, 238, 0.16)"
       >
         <article
           style={{ padding: "2rem", display: "grid", gap: "2rem" }}
@@ -87,7 +86,7 @@ export default function Solutions({ locale, t }: { locale: Locale; t: Messages }
           <SpotlightCard
             key={s.title}
             className="rounded-[10px]"
-            spotlightColor="rgba(13, 92, 99, 0.10)"
+            spotlightColor="rgba(37, 99, 235, 0.10)"
             style={{
               padding: "1.9rem 1rem",
               marginTop: "0.35rem",

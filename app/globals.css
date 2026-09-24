@@ -3698,3 +3698,253 @@ details[open] > .lg-summary::before {
   transition: border-color var(--lg-dur-state, 180ms) ease;
 }
 .esmi-console .esmi-queue-item:hover { border-color: var(--lg-foil); }
+
+/* ─── The vivid layer ─────────────────────────────────────────────────────
+   2026-09-24, owner direction: the site should feel alive — saturated,
+   glowing colour in the way thryvein.ai does it — while keeping Orchelix
+   blue. Appended last so it overrides the retirements recorded above (flat
+   stamp, no glow, no gradient) without deleting their history. DESIGN.md
+   "The Vivid Layer" records the decision.
+
+   One blue, one partner colour. Every value below reads from the palette
+   tokens in the first :root block, so the partner is a token swap, not a
+   rewrite. `:root[data-palette="coral"]` is the warm alternative the owner
+   is choosing between; the default is cyan.
+
+   Not HUD: no scan lines, reticles, neon outlines or fast motion. The only
+   motion is a 28s drift of the nebula, off under reduced motion. */
+
+:root {
+  /* Palette — RGB triplets so glows can take any alpha. */
+  --lg-v-blue:    37, 99, 235;    /* #2563EB  the main light           */
+  --lg-v-deep:    30, 64, 175;    /* #1E40AF  depth under it           */
+  --lg-v-partner: 34, 211, 238;   /* #22D3EE  cyan                     */
+
+  /* Stamp: blues only, so white holds ≥ 5.9:1 at every stop. */
+  --lg-v-stamp: linear-gradient(110deg, #1e40af 0%, #2451e6 50%, #0369a1 100%);
+  --lg-v-stamp-glow: rgba(var(--lg-v-partner), 0.45);
+  /* Gradient type — night (≥ 7.7:1) and day (≥ 5:1) spectra. */
+  --lg-v-type:     linear-gradient(95deg, #60a5fa 0%, #22d3ee 55%, #a5f3fc 100%);
+  --lg-v-type-day: linear-gradient(95deg, #1d4ed8 0%, #0369a1 55%, #0e7490 100%);
+
+  /* Cool blue-white paper ladder (ink ≥ 14:1 on the darkest). */
+  --lg-field:   #f6f8fc;
+  --lg-field-2: #eef2f9;
+  --lg-field-3: #e5ebf5;
+  --lg-field-vivid: #e5ebf5;
+  --lg-stock:   #f9fafd;
+  --lg-stock-2: #eef2f9;
+
+  /* The accent as a solid — a livelier royal blue. 5.82:1 on paper. */
+  --lg-foil:      #2451e6;
+  --lg-foil-lift: #2563eb;
+  --lg-foil-ink:  #ffffff;
+
+  /* Blue-black night. Ink 17:1, foil 7.8:1. */
+  --lg-night-field:   #060a14;
+  --lg-night-field-2: #0a0f1c;
+  --lg-night-field-3: #0e1424;
+  --lg-night-ink:     #eaf0fa;
+  --lg-night-ink-2:   rgba(234, 240, 250, 0.84);
+  --lg-night-ink-3:   rgba(234, 240, 250, 0.74);
+  --lg-night-foil:      #60a5fa;
+  --lg-night-foil-lift: #93c5fd;
+  --lg-night-foil-ink:  #ffffff;
+}
+
+/* The warm alternative: blue + coral/amber. */
+:root[data-palette="coral"] {
+  --lg-v-partner: 251, 146, 60;   /* #FB923C  coral-orange */
+  --lg-v-stamp: linear-gradient(110deg, #1e40af 0%, #2451e6 55%, #1d4ed8 100%);
+  --lg-v-stamp-glow: rgba(var(--lg-v-partner), 0.4);
+  --lg-v-type:     linear-gradient(95deg, #60a5fa 0%, #fb923c 60%, #fbbf24 100%);
+  --lg-v-type-day: linear-gradient(95deg, #1d4ed8 0%, #9a3412 70%, #b45309 100%);
+}
+
+/* Night bands: the nebula. */
+.lg-night {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.lg-night::before,
+.lg-night::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+}
+.lg-night::before {
+  inset: -20%;
+  background:
+    radial-gradient(38% 42% at 78% 22%, rgba(var(--lg-v-blue), 0.55),    transparent 70%),
+    radial-gradient(30% 36% at 92% 8%,  rgba(var(--lg-v-partner), 0.35), transparent 70%),
+    radial-gradient(34% 40% at 12% 92%, rgba(var(--lg-v-partner), 0.32), transparent 70%),
+    radial-gradient(26% 30% at 30% 100%, rgba(var(--lg-v-deep), 0.55),   transparent 70%);
+  filter: blur(40px);
+}
+/* Star field: three offset dot grids, faint enough to read as depth. */
+.lg-night::after {
+  inset: 0;
+  opacity: 0.55;
+  background-image:
+    radial-gradient(1px 1px at 20px 30px, rgba(255, 255, 255, 0.8), transparent 60%),
+    radial-gradient(1px 1px at 140px 90px, rgba(255, 255, 255, 0.6), transparent 60%),
+    radial-gradient(1.5px 1.5px at 260px 180px, rgba(255, 255, 255, 0.7), transparent 60%);
+  background-size: 310px 230px, 410px 290px, 530px 370px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .lg-night::before { animation: lg-nebula 28s ease-in-out infinite alternate; }
+}
+@keyframes lg-nebula {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(-4%, 3%, 0) scale(1.08); }
+}
+
+/* Light scene bands: one soft wash of blue light with a partner edge. */
+.lg-scene:not(.lg-night) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.lg-scene:not(.lg-night)::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  inset: -10% -10% auto auto;
+  width: 60%;
+  aspect-ratio: 1;
+  background: radial-gradient(closest-side, rgba(var(--lg-v-blue), 0.12), rgba(var(--lg-v-partner), 0.08) 55%, transparent);
+  filter: blur(20px);
+}
+
+/* The stamp, lit. */
+.lg-foil-surface,
+.lg-night .lg-foil-surface {
+  background-color: #2451e6;
+  background-image: var(--lg-v-stamp);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 8px 28px -8px var(--lg-v-stamp-glow);
+  color: #ffffff;
+}
+.lg-stamp {
+  border-radius: 999px;
+  transition:
+    transform var(--lg-dur-press) var(--ease-standard),
+    box-shadow var(--lg-dur-state) var(--ease-standard),
+    filter var(--lg-dur-state) var(--ease-standard);
+}
+.lg-stamp:hover {
+  filter: brightness(1.08) saturate(1.1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    0 12px 40px -6px var(--lg-v-stamp-glow);
+}
+.lg-stamp:active,
+.lg-night .lg-stamp:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Gradient type. */
+.lg-glow-text {
+  background-image: var(--lg-v-type-day);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.lg-night .lg-glow-text { background-image: var(--lg-v-type); }
+
+/* The closing orb — the last band's CTA sits in a pool of light. */
+.lg-orb::before {
+  background:
+    radial-gradient(34% 55% at 28% 45%, rgba(var(--lg-v-blue), 0.6),    transparent 70%),
+    radial-gradient(30% 50% at 38% 62%, rgba(var(--lg-v-partner), 0.35), transparent 70%),
+    radial-gradient(40% 50% at 90% 10%, rgba(var(--lg-v-deep), 0.5),     transparent 70%);
+}
+
+/* ── Frosted glass panel ─────────────────────────────────────────────────
+   One translucent panel holding a group of entries, with a hairline border
+   that shades from cyan to blue. On night it is a smoked pane that lets the
+   nebula through; on paper it is milk glass with a blue shadow. Text
+   contrast is measured against the pane over the darkest/lightest ground it
+   can sit on, and stays inside the ink ladder's AA floor. */
+.lg-glass {
+  position: relative;
+  border-radius: 24px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.55));
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(18px) saturate(140%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 30px 70px -36px rgba(var(--lg-v-blue), 0.45);
+}
+.lg-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(140deg, rgba(var(--lg-v-partner), 0.7), rgba(var(--lg-v-blue), 0.12) 45%, rgba(var(--lg-v-blue), 0.55));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+.lg-night .lg-glass {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.025));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 40px 90px -40px rgba(var(--lg-v-blue), 0.7);
+}
+.lg-glass__grid {
+  display: grid;
+  gap: 0;
+  padding: 0.75rem;
+}
+.lg-glass__item {
+  display: grid;
+  align-content: start;
+  gap: 0.7rem;
+  padding: 1.75rem 1.75rem 2rem;
+}
+@media (max-width: 639px) {
+  .lg-glass__grid { padding: 0.25rem; }
+  .lg-glass__item { padding: 1.5rem 1.25rem; }
+}
+@media (min-width: 640px) {
+  /* Hairline between the two columns and between rows, inside the pane. */
+  .lg-glass__grid.sm\:grid-cols-2 .lg-glass__item:nth-child(odd) {
+    border-right: 1px solid var(--lg-hair-2);
+  }
+  .lg-glass__grid.sm\:grid-cols-2 .lg-glass__item:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--lg-hair-2);
+  }
+}
+
+/* ── Gradient icon badge ─────────────────────────────────────────────────
+   A rounded square of the blue → cyan spectrum with a white line icon.
+   Decorative (aria-hidden): the entry's title says what the icon shows. */
+.lg-badge {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 0.35rem;
+  border-radius: 13px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #1e40af 0%, #2563eb 45%, #22d3ee 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 10px 24px -8px rgba(var(--lg-v-partner), 0.6);
+}
+.lg-badge svg {
+  width: 21px;
+  height: 21px;
+  stroke-width: 1.9;
+}

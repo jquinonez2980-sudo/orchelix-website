@@ -608,11 +608,44 @@ export function EntryList({
   entries,
   tone = "field",
   columns = 1,
+  glass = false,
+  icons,
 }: {
   entries: { title: string; desc: string; meta?: string }[];
   tone?: Tone;
   columns?: 1 | 2;
+  /** Set the entries on one frosted-glass panel (The Vivid Layer). */
+  glass?: boolean;
+  /** One icon per entry, shown in a gradient badge above its title. */
+  icons?: ReactNode[];
 }) {
+  if (glass) {
+    return (
+      <div className="lg-glass">
+        <div className={`lg-glass__grid ${columns === 2 ? "sm:grid-cols-2" : ""}`}>
+          {entries.map((e, i) => (
+            <article
+              key={e.title}
+              className="lg-glass__item lg-settle-item"
+              style={{ "--i": i } as CSSProperties}
+            >
+              {icons?.[i] ? (
+                <span className="lg-badge" aria-hidden="true">
+                  {icons[i]}
+                </span>
+              ) : null}
+              <EntryTitle tone={tone} size="1.0625rem">
+                {e.title}
+              </EntryTitle>
+              <Prose tone={tone} size="0.9375rem" max="60ch">
+                {e.desc}
+              </Prose>
+            </article>
+          ))}
+        </div>
+      </div>
+    );
+  }
   return (
     <div
       className={`lg-anchor grid gap-x-14 ${columns === 2 ? "sm:grid-cols-2" : ""}`}
