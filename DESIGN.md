@@ -183,22 +183,27 @@ components:
 ## The Vivid Layer (2026-09-24) — overrides the flat-colour rules below
 
 Owner direction: the site should feel alive, with saturated, glowing colour in
-the manner of thryvein.ai, not flat warm paper and one flat blue. Implemented
-as one appended block at the end of `app/globals.css` ("The vivid layer"), so
-the older retirements stay on record but no longer win the cascade.
+the manner of thryvein.ai, **while keeping Orchelix blue** (violet was tried
+and rejected). Implemented as one appended block at the end of
+`app/globals.css` ("The vivid layer"), so the older retirements stay on record
+but no longer win the cascade.
 
-- **Accent spectrum.** Indigo `#4F46E5` → violet `#7C3AED` → fuchsia `#A21CAF`.
-  `--lg-foil` is now indigo (5.85:1 on paper). White holds ≥ 5.7:1 on every
-  stamp stop. On night, the solid accent is lilac `#A78BFA` (7.4:1).
-- **Night bands** are violet-black (`#08070F`) and carry a nebula (large,
-  blurred indigo/violet/magenta radial light, `::before`) and a faint star
-  field (`::after`). The nebula drifts over 28s; off under reduced motion.
-- **Light bands** are cool lavender-white (`#F7F6FB` ladder) instead of warm
-  beige. Scene bands get one soft violet→pink wash in the top-right corner.
-- **The stamp** is a pill with the spectrum gradient, a lit top edge and a
-  soft coloured glow. Hover brightens the glow; active presses 1px.
-- **Gradient type** (`.lg-glow-text`): lilac → pink → peach on night, the
-  darker spectrum on paper. One phrase per page (the hero's last word).
+- **Blue + one partner.** Main light `#2563EB`, depth `#1E40AF`, partner cyan
+  `#22D3EE`. All glows read the RGB tokens `--lg-v-blue / -deep / -partner`,
+  so the partner is a token swap. A warm alternative (coral `#FB923C`) lives
+  under `:root[data-palette="coral"]`; it muddies to brown where it mixes
+  with the blue glow on night, which is why cyan is the default.
+- **Accent solid** `--lg-foil` is a livelier royal blue `#2451E6` (5.82:1 on
+  paper); on night it is `#60A5FA` (7.8:1).
+- **Night bands** are blue-black (`#060A14`) with a nebula (blurred blue and
+  cyan radial light, `::before`) and a faint star field (`::after`). The
+  nebula drifts over 28s; off under reduced motion.
+- **Light bands** are cool blue-white (`#F6F8FC` ladder). Scene bands get one
+  soft blue→cyan wash in the top-right corner.
+- **The stamp** is a pill with a blue gradient (white ≥ 5.9:1 at every stop),
+  a lit top edge and a soft partner-coloured glow.
+- **Gradient type** (`.lg-glow-text`): blue → cyan on night, deep blue → teal
+  on paper. One phrase per page (the hero's last word).
 - **Closing orb** (`.lg-orb` on a night Section): a stronger pool of light.
 - Still out: scan lines, reticles, neon outlines, fast or looping UI motion.
   Where the older sections below say "no glow / no gradient / flat stamp",

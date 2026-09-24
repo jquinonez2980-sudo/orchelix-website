@@ -3701,62 +3701,64 @@ details[open] > .lg-summary::before {
 
 /* ─── The vivid layer ─────────────────────────────────────────────────────
    2026-09-24, owner direction: the site should feel alive — saturated,
-   glowing colour in the way thryvein.ai does it — rather than the flat
-   warm-paper / single-flat-blue look. This block is appended last so it
-   overrides the retirements recorded above (flat stamp, no glow, no
-   gradient) without deleting their history. DESIGN.md "The Vivid Layer"
-   records the decision.
+   glowing colour in the way thryvein.ai does it — while keeping Orchelix
+   blue. Appended last so it overrides the retirements recorded above (flat
+   stamp, no glow, no gradient) without deleting their history. DESIGN.md
+   "The Vivid Layer" records the decision.
 
-   What it changes, and only this:
-   1. The accent moves from flat royal blue to an indigo → violet → fuchsia
-      spectrum. Every stop holds white text at ≥ 5.7:1.
-   2. Night bands go violet-black and carry a nebula: large, blurred
-      indigo / violet / magenta light, plus a faint star field.
-   3. Light bands go from warm beige to a cool lavender-white, so the
-      violet light has something clean to sit on, and scene bands get one
-      soft wash of it.
-   4. The stamp becomes a lit gradient with a soft coloured glow.
-   5. `.lg-glow-text` — gradient type, for one phrase per page at most.
+   One blue, one partner colour. Every value below reads from the palette
+   tokens in the first :root block, so the partner is a token swap, not a
+   rewrite. `:root[data-palette="coral"]` is the warm alternative the owner
+   is choosing between; the default is cyan.
 
    Not HUD: no scan lines, reticles, neon outlines or fast motion. The only
    motion is a 28s drift of the nebula, off under reduced motion. */
 
 :root {
-  --lg-v-indigo:  #4f46e5;
-  --lg-v-violet:  #7c3aed;
-  --lg-v-fuchsia: #a21caf;
-  --lg-v-lilac:   #a78bfa;
-  --lg-v-pink:    #f472b6;
-  --lg-v-peach:   #fdba74;
+  /* Palette — RGB triplets so glows can take any alpha. */
+  --lg-v-blue:    37, 99, 235;    /* #2563EB  the main light           */
+  --lg-v-deep:    30, 64, 175;    /* #1E40AF  depth under it           */
+  --lg-v-partner: 34, 211, 238;   /* #22D3EE  cyan                     */
 
-  /* Cool lavender-white paper ladder (ink contrast ≥ 14:1 on the darkest). */
-  --lg-field:   #f7f6fb;
-  --lg-field-2: #f1eff8;
-  --lg-field-3: #e9e6f3;
-  --lg-field-vivid: #e9e6f3;
-  --lg-stock:   #faf9fd;
-  --lg-stock-2: #f1eff8;
+  /* Stamp: blues only, so white holds ≥ 5.9:1 at every stop. */
+  --lg-v-stamp: linear-gradient(110deg, #1e40af 0%, #2451e6 50%, #0369a1 100%);
+  --lg-v-stamp-glow: rgba(var(--lg-v-partner), 0.45);
+  /* Gradient type — night (≥ 7.7:1) and day (≥ 5:1) spectra. */
+  --lg-v-type:     linear-gradient(95deg, #60a5fa 0%, #22d3ee 55%, #a5f3fc 100%);
+  --lg-v-type-day: linear-gradient(95deg, #1d4ed8 0%, #0369a1 55%, #0e7490 100%);
 
-  /* The accent as a solid, for rules, focus rings and links. 5.85:1 on paper. */
-  --lg-foil:      var(--lg-v-indigo);
-  --lg-foil-lift: var(--lg-v-violet);
+  /* Cool blue-white paper ladder (ink ≥ 14:1 on the darkest). */
+  --lg-field:   #f6f8fc;
+  --lg-field-2: #eef2f9;
+  --lg-field-3: #e5ebf5;
+  --lg-field-vivid: #e5ebf5;
+  --lg-stock:   #f9fafd;
+  --lg-stock-2: #eef2f9;
+
+  /* The accent as a solid — a livelier royal blue. 5.82:1 on paper. */
+  --lg-foil:      #2451e6;
+  --lg-foil-lift: #2563eb;
   --lg-foil-ink:  #ffffff;
 
-  --lg-v-stamp: linear-gradient(110deg, var(--lg-v-indigo) 0%, var(--lg-v-violet) 55%, var(--lg-v-fuchsia) 100%);
-  --lg-v-type:  linear-gradient(95deg, var(--lg-v-lilac) 0%, var(--lg-v-pink) 55%, var(--lg-v-peach) 100%);
-  /* Darker spectrum for gradient type on light paper (≥ 5.3:1 everywhere). */
-  --lg-v-type-day: linear-gradient(95deg, var(--lg-v-indigo) 0%, var(--lg-v-violet) 50%, var(--lg-v-fuchsia) 100%);
-
-  /* Violet-black night. Ink/foil pairs: ink 16.9:1, lilac 7.4:1. */
-  --lg-night-field:   #08070f;
-  --lg-night-field-2: #0c0a16;
-  --lg-night-field-3: #110e1e;
-  --lg-night-ink:     #eeecf6;
-  --lg-night-ink-2:   rgba(238, 236, 246, 0.84);
-  --lg-night-ink-3:   rgba(238, 236, 246, 0.74);
-  --lg-night-foil:      #a78bfa;
-  --lg-night-foil-lift: #c4b5fd;
+  /* Blue-black night. Ink 17:1, foil 7.8:1. */
+  --lg-night-field:   #060a14;
+  --lg-night-field-2: #0a0f1c;
+  --lg-night-field-3: #0e1424;
+  --lg-night-ink:     #eaf0fa;
+  --lg-night-ink-2:   rgba(234, 240, 250, 0.84);
+  --lg-night-ink-3:   rgba(234, 240, 250, 0.74);
+  --lg-night-foil:      #60a5fa;
+  --lg-night-foil-lift: #93c5fd;
   --lg-night-foil-ink:  #ffffff;
+}
+
+/* The warm alternative: blue + coral/amber. */
+:root[data-palette="coral"] {
+  --lg-v-partner: 251, 146, 60;   /* #FB923C  coral-orange */
+  --lg-v-stamp: linear-gradient(110deg, #1e40af 0%, #2451e6 55%, #1d4ed8 100%);
+  --lg-v-stamp-glow: rgba(var(--lg-v-partner), 0.4);
+  --lg-v-type:     linear-gradient(95deg, #60a5fa 0%, #fb923c 60%, #fbbf24 100%);
+  --lg-v-type-day: linear-gradient(95deg, #1d4ed8 0%, #9a3412 70%, #b45309 100%);
 }
 
 /* Night bands: the nebula. */
@@ -3775,10 +3777,10 @@ details[open] > .lg-summary::before {
 .lg-night::before {
   inset: -20%;
   background:
-    radial-gradient(38% 42% at 78% 22%, rgba(124, 58, 237, 0.55), transparent 70%),
-    radial-gradient(30% 36% at 92% 8%,  rgba(79, 70, 229, 0.55),  transparent 70%),
-    radial-gradient(34% 40% at 12% 92%, rgba(192, 38, 211, 0.45), transparent 70%),
-    radial-gradient(26% 30% at 30% 100%, rgba(79, 70, 229, 0.40), transparent 70%);
+    radial-gradient(38% 42% at 78% 22%, rgba(var(--lg-v-blue), 0.55),    transparent 70%),
+    radial-gradient(30% 36% at 92% 8%,  rgba(var(--lg-v-partner), 0.35), transparent 70%),
+    radial-gradient(34% 40% at 12% 92%, rgba(var(--lg-v-partner), 0.32), transparent 70%),
+    radial-gradient(26% 30% at 30% 100%, rgba(var(--lg-v-deep), 0.55),   transparent 70%);
   filter: blur(40px);
 }
 /* Star field: three offset dot grids, faint enough to read as depth. */
@@ -3799,7 +3801,7 @@ details[open] > .lg-summary::before {
   to   { transform: translate3d(-4%, 3%, 0) scale(1.08); }
 }
 
-/* Light scene bands: one soft wash of violet light. */
+/* Light scene bands: one soft wash of blue light with a partner edge. */
 .lg-scene:not(.lg-night) {
   position: relative;
   isolation: isolate;
@@ -3813,18 +3815,18 @@ details[open] > .lg-summary::before {
   inset: -10% -10% auto auto;
   width: 60%;
   aspect-ratio: 1;
-  background: radial-gradient(closest-side, rgba(124, 58, 237, 0.13), rgba(244, 114, 182, 0.07) 55%, transparent);
+  background: radial-gradient(closest-side, rgba(var(--lg-v-blue), 0.12), rgba(var(--lg-v-partner), 0.08) 55%, transparent);
   filter: blur(20px);
 }
 
 /* The stamp, lit. */
 .lg-foil-surface,
 .lg-night .lg-foil-surface {
-  background-color: var(--lg-v-indigo);
+  background-color: #2451e6;
   background-image: var(--lg-v-stamp);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.28),
-    0 8px 28px -8px rgba(124, 58, 237, 0.55);
+    0 8px 28px -8px var(--lg-v-stamp-glow);
   color: #ffffff;
 }
 .lg-stamp {
@@ -3838,7 +3840,7 @@ details[open] > .lg-summary::before {
   filter: brightness(1.08) saturate(1.1);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.34),
-    0 12px 40px -8px rgba(162, 28, 175, 0.6);
+    0 12px 40px -6px var(--lg-v-stamp-glow);
 }
 .lg-stamp:active,
 .lg-night .lg-stamp:active {
@@ -3859,7 +3861,7 @@ details[open] > .lg-summary::before {
 /* The closing orb — the last band's CTA sits in a pool of light. */
 .lg-orb::before {
   background:
-    radial-gradient(34% 55% at 28% 45%, rgba(124, 58, 237, 0.6), transparent 70%),
-    radial-gradient(30% 50% at 38% 60%, rgba(244, 114, 182, 0.4), transparent 70%),
-    radial-gradient(40% 50% at 90% 10%, rgba(79, 70, 229, 0.45), transparent 70%);
+    radial-gradient(34% 55% at 28% 45%, rgba(var(--lg-v-blue), 0.6),    transparent 70%),
+    radial-gradient(30% 50% at 38% 62%, rgba(var(--lg-v-partner), 0.35), transparent 70%),
+    radial-gradient(40% 50% at 90% 10%, rgba(var(--lg-v-deep), 0.5),     transparent 70%);
 }
