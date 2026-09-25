@@ -1696,6 +1696,12 @@ details[open] > .lg-summary::before {
 @media (prefers-reduced-motion: reduce) {
   .lg-lockup__mark.is-landing { animation: none; }
 }
+.lg-lockup__img {
+  display: block;
+  height: 100%;
+  width: auto;
+}
+.lg-lockup__img--night { display: none; }
 .lg-lockup__mark {
   display: block;
   /* The ring is nearly round (0.91:1) where the helix was tall and narrow,
@@ -3778,10 +3784,9 @@ body:has(main > section.lg-night:first-child) .lg-nav {
   background-color: rgba(6, 10, 20, 0.96);
   border-bottom-color: rgba(234, 240, 250, 0.08);
 }
-/* The mark is graphite artwork; on the dark bar it is knocked out to ink. */
-body:has(main > section.lg-night:first-child) .lg-nav .lg-lockup__mark {
-  filter: brightness(0) invert(0.93);
-}
+/* On the dark bar the mark swaps to its night gradient (lighter stops). */
+body:has(main > section.lg-night:first-child) .lg-nav .lg-lockup__img--day { display: none; }
+body:has(main > section.lg-night:first-child) .lg-nav .lg-lockup__img--night { display: block; }
 
 /* ── The listening stage (2026-09-25) ───────────────────────────────────
    Owner feedback: "Hear a real call" looked like a form field — nothing
