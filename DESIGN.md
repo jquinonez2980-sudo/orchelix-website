@@ -239,6 +239,17 @@ off-screen or the tab is hidden, and settles to a still frame under
 - **/try-esmi** opens on night with three ways in (listen · chat · call,
   `.te-ways`). It closes on a night `lg-orb` band. The live chat uses
   rounded bubbles in the blue palette, with no magenta left.
+- **Home hero — `HeroSignal`** (two canvases around the 3D `HeroRing`).
+  Calls arrive as comets and dive into the ring. Each landing sends a
+  shockwave and floats an "✓ Answered · EN" / "✓ Atendida · ES" tag, while
+  two orbits of light pass behind and in front of the mark. Desktop only,
+  like the ring.
+- **/how-it-works — `FourteenDays`**: a 14-segment dial that counts the days
+  by phase and turns over to LIVE. **/industries — `IndustrySwitchboard`**:
+  four sector badges wired to an Esmi core, lit one at a time with the
+  sector's line and trades. Both use the `.lg-console` material and read
+  their words from the page copy. They replaced the pink/grey PNGs and
+  their pulse overlays.
 
 ## Current direction (2026-09-11) — read this first
 

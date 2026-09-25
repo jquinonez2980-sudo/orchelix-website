@@ -31,6 +31,7 @@ import { ESMI_PILOT_PAYMENT_LINK } from "@/app/lib/pilotPayment";
 import type { Messages } from "@/app/i18n/messages/en";
 import HeroRing from "./HeroRing";
 import HeroLine from "./HeroLine";
+import HeroSignal from "./HeroSignal";
 
 /* HeroRing is a Client Component, imported plainly rather than through
    `next/dynamic` with `ssr: false`.
@@ -88,7 +89,12 @@ export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
       {/* The mark, in glass. Decorative in the sense that the hero states
           everything it says in words first — but it carries the company's
           own name as its label, so it is a real image, not a spacer. */}
-      <HeroRing />
+      {/* The live scene wraps the ring: calls arriving and being answered. */}
+      <div className="lg-ring-wrap">
+        {/* Tags stay bilingual in both locales — the calls are. */}
+        <HeroSignal labels={{ en: "✓ Answered · EN", es: "✓ Atendida · ES" }} />
+        <HeroRing />
+      </div>
       </div>
 
       {/* The conditions of record — where it is answered from. The languages

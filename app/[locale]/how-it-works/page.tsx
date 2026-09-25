@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Nav from "@/app/components/sections/Nav";
 import Footer from "@/app/components/sections/Footer";
-import FlowPulseOverlay from "@/app/components/sections/FlowPulseOverlay";
+import FourteenDays from "@/app/components/sections/FourteenDays";
 import { isLocale, localesFor, localizedHref } from "@/app/i18n/config";
 import { getDictionary } from "@/app/i18n/dictionaries";
 import {
@@ -14,10 +14,8 @@ import {
   QuietAction,
   RuledList,
   Band,
-  PageVisual,
   ink3For,
 } from "@/app/components/ledger";
-import howItWorksDiagram from "@/public/how-it-works-diagram.png";
 
 export function generateStaticParams() {
   return localesFor("/how-it-works").map((locale) => ({ locale }));
@@ -57,17 +55,16 @@ export default async function HowItWorksPage({ params }: PageProps<"/[locale]">)
               </Prose>
             </div>
             <div className="flex flex-col items-end gap-8">
-              {/* Input → AI → structured output, the page's whole argument in
-                  one diagram before the schedule spells it out step by step.
-                  The artwork itself is the original PNG; FlowPulseOverlay is
-                  an absolutely-positioned SVG on top of it, so the picture
-                  stays exactly as designed and only the two pulses + the AI
-                  node's glow are live. `lineHeight: 0` clears the few
-                  pixels of inline-image whitespace that would otherwise
-                  throw the overlay's alignment off by that amount. */}
-              <div style={{ position: "relative", width: "100%", maxWidth: 340, lineHeight: 0 }}>
-                <PageVisual src={howItWorksDiagram} max={340} />
-                <FlowPulseOverlay />
+              {/* The fourteen days as a dial — the schedule below, counted out. */}
+              <div style={{ width: "100%", maxWidth: 440 }}>
+                <FourteenDays
+                  phases={p.schedule.map((s) => ({ when: s.when, title: s.title }))}
+                  labels={
+                    locale === "es"
+                      ? { day: "Día", live: "En vivo", aria: "Catorce días en cuatro fases, del primer día a la línea en vivo." }
+                      : { day: "Day", live: "Live", aria: "Fourteen days in four phases, from day one to a live line." }
+                  }
+                />
               </div>
               <div className="flex flex-wrap items-center gap-x-7 gap-y-4 lg:justify-end">
                 <Stamp href={localizedHref("/book", locale)}>{t.common.bookPilot}</Stamp>
