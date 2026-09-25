@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import Nav from "@/app/components/sections/Nav";
 import Footer from "@/app/components/sections/Footer";
 import EsmiChat from "./EsmiChat";
-import PublicVoicePreview from "./PublicVoicePreview";
 import JsonLd from "@/app/components/JsonLd";
+import EsmiVoiceStage from "@/app/components/sections/voice/EsmiVoiceStage";
+import CallThread from "@/app/components/sections/voice/CallThread";
+import { CalendarCheck, Headphones, MessagesSquare, PhoneCall, Siren, UserCheck } from "lucide-react";
 import {
   Section,
   PageTitle,
@@ -33,10 +35,13 @@ export const metadata: Metadata = {
 
 type Copy = {
   title: string;
+  titleLead: string;
+  titleGlow: string;
+  waysLabel: string;
+  ways: { n: string; title: string; desc: string; href: string }[];
   lede: string;
   book: string;
   stack: string;
-  orCall: string;
   chatTitle: (company?: string) => string;
   chatBody: (company?: string) => string;
   producesTitle: string;
@@ -52,10 +57,17 @@ type Copy = {
 
 const EN: Copy = {
   title: "Hear Esmi take a call",
+  titleLead: "Hear Esmi",
+  titleGlow: "take a call",
+  waysLabel: "Three ways to meet her",
+  ways: [
+    { n: "01", title: "Listen", desc: "Press play on her real voice", href: "#hear-esmi-player" },
+    { n: "02", title: "Chat", desc: "Type to the same agent, live", href: "#chat" },
+    { n: "03", title: "Call", desc: "+1 561 566 1066", href: "tel:+15615661066" },
+  ],
   lede: "Esmi is answering calls in production today. A real recording first, then the same agent live in a chat you can type into. No form, no scheduling — the product doing its job, and the record it leaves behind.",
   book: "Book a pilot",
   stack: "See the agent stack",
-  orCall: "Or call it yourself — +1 561 566 1066",
   chatTitle: (c) => (c ? `Ask Esmi about ${c}` : "Now ask it yourself"),
   chatBody: (c) =>
     c
@@ -103,10 +115,17 @@ const EN: Copy = {
 
 const ES: Copy = {
   title: "Escucha a Esmi contestar",
+  titleLead: "Escucha a Esmi",
+  titleGlow: "contestar",
+  waysLabel: "Tres formas de conocerla",
+  ways: [
+    { n: "01", title: "Escucha", desc: "Reproduce su voz real", href: "#hear-esmi-player" },
+    { n: "02", title: "Chatea", desc: "Escríbele al mismo agente, en vivo", href: "#chat" },
+    { n: "03", title: "Llama", desc: "+1 561 566 1066", href: "tel:+15615661066" },
+  ],
   lede: "Esmi ya contesta llamadas en producción. Primero una grabación real; después el mismo agente en un chat donde puedes escribir. Sin formulario ni cita — el producto haciendo su trabajo, y el registro que deja.",
   book: "Agenda un piloto",
   stack: "Ver el stack de agentes",
-  orCall: "O llámalo tú — +1 561 566 1066",
   chatTitle: (c) => (c ? `Pregúntale a Esmi sobre ${c}` : "Ahora pregúntale tú"),
   chatBody: (c) =>
     c
@@ -198,38 +217,53 @@ export default async function TryEsmiPage({
       <JsonLd data={breadcrumbJsonLd} />
       <Nav locale={locale} t={navT} />
       <main id="main-content">
-        <Section tone="field" scene>
-          <div className="grid gap-x-16 gap-y-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:items-center">
+        <Section tone="night" scene>
+          <div className="grid gap-x-14 gap-y-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-center">
             <div>
-              <PageTitle max="13ch">{copy.title}</PageTitle>
-              <Prose size="1.0625rem" max="42ch" style={{ marginTop: "1.7rem" }}>
+              <PageTitle tone="night" max="13ch">
+                {copy.titleLead} <span className="lg-glow-text">{copy.titleGlow}</span>
+              </PageTitle>
+              <Prose tone="night" size="1.0625rem" max="42ch" style={{ marginTop: "1.7rem" }}>
                 {copy.lede}
               </Prose>
               <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">
                 <Stamp href={locale === "es" ? "/es/book" : "/book"}>{copy.book}</Stamp>
-                <QuietAction href="/get-started">
+                <QuietAction tone="night" href="/get-started">
                   {locale === "es" ? "Solicitar alta" : "Get started"}
                 </QuietAction>
-                <QuietAction href={locale === "es" ? "/es/solutions" : "/solutions"}>
+                <QuietAction tone="night" href={locale === "es" ? "/es/solutions" : "/solutions"}>
                   {copy.stack}
                 </QuietAction>
               </div>
-              <a
-                href="tel:+15615661066"
-                className="lg-fig lg-quiet"
-                style={{
-                  display: "inline-block",
-                  marginTop: "1.6rem",
-                  fontSize: "0.8125rem",
-                  letterSpacing: "0.05em",
-                  color: "var(--lg-ink-2)",
-                  textDecoration: "none",
-                }}
-              >
-                {copy.orCall}
-              </a>
+
+              {/* Three ways in, in the order a visitor warms up: hear her,
+                  talk to her, then ring her. */}
+              <nav className="te-ways" aria-label={copy.waysLabel}>
+                <p className="te-ways__label">{copy.waysLabel}</p>
+                <ol>
+                  {copy.ways.map((w, i) => {
+                    const Icon = [Headphones, MessagesSquare, PhoneCall][i];
+                    return (
+                      <li key={w.n}>
+                        <a href={w.href} data-call={w.href.startsWith("tel:") ? "true" : undefined}>
+                          <span className="te-ways__icon" aria-hidden="true">
+                            <Icon />
+                          </span>
+                          <span className="te-ways__text">
+                            <span className="te-ways__title">
+                              <span className="te-ways__n">{w.n}</span> {w.title}
+                            </span>
+                            <span className="te-ways__desc">{w.desc}</span>
+                          </span>
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ol>
+              </nav>
+
               {/* Language switcher for this surface (not full i18n path yet) */}
-              <p className="lg-fig mt-4" style={{ fontSize: "0.6875rem", letterSpacing: "0.1em" }}>
+              <p className="lg-fig mt-5" style={{ fontSize: "0.6875rem", letterSpacing: "0.1em" }}>
                 <a
                   href={locale === "es" ? "/try-esmi" : "/try-esmi?lang=es"}
                   className="lg-quiet"
@@ -239,9 +273,7 @@ export default async function TryEsmiPage({
                 </a>
               </p>
             </div>
-            <div className="lg-margin-rule lg:pl-8">
-              <PublicVoicePreview initialLang={locale} />
-            </div>
+            <EsmiVoiceStage initialLang={locale} />
           </div>
         </Section>
 
@@ -262,14 +294,17 @@ export default async function TryEsmiPage({
         </Section>
 
         <Section tone="field">
-          <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+          <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-start">
             <div>
               <SectionTitle max="16ch">{copy.producesTitle}</SectionTitle>
               <Prose size="1rem" max="42ch" style={{ marginTop: "1.4rem" }}>
                 {copy.producesLede}
               </Prose>
+              <div className="mt-10">
+                <RuledList items={copy.produces} labelWidth="8.5rem" />
+              </div>
             </div>
-            <RuledList items={copy.produces} labelWidth="8.5rem" />
+            <CallThread lang={locale} />
           </div>
         </Section>
 
@@ -278,7 +313,13 @@ export default async function TryEsmiPage({
             {copy.handlesTitle}
           </SectionTitle>
           <div className="mt-12">
-            <EntryList tone="stock" entries={copy.handles} />
+            <EntryList
+              tone="stock"
+              glass
+              columns={3}
+              entries={copy.handles}
+              icons={[<CalendarCheck key="c" />, <UserCheck key="u" />, <Siren key="s" />]}
+            />
           </div>
         </Section>
 
@@ -289,13 +330,13 @@ export default async function TryEsmiPage({
           </div>
         </Section>
 
-        <Section tone="field-3" style={{ borderTop: "2px solid var(--lg-foil)" }}>
+        <Section tone="night" scene className="lg-orb">
           <div className="grid items-end gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
             <div>
-              <SectionTitle scale="display" max="16ch">
+              <SectionTitle tone="night" scale="display" max="16ch">
                 {copy.closeTitle}
               </SectionTitle>
-              <Prose size="1.0625rem" max="48ch" style={{ marginTop: "1.5rem" }}>
+              <Prose tone="night" size="1.0625rem" max="48ch" style={{ marginTop: "1.5rem" }}>
                 {copy.closeLede}
               </Prose>
             </div>
@@ -303,16 +344,8 @@ export default async function TryEsmiPage({
               <Stamp href={locale === "es" ? "/es/book" : "/book"} size="1rem">
                 {copy.book}
               </Stamp>
-              <a
-                href="tel:+15615661066"
-                className="lg-fig lg-quiet"
-                style={{
-                  fontSize: "0.8125rem",
-                  letterSpacing: "0.08em",
-                  color: "var(--lg-ink-2)",
-                  textDecoration: "none",
-                }}
-              >
+              <a href="tel:+15615661066" className="te-call">
+                <PhoneCall aria-hidden="true" />
                 +1 561 566 1066
               </a>
             </div>

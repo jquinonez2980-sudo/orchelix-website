@@ -216,6 +216,30 @@ but no longer win the cascade.
   Where the older sections below say "no glow / no gradient / flat stamp",
   this section supersedes them.
 
+### Living visuals (2026-09-25)
+
+Owner direction: the opening visuals must hold attention, not just decorate.
+Four pieces are allowed to move continuously. Each one pauses when it is
+off-screen or the tab is hidden, and settles to a still frame under
+`prefers-reduced-motion`. Controls and UI chrome still don't loop.
+
+- **/solutions — `AgentCore`** (canvas). A wireframe globe (the console)
+  with Esmi and Nia orbiting it. Their packets land in the core and light
+  the next tick on the audit ring. It replaced `ConstellationCanvas`, whose
+  graphite nodes were invisible on the night band.
+- **Home "Hear a real call" and the /try-esmi hero — `voice/EsmiVoiceStage`**.
+  A self-lit dark console (`.evs`, with its own palette) that sits on any
+  band. The voice orb reacts to the clip's loudness curve. Captions light
+  word by word with the playhead. Business tiles play on click. On the home
+  page `voice/CallThread` plays the labelled sample booking conversation
+  beside it (`.evt`). It replaced `PublicVoicePreview`.
+- **/about — `AboutCubeStack`** (CSS 3D). Glass cubes drop in and assemble.
+  The stack turns and leans toward the pointer, and the lit apex hovers
+  above it. It replaced the graphite/magenta `about-visual.png` cutouts.
+- **/try-esmi** opens on night with three ways in (listen · chat · call,
+  `.te-ways`). It closes on a night `lg-orb` band. The live chat uses
+  rounded bubbles in the blue palette, with no magenta left.
+
 ## Current direction (2026-09-11) — read this first
 
 This document was written across three rebrands and much of it still describes the earlier ones. **Where anything below conflicts with this section, this section wins,** and the conflicting passage is history rather than instruction.

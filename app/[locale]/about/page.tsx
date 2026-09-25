@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Nav from "@/app/components/sections/Nav";
 import Footer from "@/app/components/sections/Footer";
-import AboutCubePulse from "@/app/components/sections/AboutCubePulse";
+import AboutCubeStack from "@/app/components/sections/AboutCubeStack";
 import { isLocale, localesFor, localizedHref } from "@/app/i18n/config";
 import { getDictionary } from "@/app/i18n/dictionaries";
 import {
@@ -16,7 +16,6 @@ import {
   EntryList,
   Plate,
 } from "@/app/components/ledger";
-import aboutVisual from "@/public/about-visual.png";
 import consultingEngagement from "@/public/consulting-engagement.jpg";
 
 export function generateStaticParams() {
@@ -57,10 +56,7 @@ export default async function AboutPage({ params }: PageProps<"/[locale]">) {
               </Prose>
             </div>
             <div className="flex flex-col items-end gap-8">
-              {/* The original artwork, untouched — one real piece of it (the
-                  magenta cube, cut out of the actual PNG) breathes in and
-                  out over its own position. */}
-              <AboutCubePulse src={aboutVisual} max={320} />
+              <AboutCubeStack max={440} />
               <div className="flex flex-wrap items-center gap-x-7 gap-y-4 lg:justify-end">
                 <Stamp href={localizedHref("/book", locale)}>{t.common.talkToConsultant}</Stamp>
                 <QuietAction href={localizedHref("/how-it-works", locale)}>

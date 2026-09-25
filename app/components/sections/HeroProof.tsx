@@ -1,50 +1,20 @@
 "use client";
 
-/* Compact real-call player + ruled sample transcript for the home hero.
-   Transcript is a labeled sample (not a live tenant call) — demonstrates the
-   artifact shape without inventing client proof.
+/* The home listening stage: Esmi's real voice on the left, the sample
+   booking conversation playing out on the right.
 
-   Language follows the player's EN/ES chips, not only the page locale, so
-   pressing Spanish updates both the clip and the transcript lines. */
+   The conversation follows the stage's EN/ES, not only the page locale, so
+   pressing Spanish updates both the clip and the conversation. */
 
-import PublicVoicePreview from "@/app/(site)/try-esmi/PublicVoicePreview";
+import EsmiVoiceStage from "@/app/components/sections/voice/EsmiVoiceStage";
+import CallThread from "@/app/components/sections/voice/CallThread";
 import type { Locale } from "@/app/i18n/config";
 import { track } from "@/app/lib/analytics";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
-type SampleLang = "en" | "es";
-
-/* Transcript mirrors a real flow: Esmi matches the language the caller used.
-   Do not offer "English or Spanish" after they already spoke one language. */
-const SAMPLE_LINES_EN = [
-  { who: "Caller", text: "Hi — do you have anything tomorrow morning for a kitchen template?" },
-  { who: "Esmi", text: "I can check that for you. What time works best?" },
-  { who: "Caller", text: "Around nine if you have it." },
-  { who: "Esmi", text: "Thursday at 9:00 is open. I'll book that and send a confirmation." },
-] as const;
-
-const SAMPLE_LINES_ES = [
-  { who: "Llamante", text: "Hola — ¿tienen algo mañana en la mañana para plantilla de cocina?" },
-  { who: "Esmi", text: "Claro, lo reviso. ¿Qué horario le conviene?" },
-  { who: "Llamante", text: "Como a las nueve, si hay." },
-  { who: "Esmi", text: "Jueves a las 9:00 está libre. Lo agendo y le mando confirmación." },
-] as const;
-
-export default function HeroProof({
-  locale = "en",
-  playerOnly = false,
-  hideLabel = false,
-}: {
-  locale?: Locale;
-  playerOnly?: boolean;
-  hideLabel?: boolean;
-}) {
-  /* Player chips own the sample language; start from the page locale. */
-  const [sampleLang, setSampleLang] = useState<SampleLang>(
-    locale === "es" ? "es" : "en",
-  );
-  const isEs = sampleLang === "es";
-  const lines = isEs ? SAMPLE_LINES_ES : SAMPLE_LINES_EN;
+export default function HeroProof({ locale = "en" }: { locale?: Locale }) {
+  const [lang, setLang] = useState<"en" | "es">(locale === "es" ? "es" : "en");
 
   useEffect(() => {
     const onPlay = () => track("hear_play", { surface: "hero" });
@@ -53,127 +23,28 @@ export default function HeroProof({
   }, []);
 
   return (
-    <div
-      className="max-w-none"
-      style={{ scrollMarginTop: "5.5rem" }}
-    >
-      <PublicVoicePreview
-        compact
-        featured
-        hideLabel={hideLabel}
-        initialLang={locale === "es" ? "es" : "en"}
-        id="hear-esmi-player"
-        onLanguageChange={setSampleLang}
-      />
-
-      {playerOnly ? null : (
-      <>
-      <figure
-        className="mt-6 m-0"
-        style={{
-          borderTop: "2px solid var(--lg-rule)",
-          paddingTop: "0.85rem",
-        }}
-        aria-live="polite"
-      >
-        <figcaption
-          className="lg-fig flex flex-wrap items-baseline justify-between gap-2"
-          style={{
-            fontSize: "0.625rem",
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            color: "var(--lg-ink-3)",
-            marginBottom: "0.75rem",
-          }}
-        >
-          <span>
-            {isEs ? "Transcripción de muestra" : "Sample transcript"}
-            <span style={{ color: "var(--lg-ink-3)", marginLeft: "0.5rem", opacity: 0.85 }}>
-              · {sampleLang.toUpperCase()}
-            </span>
-          </span>
-          <span style={{ color: "var(--lg-foil)" }}>
-            {isEs ? "AGENDADO" : "BOOKED"}
-          </span>
-        </figcaption>
-        <ul className="m-0 list-none space-y-2.5 p-0">
-          {lines.map((line, i) => (
-            <li
-              key={`${sampleLang}-${i}`}
-              style={{
-                borderBottom: "1px solid var(--lg-hair-2)",
-                paddingBottom: "0.55rem",
-              }}
-            >
-              <span
-                className="lg-fig"
-                style={{
-                  fontSize: "0.625rem",
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color:
-                    line.who === "Esmi" ? "var(--lg-foil)" : "var(--lg-ink-3)",
-                }}
-              >
-                {line.who}
-              </span>
-              <p
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontSize: "0.875rem",
-                  lineHeight: 1.5,
-                  color: "var(--lg-ink)",
-                  margin: "0.2rem 0 0",
-                }}
-              >
-                {line.text}
-              </p>
-            </li>
-          ))}
-        </ul>
-        <p
-          style={{
-            fontFamily: "var(--font-body)",
-            fontSize: "0.75rem",
-            color: "var(--lg-ink-3)",
-            margin: "0.75rem 0 0",
-          }}
-        >
-          {isEs
-            ? "Muestra ilustrativa de la forma del registro — no una llamada de un cliente público."
-            : "Illustrative sample of the record shape — not a public client call."}
-        </p>
-      </figure>
-
-      <p
-        className="mt-3"
-        style={{
-          fontFamily: "var(--font-body)",
-          fontSize: "0.8125rem",
-          lineHeight: 1.5,
-          color: "var(--lg-ink-3)",
-          margin: "0.75rem 0 0",
-        }}
-      >
-        {/* Page chrome follows site locale; transcript above follows the chips. */}
+    <div style={{ scrollMarginTop: "5.5rem" }}>
+      <div className="evs-duo">
+        <EsmiVoiceStage initialLang={lang} onLanguageChange={setLang} />
+        <CallThread lang={lang} />
+      </div>
+      <p className="evs-more">
         {locale === "es" ? (
           <>
             Audio del agente en producción.{" "}
-            <a href="/try-esmi?lang=es" className="lg-quiet" style={{ color: "var(--lg-ink)" }}>
+            <Link href="/try-esmi?lang=es" className="lg-quiet">
               Escucha más y chatea con Esmi →
-            </a>
+            </Link>
           </>
         ) : (
           <>
             Production agent audio.{" "}
-            <a href="/try-esmi" className="lg-quiet" style={{ color: "var(--lg-ink)" }}>
+            <Link href="/try-esmi" className="lg-quiet">
               Hear more and chat with Esmi →
-            </a>
+            </Link>
           </>
         )}
       </p>
-      </>
-      )}
     </div>
   );
 }

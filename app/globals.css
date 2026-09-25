@@ -1442,41 +1442,6 @@ body {
   100% { clip-path: inset(2.97% 2.63% 2.60% 57.88%); }
 }
 
-/* The About opening visual (AboutCubePulse.tsx) — five cubes cut straight
-   out of the source PNG, each layered back over its own position and
-   breathing: a slow scale-up-and-back with a matching drop-shadow so each
-   reads as lifting toward the viewer and settling again, not just growing.
-   Continuous, not a one-time settle — "the blocks go in and out" is a
-   repeating motion, the same register the AI node's glow already uses for
-   an ongoing pulse rather than an on-load reveal.
-
-   Every piece shares the base `lg-cube-pulse` rule (transform-origin,
-   filter reset) and picks up its own animation via a numbered modifier
-   class — different delay and a slightly different duration per cube, so
-   five pieces breathing at once reads as a scattered living structure
-   instead of one shape flexing in unison. The element's own box IS the
-   cutout (positioned via left/top/width/height in AboutCubePulse.tsx), so
-   `transform-origin: center` scales each from its own middle correctly. */
-.lg-cube-pulse {
-  transform-origin: center;
-}
-.lg-cube-pulse-1 { animation: lg-cube-pulse 3.2s ease-in-out infinite; }
-.lg-cube-pulse-2 { animation: lg-cube-pulse 3.6s ease-in-out infinite; animation-delay: 0.5s; }
-.lg-cube-pulse-3 { animation: lg-cube-pulse 2.9s ease-in-out infinite; animation-delay: 1.1s; }
-.lg-cube-pulse-4 { animation: lg-cube-pulse 3.4s ease-in-out infinite; animation-delay: 1.7s; }
-.lg-cube-pulse-5 { animation: lg-cube-pulse 3.1s ease-in-out infinite; animation-delay: 0.85s; }
-
-@keyframes lg-cube-pulse {
-  0%, 100% {
-    transform: scale(1) translateY(0);
-    filter: drop-shadow(0 0 0 transparent);
-  }
-  50% {
-    transform: scale(1.045) translateY(-2%);
-    filter: drop-shadow(0 10px 18px rgba(46, 50, 62, 0.32));
-  }
-}
-
 /* ─── Materials ───────────────────────────────────────────────────────────
    Buckram cloth and gold foil are produced as materials, not as tokens that
    merely name them. The cloth is a shipped raster-equivalent tile; the foil
@@ -1703,7 +1668,6 @@ details[open] > .lg-summary::before {
      the fully-grown state, not the zero-height start — falling back to no
      clip-path at all shows the complete original image, which is correct. */
   .lg-grow-bar-1, .lg-grow-bar-2, .lg-grow-bar-3 { animation: none; clip-path: none; }
-  .lg-cube-pulse { animation: none; }
 }
 
 /* Anchors sit under a sticky header, so a jump has to clear it or the
@@ -2429,33 +2393,6 @@ details[open] > .lg-summary::before {
   padding-top: 1.8rem;
   border-top: 2px solid var(--lg-rule);
 }
-.epv-featured-stack {
-  display: flex;
-  flex-direction: column;
-}
-.epv-featured-stack > .mb-4 {
-  order: 2;
-  margin-top: 1.5rem;
-  margin-bottom: 0;
-}
-.epv-featured-stack > .epv-stage {
-  order: 1;
-}
-.epv-transport {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 1.4rem 1.75rem;
-  align-items: center;
-}
-.epv-play--featured {
-  width: 4.75rem;
-  height: 4.75rem;
-}
-.epv-play--featured svg {
-  width: 1.45rem;
-  height: 1.45rem;
-}
-
 .lg-wave {
   position: relative;
   height: 4.75rem;
@@ -2492,8 +2429,6 @@ details[open] > .lg-summary::before {
 }
 
 @media (max-width: 639px) {
-  .epv-transport { gap: 1rem; }
-  .epv-play--featured { width: 3.75rem; height: 3.75rem; }
   .lg-wave { height: 3.75rem; }
 }
 
@@ -2651,39 +2586,9 @@ details[open] > .lg-summary::before {
   .lg-pending-rule { animation: none; }
 }
 
-/* ─── Public voice preview (try-esmi) ─────────────────────────────────────
-   Restrained control-bar chrome: ~150ms state transitions, no glow bloom.
-   Converted to the ledger world — the played portion of the waveform and the
-   play control carry foil; every other affordance moves in ink-alpha only. */
-.epv-pill,
-.epv-seg,
-.epv-pill:hover,
-.epv-seg:hover {
-  background-color: rgba(46, 50, 62, 0.06);
-  color: var(--lg-ink);
-}
-.epv-pill:hover { border-color: var(--lg-ink-3); }
-/* The solid-teal CTA keeps its fill on hover — brighten instead of tint. */
-
-.epv-play { transition: transform 150ms ease, filter 150ms ease; }
-.epv-play:hover:not(:disabled) { filter: brightness(1.08); transform: scale(1.04); }
-.epv-play:active:not(:disabled) { transform: scale(0.97); }
-
-/* Unplayed rail colour rides a custom property so the inline per-bar
-   background (which always wins over a stylesheet rule) can still respond
-   to :hover on the track. */
-.epv-scrub { --epv-rail: var(--lg-hair); }
-.epv-scrub[data-seekable="true"]:hover { --epv-rail: var(--lg-ink-3); }
-.epv-bar { transition: background-color 120ms linear; }
-
-@media (prefers-reduced-motion: reduce) {
-  .epv-pill, .epv-seg, .epv-cta, .epv-play, .epv-bar { transition: none; }
-  .epv-play:hover:not(:disabled), .epv-play:active:not(:disabled) { transform: none; }
-}
-
 /* ─── Voice Studio (dashboard /dashboard/voice) ───────────────────────────
-   Light-theme sibling of the .epv-* try-esmi transport above: same player
-   DNA (a static waveform that doubles as the scrub track, one saturated
+   Light-theme sibling of the public listening stage
+   (app/components/sections/voice/): same player DNA (a static waveform that doubles as the scrub track, one saturated
    control, quiet mono meta) rendered in the dashboard's navy/teal tokens
    instead of the dark glass palette.                                      */
 
@@ -3927,6 +3832,15 @@ details[open] > .lg-summary::before {
   }
 }
 
+/* Three across on wide screens, with the same inner hairlines. */
+@media (min-width: 1024px) {
+  .lg-glass__grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .lg-glass__grid--3 .lg-glass__item:not(:last-child) { border-right: 1px solid var(--lg-hair-2); }
+}
+@media (max-width: 1023px) {
+  .lg-glass__grid--3 .lg-glass__item:not(:last-child) { border-bottom: 1px solid var(--lg-hair-2); }
+}
+
 /* ── Gradient icon badge ─────────────────────────────────────────────────
    A rounded square of the blue → cyan spectrum with a white line icon.
    Decorative (aria-hidden): the entry's title says what the icon shows. */
@@ -4028,4 +3942,795 @@ body:has(main > section.lg-night:first-child) .lg-nav {
 /* The mark is graphite artwork; on the dark bar it is knocked out to ink. */
 body:has(main > section.lg-night:first-child) .lg-nav .lg-lockup__mark {
   filter: brightness(0) invert(0.93);
+}
+
+/* ── The listening stage (2026-09-25) ───────────────────────────────────
+   Owner feedback: "Hear a real call" looked like a form field — nothing
+   about it made you want to press play. The stage is now a lit console
+   that carries its own dark palette, so it sits on paper or on night:
+   Esmi's voice orb with play at its heart, captions that light word by
+   word with the playhead, the waveform in blue → cyan, and one tile per
+   business type (a tile plays on click). Beside it, on the home page, the
+   sample booking conversation plays out and lands as a confirmation card.
+   Components: app/components/sections/voice/. */
+
+.evs {
+  --evs-ink: #eaf0fa;
+  --evs-ink-2: rgba(234, 240, 250, 0.8);
+  --evs-ink-3: rgba(234, 240, 250, 0.62);
+  --evs-cyan: #67e8f9;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  container-type: inline-size;
+  border-radius: 28px;
+  padding: 1.25rem 1.25rem 1.15rem;
+  color: var(--evs-ink);
+  background:
+    radial-gradient(55% 65% at 22% 38%, rgba(var(--lg-v-blue), 0.38), transparent 70%),
+    radial-gradient(45% 55% at 100% 0%, rgba(var(--lg-v-partner), 0.2), transparent 70%),
+    radial-gradient(40% 40% at 90% 100%, rgba(var(--lg-v-deep), 0.45), transparent 70%),
+    linear-gradient(160deg, #0c1428 0%, #060a14 65%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 50px 120px -48px rgba(var(--lg-v-blue), 0.8),
+    0 20px 40px -30px rgba(6, 10, 20, 0.6);
+}
+.evs::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(140deg, rgba(var(--lg-v-partner), 0.75), rgba(var(--lg-v-blue), 0.1) 45%, rgba(var(--lg-v-blue), 0.6));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.evs::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image:
+    radial-gradient(1px 1px at 20px 30px, rgba(255, 255, 255, 0.8), transparent 60%),
+    radial-gradient(1px 1px at 140px 90px, rgba(255, 255, 255, 0.55), transparent 60%),
+    radial-gradient(1.5px 1.5px at 230px 160px, rgba(255, 255, 255, 0.6), transparent 60%);
+  background-size: 290px 210px, 370px 250px, 470px 330px;
+}
+@media (min-width: 640px) {
+  .evs { padding: 1.5rem 1.75rem 1.5rem; }
+}
+
+.evs-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.evs-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-display);
+  font-stretch: var(--lg-stretch);
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--evs-ink-2);
+}
+.evs-live i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22d3ee;
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.18), 0 0 14px rgba(34, 211, 238, 0.9);
+}
+.evs-seg {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.evs-seg button {
+  min-width: 2.75rem;
+  padding: 0.45rem 0.8rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--evs-ink-3);
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition: background-color 200ms var(--ease-standard), color 200ms var(--ease-standard);
+}
+.evs-seg button:hover { color: var(--evs-ink); }
+.evs-seg button[aria-pressed="true"] {
+  background: rgba(255, 255, 255, 0.16);
+  color: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.evs-body {
+  display: grid;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+  border-radius: 20px;
+  outline: none;
+}
+.evs-body:focus-visible { box-shadow: 0 0 0 2px rgba(165, 243, 252, 0.7); }
+@container (min-width: 620px) {
+  .evs-body {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    gap: 1.75rem;
+  }
+}
+
+.evs-orb {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
+}
+.evs-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  translate: -50% -50%;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.16);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 14px 34px -12px rgba(6, 10, 20, 0.6);
+  transition: transform 180ms var(--ease-standard), background-color 180ms var(--ease-standard);
+}
+.evs-play svg { width: 28px; height: 28px; }
+.evs-play:hover:not(:disabled) { transform: scale(1.07); background: rgba(255, 255, 255, 0.24); }
+.evs-play:active:not(:disabled) { transform: scale(0.96); }
+.evs-play:disabled { cursor: wait; }
+.evs-play:focus-visible { outline: 2px solid #a5f3fc; outline-offset: 4px; }
+/* Idle, the button calls for attention: a ring breathes out of it. */
+.evs-play::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(165, 243, 252, 0.7);
+  opacity: 0;
+  pointer-events: none;
+}
+.evs-spin {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2.5px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  animation: evs-spin 800ms linear infinite;
+}
+.evs-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 6%;
+  translate: -50% 0;
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-stretch: var(--lg-stretch);
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--evs-ink-3);
+}
+
+.evs-caption {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 11.5rem;
+  padding: 0 0.25rem;
+}
+.evs-meta {
+  margin: 0;
+  font-family: var(--font-display);
+  font-stretch: var(--lg-stretch);
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--evs-cyan);
+}
+.evs-words {
+  margin: 0.85rem 0 1rem;
+  font-family: var(--font-body);
+  font-size: clamp(1.125rem, 3.6cqi, 1.6rem);
+  line-height: 1.45;
+  color: var(--evs-ink);
+  text-wrap: pretty;
+}
+.evs-words span {
+  color: rgba(234, 240, 250, 0.3);
+  transition: color 240ms var(--ease-standard), text-shadow 240ms var(--ease-standard);
+}
+.evs-words span[data-lit] {
+  color: #ffffff;
+  text-shadow: 0 0 22px rgba(34, 211, 238, 0.45);
+}
+.evs-words--prompt { color: var(--evs-ink-2); }
+.evs-words--error {
+  padding-left: 0.9rem;
+  border-left: 2px solid var(--evs-cyan);
+  font-size: 1rem;
+  color: var(--evs-ink-2);
+}
+.evs-mark {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--evs-ink-3);
+}
+
+.evs-wave { margin-top: 0.75rem; }
+.evs .lg-wave { height: 3.25rem; }
+.evs .lg-wave__rest { stroke: rgba(234, 240, 250, 0.2); }
+.evs .lg-wave__head { stroke: #a5f3fc; }
+.evs .lg-wave:focus-visible { outline-color: #a5f3fc; }
+.evs-time {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.4rem;
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+  color: var(--evs-ink-3);
+}
+
+.evs-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.1rem;
+}
+.evs-tiles button {
+  flex: 1 1 calc(33.333% - 0.5rem);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 3rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.045);
+  color: var(--evs-ink-2);
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform 200ms var(--ease-standard),
+    background-color 200ms var(--ease-standard),
+    border-color 200ms var(--ease-standard),
+    color 200ms var(--ease-standard);
+}
+@container (max-width: 460px) {
+  .evs-tiles button { flex-basis: calc(50% - 0.5rem); }
+}
+.evs-tiles button svg {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  color: var(--evs-cyan);
+}
+.evs-tiles button:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(165, 243, 252, 0.35);
+  color: #ffffff;
+}
+.evs-tiles button:focus-visible { outline: 2px solid #a5f3fc; outline-offset: 2px; }
+.evs-tiles button[aria-pressed="true"] {
+  border-color: rgba(103, 232, 249, 0.6);
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.6), rgba(34, 211, 238, 0.28));
+  color: #ffffff;
+  box-shadow: 0 12px 30px -14px rgba(34, 211, 238, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.evs-tiles button[aria-pressed="true"] svg { color: #ffffff; }
+
+.evs-duo {
+  display: grid;
+  gap: 1.25rem;
+}
+@media (min-width: 1024px) {
+  .evs-duo {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    align-items: stretch;
+  }
+}
+.evs-placeholder {
+  min-height: 640px;
+  border-radius: 28px;
+  background: linear-gradient(160deg, #0c1428 0%, #060a14 65%);
+}
+@media (min-width: 1024px) {
+  .evs-placeholder { min-height: 520px; }
+}
+.evs-more {
+  margin: 1.1rem 0 0;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--lg-ink-3);
+}
+.evs-more a { color: var(--lg-ink); }
+/* The home band no longer needs a rule above the stage: the stage is lit. */
+.lg-hear .lg-hear-stage {
+  border-top: 0;
+  padding-top: 0;
+  margin-top: 2.75rem;
+}
+
+/* The sample conversation. */
+.evt {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 1.35rem 1.35rem 1.2rem;
+  border-radius: 28px;
+  border: 1px solid rgba(var(--lg-v-blue), 0.12);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.62));
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(18px) saturate(140%);
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    0 30px 70px -36px rgba(var(--lg-v-blue), 0.45);
+}
+.evt-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-display);
+  font-stretch: var(--lg-stretch);
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--lg-ink-3);
+}
+.evt-state {
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  color: var(--lg-foil);
+  letter-spacing: 0.2em;
+  transition: background-color 300ms var(--ease-standard), color 300ms var(--ease-standard);
+}
+.evt-state[data-on] {
+  color: #ffffff;
+  background: var(--lg-v-stamp);
+  box-shadow: 0 8px 20px -8px var(--lg-v-stamp-glow);
+}
+.evt-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 19rem;
+  margin: 1.1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.evt-msg {
+  max-width: 88%;
+  animation: evt-in 460ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.evt-msg[data-who="esmi"] { align-self: flex-end; }
+.evt-who {
+  display: block;
+  font-family: var(--font-display);
+  font-stretch: var(--lg-stretch);
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--lg-ink-3);
+}
+.evt-msg[data-who="esmi"] .evt-who { text-align: right; color: var(--lg-foil); }
+.evt-msg p {
+  margin: 0.3rem 0 0;
+  padding: 0.7rem 0.95rem;
+  border-radius: 18px;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+.evt-msg[data-who="caller"] p {
+  border: 1px solid var(--lg-hair);
+  border-bottom-left-radius: 6px;
+  background: #ffffff;
+  color: var(--lg-ink);
+}
+.evt-msg[data-who="esmi"] p {
+  border-bottom-right-radius: 6px;
+  background: linear-gradient(135deg, #1e40af 0%, #2451e6 55%, #0369a1 100%);
+  color: #ffffff;
+  box-shadow: 0 12px 26px -14px rgba(37, 99, 235, 0.8);
+}
+.evt-msg--typing p {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+  height: 2.6rem;
+}
+.evt-msg--typing[data-who="esmi"] { text-align: right; }
+.evt-msg--typing i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.5;
+  animation: evt-dot 1s ease-in-out infinite;
+}
+.evt-msg--typing i:nth-child(2) { animation-delay: 150ms; }
+.evt-msg--typing i:nth-child(3) { animation-delay: 300ms; }
+.evt-booked {
+  display: flex;
+  gap: 0.9rem;
+  align-items: center;
+  margin-top: 1rem;
+  padding: 0.95rem 1rem;
+  border-radius: 18px;
+  border: 1px solid rgba(var(--lg-v-partner), 0.4);
+  background: linear-gradient(135deg, rgba(var(--lg-v-blue), 0.08), rgba(var(--lg-v-partner), 0.14));
+  animation: evt-pop 600ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.evt-booked__icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #1e40af 0%, #2563eb 45%, #22d3ee 100%);
+  box-shadow: 0 10px 24px -8px rgba(var(--lg-v-partner), 0.6);
+}
+.evt-booked__icon svg { width: 21px; height: 21px; }
+.evt-booked p { margin: 0; }
+.evt-booked__when {
+  font-family: var(--font-display);
+  font-stretch: var(--lg-stretch);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--lg-ink);
+}
+.evt-booked__what {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--lg-ink-2);
+}
+.evt-booked__sms {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.2rem !important;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  color: #0e7490;
+}
+.evt-booked__sms svg { width: 15px; height: 15px; }
+.evt-foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: auto;
+  padding-top: 1rem;
+}
+.evt-foot p {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--lg-ink-3);
+}
+.evt-replay {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--lg-hair);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--lg-ink);
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+}
+.evt-replay svg { width: 13px; height: 13px; }
+.evt-replay:hover { border-color: var(--lg-foil); color: var(--lg-foil); }
+
+@keyframes evs-spin { to { transform: rotate(360deg); } }
+@keyframes evs-blink { 50% { opacity: 0.35; } }
+@keyframes evs-call {
+  0% { opacity: 0.8; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.75); }
+}
+@keyframes evt-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes evt-pop {
+  from { opacity: 0; transform: translateY(12px) scale(0.92); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes evt-dot {
+  0%, 100% { transform: translateY(0); opacity: 0.35; }
+  50% { transform: translateY(-4px); opacity: 0.9; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .evs[data-status="idle"] .evs-play::after { animation: evs-call 2.4s cubic-bezier(0.2, 0.8, 0.2, 1) infinite; }
+  .evs-live[data-on] i { animation: evs-blink 1.1s ease-in-out infinite; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .evt-msg, .evt-booked, .evt-msg--typing i { animation: none; }
+  .evs-tiles button, .evs-play { transition: none; }
+}
+
+/* ── The About cube stack (2026-09-25) ──────────────────────────────────
+   Owner feedback: the graphite-and-magenta cube picture didn't match the
+   blue site or delight anyone. The same idea — a stack of cubes with one
+   lit piece — is now built live in CSS 3D (AboutCubeStack.tsx): glass
+   cubes drop in and assemble, the stack turns and leans toward the
+   pointer, and the lit apex lifts off and hovers above the stack. */
+.acs {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  container-type: inline-size;
+}
+.acs-glow {
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  background:
+    radial-gradient(closest-side at 55% 50%, rgba(var(--lg-v-partner), 0.4), transparent 70%),
+    radial-gradient(closest-side at 40% 55%, rgba(var(--lg-v-blue), 0.35), transparent 75%);
+  filter: blur(24px);
+}
+.acs-floor {
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: 12%;
+  height: 12%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(var(--lg-v-deep), 0.35), transparent);
+  filter: blur(8px);
+}
+.acs-scene {
+  --s: 17.5cqi;
+  --gap: 1.08;
+  position: absolute;
+  inset: 0;
+  perspective: 1800px;
+}
+.acs-lean,
+.acs-world,
+.acs-cube,
+.acs-drop,
+.acs-lift {
+  transform-style: preserve-3d;
+}
+.acs-lean {
+  position: absolute;
+  left: 50%;
+  top: 56%;
+  width: 0;
+  height: 0;
+  transform: rotateX(var(--acs-lean-x, 0deg)) rotateY(var(--acs-lean-y, 0deg));
+}
+.acs-world {
+  position: absolute;
+  transform: rotateX(-28deg) rotateY(45deg) translateY(calc(var(--s) * 0.35));
+}
+.acs-cube {
+  position: absolute;
+  width: var(--s);
+  height: var(--s);
+  margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+  transform: translate3d(
+    calc(var(--x) * var(--s) * var(--gap)),
+    calc(var(--y) * var(--s) * var(--gap) * -1),
+    calc(var(--z) * var(--s) * var(--gap))
+  );
+}
+.acs-drop,
+.acs-lift {
+  position: absolute;
+  inset: 0;
+}
+.acs-f {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  backface-visibility: hidden;
+  box-shadow: inset 0 0 0 1px rgba(var(--lg-v-blue), 0.14);
+}
+.acs-f--front  { transform: translateZ(calc(var(--s) / 2)); }
+.acs-f--back   { transform: rotateY(180deg) translateZ(calc(var(--s) / 2)); }
+.acs-f--right  { transform: rotateY(90deg) translateZ(calc(var(--s) / 2)); }
+.acs-f--left   { transform: rotateY(-90deg) translateZ(calc(var(--s) / 2)); }
+.acs-f--top    { transform: rotateX(90deg) translateZ(calc(var(--s) / 2)); }
+.acs-f--bottom { transform: rotateX(-90deg) translateZ(calc(var(--s) / 2)); }
+/* Glass material, lit from above. */
+.acs-f--top {
+  background: linear-gradient(135deg, #ffffff 0%, #e6f0ff 60%, #d4e5ff 100%);
+}
+.acs-f--front,
+.acs-f--back {
+  background: linear-gradient(180deg, rgba(219, 234, 254, 0.96) 0%, rgba(147, 197, 253, 0.92) 100%);
+}
+.acs-f--left,
+.acs-f--right {
+  background: linear-gradient(180deg, rgba(191, 219, 254, 0.96) 0%, rgba(96, 165, 250, 0.9) 100%);
+}
+/* The lit cube. */
+.acs-cube--accent .acs-f {
+  border-color: rgba(207, 250, 254, 0.95);
+  box-shadow:
+    inset 0 0 22px rgba(255, 255, 255, 0.45),
+    0 0 34px rgba(var(--lg-v-partner), 0.55);
+}
+.acs-cube--accent .acs-f--top { background: linear-gradient(135deg, #cffafe 0%, #67e8f9 50%, #22d3ee 100%); }
+.acs-cube--accent .acs-f--front,
+.acs-cube--accent .acs-f--back { background: linear-gradient(180deg, #22d3ee 0%, #2563eb 100%); }
+.acs-cube--accent .acs-f--left,
+.acs-cube--accent .acs-f--right { background: linear-gradient(180deg, #38bdf8 0%, #1e40af 100%); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .acs-world { animation: acs-spin 44s linear infinite; }
+  .acs-drop { animation: acs-drop 1000ms cubic-bezier(0.34, 1.35, 0.5, 1) both; animation-delay: calc(var(--d) + 150ms); }
+  .acs-cube--accent .acs-lift { animation: acs-hover 5s ease-in-out 1.9s infinite both; }
+  .acs-glow { animation: acs-breathe 5s ease-in-out 1.9s infinite; }
+}
+@keyframes acs-spin {
+  from { transform: rotateX(-28deg) rotateY(45deg) translateY(calc(var(--s) * 0.35)); }
+  to   { transform: rotateX(-28deg) rotateY(405deg) translateY(calc(var(--s) * 0.35)); }
+}
+@keyframes acs-drop {
+  from { transform: translateY(calc(var(--s) * -4)) scale(0.2); }
+  to   { transform: none; }
+}
+/* The apex lifts clear of the stack and bobs there. */
+@keyframes acs-hover {
+  0%, 100% { transform: translateY(calc(var(--s) * -0.32)) rotateY(0deg); }
+  50% { transform: translateY(calc(var(--s) * -0.55)) rotateY(90deg); }
+}
+@keyframes acs-breathe {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+/* ── /try-esmi: three ways to meet Esmi (2026-09-25) ─────────────────────
+   Listen → chat → call, as three lit rows under the hero copy. The call row
+   and the closing band's number ring gently every few seconds. */
+.te-ways { margin-top: 2.5rem; }
+.te-ways__label {
+  margin: 0 0 0.85rem;
+  font-family: var(--font-display);
+  font-stretch: var(--lg-stretch);
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--lg-ink-3);
+}
+.te-ways ol {
+  display: grid;
+  gap: 0.6rem;
+  max-width: 30rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.te-ways a {
+  display: flex;
+  align-items: center;
+  gap: 0.95rem;
+  padding: 0.75rem 1rem 0.75rem 0.75rem;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--lg-ink);
+  text-decoration: none;
+  transition:
+    transform 220ms var(--ease-standard),
+    background-color 220ms var(--ease-standard),
+    border-color 220ms var(--ease-standard);
+}
+.te-ways a::after {
+  content: "→";
+  margin-left: auto;
+  color: var(--lg-ink-3);
+  transition: transform 220ms var(--ease-standard), color 220ms var(--ease-standard);
+}
+.te-ways a:hover {
+  transform: translateX(4px);
+  border-color: rgba(103, 232, 249, 0.45);
+  background: rgba(255, 255, 255, 0.08);
+}
+.te-ways a:hover::after { transform: translateX(3px); color: #67e8f9; }
+.te-ways a:focus-visible { outline: 2px solid #a5f3fc; outline-offset: 3px; }
+.te-ways__icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #1e40af 0%, #2563eb 45%, #22d3ee 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 10px 24px -8px rgba(var(--lg-v-partner), 0.6);
+}
+.te-ways__icon svg { width: 19px; height: 19px; stroke-width: 1.9; }
+.te-ways__text { display: grid; gap: 0.15rem; min-width: 0; }
+.te-ways__title {
+  font-family: var(--font-display);
+  font-stretch: var(--lg-stretch);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.te-ways__n {
+  margin-right: 0.35rem;
+  font-family: var(--font-display);
+  font-size: 0.6875rem;
+  color: #67e8f9;
+}
+.te-ways__desc {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--lg-ink-2);
+}
+.te-call {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.3rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--lg-ink);
+  font-family: var(--font-display);
+  font-stretch: var(--lg-stretch);
+  font-size: 0.9375rem;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  transition: background-color 200ms var(--ease-standard), border-color 200ms var(--ease-standard);
+}
+.te-call:hover { background: rgba(255, 255, 255, 0.12); border-color: rgba(103, 232, 249, 0.5); }
+.te-call svg { width: 17px; height: 17px; color: #67e8f9; }
+@media (prefers-reduced-motion: no-preference) {
+  .te-ways a[data-call] .te-ways__icon svg,
+  .te-call svg { animation: te-ring 4s ease-in-out 1.5s infinite; transform-origin: 50% 60%; }
+}
+@keyframes te-ring {
+  0%, 12%, 100% { transform: rotate(0); }
+  2%, 6%, 10% { transform: rotate(-14deg); }
+  4%, 8% { transform: rotate(14deg); }
 }

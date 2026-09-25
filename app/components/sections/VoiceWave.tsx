@@ -23,6 +23,10 @@ const PHRASES: [number, number][] = [
   [0.66, 0.94],
 ];
 
+/* Rounded: Math.sin can differ in the last digits between the server's and
+   the browser's engines, and unrounded values broke hydration. */
+const round = (v: number) => Math.round(v * 100) / 100;
+
 const AMPS = Array.from({ length: N }, (_, i) => {
   const t = i / (N - 1);
   let gate = 0;
@@ -33,13 +37,25 @@ const AMPS = Array.from({ length: N }, (_, i) => {
       break;
     }
   }
-  if (gate < 0.04) return 0.045 + grain(i) * 0.04;
+  if (gate < 0.04) return round(0.045 + grain(i) * 0.04);
   const spike = 0.22 + grain(i) * 0.78;
   const formant = 0.5 + 0.5 * Math.abs(Math.sin(i * 0.61 + grain(i + 3)));
-  return Math.min(1, gate * spike * formant);
+  return round(Math.min(1, gate * spike * formant));
 });
 
 const STEP = W / N;
+
+/* The same silhouette, read as a loudness curve (0–1) at a point in the clip.
+   The voice orb uses it to move with the recording without needing an
+   AnalyserNode (the clip is served cross-origin). */
+export function envelopeAt(ratio: number): number {
+  const x = Math.max(0, Math.min(1, ratio)) * (N - 1);
+  const i = Math.floor(x);
+  const f = x - i;
+  const a = AMPS[i] ?? 0;
+  const b = AMPS[Math.min(N - 1, i + 1)] ?? 0;
+  return a + (b - a) * f;
+}
 
 export default function VoiceWave({
   progress,
@@ -48,7 +64,10 @@ export default function VoiceWave({
   label,
   valueText,
   onSeek,
+  vivid = false,
 }: {
+  /** Blue → cyan played stroke, for the dark listening stage. */
+  vivid?: boolean;
   progress: number;
   playing: boolean;
   seekable: boolean;
@@ -58,6 +77,7 @@ export default function VoiceWave({
 }) {
   const uid = useId().replace(/:/g, "");
   const clipId = `lg-wave-clip-${uid}`;
+  const gradId = `lg-wave-grad-${uid}`;
   const played = Math.max(0, Math.min(1, progress));
   const headX = played * W;
 
@@ -96,18 +116,29 @@ export default function VoiceWave({
           <clipPath id={clipId}>
             <rect x="0" y="0" width={Math.max(0, headX)} height={H} />
           </clipPath>
+          {vivid ? (
+            <linearGradient id={gradId} x1="0" x2={W} y1="0" y2="0" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stopColor="#3b82f6" />
+              <stop offset="0.6" stopColor="#22d3ee" />
+              <stop offset="1" stopColor="#a5f3fc" />
+            </linearGradient>
+          ) : null}
         </defs>
         <g className="lg-wave__rest">
           {AMPS.map((amp, i) => {
-            const x = (i + 0.5) * STEP;
-            const h = Math.max(2.2, amp * (H - 6));
+            const x = round((i + 0.5) * STEP);
+            const h = round(Math.max(2.2, amp * (H - 6)));
             return <line key={i} x1={x} x2={x} y1={MID - h / 2} y2={MID + h / 2} />;
           })}
         </g>
-        <g className="lg-wave__played" clipPath={`url(#${clipId})`}>
+        <g
+          className="lg-wave__played"
+          clipPath={`url(#${clipId})`}
+          style={vivid ? { stroke: `url(#${gradId})` } : undefined}
+        >
           {AMPS.map((amp, i) => {
-            const x = (i + 0.5) * STEP;
-            const h = Math.max(2.2, amp * (H - 6));
+            const x = round((i + 0.5) * STEP);
+            const h = round(Math.max(2.2, amp * (H - 6)));
             return <line key={i} x1={x} x2={x} y1={MID - h / 2} y2={MID + h / 2} />;
           })}
         </g>
