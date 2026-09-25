@@ -57,8 +57,8 @@ export default function CardActions() {
           role="img"
           aria-label={`QR code linking to ${QR_URL}`}
         >
-          <rect x="-3" y="-3" width={QR_SIZE + 6} height={QR_SIZE + 6} fill="#F6F1EA" />
-          <path d={QR_PATH} fill="#1C1C1C" />
+          <rect x="-3" y="-3" width={QR_SIZE + 6} height={QR_SIZE + 6} fill="#FFFFFF" />
+          <path d={QR_PATH} fill="#060A14" />
         </svg>
         <p>Scan to open this card</p>
         <form method="dialog">

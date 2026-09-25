@@ -1,115 +1,258 @@
 /* Digital card — orchelix.com/jorge. Scoped to .dc; nothing here leaks.
-   Night ground and the ring's night blue are the brand's "On night" values. */
+   Rebuilt 2026-09-25 in the vivid palette: blue-black night, blue → cyan
+   light, a glass pass for the card and one glass list for the actions. */
 
 .dc {
-  --dc-ground: #121317;
-  --dc-ink: #edece8;
-  --dc-ink-2: #c9c8c4;   /* 11.6:1 on ground */
-  --dc-ink-3: #a3a29e;   /* 7.5:1 */
-  --dc-hair: #2a2c33;
-  --dc-blue: #7b8cff;    /* ring + primary action; 6.6:1 on ground */
-  --dc-blue-ink: #121317;
+  --dc-ground: #060a14;
+  --dc-ink: #eaf0fa;
+  --dc-ink-2: rgba(234, 240, 250, 0.82);
+  --dc-ink-3: rgba(234, 240, 250, 0.62);
+  --dc-hair: rgba(234, 240, 250, 0.1);
+  --dc-cyan: #67e8f9;
+  --dc-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   min-height: 100dvh;
   background: var(--dc-ground);
   color: var(--dc-ink);
   display: grid;
   place-items: center;
-  padding: max(2.5rem, env(safe-area-inset-top)) 1.5rem max(2rem, env(safe-area-inset-bottom));
+  padding: max(2.25rem, env(safe-area-inset-top)) 1.25rem max(2rem, env(safe-area-inset-bottom));
   font-family: var(--font-display), system-ui, sans-serif;
   font-stretch: var(--lg-stretch, 125%);
 }
 
-.dc__card {
+/* The sky: drifting blue and cyan light over a faint star field. */
+.dc__sky,
+.dc__sky::after {
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+}
+.dc__sky {
+  inset: -25%;
+  background:
+    radial-gradient(34% 30% at 50% 26%, rgba(37, 99, 235, 0.55), transparent 70%),
+    radial-gradient(26% 24% at 72% 12%, rgba(34, 211, 238, 0.32), transparent 70%),
+    radial-gradient(30% 30% at 20% 88%, rgba(34, 211, 238, 0.24), transparent 70%),
+    radial-gradient(34% 30% at 86% 80%, rgba(30, 64, 175, 0.5), transparent 70%);
+  filter: blur(40px);
+}
+.dc::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.55;
+  background-image:
+    radial-gradient(1px 1px at 20px 30px, rgba(255, 255, 255, 0.8), transparent 60%),
+    radial-gradient(1px 1px at 140px 90px, rgba(255, 255, 255, 0.55), transparent 60%),
+    radial-gradient(1.5px 1.5px at 260px 180px, rgba(255, 255, 255, 0.65), transparent 60%);
+  background-size: 310px 230px, 410px 290px, 530px 370px;
+}
+
+.dc__stack {
   width: 100%;
-  max-width: 24rem;
+  max-width: 25rem;
   display: flex;
   flex-direction: column;
+  gap: 1.1rem;
 }
 
+/* ── The pass ─────────────────────────────────────────────────────────── */
+.dc__tilt {
+  --rx: 0deg;
+  --ry: 0deg;
+  --mx: 30%;
+  --my: 20%;
+  perspective: 1100px;
+}
+.dc__pass {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 1.586;
+  padding: 1.35rem 1.4rem 1.15rem;
+  border-radius: 22px;
+  background:
+    radial-gradient(90% 80% at 0% 0%, rgba(37, 99, 235, 0.55), transparent 60%),
+    radial-gradient(80% 90% at 100% 100%, rgba(34, 211, 238, 0.28), transparent 60%),
+    linear-gradient(150deg, #0f1a38 0%, #0a1024 55%, #070b17 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 40px 80px -30px rgba(37, 99, 235, 0.75),
+    0 18px 40px -24px rgba(0, 0, 0, 0.8);
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+  transform-style: preserve-3d;
+  transition: transform 120ms linear;
+}
+/* A 1px gradient edge, cyan to blue. */
+.dc__pass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(140deg, rgba(103, 232, 249, 0.85), rgba(59, 130, 246, 0.15) 45%, rgba(59, 130, 246, 0.7));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+/* The holographic sheen: a soft light where the pointer is, and a thin
+   rainbow-free iridescent band in the brand's own two colours. */
+.dc__sheen {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(40% 55% at var(--mx) var(--my), rgba(165, 243, 252, 0.28), transparent 70%),
+    linear-gradient(115deg, transparent 30%, rgba(103, 232, 249, 0.14) 45%, rgba(147, 197, 253, 0.2) 50%, transparent 62%);
+  background-size: 100% 100%, 250% 100%;
+  background-position: 0 0, var(--mx) 0;
+  mix-blend-mode: screen;
+}
+.dc__pass-top {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
 .dc__ring {
-  width: 4.5rem;
+  width: 2.9rem;
   height: auto;
-  color: var(--dc-blue);
   overflow: visible;
+  filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.45));
 }
-/* The ring draws once and holds. Paths are normalized to pathLength=1. */
-@media (prefers-reduced-motion: no-preference) {
-  .dc__ring path {
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
-    animation: dc-draw 900ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    animation-delay: calc(var(--i) * 25ms);
-  }
-}
-@keyframes dc-draw { to { stroke-dashoffset: 0; } }
-
 .dc__org {
-  margin: 1.6rem 0 0;
-  font-size: 0.8125rem;
+  margin: 0;
+  font-size: 0.875rem;
   font-weight: 300;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--dc-ink);
 }
 .dc__org span {
   display: block;
-  margin-top: 0.45rem;
-  font-size: 0.5625rem;
+  margin-top: 0.35rem;
+  font-size: 0.5rem;
   font-weight: 500;
   letter-spacing: 0.34em;
   color: var(--dc-ink-3);
 }
-
+.dc__who { margin-top: auto; }
 .dc__name {
-  margin: 3.2rem 0 0;
-  font-size: clamp(1.6rem, 7vw, 2rem);
+  margin: 0;
+  font-size: clamp(1.45rem, 6.6vw, 1.85rem);
   font-weight: 300;
-  line-height: 1.1;
+  line-height: 1.08;
   letter-spacing: 0.07em;
   text-transform: uppercase;
 }
 .dc__title {
-  margin: 0.7rem 0 0;
-  font-size: 0.6875rem;
+  margin: 0.55rem 0 0;
+  font-size: 0.625rem;
   font-weight: 500;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
-  color: var(--dc-ink-2);
+  background: linear-gradient(95deg, #93c5fd, #67e8f9);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.dc__pass-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.95rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid rgba(234, 240, 250, 0.12);
+  font-size: 0.5rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--dc-ink-3);
 }
 
+/* ── Save contact ─────────────────────────────────────────────────────── */
 .dc__save {
-  margin-top: 2.4rem;
-  display: block;
-  text-align: center;
-  padding: 1.05rem 1.25rem;
-  background: var(--dc-blue);
-  color: var(--dc-blue-ink);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  min-height: 3.4rem;
+  border-radius: 999px;
+  background: linear-gradient(110deg, #1e40af 0%, #2451e6 50%, #0369a1 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 14px 36px -10px rgba(34, 211, 238, 0.55);
+  color: #ffffff;
   font-size: 0.8125rem;
   font-weight: 500;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   text-decoration: none;
-  transition: filter 160ms ease;
+  overflow: hidden;
+  transition: transform 180ms var(--dc-ease), filter 180ms var(--dc-ease);
 }
-.dc__save:hover { filter: brightness(1.08); }
+.dc__save svg { width: 18px; height: 18px; }
+.dc__save:hover { filter: brightness(1.1) saturate(1.1); transform: translateY(-1px); }
+.dc__save:active { transform: translateY(1px); }
+/* A glint runs across the button now and then. */
+.dc__save::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.35) 50%, transparent 65%);
+  transform: translateX(-120%);
+  pointer-events: none;
+}
 
+/* ── The action list ─────────────────────────────────────────────────── */
 .dc__rows {
+  margin: 0;
+  padding: 0.35rem;
   list-style: none;
-  margin: 2rem 0 0;
-  padding: 0;
-  border-top: 1px solid var(--dc-hair);
+  border-radius: 22px;
+  border: 1px solid var(--dc-hair);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
 }
+.dc__rows li + li { border-top: 1px solid rgba(234, 240, 250, 0.06); }
 .dc__rows a {
-  display: grid;
-  grid-template-columns: 4.5rem minmax(0, 1fr);
-  align-items: baseline;
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--dc-hair);
-  color: var(--dc-ink);
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.75rem 0.7rem;
+  border-radius: 16px;
+  color: inherit;
   text-decoration: none;
+  transition: background-color 200ms var(--dc-ease);
 }
+.dc__rows a:hover { background: rgba(255, 255, 255, 0.06); }
+.dc__icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #1e40af 0%, #2563eb 45%, #22d3ee 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 8px 20px -8px rgba(34, 211, 238, 0.6);
+}
+.dc__icon svg { width: 18px; height: 18px; stroke-width: 1.9; }
+.dc__text { display: grid; gap: 0.2rem; min-width: 0; flex: 1; }
 .dc__label {
-  font-size: 0.625rem;
+  font-size: 0.5625rem;
   font-weight: 500;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -119,48 +262,59 @@
   font-size: 0.9375rem;
   font-weight: 400;
   letter-spacing: 0.04em;
+  color: var(--dc-ink);
   overflow-wrap: anywhere;
 }
-.dc__rows a:hover .dc__value { color: var(--dc-blue); }
+.dc__note {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-body), Georgia, serif;
+  font-stretch: normal;
+  font-size: 0.75rem;
+  color: var(--dc-cyan);
+}
+.dc__note i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22d3ee;
+  box-shadow: 0 0 8px #22d3ee;
+}
+.dc__go {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: var(--dc-ink-3);
+  transition: transform 200ms var(--dc-ease), color 200ms var(--dc-ease);
+}
+.dc__rows a:hover .dc__go { color: var(--dc-cyan); transform: translate(2px, -2px); }
 
+/* ── Share / Show QR ─────────────────────────────────────────────────── */
 .dc__actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
-  margin-top: 1.5rem;
+  gap: 0.6rem;
 }
-.dc__actions button,
-.dc__qr button {
-  appearance: none;
-  background: transparent;
-  border: 1px solid var(--dc-hair);
+.dc__actions button {
+  min-height: 3rem;
+  border-radius: 999px;
+  border: 1px solid rgba(234, 240, 250, 0.16);
+  background: rgba(255, 255, 255, 0.05);
   color: var(--dc-ink);
-  padding: 0.85rem 0.5rem;
   font: inherit;
   font-size: 0.6875rem;
   font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-.dc__actions button:hover { border-color: var(--dc-ink-3); }
-
-.dc a:focus-visible,
-.dc button:focus-visible {
-  outline: 2px solid var(--dc-blue);
-  outline-offset: 3px;
-}
-
-.dc__foot {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  margin: 2.2rem 0 0;
-  font-size: 0.5625rem;
-  font-weight: 500;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--dc-ink-3);
+  cursor: pointer;
+  transition: background-color 200ms var(--dc-ease), border-color 200ms var(--dc-ease);
+}
+.dc__actions button:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(103, 232, 249, 0.5); }
+.dc a:focus-visible,
+.dc button:focus-visible {
+  outline: 2px solid var(--dc-cyan);
+  outline-offset: 3px;
 }
 
 /* Show QR — a native dialog.
@@ -169,28 +323,97 @@
    is centred by the UA stylesheet's own `margin: auto` against `inset: 0`,
    and Tailwind's preflight resets `*, ::backdrop, ::after, ::before` to
    `margin: 0`, which beats the UA rule and pins the dialog to the top-left
-   corner. Measured before this line: the QR sat at (0, 0) in a 390x844
-   viewport instead of centred. Restoring it here puts the platform's own
-   centring back rather than reimplementing it with transforms. */
+   corner. Restoring it here puts the platform's own centring back rather
+   than reimplementing it with transforms.
+
+   The code itself stays dark on white — scanners want contrast, not
+   brand colour. */
 .dc__qr {
   margin: auto;
   border: 0;
-  padding: 1.75rem;
+  padding: 1.5rem;
   width: min(22rem, calc(100vw - 2rem));
   max-height: calc(100dvh - 2rem);
   overflow: auto;
-  background: #f6f1ea;
-  color: #1c1c1c;
+  border-radius: 26px;
+  background: linear-gradient(160deg, #0f1a38, #070b17);
+  box-shadow: 0 0 0 1px rgba(103, 232, 249, 0.4), 0 40px 90px -30px rgba(37, 99, 235, 0.9);
+  color: var(--dc-ink, #eaf0fa);
   text-align: center;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-stretch: var(--lg-stretch, 125%);
 }
-.dc__qr::backdrop { background: rgba(18, 19, 23, 0.86); }
-.dc__qr svg { display: block; width: 100%; height: auto; }
+.dc__qr::backdrop { background: rgba(6, 10, 20, 0.82); backdrop-filter: blur(6px); }
+.dc__qr svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+}
 .dc__qr p {
-  margin: 1rem 0 1.25rem;
+  margin: 1rem 0 1.1rem;
   font-size: 0.625rem;
   font-weight: 500;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #5f5f5b;
+  color: rgba(234, 240, 250, 0.7);
 }
-.dc__qr button { color: #1c1c1c; border-color: #cfc8be; width: 100%; }
+.dc__qr button {
+  width: 100%;
+  min-height: 2.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(234, 240, 250, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  color: #eaf0fa;
+  font: inherit;
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+/* ── Motion ──────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  .dc__sky { animation: dc-sky 26s ease-in-out infinite alternate; }
+  /* The pass swings into place, once. */
+  .dc__tilt { animation: dc-arrive 1100ms cubic-bezier(0.2, 0.9, 0.25, 1) both; }
+  /* On a phone (no hover) it floats and its sheen drifts on its own. */
+  @media (hover: none) {
+    .dc__pass { animation: dc-float 7s ease-in-out 1.2s infinite; }
+    .dc__sheen { animation: dc-sheen 7s ease-in-out 1.2s infinite; }
+  }
+  /* The ring draws once and holds. Paths are normalized to pathLength=1. */
+  .dc__ring path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: dc-draw 1100ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: calc(400ms + var(--i) * 30ms);
+  }
+  .dc__in { animation: dc-up 700ms var(--dc-ease) both; animation-delay: calc(500ms + var(--d, 0) * 120ms); }
+  .dc__save::after { animation: dc-glint 5s ease-in-out 2.2s infinite; }
+}
+@keyframes dc-sky {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(-4%, 3%, 0) scale(1.08); }
+}
+@keyframes dc-arrive {
+  from { opacity: 0; transform: translateY(40px) rotateX(38deg) scale(0.92); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes dc-float {
+  0%, 100% { transform: rotateX(4deg) rotateY(-6deg) translateY(0); }
+  50% { transform: rotateX(-3deg) rotateY(6deg) translateY(-6px); }
+}
+@keyframes dc-sheen {
+  0%, 100% { background-position: 0 0, 10% 0; }
+  50% { background-position: 0 0, 90% 0; }
+}
+@keyframes dc-draw { to { stroke-dashoffset: 0; } }
+@keyframes dc-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes dc-glint {
+  0%, 70% { transform: translateX(-120%); }
+  100% { transform: translateX(120%); }
+}
