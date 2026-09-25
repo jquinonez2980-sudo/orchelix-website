@@ -1,9 +1,9 @@
 /* The Orchelix lockup: the ring mark plus the name, set live.
 
    The mark changed 2026-09-11 from the helix to the ring — a circle with one
-   ribbon crossing it, vectorized from Jorge's own drawing. Only the file
-   behind /orchelix-mark.svg and the intrinsic size below changed; the name
-   and its setting did not.
+   ribbon crossing it, vectorized from Jorge's own drawing. On 2026-09-25 it
+   took the vivid palette: a blue → cyan gradient, with a lighter night
+   version for dark navs.
 
    The name used to be part of `orchelix-logo.svg` as SVG <text> in Inter —
    which an <img> cannot load, so it rendered in whatever sans the visitor's
@@ -21,20 +21,30 @@ import Image from "next/image";
 export default function Lockup({ tagline = true }: { tagline?: boolean }) {
   return (
     <span className="lg-lockup">
-      <Image
-        src="/orchelix-mark.svg"
-        alt=""
-        aria-hidden="true"
-        width={554}
-        height={608}
-        unoptimized
-        className="lg-lockup__mark"
-        /* The homepage hero's 3D ring flies into this mark as the hero scrolls
-           away, crossfading with it, and the mark glows the first time the
-           ring lands. Nothing here depends on it: if HeroRing never mounts,
-           the mark is at full opacity, its resting state. */
-        data-ring-target=""
-      />
+      {/* The mark in the vivid gradient: the day version on paper, the
+          night version (lighter stops) on a dark nav. Both sit in one box so
+          the homepage ring still has a single target to fly into, fade and
+          glow (`data-ring-target`). */}
+      <span className="lg-lockup__mark" data-ring-target="">
+        <Image
+          src="/orchelix-mark.svg"
+          alt=""
+          aria-hidden="true"
+          width={554}
+          height={608}
+          unoptimized
+          className="lg-lockup__img lg-lockup__img--day"
+        />
+        <Image
+          src="/orchelix-mark-night-gradient.svg"
+          alt=""
+          aria-hidden="true"
+          width={554}
+          height={608}
+          unoptimized
+          className="lg-lockup__img lg-lockup__img--night"
+        />
+      </span>
       <span className="lg-lockup__words" aria-hidden="true">
         <span className="lg-lockup__name">Orchelix</span>
         {tagline ? <span className="lg-lockup__tag">AI Consulting</span> : null}

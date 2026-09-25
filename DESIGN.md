@@ -257,6 +257,16 @@ off-screen or the tab is hidden, and settles to a still frame under
   `planFacts()` in the pricing page, which the rate schedule table also
   reads. It replaced `PricingGrowthChart` and `pricing-visual.png`.
 
+### The logo in the vivid palette (2026-09-25)
+
+The brand kit (`brand/`, copies in `public/`) moved to the vivid colours.
+Solid blue `#2451E6` / night `#60A5FA` on `#060A14` is the official logo
+(print, email, cards, favicon). A blue → cyan gradient ring is the digital
+version: the nav mark is `orchelix-mark.svg` (day gradient) with
+`orchelix-mark-night-gradient.svg` swapped in on dark navs, both at the heavy
+weight so the 32px ring holds its line. The old `filter: invert` knock-out on
+dark navs is gone. `brand/README.md` has the full rules.
+
 ## Current direction (2026-09-11) — read this first
 
 This document was written across three rebrands and much of it still describes the earlier ones. **Where anything below conflicts with this section, this section wins,** and the conflicting passage is history rather than instruction.

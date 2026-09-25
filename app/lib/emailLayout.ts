@@ -24,15 +24,15 @@ export const esc = (s: string): string =>
 const C = {
   paper: "#F5F1EA",      // --lg-field
   stock: "#F8F4ED",      // --lg-stock, the card body
-  night: "#14171C",      // --lg-night-field
+  night: "#060A14",      // --lg-night-field (vivid palette; matches email-logo.png)
   ink: "#12141A",        // --lg-ink
   ink3: "#696969",       // --lg-ink-3 on stock (5.3:1)
   hair: "#DCD9D4",       // --lg-hair on stock
   rule: "#908F8E",       // --lg-rule on stock
-  nightInk: "#E8EAEE",   // --lg-night-ink
+  nightInk: "#EAF0FA",   // --lg-night-ink
   nightInk2: "#C6C8CC",  // --lg-night-ink-2 on night
   nightInk3: "#B1B3B7",  // --lg-night-ink-3 on night
-  blue: "#3657B1",       // --lg-foil
+  blue: "#2451E6",       // --lg-foil (5.8:1 on stock)
   white: "#FFFFFF",      // --lg-foil-ink
 };
 
