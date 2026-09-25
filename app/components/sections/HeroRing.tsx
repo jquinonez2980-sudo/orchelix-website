@@ -84,6 +84,12 @@ export default function HeroRing() {
     const canvas = canvasRef.current;
     if (!stage || !ring || !canvas) return;
 
+    /* Phones: the stage is hidden (globals.css, below 900px) and the nav
+       carries the mark from the first frame, so there is nothing to render
+       and nothing to hand off. Skipping here also keeps three.js off the
+       phone entirely. */
+    if (window.matchMedia("(max-width: 899px)").matches) return;
+
     const hero = stage.closest("section") as HTMLElement | null;
     const navMark = document.querySelector<SVGElement>("[data-ring-target]");
 
