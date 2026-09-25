@@ -250,6 +250,12 @@ off-screen or the tab is hidden, and settles to a still frame under
   sector's line and trades. Both use the `.lg-console` material and read
   their words from the page copy. They replaced the pink/grey PNGs and
   their pulse overlays.
+- **/pricing — `PlanConsole`**: the three plans as lit glass columns drawn
+  to scale by included minutes. They rise on view and lean toward the
+  pointer, and the lit plan cycles until a visitor picks one; the caption
+  gives that plan's monthly price, minutes and setup. Numbers come from
+  `planFacts()` in the pricing page, which the rate schedule table also
+  reads. It replaced `PricingGrowthChart` and `pricing-visual.png`.
 
 ## Current direction (2026-09-11) — read this first
 
