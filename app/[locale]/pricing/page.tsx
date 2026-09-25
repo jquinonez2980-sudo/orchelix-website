@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import JsonLd from "@/app/components/JsonLd";
 import Nav from "@/app/components/sections/Nav";
 import Footer from "@/app/components/sections/Footer";
-import PricingGrowthChart from "@/app/components/sections/PricingGrowthChart";
+import PlanConsole, { type PlanFacts } from "@/app/components/sections/PlanConsole";
 import { ESMI_PILOT_PAYMENT_LINK } from "@/app/lib/pilotPayment";
 import { isLocale, localesFor, localizedHref, type Locale } from "@/app/i18n/config";
 import { getDictionary } from "@/app/i18n/dictionaries";
@@ -18,7 +18,6 @@ import {
   Band,
   Disclosure,
 } from "@/app/components/ledger";
-import pricingVisual from "@/public/pricing-visual.png";
 
 const SITE_URL = "https://www.orchelix.com";
 
@@ -27,6 +26,19 @@ const SITE_URL = "https://www.orchelix.com";
    conversations, so they go to the Cal.com booking page. */
 const PILOT_HREF = ESMI_PILOT_PAYMENT_LINK;
 const SCALE_HREF = "/book?intent=scale";
+
+/* The three plans' headline numbers — the one copy both the opening console
+   and the rate schedule read, so the picture can never disagree with the
+   table. Plan names and prices are not translated; `setup` for Scale is the
+   localized "Custom". */
+function planFacts(t: Messages): PlanFacts[] {
+  const v = t.pages.pricing.values;
+  return [
+    { name: "Local / Starter", monthly: "$299", setup: "$499", minutes: "300", minutesValue: 300 },
+    { name: "Growth", monthly: "$599", setup: "$799", minutes: "800", minutesValue: 800 },
+    { name: "Scale", monthly: "$999", setup: v.custom, minutes: "1,500", minutesValue: 1500 },
+  ];
+}
 
 export function generateStaticParams() {
   return localesFor("/pricing").map((locale) => ({ locale }));
@@ -95,7 +107,28 @@ export default async function PricingPage({ params }: PageProps<"/[locale]">) {
             </div>
 
             <div className="flex flex-col items-end gap-8">
-              <PricingGrowthChart src={pricingVisual} max={300} />
+              <div style={{ width: "100%", maxWidth: 440 }}>
+                <PlanConsole
+                  plans={planFacts(t)}
+                  labels={
+                    locale === "es"
+                      ? {
+                          perMonth: "/ mes",
+                          minutes: "min incluidos",
+                          setup: "Instalación",
+                          pick: "Elige un plan",
+                          aria: "Tres planes: Local / Starter $299 al mes, Growth $599, Scale $999.",
+                        }
+                      : {
+                          perMonth: "/ month",
+                          minutes: "min included",
+                          setup: "Setup",
+                          pick: "Pick a plan",
+                          aria: "Three plans: Local / Starter $299 a month, Growth $599, Scale $999.",
+                        }
+                  }
+                />
+              </div>
               <div className="flex flex-wrap items-center gap-x-7 gap-y-4 lg:justify-end">
                 <Stamp href={PILOT_HREF}>{p.startPilot}</Stamp>
                 <QuietAction href={`${localizedHref("/book", locale)}?intent=demo`}>
@@ -254,10 +287,13 @@ function RateSchedule({ t, locale }: { t: Messages; locale: Locale }) {
 
   /* Plan names and prices are the same commercial facts in both languages and
      are not translated. Only the row labels and the descriptive cells are. */
+  const plans = planFacts(t);
+  const col = (k: "monthly" | "setup" | "minutes") =>
+    plans.map((pl) => pl[k]) as [string, string, string];
   const rows: { term: string; cells: [string, string, string]; strong?: boolean }[] = [
-    { term: p.terms.monthly, cells: ["$299", "$599", "$999"], strong: true },
-    { term: p.terms.setup, cells: ["$499", "$799", v.custom] },
-    { term: p.terms.minutes, cells: ["300", "800", "1,500"] },
+    { term: p.terms.monthly, cells: col("monthly"), strong: true },
+    { term: p.terms.setup, cells: col("setup") },
+    { term: p.terms.minutes, cells: col("minutes") },
     { term: p.terms.overage, cells: ["$0.25", "$0.20", "$0.22"] },
     { term: p.terms.numbers, cells: [v.starterNumbers, v.growthNumbers, v.scaleNumbers] },
     { term: p.terms.channels, cells: [v.starterChannels, v.growthChannels, v.scaleChannels] },
@@ -266,7 +302,7 @@ function RateSchedule({ t, locale }: { t: Messages; locale: Locale }) {
     { term: p.terms.support, cells: [v.starterSupport, v.growthSupport, v.scaleSupport] },
   ];
 
-  const head = ["", "Local / Starter", "Growth", "Scale"];
+  const head = ["", ...plans.map((pl) => pl.name)];
   const actions = [
     { href: PILOT_HREF, label: p.startPilotShort },
     { href: PILOT_HREF, label: p.startPilotShort },
