@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Nav from "@/app/components/sections/Nav";
 import Footer from "@/app/components/sections/Footer";
-import ConstellationCanvas from "@/app/components/sections/ConstellationCanvas";
+import AgentCore from "@/app/components/sections/AgentCore";
 import JsonLd from "@/app/components/JsonLd";
 import { isLocale, localesFor, localizedHref } from "@/app/i18n/config";
 import { getDictionary } from "@/app/i18n/dictionaries";
@@ -88,7 +88,14 @@ export default async function SolutionsPage({ params }: PageProps<"/[locale]">) 
               </Prose>
             </div>
             <div className="flex flex-col items-end gap-8">
-              <ConstellationCanvas max={320} />
+              <AgentCore
+                max={520}
+                labels={
+                  locale === "es"
+                    ? { core: "Consola", ring: "Registro de auditoría" }
+                    : { core: "Console", ring: "Audit trail" }
+                }
+              />
               <div className="flex flex-wrap items-center gap-x-7 gap-y-4 lg:justify-end">
                 <Stamp href={localizedHref("/book", locale)}>{t.common.bookPilot}</Stamp>
                 <QuietAction href="/try-esmi">{t.common.hearRealCall}</QuietAction>

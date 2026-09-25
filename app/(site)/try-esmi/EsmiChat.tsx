@@ -402,13 +402,13 @@ export default function EsmiChat({
             style={{
               width: 36,
               height: 36,
-              background: "#2E323E",
-              borderRadius: 0,
+              background: "linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #0891b2 100%)",
+              borderRadius: 12,
               padding: 6,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              border: "1px solid rgba(183,19,90,0.28)",
+              border: "1px solid rgba(255,255,255,0.5)",
               boxShadow: "none",
             }}
           >
@@ -427,8 +427,8 @@ export default function EsmiChat({
               right: -1,
               width: 10,
               height: 10,
-              borderRadius: 0,
-              background: "var(--lg-tick)",
+              borderRadius: "50%",
+              background: "#22d3ee",
               border: "2px solid var(--lg-field)",
               display: "block",
             }}
@@ -472,9 +472,9 @@ export default function EsmiChat({
                   letterSpacing: "0.08em",
                   textTransform: "uppercase",
                   padding: "2px 6px",
-                  borderRadius: 0,
-                  border: locale === lang ? "1px solid rgba(183,19,90,0.5)" : "1px solid transparent",
-                  background: locale === lang ? "rgba(183,19,90,0.10)" : "transparent",
+                  borderRadius: 999,
+                  border: locale === lang ? "1px solid rgba(37,99,235,0.5)" : "1px solid transparent",
+                  background: locale === lang ? "rgba(37,99,235,0.10)" : "transparent",
                   color: locale === lang ? FOIL : "var(--lg-ink-3)",
                   cursor: "pointer",
                   transition: "all 0.15s",
@@ -503,7 +503,7 @@ export default function EsmiChat({
             color: "var(--lg-ink-3)",
             background: "transparent",
             border: "1px solid var(--lg-hair)",
-            borderRadius: 0,
+            borderRadius: 999,
             padding: "6px 10px",
             cursor: "pointer",
             transition: "color 0.15s, border-color 0.15s",
@@ -511,7 +511,7 @@ export default function EsmiChat({
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.color = "var(--lg-ink)";
-            e.currentTarget.style.borderColor = "rgba(183,19,90,0.4)";
+            e.currentTarget.style.borderColor = "rgba(37,99,235,0.4)";
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.color = "var(--lg-ink-3)";
@@ -580,7 +580,7 @@ export default function EsmiChat({
           style={{
             flex: 1,
             resize: "none",
-            borderRadius: 0,
+            borderRadius: 14,
             border: "1px solid var(--lg-hair)",
             background: "rgba(46,50,62,0.05)",
             padding: "10px 14px",
@@ -595,8 +595,8 @@ export default function EsmiChat({
             cursor: loading ? "not-allowed" : "text",
           }}
           onFocus={(e) => {
-            e.currentTarget.style.borderColor = "rgba(183,19,90,0.6)";
-            e.currentTarget.style.boxShadow = "0 0 0 2px rgba(183,19,90,0.30)";
+            e.currentTarget.style.borderColor = "rgba(37,99,235,0.6)";
+            e.currentTarget.style.boxShadow = "0 0 0 2px rgba(37,99,235,0.30)";
             e.currentTarget.style.background = "rgba(46,50,62,0.07)";
           }}
           onBlur={(e) => {
@@ -611,7 +611,7 @@ export default function EsmiChat({
           style={{
             width: 40,
             height: 40,
-            borderRadius: 0,
+            borderRadius: 12,
             border: "none",
             display: "flex",
             alignItems: "center",
@@ -621,7 +621,7 @@ export default function EsmiChat({
             background:
               loading || !input.trim()
                 ? "var(--lg-hair-2)"
-                : FOIL,
+                : "linear-gradient(135deg, #1e40af 0%, #2451e6 55%, #0891b2 100%)",
             color: loading || !input.trim() ? "var(--lg-ink-3)" : "#FFFFFF",
             boxShadow:
               loading || !input.trim()
@@ -675,8 +675,8 @@ function VoiceWave({ activity }: { activity: Activity }) {
           style={{
             width: 3,
             height: 18,
-            borderRadius: 0,
-            background: idle ? "rgba(183,19,90,0.45)" : FOIL,
+            borderRadius: 2,
+            background: idle ? "rgba(37,99,235,0.45)" : FOIL,
             transformOrigin: "center",
             transform: idle ? "scaleY(0.28)" : undefined,
             transition: `background-color var(--lg-dur-state) var(--ease-standard)`,
@@ -714,11 +714,11 @@ function MessageBubble({
             padding: "11px 16px",
             fontSize: 14,
             lineHeight: 1.6,
-            color: "var(--lg-ink)",
-            background: "linear-gradient(135deg, rgba(183,19,90,0.16) 0%, rgba(183,19,90,0.10) 100%)",
-            border: "1px solid rgba(183,19,90,0.28)",
-            borderRadius: 0,
-            boxShadow: "0 2px 16px rgba(183,19,90,0.10)",
+            color: "#ffffff",
+            background: "linear-gradient(135deg, #1e40af 0%, #2451e6 55%, #0369a1 100%)",
+            border: "none",
+            borderRadius: "18px 18px 6px 18px",
+            boxShadow: "0 12px 26px -14px rgba(37,99,235,0.8)",
             whiteSpace: "pre-wrap",
             wordBreak: "break-word",
           }}
@@ -740,15 +740,15 @@ function MessageBubble({
         style={{
           width: 26,
           height: 26,
-          background: "#2E323E",
-          borderRadius: 0,
+          background: "linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #0891b2 100%)",
+          borderRadius: 9,
           padding: 4,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           flexShrink: 0,
           marginTop: 2,
-          border: "1px solid rgba(183,19,90,0.22)",
+          border: "1px solid rgba(255,255,255,0.5)",
           boxShadow: "none",
         }}
       >
@@ -772,7 +772,7 @@ function MessageBubble({
               padding: "12px 16px",
               background: "rgba(46,50,62,0.05)",
               border: "1px solid var(--lg-hair-2)",
-              borderRadius: 0,
+              borderRadius: 14,
               alignSelf: "flex-start",
             }}
           >
@@ -788,8 +788,8 @@ function MessageBubble({
               display: "inline-flex",
               alignItems: "center",
               padding: "8px 12px",
-              background: "rgba(183,19,90,0.08)",
-              borderRadius: 0,
+              background: "rgba(37,99,235,0.08)",
+              borderRadius: 14,
               alignSelf: "flex-start",
             }}
           >
@@ -805,10 +805,10 @@ function MessageBubble({
               fontSize: 14,
               lineHeight: 1.65,
               color: "var(--lg-ink)",
-              background: "rgba(46,50,62,0.05)",
+              background: "#ffffff",
               border: "1px solid var(--lg-hair-2)",
-              borderRadius: 0,
-              boxShadow: "0 2px 16px rgba(10,15,28,0.4)",
+              borderRadius: "18px 18px 18px 6px",
+              boxShadow: "0 10px 28px -16px rgba(37,99,235,0.45)",
               whiteSpace: "pre-wrap",
               wordBreak: "break-word",
               maxWidth: "82%",
@@ -876,8 +876,8 @@ function SlotPicker({
                 alignItems: "center",
                 gap: 2,
                 padding: "9px 14px",
-                borderRadius: 0,
-                border: "1.5px solid rgba(183,19,90,0.30)",
+                borderRadius: 12,
+                border: "1.5px solid rgba(37,99,235,0.30)",
                 background: "rgba(46,50,62,0.04)",
                 color: "var(--lg-ink)",
                 fontSize: 13,
@@ -890,11 +890,11 @@ function SlotPicker({
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = FOIL;
-                e.currentTarget.style.background = "rgba(183,19,90,0.12)";
+                e.currentTarget.style.background = "rgba(37,99,235,0.12)";
                 e.currentTarget.style.borderColor = "var(--lg-foil)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "rgba(183,19,90,0.30)";
+                e.currentTarget.style.borderColor = "rgba(37,99,235,0.30)";
                 e.currentTarget.style.background = "rgba(46,50,62,0.04)";
                 e.currentTarget.style.boxShadow = "none";
               }}
@@ -934,7 +934,7 @@ function QuickReplies({
             alignItems: "center",
             gap: 6,
             padding: "8px 14px",
-            borderRadius: 0,
+            borderRadius: 999,
             border: "1px solid var(--lg-hair)",
             background: "rgba(46,50,62,0.04)",
             color: "var(--lg-ink-2)",
@@ -945,8 +945,8 @@ function QuickReplies({
             transition: "all 0.15s",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = "rgba(183,19,90,0.5)";
-            e.currentTarget.style.background = "rgba(183,19,90,0.10)";
+            e.currentTarget.style.borderColor = "rgba(37,99,235,0.5)";
+            e.currentTarget.style.background = "rgba(37,99,235,0.10)";
             e.currentTarget.style.color = FOIL;
           }}
           onMouseLeave={(e) => {

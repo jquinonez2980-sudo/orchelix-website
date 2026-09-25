@@ -613,7 +613,8 @@ export function EntryList({
 }: {
   entries: { title: string; desc: string; meta?: string }[];
   tone?: Tone;
-  columns?: 1 | 2;
+  /** 3 is glass-only: one row of three on wide screens. */
+  columns?: 1 | 2 | 3;
   /** Set the entries on one frosted-glass panel (The Vivid Layer). */
   glass?: boolean;
   /** One icon per entry, shown in a gradient badge above its title. */
@@ -622,7 +623,11 @@ export function EntryList({
   if (glass) {
     return (
       <div className="lg-glass">
-        <div className={`lg-glass__grid ${columns === 2 ? "sm:grid-cols-2" : ""}`}>
+        <div
+          className={`lg-glass__grid ${
+            columns === 2 ? "sm:grid-cols-2" : columns === 3 ? "lg-glass__grid--3" : ""
+          }`}
+        >
           {entries.map((e, i) => (
             <article
               key={e.title}

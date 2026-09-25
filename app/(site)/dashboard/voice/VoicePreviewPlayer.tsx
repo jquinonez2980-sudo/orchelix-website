@@ -6,9 +6,10 @@ import { fetchVoicePreview, type LanguagePref } from "@/app/lib/esmiPlatform";
 
 /* THE premium player (docs/ESMI_DASHBOARD_UX.md Section 3.5). Reused
    as-is by VoiceStudio and the onboarding voice gate; the public try-esmi
-   page (Section 6) runs the same *DNA* in its own dark-theme component
-   (app/try-esmi/PublicVoicePreview.tsx) — see that file's header for why
-   it can't literally import this one. This file takes no dashboard-specific
+   page (Section 6) and the home page run the same *DNA* in their own
+   dark listening stage (app/components/sections/voice/EsmiVoiceStage.tsx),
+   which calls the unauthenticated public preview endpoint instead of this
+   one's tenant proxy. This file takes no dashboard-specific
    props (tenant auth stays in fetchVoicePreview's own proxy call, not this
    component) so a light-theme host anywhere can drop it in.
 

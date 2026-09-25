@@ -1,32 +1,22 @@
 "use client";
 
 /* Client boundary so `dynamic(..., { ssr: false })` is legal in the App Router.
-   Server Components cannot pass ssr:false to next/dynamic (Next.js 16). */
+   Server Components cannot pass ssr:false to next/dynamic (Next.js 16).
+   The placeholder reserves the stage's height so nothing shifts when it
+   mounts. */
 
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import type { Locale } from "@/app/i18n/config";
 
+const Placeholder = () => <div className="evs-placeholder" aria-hidden />;
+
 const HeroProof = dynamic(() => import("./HeroProof"), {
   ssr: false,
-  loading: () => (
-    <div
-      className="mt-10 max-w-[34rem]"
-      style={{ minHeight: 120 }}
-      aria-hidden
-    />
-  ),
+  loading: Placeholder,
 });
 
-export default function HeroProofLazy({
-  locale,
-  playerOnly = false,
-  hideLabel = false,
-}: {
-  locale?: Locale;
-  playerOnly?: boolean;
-  hideLabel?: boolean;
-}) {
+export default function HeroProofLazy({ locale }: { locale?: Locale }) {
   const ref = useRef<HTMLDivElement>(null);
   const [near, setNear] = useState(false);
 
@@ -44,19 +34,11 @@ export default function HeroProofLazy({
           io.disconnect();
         }
       },
-      { rootMargin: "80px 0px" },
+      { rootMargin: "200px 0px" },
     );
     io.observe(el);
     return () => io.disconnect();
   }, []);
 
-  return (
-    <div ref={ref}>
-      {near ? (
-        <HeroProof locale={locale} playerOnly={playerOnly} hideLabel={hideLabel} />
-      ) : (
-        <div className="mt-10 max-w-[34rem]" style={{ minHeight: 120 }} aria-hidden />
-      )}
-    </div>
-  );
+  return <div ref={ref}>{near ? <HeroProof locale={locale} /> : <Placeholder />}</div>;
 }
