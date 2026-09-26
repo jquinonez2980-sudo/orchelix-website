@@ -16,10 +16,9 @@ const PRICE_Q = "¿Cuánto cuesta una recepcionista de IA?";
 
 const patch = {
   home: {
-    heroTitle:
-      "La llamada de las 9 pm sin calefacción se va al buzón. La del paciente nuevo suena sin respuesta en una recepción saturada.",
+    heroTitle: "¿La llamada de las 9 pm?",
     heroLede:
-      "Cuando la cuadrilla está en un trabajo o la recepción está saturada, las llamadas se quedan sin contestar y los clientes agendan con quien sí contesta. Esmi, la recepcionista con IA de Orchelix, contesta 24/7 en inglés y español, agenda en Google Calendar y confirma por SMS.",
+      "Esmi, la recepcionista con IA de Orchelix, contesta 24/7 en inglés y español y agenda en Google Calendar con confirmación por SMS.",
   },
   pages: {
     aiReceptionist: {
@@ -36,7 +35,7 @@ const patch = {
       homeServices: {
         lede: "Hecho para negocios en Jobber que pierden trabajos cuando suena el teléfono y nadie contesta. Una recepcionista bilingüe con IA para negocios de servicios del hogar. Esmi contesta fuera de horario, los fines de semana y mientras tu cuadrilla está en un trabajo — califica el servicio y lo agenda en Google Calendar con confirmación por SMS.",
         closeBody:
-          "¿Escuchaste a Esmi contestar? Pruébala en tu propia línea. Un piloto de 14 días cuesta $149. Después, Esmi Local cuesta $299/mes + $499 de implementación.",
+          "Pruébala en tu propia línea: un piloto de 14 días cuesta $149. Después, Esmi Local cuesta $299/mes + $499 de implementación.",
       },
     },
   },

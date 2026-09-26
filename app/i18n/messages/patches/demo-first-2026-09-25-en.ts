@@ -16,11 +16,10 @@ const PRICE_Q = "How much does an AI receptionist cost?";
 
 const patch = {
   home: {
-    /* The glow phrase ("Esmi answers both.") lives in `demoFirst.ts`. */
-    heroTitle:
-      "The 9pm no-heat call goes to voicemail. The new-patient call rings out at a busy front desk.",
+    /* The glow phrase ("Esmi answers.") lives in `demoFirst.ts`. */
+    heroTitle: "The 9pm call?",
     heroLede:
-      "When the crew is on a job or the front desk is slammed, calls ring out and callers book with whoever picks up. Esmi, the AI receptionist from Orchelix, answers 24/7 in English and Spanish, books Google Calendar, and confirms by SMS.",
+      "Esmi, the AI receptionist from Orchelix, answers 24/7 in English and Spanish and books Google Calendar with SMS confirmation.",
   },
   pages: {
     /* Arrays replace wholesale in the overlay, so the FAQ is the base list
@@ -39,7 +38,7 @@ const patch = {
       homeServices: {
         lede: "Built for Jobber shops that lose jobs when the phone rings and nobody’s there to answer. A bilingual AI receptionist for home-services businesses. Esmi picks up after hours, on weekends, and while your crew is on a job — qualifies the work, and books it onto Google Calendar with SMS confirmation.",
         closeBody:
-          "Heard Esmi answer? Try it on your own line. A 14-day pilot is $149. After that, Esmi Local is $299/mo + $499 setup.",
+          "Try it on your own line: a 14-day pilot is $149. After that, Esmi Local is $299/mo + $499 setup.",
       },
     },
   },

@@ -7,17 +7,16 @@
 
    The band makes one promise and proves it in the same viewport:
 
-   1. The outcome — two missed-call scenes and "Esmi answers both." The name is in
+   1. The outcome, at Display size — "The 9pm call? Esmi answers." The name is in
       the nav lockup and in the glass mark beside this column; the headline
       does not spend itself repeating the logo.
    2. One line of what the company does.
    3. The live line (`HeroLine`) — the number Esmi answers, 24/7, set large.
       A visitor can test the claim before they read another word, which is
       the one thing a competitor's hero cannot copy.
-   4. The action: the stamp dials the live line (demo first), a quiet link
-      to try it on your own line (/pricing), and a quiet action that hands the
-      visitor down to the recorded call in the next band, so a visitor not
-      ready to dial still has somewhere to go that is not away.
+   4. The action: the stamp dials the live line (demo first, no price on
+      the main button) and one quiet link to try it on your own line
+      (/pricing). The recorded call is the very next band.
 
    The conditions strip sits at the FOOT of the band rather than above the
    headline, where it would be an eyebrow (DESIGN.md, The No Kicker Rule).
@@ -59,11 +58,9 @@ import HeroSignal from "./HeroSignal";
    surface is built on. */
 
 export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
-  /* 2026-09-25 (Jorge-approved, demo-first): the headline is two pain
-     scenes and a resolution. The scenes are `heroTitle`; the resolution is
-     `heroTitleGlow` and carries the vivid gradient. It is a sentence rather
-     than a three-word promise, so it steps down from the poster size
-     (inline font-size on the Struck span) to keep the column the same height. */
+  /* 2026-09-25 (Jorge-approved, demo-first): a short question and its
+     answer. The question is `heroTitle`; the answer is `heroTitleGlow` and
+     carries the vivid gradient. Poster size, unchanged. */
   const d = demoFirstCopy(locale);
   const head = t.home.heroTitle;
   const tail = d.heroTitleGlow;
@@ -75,9 +72,9 @@ export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
             tracking — all of it from `PageTitle` and the --lg-* type tokens,
             which are the only way a heading is set here. The ink is `--lg-ink`, which the night
             band has already retargeted to #e8eaee: 14.91:1 on this ground. */}
-        <PageTitle tone="night" max="24ch">
-          {/* The resolution carries the vivid gradient — one phrase, once. */}
-          <span className="lg-strike" style={{ fontSize: "clamp(1.45rem, 2.7vw, 2.35rem)" }}>
+        <PageTitle tone="night" max="14ch">
+          {/* The answer carries the vivid gradient — one phrase, once. */}
+          <span className="lg-strike">
             {head}{head && " "}<span className="lg-glow-text">{tail}</span>
           </span>
         </PageTitle>
@@ -91,7 +88,6 @@ export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
               step after it, and carries no price on the button. */}
           <Stamp href={DEMO_TEL}>{d.heroCall}</Stamp>
           <QuietAction tone="night" href={localizedHref("/pricing", locale)}>{d.heroTryOwnLine}</QuietAction>
-          <QuietAction tone="night" href="#hear-esmi">{t.home.hearFirst}</QuietAction>
         </div>
       </div>
 
