@@ -172,6 +172,14 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      {
+        /* The public brand kit's files and data (/brand/files/*, /brand/kit.json).
+           Open to anyone with the link — the bots that make social posts need
+           that — but kept out of search results, like the /brand page itself
+           (which says so in its own robots meta). */
+        source: "/brand/:path+",
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
     ];
   },
 };

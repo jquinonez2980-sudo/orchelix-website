@@ -13,6 +13,13 @@ are now `#2451E6` (on light) and `#60A5FA` (on dark), the night ground is
 `#060A14`, and there is a new **gradient** version of the mark and lockups for
 the website and app icons.
 
+## Online copy for bots and partners
+
+A curated set of these files is published at **https://www.orchelix.com/brand**
+(page) and **https://www.orchelix.com/brand/kit.json** (data), served from
+`public/brand/files/` and listed in `app/(site)/brand/kit.ts`. When a master
+here changes, copy it over there too — the public file names are a contract.
+
 ## Which file do I use?
 
 | Need | File |
