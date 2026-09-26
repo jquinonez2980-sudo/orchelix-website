@@ -3,6 +3,8 @@ import type { Locale } from "./config";
 import type { Messages } from "./messages/en";
 import competitiveEn from "./messages/patches/competitive-2026-09-16-en";
 import competitiveEs from "./messages/patches/competitive-2026-09-16-es";
+import demoFirstEn from "./messages/patches/demo-first-2026-09-25-en";
+import demoFirstEs from "./messages/patches/demo-first-2026-09-25-es";
 
 /* Catalogues are loaded per-request on the server and never reach the client
    bundle, so adding languages costs nothing in shipped JavaScript. */
@@ -11,9 +13,11 @@ const dictionaries = {
   es: () => import("./messages/es").then((m) => m.default),
 } satisfies Record<Locale, () => Promise<Messages>>;
 
+/* Applied in order: the 2026-09-16 competitive overlay, then the 2026-09-25
+   demo-first copy overlay. */
 const patches = {
-  en: competitiveEn,
-  es: competitiveEs,
+  en: [competitiveEn, demoFirstEn],
+  es: [competitiveEs, demoFirstEs],
 } as const;
 
 /* Shallow-to-deep merge for competitive-truth overlays. Arrays in the patch
@@ -33,5 +37,6 @@ function deepMerge<T>(base: T, patch: unknown): T {
 
 export async function getDictionary(locale: Locale): Promise<Messages> {
   const base = await dictionaries[locale]();
-  return deepMerge(base, patches[locale]);
+  const overlays: readonly unknown[] = patches[locale];
+  return overlays.reduce<Messages>((acc, p) => deepMerge(acc, p), base);
 }
