@@ -7,16 +7,16 @@
 
    The band makes one promise and proves it in the same viewport:
 
-   1. The outcome, at Display size — "Every call answered." The name is in
+   1. The outcome, at Display size — "The 9pm call? Esmi answers." The name is in
       the nav lockup and in the glass mark beside this column; the headline
       does not spend itself repeating the logo.
    2. One line of what the company does.
    3. The live line (`HeroLine`) — the number Esmi answers, 24/7, set large.
       A visitor can test the claim before they read another word, which is
       the one thing a competitor's hero cannot copy.
-   4. The action: the stamp ($149 pilot) and a quiet action that hands the
-      visitor down to the recorded call in the next band, so a visitor not
-      ready to dial still has somewhere to go that is not away.
+   4. The action: the stamp dials the live line (demo first, no price on
+      the main button) and one quiet link to try it on your own line
+      (/pricing). The recorded call is the very next band.
 
    The conditions strip sits at the FOOT of the band rather than above the
    headline, where it would be an eyebrow (DESIGN.md, The No Kicker Rule).
@@ -26,9 +26,9 @@
    state, so with JS off or motion suppressed the words are simply there. */
 
 import { Section, PageTitle, Stamp, QuietAction } from "@/app/components/ledger";
-import { type Locale } from "@/app/i18n/config";
-import { ESMI_PILOT_PAYMENT_LINK } from "@/app/lib/pilotPayment";
+import { localizedHref, type Locale } from "@/app/i18n/config";
 import type { Messages } from "@/app/i18n/messages/en";
+import { DEMO_TEL, demoFirstCopy } from "@/app/i18n/messages/demoFirst";
 import HeroRing from "./HeroRing";
 import HeroLine from "./HeroLine";
 import HeroSignal from "./HeroSignal";
@@ -58,9 +58,12 @@ import HeroSignal from "./HeroSignal";
    surface is built on. */
 
 export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
-  const words = t.home.heroTitle.split(" ");
-  const tail = words.pop() ?? "";
-  const head = words.join(" ");
+  /* 2026-09-25 (Jorge-approved, demo-first): a short question and its
+     answer. The question is `heroTitle`; the answer is `heroTitleGlow` and
+     carries the vivid gradient. Poster size, unchanged. */
+  const d = demoFirstCopy(locale);
+  const head = t.home.heroTitle;
+  const tail = d.heroTitleGlow;
   return (
     <Section id="top" tone="night" tight>
       <div className="lg-hero-grid--ring">
@@ -70,7 +73,7 @@ export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
             which are the only way a heading is set here. The ink is `--lg-ink`, which the night
             band has already retargeted to #e8eaee: 14.91:1 on this ground. */}
         <PageTitle tone="night" max="14ch">
-          {/* The last word carries the vivid gradient — one phrase, once. */}
+          {/* The answer carries the vivid gradient — one phrase, once. */}
           <span className="lg-strike">
             {head}{head && " "}<span className="lg-glow-text">{tail}</span>
           </span>
@@ -81,8 +84,10 @@ export default function Hero({ locale, t }: { locale: Locale; t: Messages }) {
         <HeroLine head={t.home.lineHead} note={t.home.lineNote} label={t.home.lineCall} />
 
         <div className="lg-hero-actions">
-          <Stamp href={ESMI_PILOT_PAYMENT_LINK}>{locale === "es" ? "Empieza un piloto de $149" : "Start a $149 pilot"}</Stamp>
-          <QuietAction tone="night" href="#hear-esmi">{t.home.hearFirst}</QuietAction>
+          {/* Demo first: the free call is the primary action; the pilot is the
+              step after it, and carries no price on the button. */}
+          <Stamp href={DEMO_TEL}>{d.heroCall}</Stamp>
+          <QuietAction tone="night" href={localizedHref("/pricing", locale)}>{d.heroTryOwnLine}</QuietAction>
         </div>
       </div>
 

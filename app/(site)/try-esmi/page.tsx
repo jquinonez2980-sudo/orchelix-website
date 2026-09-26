@@ -40,7 +40,8 @@ type Copy = {
   waysLabel: string;
   ways: { n: string; title: string; desc: string; href: string }[];
   lede: string;
-  book: string;
+  call: string;
+  pilot: string;
   stack: string;
   chatTitle: (company?: string) => string;
   chatBody: (company?: string) => string;
@@ -66,7 +67,8 @@ const EN: Copy = {
     { n: "03", title: "Call", desc: "+1 561 566 1066", href: "tel:+15615661066" },
   ],
   lede: "Esmi is answering calls in production today. A real recording first, then the same agent live in a chat you can type into. No form, no scheduling — the product doing its job, and the record it leaves behind.",
-  book: "Book a pilot",
+  call: "Call Esmi — 561-566-1066",
+  pilot: "Try it on your own line",
   stack: "See the agent stack",
   chatTitle: (c) => (c ? `Ask Esmi about ${c}` : "Now ask it yourself"),
   chatBody: (c) =>
@@ -124,7 +126,8 @@ const ES: Copy = {
     { n: "03", title: "Llama", desc: "+1 561 566 1066", href: "tel:+15615661066" },
   ],
   lede: "Esmi ya contesta llamadas en producción. Primero una grabación real; después el mismo agente en un chat donde puedes escribir. Sin formulario ni cita — el producto haciendo su trabajo, y el registro que deja.",
-  book: "Agenda un piloto",
+  call: "Llama a Esmi — 561-566-1066",
+  pilot: "Pruébala en tu propia línea",
   stack: "Ver el stack de agentes",
   chatTitle: (c) => (c ? `Pregúntale a Esmi sobre ${c}` : "Ahora pregúntale tú"),
   chatBody: (c) =>
@@ -227,7 +230,7 @@ export default async function TryEsmiPage({
                 {copy.lede}
               </Prose>
               <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">
-                <Stamp href={locale === "es" ? "/es/book" : "/book"}>{copy.book}</Stamp>
+                <Stamp href="tel:+15615661066">{copy.call}</Stamp>
                 <QuietAction tone="night" href="/get-started">
                   {locale === "es" ? "Solicitar alta" : "Get started"}
                 </QuietAction>
@@ -342,7 +345,7 @@ export default async function TryEsmiPage({
             </div>
             <div className="flex flex-wrap items-center gap-x-8 gap-y-4 lg:justify-end">
               <Stamp href={locale === "es" ? "/es/book" : "/book"} size="1rem">
-                {copy.book}
+                {copy.pilot}
               </Stamp>
               <a href="tel:+15615661066" className="te-call">
                 <PhoneCall aria-hidden="true" />

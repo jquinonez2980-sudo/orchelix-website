@@ -1,5 +1,6 @@
 import type { Messages } from "@/app/i18n/messages/en";
 import { localizedHref, type Locale } from "@/app/i18n/config";
+import { DEMO_TEL, demoFirstCopy } from "@/app/i18n/messages/demoFirst";
 import {
   Section,
   PageTitle,
@@ -40,10 +41,14 @@ export default function VerticalPage({
   v,
   t,
   locale,
+  demoFirst = false,
 }: {
   v: Vertical;
   t: Messages;
   locale: Locale;
+  /** Hero primary dials the live demo line instead of booking a pilot; the
+      pilot stays in the closing band. Used by /home-services (2026-09-25). */
+  demoFirst?: boolean;
 }) {
   return (
     <main id="main-content">
@@ -59,7 +64,11 @@ export default function VerticalPage({
               {v.lede}
             </Prose>
             <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">
-              <Stamp href={localizedHref("/book", locale)}>{t.common.bookPilot}</Stamp>
+              {demoFirst ? (
+                <Stamp href={DEMO_TEL}>{demoFirstCopy(locale).hearEsmiAnswer}</Stamp>
+              ) : (
+                <Stamp href={localizedHref("/book", locale)}>{t.common.bookPilot}</Stamp>
+              )}
               <QuietAction href="/try-esmi">{t.common.hearRealCall}</QuietAction>
             </div>
           </div>

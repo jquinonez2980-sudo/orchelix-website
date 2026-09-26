@@ -19,6 +19,7 @@ import {
 import { localizedHref, type Locale } from "@/app/i18n/config";
 import { ESMI_PILOT_PAYMENT_LINK } from "@/app/lib/pilotPayment";
 import enMessages, { type Messages } from "@/app/i18n/messages/en";
+import { DEMO_TEL, demoFirstCopy } from "@/app/i18n/messages/demoFirst";
 
 /* Defaults to English: /ai-receptionist and its industry pages live under
    `app/(site)/` and share this close without threading a catalogue through. */
@@ -31,27 +32,26 @@ export default function FinalCTA({
   locale?: Locale;
   t?: Messages;
 } = {}) {
+  const d = demoFirstCopy(locale);
   return (
     <Section id="book" tone={TONE} scene className="lg-orb">
       <div className="grid items-end gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
         <div>
           <SectionTitle tone={TONE} scale="display" max="16ch">
-            {t.common.startWithOneWorkflow}
+            {d.closeHeading}
           </SectionTitle>
           <Prose tone={TONE} size="1.0625rem" max="48ch" style={{ marginTop: "1.5rem" }}>
-            {t.common.startWithOneWorkflowBody}
+            {d.closeBody}
           </Prose>
         </div>
 
         <div className="flex flex-wrap items-center gap-x-8 gap-y-4 lg:justify-end">
-          <Stamp href={ESMI_PILOT_PAYMENT_LINK} size="1rem">
-            {locale === "es" ? "Empieza un piloto de $149" : "Start a $149 pilot"}
+          {/* Demo first (2026-09-25): the live call, then the pilot, then pricing. */}
+          <Stamp href={DEMO_TEL} size="1rem">
+            {d.closeCall}
           </Stamp>
-          <QuietAction tone={TONE} href={locale === "es" ? "/try-esmi?lang=es" : "/try-esmi"}>
-            {t.common.hearRealCall}
-          </QuietAction>
-          <QuietAction tone={TONE} href={localizedHref("/book", locale)}>
-            {t.common.bookPilot}
+          <QuietAction tone={TONE} href={ESMI_PILOT_PAYMENT_LINK}>
+            {d.closePilot}
           </QuietAction>
           <QuietAction tone={TONE} href={localizedHref("/pricing", locale)}>
             {t.common.seePricing}

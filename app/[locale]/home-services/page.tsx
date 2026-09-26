@@ -32,7 +32,7 @@ export default async function HomeServicesPage({ params }: PageProps<"/[locale]"
   return (
     <>
       <Nav locale={locale} t={t} />
-      <VerticalPage v={t.pages.verticals.homeServices} t={t} locale={locale} />
+      <VerticalPage v={t.pages.verticals.homeServices} t={t} locale={locale} demoFirst />
       <Footer locale={locale} t={t} />
     </>
   );
