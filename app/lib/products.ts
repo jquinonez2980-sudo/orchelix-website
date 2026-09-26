@@ -97,8 +97,10 @@ export function getProduct(sku: string): Product | undefined {
   return ALL_PRODUCTS.find((p) => p.sku === sku);
 }
 
+// en-US so a CAD price reads "CA$48", not a bare "$48" a US visitor would
+// take for US dollars.
 export function formatPrice(price: number, currency: string): string {
-  return new Intl.NumberFormat("en-CA", {
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency,
     maximumFractionDigits: 0,

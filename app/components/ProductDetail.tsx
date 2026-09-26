@@ -1,23 +1,32 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
+import { Suspense, useState } from "react";
 import Link from "next/link";
 import { Product, formatPrice, isLaunchSku } from "@/app/lib/products";
+import { framesFor, type Style } from "@/app/lib/shopMedia";
+import ProductShot from "@/app/components/shop/ProductShot";
+import Swatch from "@/app/components/shop/Swatch";
+import CheckoutNotice from "@/app/components/shop/CheckoutNotice";
 
 export default function ProductDetail({
   product,
+  style,
   description,
 }: {
   product: Product;
+  style: Style;
   description: string;
 }) {
   const hasSizes = !!product.sizes && product.sizes.length > 0;
   const [size, setSize] = useState<string | undefined>(hasSizes ? product.sizes![0] : undefined);
+  const [view, setView] = useState<"front" | "back">("front");
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const available = isLaunchSku(product.sku);
+  const price = formatPrice(product.price, product.currency);
+  const { front, back } = framesFor(product.sku);
+  const showFit = product.fit && product.fit !== "One size" && product.fit !== "—";
 
   async function handleBuy() {
     setStatus("loading");
@@ -41,50 +50,92 @@ export default function ProductDetail({
     }
   }
 
+  const buyLabel = status === "loading" ? "Opening checkout…" : `Buy now · ${price}`;
+
   return (
-    <section className="detail">
-      <div className="detail-gallery">
-        {/* Natural aspect ratio: the tee images put front and back side by side,
-            and any fixed-ratio crop cuts one of them in half. */}
-        <Image
-          src={product.image}
-          alt={product.name}
-          width={product.imageWidth}
-          height={product.imageHeight}
-          sizes="(max-width: 780px) 100vw, 55vw"
-          priority
-        />
+    <div className="pdp">
+      <div className="pdp__gallery">
+        <div className="pdp__stage">
+          <ProductShot
+            product={product}
+            frame={view === "back" && back ? back : front}
+            alt={`${product.name}, ${product.color}, ${view}`}
+            sizes="(max-width: 900px) 100vw, 55vw"
+            priority
+          />
+        </div>
+        {back ? (
+          <div className="pdp__views" role="group" aria-label="Choose a view">
+            {(["front", "back"] as const).map((v) => (
+              <button
+                key={v}
+                type="button"
+                className="pdp__view"
+                aria-pressed={view === v}
+                onClick={() => setView(v)}
+              >
+                <span className="pdp__thumb">
+                  <ProductShot product={product} frame={v === "back" ? back : front} alt="" sizes="96px" />
+                </span>
+                {v === "front" ? "Front" : "Back"}
+              </button>
+            ))}
+          </div>
+        ) : null}
       </div>
-      <div className="detail-info">
-        <Link className="back-link" href="/shop">
-          ← Shop
-        </Link>
-        <h1>
-          {product.name}
-          {product.fit && product.fit !== "One size" && product.fit !== "—" ? ` · ${product.fit}` : ""}
-        </h1>
-        <p className="fit-color">
+
+      <div className="pdp__info">
+        <Suspense fallback={null}>
+          <CheckoutNotice />
+        </Suspense>
+
+        <nav className="pdp__crumbs" aria-label="Breadcrumb">
+          <Link href="/shop">Shop</Link>
+          <span aria-hidden="true">/</span>
+          <span>{style.available ? "Drop 01" : "In the studio"}</span>
+        </nav>
+
+        <h1 className="pdp__name">{product.name}</h1>
+        <p className="pdp__color">
+          <Swatch color={product.color} />
           {product.color}
-          {hasSizes ? ` · Sizes ${product.sizes!.join(", ")}` : ""}
+          {showFit ? ` · ${product.fit}` : ""}
         </p>
-        <p className="price">{formatPrice(product.price, product.currency)}</p>
-        <p className="desc">{description}</p>
+        <p className="pdp__price">{price}</p>
+        <p className="pdp__desc">{description}</p>
 
-        <p className="prints">
-          Front: <span>{product.front}</span>
-          <br />
-          Back: <span>{product.back}</span>
-        </p>
+        {style.fits.length > 1 ? (
+          <div className="pdp__field">
+            <span className="pdp__label">Fit</span>
+            <div className="pdp__options">
+              {style.fits.map((f) =>
+                f.sku === product.sku ? (
+                  <span key={f.sku} className="pdp__option" aria-current="true">
+                    {f.fit}
+                  </span>
+                ) : f.available ? (
+                  <Link key={f.sku} href={`/shop/${f.sku}`} className="pdp__option">
+                    {f.fit}
+                  </Link>
+                ) : (
+                  <span key={f.sku} className="pdp__option" aria-disabled="true">
+                    {f.fit} <small>soon</small>
+                  </span>
+                ),
+              )}
+            </div>
+          </div>
+        ) : null}
 
-        {hasSizes && (
-          <div className="size-select">
-            <span className="label">Size</span>
-            <div className="size-options" role="group" aria-label="Select size">
+        {hasSizes ? (
+          <div className="pdp__field">
+            <span className="pdp__label">Size</span>
+            <div className="pdp__options" role="group" aria-label="Select size">
               {product.sizes!.map((s) => (
                 <button
                   key={s}
                   type="button"
-                  className="size-option"
+                  className="pdp__option pdp__option--size"
                   aria-pressed={size === s}
                   onClick={() => setSize(s)}
                 >
@@ -93,28 +144,65 @@ export default function ProductDetail({
               ))}
             </div>
           </div>
-        )}
+        ) : null}
 
-        <div className="buy-row">
+        <div className="pdp__buy">
           {available ? (
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={handleBuy}
-              disabled={status === "loading"}
-            >
-              {status === "loading" ? "Redirecting…" : "Buy"}
+            <button type="button" className="pdp__cta" onClick={handleBuy} disabled={status === "loading"}>
+              {buyLabel}
             </button>
           ) : (
-            <span className="tag-soon">Soon</span>
+            <span className="pdp__cta" aria-disabled="true">
+              In the studio · not for sale yet
+            </span>
           )}
-          {status === "error" && (
-            <p className="checkout-note" data-state="error">
+          {status === "error" ? (
+            <p className="pdp__error" role="alert">
               {errorMessage}
             </p>
-          )}
+          ) : null}
+          {available ? (
+            <p className="pdp__fine">Secure checkout by Stripe. Priced in Canadian dollars.</p>
+          ) : null}
         </div>
+
+        <dl className="pdp__specs">
+          <div>
+            <dt>Front</dt>
+            <dd>{product.front}</dd>
+          </div>
+          <div>
+            <dt>Back</dt>
+            <dd>{product.back}</dd>
+          </div>
+          <div>
+            <dt>Colour</dt>
+            <dd>{product.color}</dd>
+          </div>
+          {hasSizes ? (
+            <div>
+              <dt>Sizes</dt>
+              <dd>{product.sizes!.join(", ")}</dd>
+            </div>
+          ) : null}
+        </dl>
       </div>
-    </section>
+
+      {/* Phones: the buy action stays in reach while the page scrolls. */}
+      {available ? (
+        <div className="pdp__bar">
+          <span>
+            <span className="pdp__bar-name">{product.name}</span>
+            <span className="pdp__bar-meta">
+              {size ? `${size} · ` : ""}
+              {price}
+            </span>
+          </span>
+          <button type="button" className="pdp__cta" onClick={handleBuy} disabled={status === "loading"}>
+            {status === "loading" ? "Opening…" : "Buy now"}
+          </button>
+        </div>
+      ) : null}
+    </div>
   );
 }
