@@ -476,6 +476,12 @@
   letter-spacing: 0.12em;
 }
 
+.shop-scope .pdp__ship {
+  margin: 0.75rem 0 0;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--lg-ink-2);
+}
 .shop-scope .pdp__buy { margin-top: 2rem; }
 .shop-scope .pdp__cta {
   display: inline-flex;

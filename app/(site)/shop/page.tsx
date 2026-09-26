@@ -64,7 +64,7 @@ export default function ShopPage() {
             <header className="shop-band__head">
               <SectionTitle max="14ch">Drop 01</SectionTitle>
               <p className="shop-band__note">
-                {`${COUNT[drop.length] ?? drop.length} styles · Unisex and women’s fits · Priced in CAD`}
+                {`${COUNT[drop.length] ?? drop.length} styles · Unisex and women’s fits · Ships from Toronto to Canada and the US`}
               </p>
             </header>
             <div className="drop-grid">

@@ -7,6 +7,7 @@ import { framesFor, type Style } from "@/app/lib/shopMedia";
 import ProductShot from "@/app/components/shop/ProductShot";
 import Swatch from "@/app/components/shop/Swatch";
 import CheckoutNotice from "@/app/components/shop/CheckoutNotice";
+import { SHIPPING, SHIP_COUNTRIES, SHIPS_FROM, type ShipCountry } from "@/app/lib/shipping";
 
 export default function ProductDetail({
   product,
@@ -20,12 +21,14 @@ export default function ProductDetail({
   const hasSizes = !!product.sizes && product.sizes.length > 0;
   const [size, setSize] = useState<string | undefined>(hasSizes ? product.sizes![0] : undefined);
   const [view, setView] = useState<"front" | "back">("front");
+  const [shipTo, setShipTo] = useState<ShipCountry>("CA");
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const available = isLaunchSku(product.sku);
   const price = formatPrice(product.price, product.currency);
   const { front, back } = framesFor(product.sku);
+  const shipFee = formatPrice(SHIPPING[shipTo].amount, product.currency);
   const showFit = product.fit && product.fit !== "One size" && product.fit !== "—";
 
   async function handleBuy() {
@@ -35,7 +38,7 @@ export default function ProductDetail({
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sku: product.sku, size, quantity: 1 }),
+        body: JSON.stringify({ sku: product.sku, size, quantity: 1, country: shipTo }),
       });
       const data = await res.json();
       if (!res.ok || !data.url) {
@@ -146,6 +149,28 @@ export default function ProductDetail({
           </div>
         ) : null}
 
+        {available ? (
+          <div className="pdp__field">
+            <span className="pdp__label">Ship to</span>
+            <div className="pdp__options" role="group" aria-label="Ship to">
+              {SHIP_COUNTRIES.map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  className="pdp__option"
+                  aria-pressed={shipTo === c}
+                  onClick={() => setShipTo(c)}
+                >
+                  {SHIPPING[c].country}
+                </button>
+              ))}
+            </div>
+            <p className="pdp__ship">
+              {shipFee} shipping to {SHIPPING[shipTo].to}, added at checkout. Ships from {SHIPS_FROM}.
+            </p>
+          </div>
+        ) : null}
+
         <div className="pdp__buy">
           {available ? (
             <button type="button" className="pdp__cta" onClick={handleBuy} disabled={status === "loading"}>
@@ -195,7 +220,7 @@ export default function ProductDetail({
             <span className="pdp__bar-name">{product.name}</span>
             <span className="pdp__bar-meta">
               {size ? `${size} · ` : ""}
-              {price}
+              {price} + {shipFee} shipping
             </span>
           </span>
           <button type="button" className="pdp__cta" onClick={handleBuy} disabled={status === "loading"}>
